@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+	<title>{{ name }} | Resume</title>
+	
+	<!-- Meta -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="Xiaoying Riley at 3rd Wave Media">    
+	<link rel="shortcut icon" href="favicon.ico"> 
+	
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+	
+	<!-- FontAwesome JS-->
+	<script defer src="assets/fontawesome/js/all.min.js"></script>
+	
+	<!-- Theme CSS -->  
+	<link id="theme-style" rel="stylesheet" href="assets/css/devresume.css">
+
+</head> 
+
+<body>
+	
+	<div class="main-wrapper">
+		<div class="container px-3 px-lg-5">
+			<article class="resume-wrapper mx-auto theme-bg-light p-5 mb-5 my-5 shadow-lg">
+				
+				<div class="resume-header">
+					<div class="row align-items-center">
+						<div class="resume-title col-12 col-md-6 col-lg-8 col-xl-9">
+							<h2 class="resume-name mb-0 text-uppercase">{{ name }}</h2>
+							<div class="resume-tagline mb-3 mb-md-0">{{ job_title }}</div>
+						</div><!--//resume-title-->
+						<div class="resume-contact col-12 col-md-6 col-lg-4 col-xl-3">
+							<ul class="list-unstyled mb-0">
+								<li class="mb-2"><i class="fas fa-phone-square fa-fw fa-lg mr-2 "></i><a class="resume-link" href="tel:#">{{ phone_number }}</a></li>
+								<li class="mb-2"><i class="fas fa-envelope-square fa-fw fa-lg mr-2"></i><a class="resume-link" href="mailto:#">{{ email }}</a></li>
+								<li class="mb-2"><i class="fas fa-globe fa-fw fa-lg mr-2"></i><a class="resume-link" href="#">{{ website }}</a></li>
+								<li class="mb-0"><i class="fas fa-map-marker-alt fa-fw fa-lg mr-2"></i>{{ location }}</li>
+							</ul>
+						</div><!--//resume-contact-->
+					</div><!--//row-->
+					
+				</div><!--//resume-header-->
+				<hr>
+				<div class="resume-intro py-3">
+					<div class="media flex-column flex-md-row align-items-center">
+						<img class="resume-profile-image mb-3 mb-md-0 mr-md-5 ml-md-0 rounded mx-auto" src="{{ profile_picture }}" alt="image">
+						<div class="media-body text-left">
+							<p class="mb-0">{{ summary }}</p>
+						</div><!--//media-body-->
+					</div>
+				</div><!--//resume-intro-->
+				<hr>
+				<div class="resume-body">
+					<div class="row">
+						<div class="resume-main col-12 col-lg-8 col-xl-9 pr-0 pr-lg-5">
+							<section class="work-section py-3">
+								<h3 class="text-uppercase resume-section-heading mb-4">Work Experience</h3>
+								{% for job in jobs %}
+								<div class="item mb-3">
+									<div class="item-heading row align-items-center mb-2">
+										<h4 class="item-title col-12 col-md-6 col-lg-8 mb-2 mb-md-0">{{ job.title }}</h4>
+											<div class="item-meta col-12 col-md-6 col-lg-4 text-muted text-left text-md-right">{{ job.company }} | {{ job.start_date }} - {{ job.end_date }}</div>
+									</div>
+									<div class="item-content">
+										{% if job.description %}
+										<p>{{ job.description }}</p>
+										{% endif %}
+										{% if job.bullets %}
+										<ul class="resume-list">
+											{% for bullet in job.bullets %}
+											<li>{{ bullet }}</li>
+											{% endfor %}
+										</ul>
+										{% endif %}
+									</div>
+								</div><!--//item-->
+								{% endfor %}
+							</section><!--//work-section-->
+							
+							<section class="project-section py-3">
+								<h3 class="text-uppercase resume-section-heading mb-4">Projects</h3>
+								{% for project in projects %}
+								<div class="item mb-3">
+									<div class="item-heading row align-items-center mb-2">
+										<h4 class="item-title col-12 col-md-6 col-lg-8 mb-2 mb-md-0">{{ project.title }}</h4>
+										<div class="item-meta col-12 col-md-6 col-lg-4 text-muted text-left text-md-right">{{ project.type }}</div>
+
+									</div>
+									<div class="item-content">
+										{% if project.description %}
+										<p>{{ project.description }}</p>
+										{% endif %}
+										{% if project.bullets %}
+										<ul class="resume-list">
+											{% for bullet in project.bullets %}
+											<li>{{ bullet }}</li>
+											{% endfor %}
+										</ul>
+										{% endif %}
+									</div>
+								</div><!--//item-->
+								{% endfor %}
+							</section><!--//project-section-->
+						</div><!--//resume-main-->
+
+						<aside class="resume-aside col-12 col-lg-4 col-xl-3 px-lg-4 pb-lg-4">
+							<section class="skills-section py-3">
+								<h3 class="text-uppercase resume-section-heading mb-4">Skills</h3>
+								{% for skill in skills %}
+								<div class="item">
+									<h4 class="item-title">{{ skill.title }}</h4>
+									<ul class="list-unstyled resume-skills-list">
+										<li class="mb-2">{{ ', '.join(skill.entries) }}</li>
+									</ul>
+								</div><!--//item-->
+								{% endfor %}
+							</section><!--//skills-section-->
+
+							<section class="education-section py-3">
+								<h3 class="text-uppercase resume-section-heading mb-4">Education</h3>
+								<ul class="list-unstyled resume-education-list">
+									{% for degree in degrees %}
+									<li class="mb-3">
+										<div class="resume-degree font-weight-bold">{{ degree.degree }}</div>
+										<div class="resume-degree-org text-muted">{{ degree.school }}</div>
+										<div class="resume-degree-time text-muted">{{ degree.start_date }} - {{ degree.end_date }}</div>
+									</li>
+									{% endfor %}
+								</ul>
+							</section><!--//education-section-->
+
+<!--							<section class="education-section py-3">-->
+<!--								<h3 class="text-uppercase resume-section-heading mb-4">Awards</h3>-->
+<!--								<ul class="list-unstyled resume-awards-list">-->
+<!--									<li class="mb-3">-->
+<!--										<div class="font-weight-bold">Award Lorem Ipsum</div>-->
+<!--										<div class="text-muted">Microsoft lorem ipsum (2019)</div>-->
+<!--									</li>-->
+<!--									<li>-->
+<!--										<div class="font-weight-bold">Award Donec Sodales</div>-->
+<!--										<div class="text-muted">Oracle Aenean (2017)</div>-->
+<!--									</li>-->
+<!--								</ul>-->
+<!--							</section>&lt;!&ndash;//education-section&ndash;&gt;-->
+
+<!--								<section class="skills-section py-3">-->
+<!--									<h3 class="text-uppercase resume-section-heading mb-4">Languages</h3>-->
+<!--									<ul class="list-unstyled resume-lang-list">-->
+<!--										<li class="mb-2">English <span class="text-muted">(Native)</span></li>-->
+<!--										<li>Spanish <span class="text-muted">(Professional)</span></li>-->
+<!--									</ul>-->
+<!--								</section>&lt;!&ndash;//certificates-section&ndash;&gt;-->
+
+<!--								<section class="skills-section py-3">-->
+<!--									<h3 class="text-uppercase resume-section-heading mb-4">Interests</h3>-->
+<!--									<ul class="list-unstyled resume-interests-list mb-0">-->
+<!--										<li class="mb-2">Climbing</li>-->
+<!--										<li class="mb-2">Snowboarding</li>-->
+<!--										<li class="mb-2">Photography</li>-->
+<!--										<li>Travelling</li>-->
+<!--									</ul>-->
+<!--								</section>&lt;!&ndash;//certificates-section&ndash;&gt;-->
+								</aside><!--//resume-aside-->
+							</div><!--//row-->
+						</div><!--//resume-body-->
+						<hr>
+						<div class="resume-footer text-center">
+							<ul class="resume-social-list list-inline mx-auto mb-0 d-inline-block text-muted">
+								<li class="list-inline-item mb-lg-0 mr-3"><a class="resume-link" href="{{ social.github }}"><i class="fab fa-github-square fa-2x mr-2" data-fa-transform="down-4"></i><span class="d-none d-lg-inline-block text-muted">GitHub</span></a></li>
+								<li class="list-inline-item mb-lg-0 mr-3"><a class="resume-link" href="{{ social.linkedin }}"><i class="fab fa-linkedin fa-2x mr-2" data-fa-transform="down-4"></i><span class="d-none d-lg-inline-block text-muted">LinkedIn</span></a></li>
+								<li class="list-inline-item mb-lg-0 mr-3"><a class="resume-link" href="{{ social.stack_overflow }}"><i class="fab fa-stack-overflow fa-2x mr-2" data-fa-transform="down-4"></i><span class="d-none d-lg-inline-block text-muted">Stack Overflow</span></a></li>
+							</ul>
+						</div><!--//resume-footer-->
+					</article>
+					
+				</div><!--//container-->
+				
+				<footer class="footer text-center py-4">
+					<!--/* This template is free as long as you keep the footer attribution link. If you'd like to use the template without the attribution link, you can buy the commercial license via our website: themes.3rdwavemedia.com Thank you for your support. :) */-->
+					<small class="copyright text-muted">Designed with <i class="fas fa-heart"></i> by <a class="theme-link" href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> for developers</small>
+				</footer>
+
+			</div><!--//main-wrapper-->
+	</body>
+</html> 
