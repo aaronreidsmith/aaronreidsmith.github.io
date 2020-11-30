@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-29T16:02:08-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 88</title><link href="http://localhost:4000/blog/perl-weekly-challenge-088/" rel="alternate" type="text/html" title="Perl Weekly Challenge 88" /><published>2020-11-29T00:00:00-06:00</published><updated>2020-11-29T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-088</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-088/">&lt;p&gt;I have always been a fan of Perl (and its younger brother Raku), but, since leaving the Bioinformatics world, have not found any real-world scenarios to flex those muscles.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-29T18:44:40-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 88</title><link href="http://localhost:4000/blog/perl-weekly-challenge-088/" rel="alternate" type="text/html" title="Perl Weekly Challenge 88" /><published>2020-11-29T00:00:00-06:00</published><updated>2020-11-29T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-088</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-088/">&lt;p&gt;I have always been a fan of Perl (and its younger brother Raku), but, since leaving the Bioinformatics world, have not found any real-world scenarios to flex those muscles.&lt;/p&gt;
 
 &lt;p&gt;I recently stumbled upon the &lt;a href=&quot;https://perlweeklychallenge.org/&quot;&gt;Perl Weekly Challenge&lt;/a&gt; and decided it would be a great way to keep up-to-date with the community. I participated for the first time this week and thought it would be fun to do a write up of how I approached the problems. In the future, I will start publishing my blogs earlier in the week so that I can include a link to it in my PR.&lt;/p&gt;
 
@@ -39,16 +39,18 @@ Output:
 
 &lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
 
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-088/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;See below for explanation and any specific implementation comments&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-raku&quot;&gt;subset PositiveInt of Int where { $_ ~~ Int &amp;amp;&amp;amp; $_ &amp;gt; 0 } # [1]
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset PositiveInt of Int where { $_ ~~ Int &amp;amp;&amp;amp; $_ &amp;gt; 0 } # [1]
 
 sub MAIN(*@N where all(@N) ~~ PositiveInt &amp;amp;&amp;amp; @N.elems &amp;gt; 0) {
     my $product = [*] @N;         # [2]
     my @M = @N.map: $product / *; # [3]
     say @M;
 }
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;This program runs as such:&lt;/p&gt;
 
@@ -120,9 +122,11 @@ Output:
 
 &lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
 
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-088/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;See below for explanation and any specific implementation comments&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-raku&quot;&gt;subset PositiveInt of Int where { $_ ~~ Int &amp;amp;&amp;amp; $_ &amp;gt; 0 }
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset PositiveInt of Int where { $_ ~~ Int &amp;amp;&amp;amp; $_ &amp;gt; 0 }
 
 enum Direction &amp;lt;NORTH EAST SOUTH WEST&amp;gt;;
 
@@ -196,7 +200,7 @@ sub MAIN(*@input where all(@input) ~~ PositiveInt &amp;amp;&amp;amp; @input.elem
     }
     say @output;
 }
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;This program runs as such:&lt;/p&gt;
 
@@ -219,10 +223,9 @@ raku ch-2.raku 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
       &lt;li&gt;Couldn’t find a better way to do this, but I am all ears if any knows. Scala has a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isWhole&lt;/code&gt; function on its number classes, so I basically did that check myself:&lt;/li&gt;
     &lt;/ul&gt;
 
-    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;raku
-  	my $side-length = @input.elems.sqrt;
-  	$side-length.Int == $side-length or die &quot;Must be a square matrix&quot;;
-  	&lt;/code&gt;&lt;/p&gt;
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; my $side-length = @input.elems.sqrt;
+ $side-length.Int == $side-length or die &quot;Must be a square matrix&quot;;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;Convert that into an actual matrix that looks like this (using example 1):&lt;/p&gt;
@@ -251,4 +254,8 @@ raku ch-2.raku 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
 
 &lt;p&gt;This was a fun dive back into the world of Perl, and I am looking forward to more of these challenges and blogs going forward.&lt;/p&gt;
 
-&lt;p&gt;I am hoping someone can prove me wrong and solve the second problem functionally. Looking forward to seeing everyone’s solutions and interacting more with the community!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I have always been a fan of Perl (and its younger brother Raku), but, since leaving the Bioinformatics world, have not found any real-world scenarios to flex those muscles.</summary></entry></feed>
+&lt;p&gt;I am hoping someone can prove me wrong and solve the second problem functionally. Looking forward to seeing everyone’s solutions and interacting more with the community!&lt;/p&gt;
+
+&lt;h4 id=&quot;ps&quot;&gt;PS&lt;/h4&gt;
+
+&lt;p&gt;It seems the theme I am using for my blog does not support &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;raku&lt;/code&gt; code highlighting yet. I am using Jekyll; any plugin I can use to circumvent this?&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I have always been a fan of Perl (and its younger brother Raku), but, since leaving the Bioinformatics world, have not found any real-world scenarios to flex those muscles.</summary></entry></feed>

@@ -50,9 +50,11 @@ Output:
 
 ### Solution
 
+[GitHub Link](https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-088/aaronreidsmith/raku/ch-1.raku)
+
 See below for explanation and any specific implementation comments
 
-```raku
+```
 subset PositiveInt of Int where { $_ ~~ Int && $_ > 0 } # [1]
 
 sub MAIN(*@N where all(@N) ~~ PositiveInt && @N.elems > 0) {
@@ -129,9 +131,11 @@ Output:
 
 ### Solution
 
+[GitHub Link](https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-088/aaronreidsmith/raku/ch-2.raku)
+
 See below for explanation and any specific implementation comments
 
-```raku
+```
 subset PositiveInt of Int where { $_ ~~ Int && $_ > 0 }
 
 enum Direction <NORTH EAST SOUTH WEST>;
@@ -227,10 +231,10 @@ The basics of the above program are as follows:
 1. We take some input and make sure it is square
   - Couldn't find a better way to do this, but I am all ears if any knows. Scala has a `isWhole` function on its number classes, so I basically did that check myself:
 
-	```raku
-  	my $side-length = @input.elems.sqrt;
-  	$side-length.Int == $side-length or die "Must be a square matrix";
-  	```
+    ```
+    my $side-length = @input.elems.sqrt;
+    $side-length.Int == $side-length or die "Must be a square matrix";
+    ```
 
 2. Convert that into an actual matrix that looks like this (using example 1):
 
@@ -257,4 +261,6 @@ This was a fun dive back into the world of Perl, and I am looking forward to mor
 
 I am hoping someone can prove me wrong and solve the second problem functionally. Looking forward to seeing everyone's solutions and interacting more with the community! 
 
+#### PS
 
+It seems the theme I am using for my blog does not support `raku` code highlighting yet. I am using Jekyll; any plugin I can use to circumvent this?
