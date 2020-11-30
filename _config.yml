@@ -14,7 +14,9 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Aaron Smith
+masthead_title: Aaron Smith Blog
 email: aaronreidsmith@gmail.com
+repository: aaronreidsmith/aaronreidsmith.github.io
 description: Personal website and blog of Aaron Smith
 github_username: aaronreidsmith
 minimal_mistakes_skin: dark
@@ -96,6 +98,7 @@ defaults:
     values:
       layout: single
       author_profile: true
+      show_date: true
       read_time: true
       comments: true
       share: true

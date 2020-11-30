@@ -1,6 +1,6 @@
 /* ========================================================================== Dark skin ========================================================================== */
 /* Colors */
-.author__urls.social-icons .svg-inline--fa, .page__footer-follow .social-icons .svg-inline--fa { color: inherit; }
+.author__urls.social-icons i, .author__urls.social-icons .svg-inline--fa, .page__footer-follow .social-icons i, .page__footer-follow .social-icons .svg-inline--fa { color: inherit; }
 
 .ais-search-box .ais-search-box--input { background-color: #1f242c; }
 
@@ -862,18 +862,18 @@ body:hover .visually-hidden a, body:hover .visually-hidden input, body:hover .vi
 .social-icons .fa-facebook, .social-icons .fa-facebook-square, .social-icons .fa-facebook-f { color: #3b5998; }
 .social-icons .fa-flickr { color: #ff0084; }
 .social-icons .fa-foursquare { color: #0072b1; }
-.social-icons .fa-github, .social-icons .fa-github-alt, .social-icons .fa-github-square { color: #171516; }
+.social-icons .fa-github, .social-icons .fa-github-alt, .social-icons .fa-github-square { color: #eaeaea; }
 .social-icons .fa-gitlab { color: #e24329; }
 .social-icons .fa-instagram { color: #517fa4; }
 .social-icons .fa-keybase { color: #ef7639; }
 .social-icons .fa-lastfm, .social-icons .fa-lastfm-square { color: #d51007; }
-.social-icons .fa-linkedin, .social-icons .fa-linkedin-in { color: #007bb6; }
+.social-icons .fa-linkedin, .social-icons .fa-linkedin-in { color: #eaeaea; }
 .social-icons .fa-mastodon, .social-icons .fa-mastodon-square { color: #2b90d9; }
 .social-icons .fa-pinterest, .social-icons .fa-pinterest-p, .social-icons .fa-pinterest-square { color: #cb2027; }
 .social-icons .fa-reddit { color: #ff4500; }
-.social-icons .fa-rss, .social-icons .fa-rss-square { color: #fa9b39; }
+.social-icons .fa-rss, .social-icons .fa-rss-square { color: #eaeaea; }
 .social-icons .fa-soundcloud { color: #ff3300; }
-.social-icons .fa-stack-exchange, .social-icons .fa-stack-overflow { color: #fe7a15; }
+.social-icons .fa-stack-exchange, .social-icons .fa-stack-overflow { color: #eaeaea; }
 .social-icons .fa-tumblr, .social-icons .fa-tumblr-square { color: #32506d; }
 .social-icons .fa-twitter, .social-icons .fa-twitter-square { color: #55acee; }
 .social-icons .fa-vimeo, .social-icons .fa-vimeo-square, .social-icons .fa-vimeo-v { color: #1ab7ea; }
