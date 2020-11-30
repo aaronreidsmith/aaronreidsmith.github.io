@@ -37,6 +37,8 @@ gcd(1,2) + gcd(1,3) + gcd(1,4) + gcd(2,3) + gcd(2,4) + gcd(3,4)
 
 ### Solution
 
+[GitHub Link](https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-089/aaronreidsmith/raku/ch-1.raku)
+
 See below for explanation and any specific implementation comments
 
 ```
@@ -101,6 +103,8 @@ c + e + g = 15
 ```
 
 ### Solution
+
+[GitHub Link](https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-089/aaronreidsmith/raku/ch-2.raku)
 
 See below for explanation and any implementation-specific comments
 
