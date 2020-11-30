@@ -54,9 +54,10 @@ plugins:
   - jekyll-include-cache
 
 author:
-  name   : "Aaron Smith"
-  avatar : "/assets/images/headshot-square.jpg"
-  bio    : "Data Engineer specializing in streaming data at scale, especially on AWS"
+  name: "Aaron Smith"
+  avatar: "/assets/images/headshot-square.jpg"
+  bio: "Data Engineer specializing in streaming data at scale, especially on AWS"
+  location: "Austin, TX"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
@@ -90,7 +91,7 @@ footer:
 defaults:
   # _posts
   - scope:
-      path: ""
+      path: "_posts"
       type: posts
     values:
       layout: single
@@ -101,7 +102,7 @@ defaults:
       related: true
   # _pages
   - scope:
-      path: "_pages"
+      path: ""
       type: pages
     values:
       layout: single

@@ -229,7 +229,7 @@ I _tried_ to do this one functionally, but I just couldn't find a way to do it.
 The basics of the above program are as follows:
 
 1. We take some input and make sure it is square
-  - Couldn't find a better way to do this, but I am all ears if any knows. Scala has a `isWhole` function on its number classes, so I basically did that check myself:
+  - Couldn't find a better way to do this, but I am all ears if anyone knows. Scala has a `isWhole` function on its number classes, so I basically did that check myself:
 
     ```
     my $side-length = @input.elems.sqrt;

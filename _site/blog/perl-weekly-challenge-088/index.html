@@ -195,6 +195,10 @@
     <button class="btn btn--inverse">Follow</button>
     <ul class="author__urls social-icons">
       
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Austin, TX</span>
+        </li>
+      
 
       
         
@@ -539,7 +543,7 @@ raku ch-2.raku 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
 <ol>
   <li>We take some input and make sure it is square
     <ul>
-      <li>Couldn’t find a better way to do this, but I am all ears if any knows. Scala has a <code class="language-plaintext highlighter-rouge">isWhole</code> function on its number classes, so I basically did that check myself:</li>
+      <li>Couldn’t find a better way to do this, but I am all ears if anyone knows. Scala has a <code class="language-plaintext highlighter-rouge">isWhole</code> function on its number classes, so I basically did that check myself:</li>
     </ul>
 
     <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> my $side-length = @input.elems.sqrt;
