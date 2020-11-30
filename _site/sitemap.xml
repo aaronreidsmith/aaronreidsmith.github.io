@@ -19,4 +19,8 @@
 <url>
 <loc>http://localhost:4000/posts/</loc>
 </url>
+<url>
+<loc>http://localhost:4000/assets/files/aaron_smith_resume.pdf</loc>
+<lastmod>2020-11-02T12:55:09-06:00</lastmod>
+</url>
 </urlset>
