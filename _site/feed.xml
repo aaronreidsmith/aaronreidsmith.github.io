@@ -1,4 +1,249 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-29T20:11:02-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 88</title><link href="http://localhost:4000/blog/perl-weekly-challenge-088/" rel="alternate" type="text/html" title="Perl Weekly Challenge 88" /><published>2020-11-29T00:00:00-06:00</published><updated>2020-11-29T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-088</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-088/">&lt;p&gt;I have always been a fan of Perl (and its younger brother Raku), but, since leaving the Bioinformatics world, have not found any real-world scenarios to flex those muscles.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-30T13:51:16-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 89</title><link href="http://localhost:4000/blog/perl-weekly-challenge-089/" rel="alternate" type="text/html" title="Perl Weekly Challenge 89" /><published>2020-11-30T00:00:00-06:00</published><updated>2020-11-30T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-089</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-089/">&lt;p&gt;Back again with challenge 89! I was able to tackle this one the day it was released, but I doubt that will be the case going forward.&lt;/p&gt;
+
+&lt;p&gt;Once again, it seems the first task can be tackled easily in a functional way and the second one ends up being more imperative. Hoping I can try to do more things functionally in the future!&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-gcd-sum&quot;&gt;Task 1: GCD Sum&lt;/h2&gt;
+
+&lt;p&gt;You are given a positive integer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to sum &lt;a href=&quot;https://en.wikipedia.org/wiki/Greatest_common_divisor&quot;&gt;GCD&lt;/a&gt; of all possible unique pairs between 1 and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 3
+Output: 3
+
+gcd(1,2) + gcd(1,3) + gcd(2,3)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 4
+Output: 7
+
+gcd(1,2) + gcd(1,3) + gcd(1,4) + gcd(2,3) + gcd(2,4) + gcd(3,4)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;See below for explanation and any specific implementation comments&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($N where $N ~~ Int &amp;amp;&amp;amp; $N &amp;gt; 0) {
+    my @pairs = (1..$N).combinations(2);                    # [1]
+    say [+] @pairs.map(-&amp;gt; @pair { @pair[0] gcd @pair[1] }); # [2][3]
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;raku ch-1.raku 3
+3
+
+raku ch-1.raku 4
+7
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;The thought process here is pretty straight forward:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Find all pairs from 1 to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Find the GCD of each pair&lt;/li&gt;
+  &lt;li&gt;Sum the GCDs produced in step 2&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;You’ll see my functional programming background bubbling up again. In fact, this could honestly be a one-liner if I weren’t going for readability:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;say [+] (1..$N).combinations(2).map(-&amp;gt; @pair { @pair[0] gcd @pair[1] });
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Raku provided a great subroutine to find all the pairs in a list (&lt;a href=&quot;https://docs.raku.org/routine/combinations&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;combinations&lt;/code&gt;&lt;/a&gt;). In fact, it is generalized such that you can take more than just pairs (if I didn’t provide a number, it would find &lt;em&gt;all&lt;/em&gt; combinations from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;size=0&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;size=$N&lt;/code&gt;), so it may come back in future problems!&lt;/li&gt;
+  &lt;li&gt;This was an interesting one for me. In Scala, since it is so strongly and statically typed, we know that the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@pairs&lt;/code&gt; list contains lists itself, so you could just say: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pairs.map(_._1 gcd _._2)&lt;/code&gt;. In Raku, I had to use the &lt;a href=&quot;https://docs.raku.org/language/functions#Blocks_and_lambdas&quot;&gt;pointy block&lt;/a&gt; notation to give the mapped items a name and, more importantly, a sigil to treat it as a list.&lt;/li&gt;
+  &lt;li&gt;I &lt;em&gt;love&lt;/em&gt; that a lot of simple things (like &lt;a href=&quot;https://docs.raku.org/routine/gcd&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gcd&lt;/code&gt;&lt;/a&gt; or &lt;a href=&quot;https://docs.raku.org/routine/is-prime&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is-prime&lt;/code&gt;&lt;/a&gt;) are built right into Raku. It saves a lot of boilerplate code and potentially bad implementation of these functions.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-magic-matrix&quot;&gt;Task 2: Magic Matrix&lt;/h2&gt;
+
+&lt;p&gt;Write a script to display matrix as below with numbers &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1 - 9&lt;/code&gt;. Please make sure numbers are used once.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[ a b c ]
+[ d e f ]
+[ g h i ]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;So that it satisfies the following:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;a + b + c = 15
+d + e + f = 15
+g + h + i = 15
+a + d + g = 15
+b + e + h = 15
+c + f + i = 15
+a + e + i = 15
+c + e + g = 15
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset OddPositiveInt of Int where { $_ ~~ Int &amp;amp;&amp;amp; $_ &amp;gt; 0 &amp;amp;&amp;amp; !($_ %% 2) }
+
+sub MAIN($side-length where $side-length ~~ OddPositiveInt = 3, $debug where $debug ~~ Bool = False) {
+    my @matrix = generate-matrix($side-length);
+    my @filled-in-matrix = fill-in-matrix(@matrix, $side-length);
+    for @filled-in-matrix -&amp;gt; @row {
+        say '[ ' ~ @row.join(' ') ~ ' ]';
+    }
+    if $debug {
+        print &quot;\n&quot;;
+        validate-matrix(@filled-in-matrix, $side-length);
+    }
+}
+
+# Generate a 2D matrix that we can fill in with the proper numbers.
+# For 3x3 it would output:
+#  [0 0 0]
+#  [0 0 0]
+#  [0 0 0]
+sub generate-matrix($side-length) {
+    my @matrix = Array.new;
+    for ^$side-length -&amp;gt; $i {
+        my @row = Array.new;
+        for (($i * $side-length) + 1..($i * $side-length) + $side-length) {
+            @row.push(0);
+        }
+        @matrix.push(@row);
+    }
+    @matrix
+}
+
+# Actual business logic here. It takes the empty array and fills it in to be &quot;magic&quot;
+# Such that all rows, columns, and the two diagonals add up to $side-length * ($side-length² + 1) / 2
+sub fill-in-matrix(@matrix, $side-length) {
+    my $num = 1;
+    my $row = floor($side-length / 2);
+    my $col = $side-length - 1;
+
+    while $num &amp;lt;= $side-length² {                # [1]
+        if $row == -1 &amp;amp;&amp;amp; $col == $side-length {  # Condition 3 (see below)
+            $col = $side-length - 2;
+            $row = 0;
+        } else {
+            if $col == $side-length {            # Condition 1 (see below)
+                $col = 0;
+            }
+            if $row &amp;lt; 0 {
+                $row = $side-length - 1;
+            }
+        }
+        if @matrix[$row][$col] != 0 {           # Condition 2 (see below)
+            $col -= 2;
+            $row++;
+        } else {
+            @matrix[$row][$col] = $num;
+            $num++;
+            $col++;
+            $row--;
+        }
+    }
+    @matrix;
+}
+
+# Helper function to validate output matrix and print the validation
+sub validate-matrix(@matrix, $side-length) {
+    my @rows = @matrix;
+    my @columns = [Z] @matrix;                                                   # [2]
+    my @diagonal = @matrix.kv.map(-&amp;gt; $i, @row { @row[$i] });
+    my @counter-diagonal = @matrix.kv.map(-&amp;gt; $i, @row { @row[*-$i-1] });
+
+    my $target = ($side-length * ($side-length² + 1) / 2).Int;
+
+    my $valid-rows = so @rows.map(-&amp;gt; @row { [+] @row }).all == $target;          # [3]
+    my $valid-cols = so @columns.map(-&amp;gt; @column { [+] @column }).all == $target;
+    my $valid-diag = so ([+] @diagonal) == $target;
+    my $valid-counter-diag = so ([+] @counter-diagonal) == $target;
+
+    if $valid-rows &amp;amp;&amp;amp; $valid-cols &amp;amp;&amp;amp; $valid-diag &amp;amp;&amp;amp; $valid-counter-diag {
+        for @rows -&amp;gt; @row {
+            say @row.join(' + ') ~ ' = ' ~ $target;
+        }
+        for @columns -&amp;gt; @column {
+            say @column.join(' + ') ~ ' = ' ~ $target;
+        }
+        say @diagonal.join(' + ') ~ ' = ' ~ $target;
+        say @counter-diagonal.join(' + ') ~ ' = ' ~ $target;
+    } else {
+        die &quot;Not a valid magic matrix&quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;raku ch-2.raku
+[ 2 7 6 ]
+[ 9 5 1 ]
+[ 4 3 8 ]
+
+# There is an optional `debug` parameter that can be supplied, but the `side-length` argument must also be provided
+raku ch-2.raku 3 True
+[ 2 7 6 ]
+[ 9 5 1 ]
+[ 4 3 8 ]
+
+2 + 7 + 6 = 15
+9 + 5 + 1 = 15
+4 + 3 + 8 = 15
+2 + 9 + 4 = 15
+7 + 5 + 3 = 15
+6 + 1 + 8 = 15
+2 + 5 + 8 = 15
+6 + 5 + 4 = 15
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It should be noted this program only works with odd side-length squares&lt;/p&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;Full disclosure, I have done this problem before, so I basically just ported some old code. There are two steps to this problem before we even get to implementation:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Find the pattern for what the sum is
+    &lt;ul&gt;
+      &lt;li&gt;As seen in the code, you will find it is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N(N²+1)/2&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Draw some “magic matrices” to see if you can find any patterns&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;You will find 3 patterns hold true (I am copying these from &lt;a href=&quot;https://www.geeksforgeeks.org/magic-square/&quot;&gt;Geeks for Geeks&lt;/a&gt;):&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The position of next number is calculated by decrementing row number of the previous number by 1, and incrementing the column number of the previous number by 1. At any time, if the calculated row position becomes -1, it will wrap around to n-1. Similarly, if the calculated column position becomes n, it will wrap around to 0.&lt;/li&gt;
+  &lt;li&gt;If the magic square already contains a number at the calculated position, calculated column position will be decremented by 2, and calculated row position will be incremented by 1.&lt;/li&gt;
+  &lt;li&gt;If the calculated row position is -1 &amp;amp; calculated column position is n, the new position would be: (0, n-2).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Basically, we just start in the middle right square and apply the above criteria iteratively and it works for any odd-side-lengthed square.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Raku supports Unicode, so you’ll notice I used &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$side-length²&lt;/code&gt; rather than &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$side-length ** 2&lt;/code&gt;. It’s a small feature that I find helps readibilty (but can be hard to write)!&lt;/li&gt;
+  &lt;li&gt;This has been called out as a &lt;a href=&quot;https://docs.raku.org/language/traps#Using_[%E2%80%A6]_metaoperator_with_a_list_of_lists&quot;&gt;trick to avoid&lt;/a&gt; because it fails when you get a matrix with 1 row. Since it is being used in a debugging function and if we &lt;em&gt;did&lt;/em&gt; get a 1-row matrix it would be 1x1, so I think it is safe to use here&lt;/li&gt;
+  &lt;li&gt;I don’t really like that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;so&lt;/code&gt; is the subroutine used to cast input to a boolean, so I just wanted to call out that (a) that is what these lines are doing and (b) I don’t like the terminology.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I’m really glad I decided to start doing these challenges weekly, and I may even go back and attempt old challenges if I have time.&lt;/p&gt;
+
+&lt;p&gt;With that being said, I am kind of disappointed in myself for just copying old code for task two. For one, I have grown as a programmer since writing that, and two, it seems past-me just copied that code from somewhere on the internet. While it was kind of challenging porting it to Raku, I feel like it was the lazy way out.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Back again with challenge 89! I was able to tackle this one the day it was released, but I doubt that will be the case going forward.</summary></entry><entry><title type="html">Perl Weekly Challenge 88</title><link href="http://localhost:4000/blog/perl-weekly-challenge-088/" rel="alternate" type="text/html" title="Perl Weekly Challenge 88" /><published>2020-11-29T00:00:00-06:00</published><updated>2020-11-29T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-088</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-088/">&lt;p&gt;I have always been a fan of Perl (and its younger brother Raku), but, since leaving the Bioinformatics world, have not found any real-world scenarios to flex those muscles.&lt;/p&gt;
 
 &lt;p&gt;I recently stumbled upon the &lt;a href=&quot;https://perlweeklychallenge.org/&quot;&gt;Perl Weekly Challenge&lt;/a&gt; and decided it would be a great way to keep up-to-date with the community. I participated for the first time this week and thought it would be fun to do a write up of how I approached the problems. In the future, I will start publishing my blogs earlier in the week so that I can include a link to it in my PR.&lt;/p&gt;
 
