@@ -93,12 +93,12 @@ $M[4] = (5 x 2 x 1 x 4 x 3) / 3 = 40
 
 #### Specific comments
 
-1. The problem states we are given an array of positive integers, but it never hurts to validate. Raku gives us the `subset` keyword to easily define subsets of other types. In this case, the element has to be an integer and must be greater than 0. We then use this subset in the `MAIN` subroutine's signature
+1. The problem states we are given an array of positive integers, but it never hurts to validate. Raku gives us the `subset` keyword to easily define subsets of other types. In this case, the element has to be an integer and must be greater than 0. We then use this subset in the `MAIN` subroutine's signature.
 
 2. As we can see from the modifications to example 1 above, we will always have the product of all items in the numerator and current item in the denominator. We just want to calculate that once, and Raku gives us a simple way of doing that through it's `[*]` operator.
 
 3. This line shows my functional programming background bubbling up. Basically, for each item in the list, we want `$product / $item`, and we want the output collected into a list. This is a _textbook_ case for a map function, so you can see that is what I went with.
-  - To a non-Raku user, this may be a little confusing because `*` in a map _literally_ means [`whatever`](https://docs.raku.org/type/Whatever) (more specifically, "whatever input I received") and _not_ `multiply`. The Scala equivalent would be `N.map(item => product / item)`
+  - To a non-Raku user, this may be a little confusing because `*` in a map _literally_ means [`whatever`](https://docs.raku.org/type/Whatever) (more specifically, "whatever input I received") and _not_ `multiply`. The Scala equivalent would be `N.map(item => product / item)`.
 
   
 ## Task 2: Spiral Matrix

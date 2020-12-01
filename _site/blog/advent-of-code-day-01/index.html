@@ -331,7 +331,7 @@
         
         <p>Turns out I started blogging just in time for the <a href="https://adventofcode.com/">Advent of Code</a>, an annual series of daily challenges that run from December 1st to December 25th.</p>
 
-<p>These problems remind me a lot of <a href="https://projecteuler.net/">Project Euler</a>, because they are not concerned with the readbility or speed of your code, just the output. That means that any goals one wishes to accomplish should be set personally (there <em>is</em> technically a leaderboard, but I find you have to be online very late at night to catch the posts and it is not worth the stress during the holoday season).</p>
+<p>These problems remind me a lot of <a href="https://projecteuler.net/">Project Euler</a>, because they are not concerned with the readbility or speed of your code, just the output. That means that any goals one wishes to accomplish should be set personally (there <em>is</em> technically a leaderboard, but I find you have to be online very late at night to catch the posts and it is not worth the stress during the holiday season).</p>
 
 <p>My goal, as you may have guessed from my previous posts, is to complete these challenges in <em>at least</em> Raku and to do so utilizing a functional programming paradigm. Let’s dive into day 1 and see if I can do it!</p>
 
@@ -374,8 +374,8 @@
   <li>I’m a sucker for good IO. I feel reading/writing files in languages like Java or Scala is so cumbersome that I try to avoid it at all costs. Languages like Raku were <em>built</em> for text manipultion, so it makes sense that the IO is great, but I just wanted to call out how easy it is to get the lines of a file in a list.</li>
   <li>As I said in my <a href="https://aaronreidsmith.github.io/blog/perl-weekly-challenge-089/#specific-comments">previous post</a>, I see the <code class="language-plaintext highlighter-rouge">combinations</code> feature coming back a lot in these puzzles. I love that it is built right in.</li>
   <li><code class="language-plaintext highlighter-rouge">grep</code> is familiar to most <code class="language-plaintext highlighter-rouge">*nix</code> users, and it is the equivalent of a <code class="language-plaintext highlighter-rouge">filter</code> in more traditional functional languages. In this case, we are filtering down to only pairs that add up to <code class="language-plaintext highlighter-rouge">2020</code>.</li>
-  <li>At this point this list looks like this: <code class="language-plaintext highlighter-rouge">(($a, $b))</code>, so we still want to map over the outer list and multiply the pair together</li>
-  <li>Since <code class="language-plaintext highlighter-rouge">map</code> returns a list, we need to grab the first item from that list for pretty printing</li>
+  <li>At this point this list looks like this: <code class="language-plaintext highlighter-rouge">(($a, $b))</code>, so we still want to map over the outer list and multiply the pair together.</li>
+  <li>Since <code class="language-plaintext highlighter-rouge">map</code> returns a list, we need to grab the first item from that list for pretty printing.</li>
 </ol>
 
 <h3 id="part-2">Part 2</h3>
@@ -417,7 +417,7 @@ $ raku main.raku --p2 input.txt
 <ol>
   <li>Using the <code class="language-plaintext highlighter-rouge">:$p2</code> notation says to Raku “create a command line flag called <code class="language-plaintext highlighter-rouge">--p2</code> and assign it to <code class="language-plaintext highlighter-rouge">$p2</code> with a default of <code class="language-plaintext highlighter-rouge">False</code>”. Creating command line interfaces can be kind of a pain in a lot of languages, so I am happy that is built right into the language.</li>
   <li>This is the check to see if we are doing part 1 or part 2. Raku’s ternary operator is <code class="language-plaintext highlighter-rouge">condition ?? true !! false</code> rather than the traditional <code class="language-plaintext highlighter-rouge">condition ? true : false</code>.</li>
-  <li>Since we have to remove all the pair hardcoding, we can generalize it as a list called <code class="language-plaintext highlighter-rouge">@combo</code> and then just find the sum of the entire combo using the <code class="language-plaintext highlighter-rouge">[+]</code> meta operator. We perform a similar generalization for the <code class="language-plaintext highlighter-rouge">map</code> step</li>
+  <li>Since we have to remove all the pair hardcoding, we can generalize it as a list called <code class="language-plaintext highlighter-rouge">@combo</code> and then just find the sum of the entire combo using the <code class="language-plaintext highlighter-rouge">[+]</code> meta operator. We perform a similar generalization for the <code class="language-plaintext highlighter-rouge">map</code> step.</li>
 </ol>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
