@@ -102,4 +102,4 @@ Since it is basically the same problem, it only makes sense to modify the script
 
 ## Final Thoughts
 
-So far so good with my goal to write Raku solutions functionally! Check my [GitHub](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku) to see any other solutions (and any other languages, if I get around to them). This was a fun little dip into the Advent of Code, and I am looking forward to the rest of the month!
+So far so good with my goal to write Raku solutions functionally! Check my [GitHub](https://github.com/aaronreidsmith/advent-of-code) to see any other solutions (and any other languages, if I get around to them). This was a fun little dip into the Advent of Code, and I am looking forward to the rest of the month!
