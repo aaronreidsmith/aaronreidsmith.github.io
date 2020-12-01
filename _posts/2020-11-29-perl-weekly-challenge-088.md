@@ -1,5 +1,6 @@
 ---
 title: "Perl Weekly Challenge 88"
+last_modified_at: 2020-12-01T08:40:30-05:00
 categories:
   - Blog
 tags:
@@ -67,10 +68,10 @@ sub MAIN(*@N where all(@N) ~~ PositiveInt && @N.elems > 0) {
 This program runs as such:
 
 ```
-raku ch-1.raku 5 2 1 4 3
+$ raku ch-1.raku 5 2 1 4 3
 [24 60 120 30 40]
 
-raku ch-1.raku 2 1 4 3
+$ raku ch-1.raku 2 1 4 3
 [12 24 6 8]
 ```
 
@@ -215,10 +216,10 @@ sub MAIN(*@input where all(@input) ~~ PositiveInt && @input.elems > 0) {
 This program runs as such:
 
 ```
-raku ch-2.raku 1 2 3 4 5 6 7 8 9
+$ raku ch-2.raku 1 2 3 4 5 6 7 8 9
 [1 2 3 6 9 8 7 4 5]
 
-raku ch-2.raku 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+$ raku ch-2.raku 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
 [1 2 3 4 8 12 16 15 14 13 9 5 6 7 11 10]
 ```
 

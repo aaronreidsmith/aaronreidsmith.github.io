@@ -1,5 +1,6 @@
 ---
 title: "Perl Weekly Challenge 89"
+last_modified_at: 2020-12-01T08:40:30-05:00
 categories:
   - Blog
 tags:
@@ -51,10 +52,10 @@ sub MAIN($N where $N ~~ Int && $N > 0) {
 This program runs as such:
 
 ```
-raku ch-1.raku 3
+$ raku ch-1.raku 3
 3
 
-raku ch-1.raku 4
+$ raku ch-1.raku 4
 7
 ```
 
@@ -204,13 +205,13 @@ sub validate-matrix(@matrix, $side-length) {
 This program runs as such:
 
 ```
-raku ch-2.raku
+$ raku ch-2.raku
 [ 2 7 6 ]
 [ 9 5 1 ]
 [ 4 3 8 ]
 
 # There is an optional `debug` parameter that can be supplied, but the `side-length` argument must also be provided
-raku ch-2.raku 3 True
+$ raku ch-2.raku 3 True
 [ 2 7 6 ]
 [ 9 5 1 ]
 [ 4 3 8 ]

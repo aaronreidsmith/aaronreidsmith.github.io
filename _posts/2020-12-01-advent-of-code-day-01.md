@@ -1,5 +1,6 @@
 ---
 title: "Advent of Code: Day 1"
+last_modified_at: 2020-12-01T08:40:30-05:00
 categories:
   - Blog
 tags:
@@ -40,7 +41,8 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-raku main.raku input.txt
+$ raku main.raku input.txt
+1020036
 ```
 
 #### Explanation
@@ -79,10 +81,12 @@ This runs as such:
 
 ```
 # Part 1
-raku main.raku input.txt
+$ raku main.raku input.txt
+1020036
 
 # Part 2
-raku main.raku --p2 input.txt
+$ raku main.raku --p2 input.txt
+286977330
 ```
 
 #### Explanation
