@@ -10,4 +10,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "http://localhost:4000/blog/perl-weekly-challenge-089/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 1",
+        "excerpt":"Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th. These problems remind me a lot of Project Euler, because they are not concerned with the readbility or speed of your code, just...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-01/",
+        "teaser": null
       }]

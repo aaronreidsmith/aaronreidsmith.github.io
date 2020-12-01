@@ -1,4 +1,94 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-30T16:16:11-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 89</title><link href="http://localhost:4000/blog/perl-weekly-challenge-089/" rel="alternate" type="text/html" title="Perl Weekly Challenge 89" /><published>2020-11-30T00:00:00-06:00</published><updated>2020-11-30T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-089</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-089/">&lt;p&gt;Back again with challenge 89! I was able to tackle this one the day it was released, but I doubt that will be the case going forward.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-01T08:20:53-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 1</title><link href="http://localhost:4000/blog/advent-of-code-day-01/" rel="alternate" type="text/html" title="Advent of Code: Day 1" /><published>2020-12-01T00:00:00-06:00</published><updated>2020-12-01T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-01</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-01/">&lt;p&gt;Turns out I started blogging just in time for the &lt;a href=&quot;https://adventofcode.com/&quot;&gt;Advent of Code&lt;/a&gt;, an annual series of daily challenges that run from December 1st to December 25th.&lt;/p&gt;
+
+&lt;p&gt;These problems remind me a lot of &lt;a href=&quot;https://projecteuler.net/&quot;&gt;Project Euler&lt;/a&gt;, because they are not concerned with the readbility or speed of your code, just the output. That means that any goals one wishes to accomplish should be set personally (there &lt;em&gt;is&lt;/em&gt; technically a leaderboard, but I find you have to be online very late at night to catch the posts and it is not worth the stress during the holoday season).&lt;/p&gt;
+
+&lt;p&gt;My goal, as you may have guessed from my previous posts, is to complete these challenges in &lt;em&gt;at least&lt;/em&gt; Raku and to do so utilizing a functional programming paradigm. Let’s dive into day 1 and see if I can do it!&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;p&gt;I am not going to copy and paste the explanation of the problem here like I do for the Perl Weekly Challenge, because it is &lt;em&gt;so&lt;/em&gt; long and I want to encourage users to go attempt the challenge themselves! Instead, I will write a summary of what the challenge is and my solution.&lt;/p&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;Given a file full of integers (one per line), find the single pair of integers that adds up to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2020&lt;/code&gt;, then find the product of those two numbers.&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
+    say $file.IO.lines                           # [1]
+          .combinations(2)                       # [2]
+          .grep(-&amp;gt; ($a, $b) { $a + $b == 2020 }) # [3]
+          .map(-&amp;gt; ($a, $b) { $a * $b })          # [4]
+          .head;                                 # [5]
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;raku main.raku input.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;This is fairly straight forward and I feel Raku reads very cleanly. Basically, we read the entire file into a list (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IO.lines&lt;/code&gt;), then find all the pairs in that list, filter those pairs down to where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$a + $b == 2020&lt;/code&gt;, then multiply those two numbers together!&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;I’m a sucker for good IO. I feel reading/writing files in languages like Java or Scala is so cumbersome that I try to avoid it at all costs. Languages like Raku were &lt;em&gt;built&lt;/em&gt; for text manipultion, so it makes sense that the IO is great, but I just wanted to call out how easy it is to get the lines of a file in a list.&lt;/li&gt;
+  &lt;li&gt;As I said in my &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-089/#specific-comments&quot;&gt;previous post&lt;/a&gt;, I see the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;combinations&lt;/code&gt; feature coming back a lot in these puzzles. I love that it is built right in.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;grep&lt;/code&gt; is familiar to most &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*nix&lt;/code&gt; users, and it is the equivalent of a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;filter&lt;/code&gt; in more traditional functional languages. In this case, we are filtering down to only pairs that add up to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2020&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;At this point this list looks like this: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(($a, $b))&lt;/code&gt;, so we still want to map over the outer list and multiply the pair together&lt;/li&gt;
+  &lt;li&gt;Since &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt; returns a list, we need to grab the first item from that list for pretty printing&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;Given the same file as before, find the &lt;em&gt;3&lt;/em&gt; numbers that add up to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2020&lt;/code&gt; and find their product.&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file, Bool :$p2 = False) {                # [1]
+    say $file.IO.lines
+          .combinations($p2 ?? 3 !! 2)              # [2]
+          .grep(-&amp;gt; @combo { ([+] @combo) == 2020 }) # [3]
+          .map(-&amp;gt; @combo { [*] @combo })
+          .head;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
+raku main.raku input.txt
+
+# Part 2
+raku main.raku --p2 input.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;Since it is basically the same problem, it only makes sense to modify the script we have already written rather than starting from scratch. Basically, everywhere where we hardcoded &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$a, $b&lt;/code&gt; needs to be generalized to some list. In this case, we added a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p2&lt;/code&gt; CLI flag that allows the users to specify if they are doing part 1 or part 2. If they are doing part 2 we find trios instead of pairs, then perform the same “business logic” on that collection.&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:$p2&lt;/code&gt; notation says to Raku “create a command line flag called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--p2&lt;/code&gt; and assign it to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$p2&lt;/code&gt; with a default of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;False&lt;/code&gt;”. Creating command line interfaces can be kind of a pain in a lot of languages, so I am happy that is built right into the language.&lt;/li&gt;
+  &lt;li&gt;This is the check to see if we are doing part 1 or part 2. Raku’s ternary operator is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;condition ?? true !! false&lt;/code&gt; rather than the traditional &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;condition ? true : false&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Since we have to remove all the pair hardcoding, we can generalize it as a list called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@combo&lt;/code&gt; and then just find the sum of the entire combo using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[+]&lt;/code&gt; meta operator. We perform a similar generalization for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt; step&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;So far so good with my goal to write Raku solutions functionally! Check my &lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku&quot;&gt;GitHub&lt;/a&gt; to see any other solutions (and any other languages, if I get around to them). This was a fun little dip into the Advent of Code, and I am looking forward to the rest of the month!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.</summary></entry><entry><title type="html">Perl Weekly Challenge 89</title><link href="http://localhost:4000/blog/perl-weekly-challenge-089/" rel="alternate" type="text/html" title="Perl Weekly Challenge 89" /><published>2020-11-30T00:00:00-06:00</published><updated>2020-11-30T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-089</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-089/">&lt;p&gt;Back again with challenge 89! I was able to tackle this one the day it was released, but I doubt that will be the case going forward.&lt;/p&gt;
 
 &lt;p&gt;Once again, it seems the first task can be tackled easily in a functional way and the second one ends up being more imperative. Hoping I can try to do more things functionally in the future!&lt;/p&gt;
 
