@@ -16,4 +16,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-01/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 2",
+        "excerpt":"We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in! The Problem Part 1 Given a file full of...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-02/",
+        "teaser": null
       }]
