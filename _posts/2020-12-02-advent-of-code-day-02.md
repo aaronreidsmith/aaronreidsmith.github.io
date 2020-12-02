@@ -140,7 +140,7 @@ class PartTwoActions {
         my @password     = $/[3].Str.comb;
         make so (
             (@password[$position-one] cmp $target) == Same # [1][2]
-            xor                                            # [2]
+            xor                                            # [3]
             (@password[$position-two] cmp $target) == Same
         );
     }
@@ -169,15 +169,15 @@ $ raku main.raku --p2 input.txt
 
 #### Explanation
 
-Similarly to [day 1](https://aaronreidsmith.github.io/blog/advent-of-code-day-01/), we can utilize the code already written an tweak it a little bit. In this case, the grammar stays the same, but the actions taken on each line need to change.
+Similarly to [day 1](https://aaronreidsmith.github.io/blog/advent-of-code-day-01/), we can utilize the code already written and tweak it a little bit. In this case, the grammar stays the same, but the actions taken on each line need to change.
 
 Again, we provide the `--p2` flag, and then add the `PartTwoActions` class to handle the business logic for the new interpretation of the password policy.
 
 ##### Specific Comments
 
-1. I had to use `cmp` instead of `==` here to get proper string comparison (otherwise, Raku tries to case strings to hexadecimal).
+1. I had to use `cmp` instead of `==` here to get proper string comparison (otherwise, Raku tries to cast strings to hexadecimal).
 2. `cmp` returns `Less`, `More` or `Same` instead of a boolean. I couldn't find a way to cast `Same` to a boolean, because it casts it as such `Same -> 0 -> False`, when what we really want is `True`, so I had to add the ugly `== Same`.
-3. `|` is a junction operator in Raku, so it has the handy-dandy `xor` operator utilized here.
+3. `|` is a junction operator in Raku, so it has the handy dandy `xor` operator utilized here.
 
 
 ## Final Thoughts

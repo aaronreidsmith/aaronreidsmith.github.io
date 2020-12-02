@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-02T10:33:59-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 2</title><link href="http://localhost:4000/blog/advent-of-code-day-02/" rel="alternate" type="text/html" title="Advent of Code: Day 2" /><published>2020-12-02T00:00:00-06:00</published><updated>2020-12-02T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-02</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-02/">&lt;p&gt;We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-02T10:45:07-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 2</title><link href="http://localhost:4000/blog/advent-of-code-day-02/" rel="alternate" type="text/html" title="Advent of Code: Day 2" /><published>2020-12-02T00:00:00-06:00</published><updated>2020-12-02T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-02</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-02/">&lt;p&gt;We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -132,7 +132,7 @@ class PartTwoActions {
         my @password     = $/[3].Str.comb;
         make so (
             (@password[$position-one] cmp $target) == Same # [1][2]
-            xor                                            # [2]
+            xor                                            # [3]
             (@password[$position-two] cmp $target) == Same
         );
     }
@@ -160,16 +160,16 @@ $ raku main.raku --p2 input.txt
 
 &lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
 
-&lt;p&gt;Similarly to &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-01/&quot;&gt;day 1&lt;/a&gt;, we can utilize the code already written an tweak it a little bit. In this case, the grammar stays the same, but the actions taken on each line need to change.&lt;/p&gt;
+&lt;p&gt;Similarly to &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-01/&quot;&gt;day 1&lt;/a&gt;, we can utilize the code already written and tweak it a little bit. In this case, the grammar stays the same, but the actions taken on each line need to change.&lt;/p&gt;
 
 &lt;p&gt;Again, we provide the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--p2&lt;/code&gt; flag, and then add the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PartTwoActions&lt;/code&gt; class to handle the business logic for the new interpretation of the password policy.&lt;/p&gt;
 
 &lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;I had to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cmp&lt;/code&gt; instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;==&lt;/code&gt; here to get proper string comparison (otherwise, Raku tries to case strings to hexadecimal).&lt;/li&gt;
+  &lt;li&gt;I had to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cmp&lt;/code&gt; instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;==&lt;/code&gt; here to get proper string comparison (otherwise, Raku tries to cast strings to hexadecimal).&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cmp&lt;/code&gt; returns &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Less&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;More&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Same&lt;/code&gt; instead of a boolean. I couldn’t find a way to cast &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Same&lt;/code&gt; to a boolean, because it casts it as such &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Same -&amp;gt; 0 -&amp;gt; False&lt;/code&gt;, when what we really want is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt;, so I had to add the ugly &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;== Same&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; is a junction operator in Raku, so it has the handy-dandy &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xor&lt;/code&gt; operator utilized here.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; is a junction operator in Raku, so it has the handy dandy &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xor&lt;/code&gt; operator utilized here.&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
