@@ -10,7 +10,7 @@ tags:
 
 Turns out I started blogging just in time for the [Advent of Code](https://adventofcode.com/), an annual series of daily challenges that run from December 1st to December 25th.
 
-These problems remind me a lot of [Project Euler](https://projecteuler.net/), because they are not concerned with the readbility or speed of your code, just the output. That means that any goals one wishes to accomplish should be set personally (there _is_ technically a leaderboard, but I find you have to be online very late at night to catch the posts and it is not worth the stress during the holiday season).
+These problems remind me a lot of [Project Euler](https://projecteuler.net/), because they are not concerned with the readability or speed of your code, just the output. That means that any goals one wishes to accomplish should be set personally (there _is_ technically a leaderboard, but I find you have to be online very late at night to catch the posts and it is not worth the stress during the holiday season).
 
 My goal, as you may have guessed from my previous posts, is to complete these challenges in _at least_ Raku and to do so utilizing a functional programming paradigm. Let's dive into day 1 and see if I can do it!
 
