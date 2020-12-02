@@ -1,4 +1,180 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-01T18:28:10-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 1</title><link href="http://localhost:4000/blog/advent-of-code-day-01/" rel="alternate" type="text/html" title="Advent of Code: Day 1" /><published>2020-12-01T00:00:00-06:00</published><updated>2020-12-01T07:40:30-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-01</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-01/">&lt;p&gt;Turns out I started blogging just in time for the &lt;a href=&quot;https://adventofcode.com/&quot;&gt;Advent of Code&lt;/a&gt;, an annual series of daily challenges that run from December 1st to December 25th.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-02T10:33:59-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 2</title><link href="http://localhost:4000/blog/advent-of-code-day-02/" rel="alternate" type="text/html" title="Advent of Code: Day 2" /><published>2020-12-02T00:00:00-06:00</published><updated>2020-12-02T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-02</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-02/">&lt;p&gt;We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;Given a file full of lines that look like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1-3 a: ababa
+10-14 q: qqqqqqqqq
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Which can be interpretted as a password policy that reads as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The password &quot;ababa&quot; must contain between 1 and 3 (inclusive) &quot;a&quot; characters
+The password &quot;qqqqqqqqqq&quot; must contain between 10 and 14 (inclusive) &quot;q&quot; characters
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Our job is to find how many passwords are &lt;strong&gt;valid&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grammar PasswordEntry {
+    token TOP { ^(&amp;lt;digit&amp;gt;+)'-'(&amp;lt;digit&amp;gt;+) &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;)':' &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;+)$ } # [1]
+}
+
+grammar PasswordEntryActions {
+    method TOP($/) {                                                          # [2]
+        my $range-start  = $/[0].Int;
+        my $range-end    = $/[1].Int;
+        my $target       = $/[2].Str;
+        my $password     = $/[3].Str;
+        my $target-count = $password.comb($target).elems;                     # [3]
+        make so $range-start &amp;lt;= $target-count &amp;amp;&amp;amp; $target-count &amp;lt;= $range-end;
+    }
+}
+
+sub MAIN($file) {
+    my $actions = PasswordEntryActions.new;
+    say $file.IO.lines
+          .map(-&amp;gt; $row { PasswordEntry.parse($row, :$actions).made }) # [4]
+          .grep(* == True)                                            # [5]
+          .elems;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+393
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;We do a couple things here:&lt;/p&gt;
+
+&lt;p&gt;First we pull in all the lines in the file, then parse them using our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PasswordEntry&lt;/code&gt; grammar. See below for the explanation on the grammar.&lt;/p&gt;
+
+&lt;p&gt;When we parse each line, we specify what actions should take place with the parsed text (in this case, we pass it to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PasswordEntryActions&lt;/code&gt; to do post-processing). &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PasswordEntryActions&lt;/code&gt; takes the input (a &lt;a href=&quot;https://docs.raku.org/type/Match&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Match&lt;/code&gt;&lt;/a&gt; object), and determines if the parsed password contains the right number of target characters.&lt;/p&gt;
+
+&lt;p&gt;These are then filtered down to only those that &lt;em&gt;do&lt;/em&gt; contain the right number of characters (valid passwords) and counted.&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;We could just define a regex like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;my $regex = /pattern/&lt;/code&gt;, but I wanted to combine the parse step &lt;em&gt;and&lt;/em&gt; the business logic of determining if it is a valid password; we will get into that second part below.
+    &lt;ul&gt;
+      &lt;li&gt;When definining a grammar, you always have to define a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TOP&lt;/code&gt; token the encompasses everything. If I had a more complex grammar, I could define subtokens that could be used in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TOP&lt;/code&gt; token (or any other defined tokens).&lt;/li&gt;
+      &lt;li&gt;For the non-regex folks, the way this reads is:
+        &lt;ul&gt;
+          &lt;li&gt;Start of line&lt;/li&gt;
+          &lt;li&gt;An integer (captured group, see below)&lt;/li&gt;
+          &lt;li&gt;Followed by a dash&lt;/li&gt;
+          &lt;li&gt;Followed by an integer (captured group, see below)&lt;/li&gt;
+          &lt;li&gt;Followed by a space&lt;/li&gt;
+          &lt;li&gt;Followed by a single lowercase letter (captured group, see below)&lt;/li&gt;
+          &lt;li&gt;Followed by a colon&lt;/li&gt;
+          &lt;li&gt;Followed by a space&lt;/li&gt;
+          &lt;li&gt;Followed by one or more lowercase letters (captured group, see below)&lt;/li&gt;
+          &lt;li&gt;End of line&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Additionally, you’ll notice the four sets of parenthese that define &lt;em&gt;capture groups&lt;/em&gt;, meaning when this grammar parses a line successfully, it will return the four groups in an array.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;When we use the parser (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PasswordEntry.parse&lt;/code&gt;), we are able to supply this &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;actions&lt;/code&gt; class that has methods corresponding to the tokens in the parser. This is where any business logic should take place. For example, any type casting or object creation to be used in the outer scope. In this case, like I said above, we want to parse and reduce to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;False&lt;/code&gt; in one pass. So what our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TOP&lt;/code&gt; method does is take the match &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$/&lt;/code&gt; (this is a special variable, I would never name something like this), extract the four groups defined in the grammar, and cast them to the correct types. We then count the number of times the target appears in the password and see if it is in range.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;comb&lt;/code&gt; takes a string and turns it into a list of characters. When supplied with a string argument (in this case, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$target&lt;/code&gt;), it turns the string into a list &lt;em&gt;and&lt;/em&gt; filters it down to elements that equal the supplied character.&lt;/li&gt;
+  &lt;li&gt;There is some special syntax going on on this line. I could have written &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PasswordEntry.parse($row, actions =&amp;gt; $actions)&lt;/code&gt;, and used &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$actions&lt;/code&gt; as a named keyword. But, since my variable has the same name as the target argument, I am able to pass it in as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:$actions&lt;/code&gt;. It reminds me of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;**kwargs&lt;/code&gt; in Python.&lt;/li&gt;
+  &lt;li&gt;I &lt;em&gt;hate&lt;/em&gt; that I have to say &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;* == True&lt;/code&gt;, but &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;grep&lt;/code&gt; would not work otherwise, so I guess that is just an edge case.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;Given the same file as before, the interpretation of the lines has changed. Given the same lines as above, the intperpretation should now be:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The password &quot;ababa&quot; must contain an &quot;a&quot; character in position 1 or 3 (but not both)
+The password &quot;qqqqqqqqqq&quot; must contain a &quot;q&quot; character in position 10 or 14 (but not both)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; These strings are 1-indexed instead of 0-indexed, so we have to account for that.&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grammar PasswordEntry {
+    token TOP { ^(&amp;lt;digit&amp;gt;+)'-'(&amp;lt;digit&amp;gt;+) &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;)':' &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;+)$ }
+}
+
+class PartOneActions {
+    method TOP($/) {
+        my $range-start  = $/[0].Int;
+        my $range-end    = $/[1].Int;
+        my $target       = $/[2].Str;
+        my $password     = $/[3].Str;
+        my $target-count = $password.comb($target).elems;
+        make so $range-start &amp;lt;= $target-count &amp;amp;&amp;amp; $target-count &amp;lt;= $range-end;
+    }
+}
+
+class PartTwoActions {
+    method TOP($/) {
+        my $position-one = $/[0].Int - 1;
+        my $position-two = $/[1].Int - 1;
+        my $target       = $/[2].Str;
+        my @password     = $/[3].Str.comb;
+        make so (
+            (@password[$position-one] cmp $target) == Same # [1][2]
+            xor                                            # [2]
+            (@password[$position-two] cmp $target) == Same
+        );
+    }
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my $actions = $p2 ?? PartTwoActions.new !! PartOneActions.new;
+    say $file.IO.lines
+          .map(-&amp;gt; $row { PasswordEntry.parse($row, :$actions).made })
+          .grep(* == True)
+          .elems;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
+$ raku main.raku input.txt
+393
+
+# Part 2
+$ raku main.raku --p2 input.txt
+690
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;Similarly to &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-01/&quot;&gt;day 1&lt;/a&gt;, we can utilize the code already written an tweak it a little bit. In this case, the grammar stays the same, but the actions taken on each line need to change.&lt;/p&gt;
+
+&lt;p&gt;Again, we provide the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--p2&lt;/code&gt; flag, and then add the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PartTwoActions&lt;/code&gt; class to handle the business logic for the new interpretation of the password policy.&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;I had to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cmp&lt;/code&gt; instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;==&lt;/code&gt; here to get proper string comparison (otherwise, Raku tries to case strings to hexadecimal).&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cmp&lt;/code&gt; returns &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Less&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;More&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Same&lt;/code&gt; instead of a boolean. I couldn’t find a way to cast &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Same&lt;/code&gt; to a boolean, because it casts it as such &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Same -&amp;gt; 0 -&amp;gt; False&lt;/code&gt;, when what we really want is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt;, so I had to add the ugly &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;== Same&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; is a junction operator in Raku, so it has the handy-dandy &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xor&lt;/code&gt; operator utilized here.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;Another functional and (in my opinion) beautiful solution! In my day job, I actually maintain a grammar defined using &lt;a href=&quot;https://www.antlr.org/&quot;&gt;ANTLR&lt;/a&gt;, so it is fun to see tools with the same concepts in other languages. Looking forward to getting to use grammars more in Raku. See y’all tomorrow!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!</summary></entry><entry><title type="html">Advent of Code: Day 1</title><link href="http://localhost:4000/blog/advent-of-code-day-01/" rel="alternate" type="text/html" title="Advent of Code: Day 1" /><published>2020-12-01T00:00:00-06:00</published><updated>2020-12-01T07:40:30-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-01</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-01/">&lt;p&gt;Turns out I started blogging just in time for the &lt;a href=&quot;https://adventofcode.com/&quot;&gt;Advent of Code&lt;/a&gt;, an annual series of daily challenges that run from December 1st to December 25th.&lt;/p&gt;
 
 &lt;p&gt;These problems remind me a lot of &lt;a href=&quot;https://projecteuler.net/&quot;&gt;Project Euler&lt;/a&gt;, because they are not concerned with the readability or speed of your code, just the output. That means that any goals one wishes to accomplish should be set personally (there &lt;em&gt;is&lt;/em&gt; technically a leaderboard, but I find you have to be online very late at night to catch the posts and it is not worth the stress during the holiday season).&lt;/p&gt;
 
