@@ -1,4 +1,149 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-02T10:45:07-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 2</title><link href="http://localhost:4000/blog/advent-of-code-day-02/" rel="alternate" type="text/html" title="Advent of Code: Day 2" /><published>2020-12-02T00:00:00-06:00</published><updated>2020-12-02T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-02</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-02/">&lt;p&gt;We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-03T08:33:04-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 3</title><link href="http://localhost:4000/blog/advent-of-code-day-03/" rel="alternate" type="text/html" title="Advent of Code: Day 3" /><published>2020-12-03T00:00:00-06:00</published><updated>2020-12-03T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-03</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-03/">&lt;p&gt;Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a &lt;a href=&quot;https://two-wrongs.com/myth-of-the-day-functional-programmers-dont-use-loops&quot;&gt;for-loop in functional programming programming&lt;/a&gt;, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;We are going sledding this week! Our job is to get to the bottom of the mountain following a specific path, and to count how many trees we would run into along the way.&lt;/p&gt;
+
+&lt;p&gt;Given a file that looks like the diagram below, we are to start in the top left of this file and traverse right three spaces and down one space until we hit the bottom, counting the number of hash signs (trees) we encounter.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...#..............#.#....#..#..
+...#..#..#..............#..#...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Additionally, this is a magic mountain, so the pattern on each row repeats out to the right infinitely, and we have to account for that.&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub traverse(@mountain, $trees-encountered = 0, $i = 0, $j = 0) {
+    if $i &amp;gt; @mountain.elems - 1 {
+        $trees-encountered;
+    } else {
+        my $tree-hit = @mountain[$i][$j] cmp '#' == Same ?? 1 !! 0;
+        if $i == @mountain.elems - 1 {
+            $trees-encountered + $tree-hit;
+        } else {
+            traverse(@mountain, $trees-encountered + $tree-hit, $i + 1, $j + 3);
+        }
+    }
+}
+
+sub MAIN($file) {
+    say traverse($file.IO.lines.map(-&amp;gt; $line { |$line.comb xx * })); # [1][2][3][4]
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+191
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;Other than the below comments, I feel like this reads fairly easily. Basically, we turn our file into a list of infinite lists (described below) and then call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse&lt;/code&gt; on that outer list. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse&lt;/code&gt; is a &lt;a href=&quot;https://www.geeksforgeeks.org/tail-recursion/&quot;&gt;tail-recursive&lt;/a&gt; function with fairly simple logic:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;If we have already passed the bottom, return the number of trees we hit&lt;/li&gt;
+  &lt;li&gt;If we are at the bottom of the mountain, see if we are currently hitting a tree and then return &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$trees-encountered&lt;/code&gt; with the last tree included&lt;/li&gt;
+  &lt;li&gt;Otherwise, add the current tree hit to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$trees-encountered&lt;/code&gt; and go down one row and to the right three columns&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; has a special meaning when used in front of a list. It flattens any inner lists to the top level. So, for example, if we had &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|((1, 2), (3, 4))&lt;/code&gt;, that would equal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 2, 3, 4)&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Reminder that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.comb&lt;/code&gt; splits the input into a list of characters.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xx&lt;/code&gt; is a special operator that takes the input list and concatenates it to itself &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; times (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N = *&lt;/code&gt; here; see below). So, for example, if we had &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 2) xx 2&lt;/code&gt;, that would yield &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;((1, 2), (1, 2))&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xx&lt;/code&gt; allows the &lt;a href=&quot;https://docs.raku.org/type/Whatever&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Whatever&lt;/code&gt;&lt;/a&gt; character (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt;) on the right hand side, and in that case it returns a lazy, infinite concatenation of the left hand side.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;So, to summarize the above comments, we take the line and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;comb&lt;/code&gt; it to a list. Then, we concatenate that list infinitely to have a list of lists, which we flatten using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; operator. Since this happens in a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt;, it applies to each line, so we have one finite outer list containing multiple infinite lists. We then traverse the outer list.&lt;/p&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;Given the same file as before, we want to tackle it with five different traversals:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Right 1, down 1&lt;/li&gt;
+  &lt;li&gt;Right 3, down 1 (This is the slope we already checked)&lt;/li&gt;
+  &lt;li&gt;Right 5, down 1&lt;/li&gt;
+  &lt;li&gt;Right 7, down 1&lt;/li&gt;
+  &lt;li&gt;Right 1, down 2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Then, we must find the product of all the trees we hit with each traversal&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub traverse(@mountain, $i-increment, $j-increment, $trees-encountered = 0, $i = 0, $j = 0) {
+    if $i &amp;gt; @mountain.elems - 1 {
+        $trees-encountered;
+    } else {
+        my $tree-hit = @mountain[$i][$j] cmp '#' == Same ?? 1 !! 0;
+        if $i == @mountain.elems - 1 {
+            $trees-encountered + $tree-hit;
+        } else {
+            traverse(
+                @mountain,
+                $i-increment,
+                $j-increment,
+                $trees-encountered + $tree-hit,
+                $i + $i-increment,
+                $j + $j-increment
+            );
+        }
+    }
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my @traversals = $p2 ?? (
+        (1, 1),
+        (1, 3),
+        (1, 5),
+        (1, 7),
+        (2, 1)      # [1]
+    ) !! ((1, 3),); # [2]
+    say [*] @traversals.map(-&amp;gt; ($i-increment, $j-increment) {
+        traverse($file.IO.lines.map(-&amp;gt; $line { |$line.comb xx * }), $i-increment, $j-increment)
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
+$ raku main.raku input.txt
+191
+
+# Part 2
+$ raku main.raku --p2 input.txt
+1478615040
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;Again, we are able to tweak our code slightly and handle both parts one and two in one block. In this case, we added two arguments to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse&lt;/code&gt; to tell it the row step-size and column step-size. We then just add the list of lists corresponding to the five traversals noted above, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt; over them and calculate the product using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[*]&lt;/code&gt; operator! In the case of part one, it is a list of size one, so &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[*]&lt;/code&gt; will just return the single element.&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The input file has 323 lines, so we will hit the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$i &amp;gt; @mountain.elems - 1&lt;/code&gt; case with this traversal, so it is a good thing we generalized it in the previous step!&lt;/li&gt;
+  &lt;li&gt;Need this to be a list of lists to map over it, so we need the comma to denote the outer list is of size one.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I felt this problem came very serendipitously; I was &lt;em&gt;just&lt;/em&gt; reading about the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xx&lt;/code&gt; operators last night, so I am glad I got to put them to use. Recursion (and more specifically tail recursion) is always a fun approach, and it let us tackle this problem functionally. 3 for 3! Let’s see what tomorrow brings.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion.</summary></entry><entry><title type="html">Advent of Code: Day 2</title><link href="http://localhost:4000/blog/advent-of-code-day-02/" rel="alternate" type="text/html" title="Advent of Code: Day 2" /><published>2020-12-02T00:00:00-06:00</published><updated>2020-12-02T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-02</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-02/">&lt;p&gt;We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
