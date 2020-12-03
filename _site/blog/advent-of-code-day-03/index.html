@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Advent of Code: Day 2 - Aaron Smith</title>
-<meta name="description" content="We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!">
+<!-- begin _includes/seo.html --><title>Advent of Code: Day 3 - Aaron Smith</title>
+<meta name="description" content="Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion.">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Advent of Code: Day 2">
-<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-02/">
+<meta property="og:title" content="Advent of Code: Day 3">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-03/">
 
 
-  <meta property="og:description" content="We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-12-02T00:00:00-06:00">
+  <meta property="og:description" content="Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion.">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-02/">
+
+  <meta property="article:published_time" content="2020-12-03T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-03/">
 
 
 
@@ -285,15 +285,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Advent of Code: Day 2">
-    <meta itemprop="description" content="We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!">
-    <meta itemprop="datePublished" content="2020-12-02T00:00:00-06:00">
+    <meta itemprop="headline" content="Advent of Code: Day 3">
+    <meta itemprop="description" content="Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion.">
+    <meta itemprop="datePublished" content="2020-12-03T00:00:00-06:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 2
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 3
 </h1>
           
 
@@ -302,7 +302,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-02T00:00:00-06:00">December 2, 2020</time>
+        <time datetime="2020-12-03T00:00:00-06:00">December 3, 2020</time>
       </span>
     
 
@@ -315,7 +315,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          5 minute read
+          4 minute read
         
       </span>
     
@@ -327,152 +327,124 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!</p>
+        <p>Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a <a href="https://two-wrongs.com/myth-of-the-day-functional-programmers-dont-use-loops">for-loop in functional programming programming</a>, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion.</p>
 
 <h2 id="the-problem">The Problem</h2>
 
 <h3 id="part-1">Part 1</h3>
 
-<p>Given a file full of lines that look like this:</p>
+<p>We are going sledding this week! Our job is to get to the bottom of the mountain following a specific path, and to count how many trees we would run into along the way.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1-3 a: ababa
-10-14 q: qqqqqqqqq
+<p>Given a file that looks like the diagram below, we are to start in the top left of this file and traverse right three spaces and down one space until we hit the bottom, counting the number of hash signs (trees) we encounter.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...#..............#.#....#..#..
+...#..#..#..............#..#...
 </code></pre></div></div>
 
-<p>Which can be interpretted as a password policy that reads as such:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The password "ababa" must contain between 1 and 3 (inclusive) "a" characters
-The password "qqqqqqqqqq" must contain between 10 and 14 (inclusive) "q" characters
-</code></pre></div></div>
-
-<p>Our job is to find how many passwords are <strong>valid</strong>.</p>
+<p>Additionally, this is a magic mountain, so the pattern on each row repeats out to the right infinitely, and we have to account for that.</p>
 
 <h4 id="solution">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implemenation specific comments</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grammar PasswordEntry {
-    token TOP { ^(&lt;digit&gt;+)'-'(&lt;digit&gt;+) &lt;.ws&gt; (&lt;[a..z]&gt;)':' &lt;.ws&gt; (&lt;[a..z]&gt;+)$ } # [1]
-}
-
-grammar PasswordEntryActions {
-    method TOP($/) {                                                          # [2]
-        my $range-start  = $/[0].Int;
-        my $range-end    = $/[1].Int;
-        my $target       = $/[2].Str;
-        my $password     = $/[3].Str;
-        my $target-count = $password.comb($target).elems;                     # [3]
-        make so $range-start &lt;= $target-count &amp;&amp; $target-count &lt;= $range-end;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub traverse(@mountain, $trees-encountered = 0, $i = 0, $j = 0) {
+    if $i &gt; @mountain.elems - 1 {
+        $trees-encountered;
+    } else {
+        my $tree-hit = @mountain[$i][$j] cmp '#' == Same ?? 1 !! 0;
+        if $i == @mountain.elems - 1 {
+            $trees-encountered + $tree-hit;
+        } else {
+            traverse(@mountain, $trees-encountered + $tree-hit, $i + 1, $j + 3);
+        }
     }
 }
 
 sub MAIN($file) {
-    my $actions = PasswordEntryActions.new;
-    say $file.IO.lines
-          .map(-&gt; $row { PasswordEntry.parse($row, :$actions).made }) # [4]
-          .grep(* == True)                                            # [5]
-          .elems;
+    say traverse($file.IO.lines.map(-&gt; $line { |$line.comb xx * })); # [1][2][3][4]
 }
 </code></pre></div></div>
 
 <p>This runs as such:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
-393
+191
 </code></pre></div></div>
 
 <h4 id="explanation">Explanation</h4>
 
-<p>We do a couple things here:</p>
+<p>Other than the below comments, I feel like this reads fairly easily. Basically, we turn our file into a list of infinite lists (described below) and then call <code class="language-plaintext highlighter-rouge">traverse</code> on that outer list. <code class="language-plaintext highlighter-rouge">traverse</code> is a <a href="https://www.geeksforgeeks.org/tail-recursion/">tail-recursive</a> function with fairly simple logic:</p>
 
-<p>First we pull in all the lines in the file, then parse them using our <code class="language-plaintext highlighter-rouge">PasswordEntry</code> grammar. See below for the explanation on the grammar.</p>
-
-<p>When we parse each line, we specify what actions should take place with the parsed text (in this case, we pass it to <code class="language-plaintext highlighter-rouge">PasswordEntryActions</code> to do post-processing). <code class="language-plaintext highlighter-rouge">PasswordEntryActions</code> takes the input (a <a href="https://docs.raku.org/type/Match"><code class="language-plaintext highlighter-rouge">Match</code></a> object), and determines if the parsed password contains the right number of target characters.</p>
-
-<p>These are then filtered down to only those that <em>do</em> contain the right number of characters (valid passwords) and counted.</p>
+<ul>
+  <li>If we have already passed the bottom, return the number of trees we hit</li>
+  <li>If we are at the bottom of the mountain, see if we are currently hitting a tree and then return <code class="language-plaintext highlighter-rouge">$trees-encountered</code> with the last tree included</li>
+  <li>Otherwise, add the current tree hit to <code class="language-plaintext highlighter-rouge">$trees-encountered</code> and go down one row and to the right three columns</li>
+</ul>
 
 <h5 id="specific-comments">Specific Comments</h5>
 
 <ol>
-  <li>We could just define a regex like <code class="language-plaintext highlighter-rouge">my $regex = /pattern/</code>, but I wanted to combine the parse step <em>and</em> the business logic of determining if it is a valid password; we will get into that second part below.
-    <ul>
-      <li>When definining a grammar, you always have to define a <code class="language-plaintext highlighter-rouge">TOP</code> token the encompasses everything. If I had a more complex grammar, I could define subtokens that could be used in the <code class="language-plaintext highlighter-rouge">TOP</code> token (or any other defined tokens).</li>
-      <li>For the non-regex folks, the way this reads is:
-        <ul>
-          <li>Start of line</li>
-          <li>An integer (captured group, see below)</li>
-          <li>Followed by a dash</li>
-          <li>Followed by an integer (captured group, see below)</li>
-          <li>Followed by a space</li>
-          <li>Followed by a single lowercase letter (captured group, see below)</li>
-          <li>Followed by a colon</li>
-          <li>Followed by a space</li>
-          <li>Followed by one or more lowercase letters (captured group, see below)</li>
-          <li>End of line</li>
-        </ul>
-      </li>
-      <li>Additionally, you’ll notice the four sets of parenthese that define <em>capture groups</em>, meaning when this grammar parses a line successfully, it will return the four groups in an array.</li>
-    </ul>
-  </li>
-  <li>When we use the parser (<code class="language-plaintext highlighter-rouge">PasswordEntry.parse</code>), we are able to supply this <code class="language-plaintext highlighter-rouge">actions</code> class that has methods corresponding to the tokens in the parser. This is where any business logic should take place. For example, any type casting or object creation to be used in the outer scope. In this case, like I said above, we want to parse and reduce to <code class="language-plaintext highlighter-rouge">True</code> or <code class="language-plaintext highlighter-rouge">False</code> in one pass. So what our <code class="language-plaintext highlighter-rouge">TOP</code> method does is take the match <code class="language-plaintext highlighter-rouge">$/</code> (this is a special variable, I would never name something like this), extract the four groups defined in the grammar, and cast them to the correct types. We then count the number of times the target appears in the password and see if it is in range.</li>
-  <li><code class="language-plaintext highlighter-rouge">comb</code> takes a string and turns it into a list of characters. When supplied with a string argument (in this case, <code class="language-plaintext highlighter-rouge">$target</code>), it turns the string into a list <em>and</em> filters it down to elements that equal the supplied character.</li>
-  <li>There is some special syntax going on on this line. I could have written <code class="language-plaintext highlighter-rouge">PasswordEntry.parse($row, actions =&gt; $actions)</code>, and used <code class="language-plaintext highlighter-rouge">$actions</code> as a named keyword. But, since my variable has the same name as the target argument, I am able to pass it in as <code class="language-plaintext highlighter-rouge">:$actions</code>. It reminds me of <code class="language-plaintext highlighter-rouge">**kwargs</code> in Python.</li>
-  <li>I <em>hate</em> that I have to say <code class="language-plaintext highlighter-rouge">* == True</code>, but <code class="language-plaintext highlighter-rouge">grep</code> would not work otherwise, so I guess that is just an edge case.</li>
+  <li><code class="language-plaintext highlighter-rouge">|</code> has a special meaning when used in front of a list. It flattens any inner lists to the top level. So, for example, if we had <code class="language-plaintext highlighter-rouge">|((1, 2), (3, 4))</code>, that would equal <code class="language-plaintext highlighter-rouge">(1, 2, 3, 4)</code>.</li>
+  <li>Reminder that <code class="language-plaintext highlighter-rouge">.comb</code> splits the input into a list of characters.</li>
+  <li><code class="language-plaintext highlighter-rouge">xx</code> is a special operator that takes the input list and concatenates it to itself <code class="language-plaintext highlighter-rouge">N</code> times (<code class="language-plaintext highlighter-rouge">N = *</code> here; see below). So, for example, if we had <code class="language-plaintext highlighter-rouge">(1, 2) xx 2</code>, that would yield <code class="language-plaintext highlighter-rouge">((1, 2), (1, 2))</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">xx</code> allows the <a href="https://docs.raku.org/type/Whatever"><code class="language-plaintext highlighter-rouge">Whatever</code></a> character (<code class="language-plaintext highlighter-rouge">*</code>) on the right hand side, and in that case it returns a lazy, infinite concatenation of the left hand side.</li>
 </ol>
+
+<p>So, to summarize the above comments, we take the line and <code class="language-plaintext highlighter-rouge">comb</code> it to a list. Then, we concatenate that list infinitely to have a list of lists, which we flatten using the <code class="language-plaintext highlighter-rouge">|</code> operator. Since this happens in a <code class="language-plaintext highlighter-rouge">map</code>, it applies to each line, so we have one finite outer list containing multiple infinite lists. We then traverse the outer list.</p>
 
 <h3 id="part-2">Part 2</h3>
 
-<p>Given the same file as before, the interpretation of the lines has changed. Given the same lines as above, the intperpretation should now be:</p>
+<p>Given the same file as before, we want to tackle it with five different traversals:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The password "ababa" must contain an "a" character in position 1 or 3 (but not both)
-The password "qqqqqqqqqq" must contain a "q" character in position 10 or 14 (but not both)
-</code></pre></div></div>
+<ul>
+  <li>Right 1, down 1</li>
+  <li>Right 3, down 1 (This is the slope we already checked)</li>
+  <li>Right 5, down 1</li>
+  <li>Right 7, down 1</li>
+  <li>Right 1, down 2</li>
+</ul>
 
-<p><strong>Note:</strong> These strings are 1-indexed instead of 0-indexed, so we have to account for that.</p>
+<p>Then, we must find the product of all the trees we hit with each traversal</p>
 
 <h4 id="solution-1">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implemenation specific comments</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grammar PasswordEntry {
-    token TOP { ^(&lt;digit&gt;+)'-'(&lt;digit&gt;+) &lt;.ws&gt; (&lt;[a..z]&gt;)':' &lt;.ws&gt; (&lt;[a..z]&gt;+)$ }
-}
-
-class PartOneActions {
-    method TOP($/) {
-        my $range-start  = $/[0].Int;
-        my $range-end    = $/[1].Int;
-        my $target       = $/[2].Str;
-        my $password     = $/[3].Str;
-        my $target-count = $password.comb($target).elems;
-        make so $range-start &lt;= $target-count &amp;&amp; $target-count &lt;= $range-end;
-    }
-}
-
-class PartTwoActions {
-    method TOP($/) {
-        my $position-one = $/[0].Int - 1;
-        my $position-two = $/[1].Int - 1;
-        my $target       = $/[2].Str;
-        my @password     = $/[3].Str.comb;
-        make so (
-            (@password[$position-one] cmp $target) == Same # [1][2]
-            xor                                            # [3]
-            (@password[$position-two] cmp $target) == Same
-        );
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub traverse(@mountain, $i-increment, $j-increment, $trees-encountered = 0, $i = 0, $j = 0) {
+    if $i &gt; @mountain.elems - 1 {
+        $trees-encountered;
+    } else {
+        my $tree-hit = @mountain[$i][$j] cmp '#' == Same ?? 1 !! 0;
+        if $i == @mountain.elems - 1 {
+            $trees-encountered + $tree-hit;
+        } else {
+            traverse(
+                @mountain,
+                $i-increment,
+                $j-increment,
+                $trees-encountered + $tree-hit,
+                $i + $i-increment,
+                $j + $j-increment
+            );
+        }
     }
 }
 
 sub MAIN($file, Bool :$p2 = False) {
-    my $actions = $p2 ?? PartTwoActions.new !! PartOneActions.new;
-    say $file.IO.lines
-          .map(-&gt; $row { PasswordEntry.parse($row, :$actions).made })
-          .grep(* == True)
-          .elems;
+    my @traversals = $p2 ?? (
+        (1, 1),
+        (1, 3),
+        (1, 5),
+        (1, 7),
+        (2, 1)      # [1]
+    ) !! ((1, 3),); # [2]
+    say [*] @traversals.map(-&gt; ($i-increment, $j-increment) {
+        traverse($file.IO.lines.map(-&gt; $line { |$line.comb xx * }), $i-increment, $j-increment)
+    });
 }
 </code></pre></div></div>
 
@@ -480,30 +452,27 @@ sub MAIN($file, Bool :$p2 = False) {
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
 $ raku main.raku input.txt
-393
+191
 
 # Part 2
 $ raku main.raku --p2 input.txt
-690
+1478615040
 </code></pre></div></div>
 
 <h4 id="explanation-1">Explanation</h4>
 
-<p>Similarly to <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-01/">day 1</a>, we can utilize the code already written and tweak it a little bit. In this case, the grammar stays the same, but the actions taken on each line need to change.</p>
-
-<p>Again, we provide the <code class="language-plaintext highlighter-rouge">--p2</code> flag, and then add the <code class="language-plaintext highlighter-rouge">PartTwoActions</code> class to handle the business logic for the new interpretation of the password policy.</p>
+<p>Again, we are able to tweak our code slightly and handle both parts one and two in one block. In this case, we added two arguments to <code class="language-plaintext highlighter-rouge">traverse</code> to tell it the row step-size and column step-size. We then just add the list of lists corresponding to the five traversals noted above, <code class="language-plaintext highlighter-rouge">map</code> over them and calculate the product using the <code class="language-plaintext highlighter-rouge">[*]</code> operator! In the case of part one, it is a list of size one, so <code class="language-plaintext highlighter-rouge">[*]</code> will just return the single element.</p>
 
 <h5 id="specific-comments-1">Specific Comments</h5>
 
 <ol>
-  <li>I had to use <code class="language-plaintext highlighter-rouge">cmp</code> instead of <code class="language-plaintext highlighter-rouge">==</code> here to get proper string comparison (otherwise, Raku tries to cast strings to hexadecimal).</li>
-  <li><code class="language-plaintext highlighter-rouge">cmp</code> returns <code class="language-plaintext highlighter-rouge">Less</code>, <code class="language-plaintext highlighter-rouge">More</code> or <code class="language-plaintext highlighter-rouge">Same</code> instead of a boolean. I couldn’t find a way to cast <code class="language-plaintext highlighter-rouge">Same</code> to a boolean, because it casts it as such <code class="language-plaintext highlighter-rouge">Same -&gt; 0 -&gt; False</code>, when what we really want is <code class="language-plaintext highlighter-rouge">True</code>, so I had to add the ugly <code class="language-plaintext highlighter-rouge">== Same</code>.</li>
-  <li><code class="language-plaintext highlighter-rouge">|</code> is a junction operator in Raku, so it has the handy dandy <code class="language-plaintext highlighter-rouge">xor</code> operator utilized here.</li>
+  <li>The input file has 323 lines, so we will hit the <code class="language-plaintext highlighter-rouge">$i &gt; @mountain.elems - 1</code> case with this traversal, so it is a good thing we generalized it in the previous step!</li>
+  <li>Need this to be a list of lists to map over it, so we need the comma to denote the outer list is of size one.</li>
 </ol>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>Another functional and (in my opinion) beautiful solution! In my day job, I actually maintain a grammar defined using <a href="https://www.antlr.org/">ANTLR</a>, so it is fun to see tools with the same concepts in other languages. Looking forward to getting to use grammars more in Raku. See y’all tomorrow!</p>
+<p>I felt this problem came very serendipitously; I was <em>just</em> reading about the <code class="language-plaintext highlighter-rouge">|</code> and <code class="language-plaintext highlighter-rouge">xx</code> operators last night, so I am glad I got to put them to use. Recursion (and more specifically tail recursion) is always a fun approach, and it let us tackle this problem functionally. 3 for 3! Let’s see what tomorrow brings.</p>
 
         
       </section>
@@ -556,7 +525,7 @@ $ raku main.raku --p2 input.txt
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-02T00:00:00-06:00">December 2, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-03T00:00:00-06:00">December 3, 2020</time></p>
 
 
       </footer>
@@ -566,23 +535,22 @@ $ raku main.raku --p2 input.txt
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+2%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-02%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+3%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-03%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-02%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-03%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-02%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-03%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/advent-of-code-day-01/" class="pagination--pager" title="Advent of Code: Day 1
+      <a href="/blog/advent-of-code-day-02/" class="pagination--pager" title="Advent of Code: Day 2
 ">Previous</a>
     
     
-      <a href="/blog/advent-of-code-day-03/" class="pagination--pager" title="Advent of Code: Day 3
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -606,7 +574,7 @@ $ raku main.raku --p2 input.txt
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/blog/advent-of-code-day-03/" rel="permalink">Advent of Code: Day 3
+        <a href="/blog/advent-of-code-day-02/" rel="permalink">Advent of Code: Day 2
 </a>
       
     </h2>
@@ -617,7 +585,7 @@ $ raku main.raku --p2 input.txt
       
       <span class="page__meta-date">
         <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-03T00:00:00-06:00">December 3, 2020</time>
+        <time datetime="2020-12-02T00:00:00-06:00">December 2, 2020</time>
       </span>
     
 
@@ -630,14 +598,14 @@ $ raku main.raku --p2 input.txt
       <span class="page__meta-readtime">
         <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
-          4 minute read
+          5 minute read
         
       </span>
     
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming program...</p>
+    <p class="archive__item-excerpt" itemprop="description">We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) rea...</p>
   </article>
 </div>
 

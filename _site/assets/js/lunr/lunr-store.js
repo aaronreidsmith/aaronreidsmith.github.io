@@ -22,4 +22,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-02/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 3",
+        "excerpt":"Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion. The Problem Part 1 We are going sledding this...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-03/",
+        "teaser": null
       }]
