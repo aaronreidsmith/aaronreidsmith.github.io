@@ -10,9 +10,9 @@ tags:
 
 I have always been a fan of Perl (and its younger brother Raku), but, since leaving the Bioinformatics world, have not found any real-world scenarios to flex those muscles.
 
-I recently stumbled upon the [Perl Weekly Challenge](https://perlweeklychallenge.org/) and decided it would be a great way to keep up-to-date with the community. I participated for the first time this week and thought it would be fun to do a write up of how I approached the problems. In the future, I will start publishing my blogs earlier in the week so that I can include a link to it in my PR.
+I recently stumbled upon the [Perl Weekly Challenge](https://perlweeklychallenge.org/) and decided it would be a great way to keep up-to-date with the community. I participated for the first time this week and thought it would be fun to do a write-up of how I approached the problems. In the future, I will start publishing my blogs earlier in the week so that I can include a link to it in my PR.
 
-So, without further adieu, let's dive in.
+So, without further ado, let's dive in.
 
 ## Task 1: Array of Product
 
@@ -248,7 +248,7 @@ The basics of the above program are as follows:
 	```
 	
 3. 	Starting in the top left corner, walk to the right (`EAST`) with the following logic: if we hit the edge or a visited cell, turn right, else keep going.
-  - We always "visit" the current cell by marking it visted and adding it to the output
+  - We always "visit" the current cell by marking it visited and adding it to the output
 
 **That's it!**
 

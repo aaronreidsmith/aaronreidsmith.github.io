@@ -10,7 +10,7 @@ tags:
 
 Back again with challenge 89! I was able to tackle this one the day it was released, but I doubt that will be the case going forward.
 
-Once again, it seems the first task can be tackled easily in a functional way and the second one ends up being more imperative. Hoping I can try to do more things functionally in the future!
+Once again, it seems the first task can be tackled easily in a functional way, and the second one ends up being more imperative. Hoping I can try to do more things functionally in the future!
 
 ## Task 1: GCD Sum
 
@@ -243,11 +243,11 @@ You will find 3 patterns hold true (I am copying these from [Geeks for Geeks](ht
 2. If the magic square already contains a number at the calculated position, calculated column position will be decremented by 2, and calculated row position will be incremented by 1.
 3. If the calculated row position is -1 & calculated column position is n, the new position would be: (0, n-2).
 
-Basically, we just start in the middle right square and apply the above criteria iteratively and it works for any odd-side-lengthed square.
+Basically, we just start in the middle right square and apply the above criteria iteratively, and it works for any odd-side-lengthed square.
 
 #### Specific comments
 
-1. Raku supports Unicode, so you'll notice I used `$side-length²` rather than `$side-length ** 2`. It's a small feature that I find helps readibilty (but can be hard to write)!
+1. Raku supports Unicode, so you'll notice I used `$side-length²` rather than `$side-length ** 2`. It's a small feature that I find helps readabilty (but can be hard to write)!
 2. This has been called out as a [trick to avoid](https://docs.raku.org/language/traps#Using_[%E2%80%A6]_metaoperator_with_a_list_of_lists) because it fails when you get a matrix with 1 row. Since it is being used in a debugging function and if we _did_ get a 1-row matrix it would be 1x1, so I think it is safe to use here
 3. I don't really like that `so` is the subroutine used to cast input to a boolean, so I just wanted to call out that (a) that is what these lines are doing and (b) I don't like the terminology.
 

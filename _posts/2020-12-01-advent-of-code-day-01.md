@@ -10,13 +10,13 @@ tags:
 
 Turns out I started blogging just in time for the [Advent of Code](https://adventofcode.com/), an annual series of daily challenges that run from December 1st to December 25th.
 
-These problems remind me a lot of [Project Euler](https://projecteuler.net/), because they are not concerned with the readability or speed of your code, just the output. That means that any goals one wishes to accomplish should be set personally (there _is_ technically a leaderboard, but I find you have to be online very late at night to catch the posts and it is not worth the stress during the holiday season).
+These problems remind me a lot of [Project Euler](https://projecteuler.net/), because they are not concerned with the readability or speed of your code, just the output. That means that any goals one wishes to accomplish should be set personally (there _is_ technically a leaderboard, but I find you have to be online very late at night to catch the posts, and it is not worth the stress during the holiday season).
 
 My goal, as you may have guessed from my previous posts, is to complete these challenges in _at least_ Raku and to do so utilizing a functional programming paradigm. Let's dive into day 1 and see if I can do it!
 
 ## The Problem
 
-I am not going to copy and paste the explanation of the problem here like I do for the Perl Weekly Challenge, because it is _so_ long and I want to encourage users to go attempt the challenge themselves! Instead, I will write a summary of what the challenge is and my solution.
+I am not going to copy and paste the explanation of the problem here like I do for the Perl Weekly Challenge, because it is _so_ long, and I want to encourage users to go attempt the challenge themselves! Instead, I will write a summary of what the challenge is and my solution.
 
 ### Part 1
 
@@ -47,11 +47,11 @@ $ raku main.raku input.txt
 
 #### Explanation
 
-This is fairly straight forward and I feel Raku reads very cleanly. Basically, we read the entire file into a list (`IO.lines`), then find all the pairs in that list, filter those pairs down to where `$a + $b == 2020`, then multiply those two numbers together!
+This is fairly straight forward, and I feel Raku reads very cleanly. Basically, we read the entire file into a list (`IO.lines`), then find all the pairs in that list, filter those pairs down to where `$a + $b == 2020`, then multiply those two numbers together!
 
 ##### Specific Comments
 
-1. I'm a sucker for good IO. I feel reading/writing files in languages like Java or Scala is so cumbersome that I try to avoid it at all costs. Languages like Raku were _built_ for text manipultion, so it makes sense that the IO is great, but I just wanted to call out how easy it is to get the lines of a file in a list.
+1. I'm a sucker for good IO. I feel reading/writing files in languages like Java or Scala is so cumbersome that I try to avoid it at all costs. Languages like Raku were _built_ for text manipulation, so it makes sense that the IO is great, but I just wanted to call out how easy it is to get the lines of a file in a list.
 2. As I said in my [previous post](https://aaronreidsmith.github.io/blog/perl-weekly-challenge-089/#specific-comments), I see the `combinations` feature coming back a lot in these puzzles. I love that it is built right in.
 3. `grep` is familiar to most `*nix` users, and it is the equivalent of a `filter` in more traditional functional languages. In this case, we are filtering down to only pairs that add up to `2020`.
 4. At this point this list looks like this: `(($a, $b))`, so we still want to map over the outer list and multiply the pair together.
@@ -97,7 +97,7 @@ Since it is basically the same problem, it only makes sense to modify the script
 
 1. Using the `:$p2` notation says to Raku "create a command line flag called `--p2` and assign it to `$p2` with a default of `False`". Creating command line interfaces can be kind of a pain in a lot of languages, so I am happy that is built right into the language. 
 2. This is the check to see if we are doing part 1 or part 2. Raku's ternary operator is `condition ?? true !! false` rather than the traditional `condition ? true : false`.
-3. Since we have to remove all the pair hardcoding, we can generalize it as a list called `@combo` and then just find the sum of the entire combo using the `[+]` meta operator. We perform a similar generalization for the `map` step.
+3. Since we have to remove all the pair hard-coding, we can generalize it as a list called `@combo` and then just find the sum of the entire combo using the `[+]` meta operator. We perform a similar generalization for the `map` step.
 
 
 ## Final Thoughts

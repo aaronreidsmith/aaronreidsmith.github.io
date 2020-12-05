@@ -7,7 +7,7 @@ tags:
   - Raku
 ---
 
-Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a [for-loop in functional programming programming](https://two-wrongs.com/myth-of-the-day-functional-programmers-dont-use-loops), I wanted to used one of the common substitutes in the functional programmer's toolbelt: recursion.
+Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a [for-loop in functional programming programming](https://two-wrongs.com/myth-of-the-day-functional-programmers-dont-use-loops), I wanted to used one of the common substitutes in the functional programmer's tool belt: recursion.
 
 
 ## The Problem
@@ -71,7 +71,7 @@ Other than the below comments, I feel like this reads fairly easily. Basically, 
 1. `|` has a special meaning when used in front of a list. It flattens any inner lists to the top level. So, for example, if we had `|((1, 2), (3, 4))`, that would equal `(1, 2, 3, 4)`.
 2. Reminder that `.comb` splits the input into a list of characters.
 3. `xx` is a special operator that takes the input list and concatenates it to itself `N` times (`N = *` here; see below). So, for example, if we had `(1, 2) xx 2`, that would yield `((1, 2), (1, 2))`.
-4. `xx` allows the [`Whatever`](https://docs.raku.org/type/Whatever) character (`*`) on the right hand side, and in that case it returns a lazy, infinite concatenation of the left hand side.
+4. `xx` allows the [`Whatever`](https://docs.raku.org/type/Whatever) character (`*`) on the right-hand side, and in that case it returns a lazy, infinite concatenation of the left-hand side.
 
 So, to summarize the above comments, we take the line and `comb` it to a list. Then, we concatenate that list infinitely to have a list of lists, which we flatten using the `|` operator. Since this happens in a `map`, it applies to each line, so we have one finite outer list containing multiple infinite lists. We then traverse the outer list.
 

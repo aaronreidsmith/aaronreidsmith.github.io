@@ -20,7 +20,7 @@ Given a file full of lines that look like this:
 10-14 q: qqqqqqqqq
 ```
 
-Which can be interpretted as a password policy that reads as such:
+Which can be interpreted as a password policy that reads as such:
 
 ```
 The password "ababa" must contain between 1 and 3 (inclusive) "a" characters
@@ -69,7 +69,7 @@ $ raku main.raku input.txt
 
 #### Explanation
 
-We do a couple things here:
+We do a couple of things here:
 
 First we pull in all the lines in the file, then parse them using our `PasswordEntry` grammar. See below for the explanation on the grammar.
 
@@ -80,7 +80,7 @@ These are then filtered down to only those that _do_ contain the right number of
 ##### Specific Comments
 
 1. We could just define a regex like `my $regex = /pattern/`, but I wanted to combine the parse step _and_ the business logic of determining if it is a valid password; we will get into that second part below.
-  - When definining a grammar, you always have to define a `TOP` token the encompasses everything. If I had a more complex grammar, I could define subtokens that could be used in the `TOP` token (or any other defined tokens).
+  - When defining a grammar, you always have to define a `TOP` token the encompasses everything. If I had a more complex grammar, I could define subtokens that could be used in the `TOP` token (or any other defined tokens).
   - For the non-regex folks, the way this reads is:
         - Start of line
         - An integer (captured group, see below)
@@ -92,16 +92,16 @@ These are then filtered down to only those that _do_ contain the right number of
         - Followed by a space
         - Followed by one or more lowercase letters (captured group, see below)
         - End of line
-  - Additionally, you'll notice the four sets of parenthese that define _capture groups_, meaning when this grammar parses a line successfully, it will return the four groups in an array.
+  - Additionally, you'll notice the four sets of parentheses that define _capture groups_, meaning when this grammar parses a line successfully, it will return the four groups in an array.
   
 2. When we use the parser (`PasswordEntry.parse`), we are able to supply this `actions` class that has methods corresponding to the tokens in the parser. This is where any business logic should take place. For example, any type casting or object creation to be used in the outer scope. In this case, like I said above, we want to parse and reduce to `True` or `False` in one pass. So what our `TOP` method does is take the match `$/` (this is a special variable, I would never name something like this), extract the four groups defined in the grammar, and cast them to the correct types. We then count the number of times the target appears in the password and see if it is in range.
 3. `comb` takes a string and turns it into a list of characters. When supplied with a string argument (in this case, `$target`), it turns the string into a list _and_ filters it down to elements that equal the supplied character.
-4. There is some special syntax going on on this line. I could have written `PasswordEntry.parse($row, actions => $actions)`, and used `$actions` as a named keyword. But, since my variable has the same name as the target argument, I am able to pass it in as `:$actions`. It reminds me of `**kwargs` in Python.
+4. There is some special syntax happening on this line. I could have written `PasswordEntry.parse($row, actions => $actions)`, and used `$actions` as a named keyword. But, since my variable has the same name as the target argument, I am able to pass it in as `:$actions`. It reminds me of `**kwargs` in Python.
 5. I _hate_ that I have to say `* == True`, but `grep` would not work otherwise, so I guess that is just an edge case.
 
 ### Part 2
 
-Given the same file as before, the interpretation of the lines has changed. Given the same lines as above, the intperpretation should now be:
+Given the same file as before, the interpretation of the lines has changed. Given the same lines as above, the interpretation should now be:
 
 ```
 The password "ababa" must contain an "a" character in position 1 or 3 (but not both)
@@ -114,7 +114,7 @@ The password "qqqqqqqqqq" must contain a "q" character in position 10 or 14 (but
 
 [GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku)
 
-See below for explanation and any implemtenation specific comments.
+See below for explanation and any implementation specific comments.
 
 ```
 grammar PasswordEntry {
