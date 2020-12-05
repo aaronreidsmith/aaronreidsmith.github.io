@@ -1,0 +1,912 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Advent of Code: Day 4 - Aaron Smith</title>
+<meta name="description" content="Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!">
+
+
+  <meta name="author" content="Aaron Smith">
+  
+  <meta property="article:author" content="Aaron Smith">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Aaron Smith">
+<meta property="og:title" content="Advent of Code: Day 4">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-04/">
+
+
+  <meta property="og:description" content="Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-04T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-04/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Aaron Smith Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Aaron Smith Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/tags/">Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/assets/files/aaron_smith_resume.pdf">Resume</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/headshot-square.jpg" alt="Aaron Smith" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Aaron Smith</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Data Engineer specializing in streaming data at scale, especially on AWS</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Connect</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Austin, TX</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Advent of Code: Day 4">
+    <meta itemprop="description" content="Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!">
+    <meta itemprop="datePublished" content="2020-12-04T00:00:00-06:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 4
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-04T00:00:00-06:00">December 4, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!</p>
+
+<h2 id="the-problem">The Problem</h2>
+
+<h3 id="part-1">Part 1</h3>
+
+<p>This problem may require a little more back-story than my previous posts.</p>
+
+<p>We’re traveling for the holidays, but realized we forgot our passport! Luckily, we have our North Pole Credentials that have all the same information except Country ID (you know, the thing that makes a passport useful). A passport contains the following fields:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>byr (Birth Year)
+iyr (Issue Year)
+eyr (Expiration Year)
+hgt (Height)
+hcl (Hair Color)
+ecl (Eye Color)
+pid (Passport ID)
+cid (Country ID
+</code></pre></div></div>
+
+<p>Unfortunately we are stuck in a long line because the passport scanner is down. Apparently it is having trouble detecting which passports have all the required fields. We’re nice folks though, so we’re going to offer our skills up to the border agents to fix their passport scanner (and maybe we can slip in a “bug” to ignore the fact that we don’t have a passport?).</p>
+
+<p>We are given a batch file of passport information as our input. Each passport is separated by a blank line, and each item in the passport is separated by either a newline or a space. Example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
+byr:1937 iyr:2017 cid:147 hgt:183cm
+
+iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884
+hcl:#cfa07d byr:1929
+
+hcl:#ae17e1 iyr:2013
+eyr:2024
+ecl:brn pid:760753108 byr:1931
+hgt:179cm
+
+hcl:#cfa07d eyr:2025 pid:166559648
+iyr:2011 ecl:brn hgt:59in
+</code></pre></div></div>
+
+<ul>
+  <li>Passport 1 is valid because it has all required fields</li>
+  <li>Passport 2 is invalid because it is missing the <code class="language-plaintext highlighter-rouge">hgt</code> field</li>
+  <li>Passport 3 is “valid” because it contains everything but <code class="language-plaintext highlighter-rouge">cid</code></li>
+  <li>Passport 4 is invalid because it is missing both the <code class="language-plaintext highlighter-rouge">cid</code> and <code class="language-plaintext highlighter-rouge">byr</code> fields</li>
+</ul>
+
+<p>Our job is to find how many passports are either valid or “valid”</p>
+
+<h4 id="solution">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implemenation specific comments</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub is-valid(%credentials) {
+    my $passport-keys = set &lt;byr iyr eyr hgt hcl ecl pid cid&gt;;   # [1]
+    my $north-pole-credentials = $passport-keys ⊖ 'cid';         # [2]
+
+    my $keys = set %credentials.keys;
+
+    $keys ~~ $passport-keys || $keys ~~ $north-pole-credentials; # [3]
+}
+
+sub MAIN($file) {
+    say $file.IO
+          .slurp
+          .split(/\n\n/)
+          .map(-&gt; $entry {
+              $entry
+                .split(/&lt;space&gt;/)
+                .map(*.split(':'))
+                .map(-&gt; ($key, $value) { $key.trim =&gt; $value.trim })
+                .Hash
+          })
+          .map(&amp;is-valid)
+          .grep(* == True)
+          .elems;
+}
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+237
+</code></pre></div></div>
+
+<h4 id="explanation">Explanation</h4>
+
+<p>The hardest part to step one was getting our data out of the batch file and into a data structure (in this case, a list of hashes). You’ll notice this time we use <code class="language-plaintext highlighter-rouge">IO.slurp</code> instead of <code class="language-plaintext highlighter-rouge">IO.lines</code> to pull all the data into one string to manipulate it ourselves. Once we have the file as a string, we apply the following steps:</p>
+
+<ol>
+  <li>Split the data on 2 newlines (aka, a blank line between entries)</li>
+  <li>Then for each passport entry split on the the <a href="https://docs.raku.org/language/regexes#Predefined_character_classes"><code class="language-plaintext highlighter-rouge">&lt;space&gt;</code></a> character (which is an alias for <code class="language-plaintext highlighter-rouge">\s</code>), giving us an inner list containing colon-separated key-value pairs</li>
+  <li>For each key-value pair, we split on the comma</li>
+  <li>We then take all our pairs and turn them into actual <a href="https://docs.raku.org/type/Pair">Pair</a> objects</li>
+  <li>We use the Pair objects as an interim to convert each entry to a <a href="https://docs.raku.org/type/Hash">Hash</a></li>
+</ol>
+
+<p>At this point, our sample input above would look something like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(
+  {byr =&gt; 1937, cid =&gt; 147, ecl =&gt; gry, eyr =&gt; 2020, hcl =&gt; #fffffd, hgt =&gt; 183cm, iyr =&gt; 2017, pid =&gt; 860033327},
+  {byr =&gt; 1929, cid =&gt; 350, ecl =&gt; amb, eyr =&gt; 2023, hcl =&gt; #cfa07d, iyr =&gt; 2013, pid =&gt; 028048884},
+  {byr =&gt; 1931, ecl =&gt; brn, eyr =&gt; 2024, hcl =&gt; #ae17e1, hgt =&gt; 179cm, iyr =&gt; 2013, pid =&gt; 760753108},
+  {ecl =&gt; brn, eyr =&gt; 2025, hcl =&gt; #cfa07d, hgt =&gt; 59in, iyr =&gt; 2011, pid =&gt; 166559648}
+)
+</code></pre></div></div>
+
+<p>We then map our <code class="language-plaintext highlighter-rouge">is-valid</code> function over this list of hashes and count how many <code class="language-plaintext highlighter-rouge">True</code>s we get</p>
+
+<h5 id="specific-comments">Specific Comments</h5>
+
+<ol>
+  <li>The <code class="language-plaintext highlighter-rouge">&lt;...&gt;</code> syntax is a special way of making a list of strings. It implicitly quotes each space-separated entry. We then cast this list to a set.</li>
+  <li>Raku is big on Unicode operators, and I try to use them where I can. In this case, we are using the <a href="https://en.wikipedia.org/wiki/Symmetric_difference">Set difference</a> operator commonly seen in mathematics classes. It gives us a new set containing everything except <code class="language-plaintext highlighter-rouge">cid</code>.</li>
+  <li>Now we have our valid and “valid” sets, so we just check if our current passport entry matches either one using the <a href="https://docs.raku.org/language/operators#index-entry-smartmatch_operator">smartmatch</a> operator.</li>
+</ol>
+
+<h3 id="part-2">Part 2</h3>
+
+<p>So, after helping security out with their passport issue, now they’re starting to get suspicious that <em>too</em> many people are getting through, so we need to tighten up our script.</p>
+
+<p>Now it needs to check both keys and values with the following stipulations:</p>
+
+<ul>
+  <li>Birth Year - Must be a 4-digit number between 1920 and 2002 (inclusive)</li>
+  <li>Issue Year - Must be a 4-digit number between 2010 and 2020 (inclusive)</li>
+  <li>Expiration Year - Must be a 4-digit number between 2020 and 2030 (inclusive)</li>
+  <li>Height - A number followed by either <code class="language-plaintext highlighter-rouge">in</code> or <code class="language-plaintext highlighter-rouge">cm</code>
+    <ul>
+      <li>If <code class="language-plaintext highlighter-rouge">in</code>, height must be between 59 and 76 (inclusive)</li>
+      <li>If <code class="language-plaintext highlighter-rouge">cm</code>, height must be between 150 and 193 (inclusive)</li>
+    </ul>
+  </li>
+  <li>Hair Color - Must be a <code class="language-plaintext highlighter-rouge">#</code> character followed by exactly 6 characters <code class="language-plaintext highlighter-rouge">0-9</code> or <code class="language-plaintext highlighter-rouge">a-f</code></li>
+  <li>Eye Color - Must be one of <code class="language-plaintext highlighter-rouge">amb, blu, brn, grn, gry, hzl, oth</code></li>
+  <li>Passport ID - 9-digit number including leading zeroes</li>
+  <li>Country ID - We still want to ignore this or we won’t get through</li>
+</ul>
+
+<h4 id="solution-1">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implemenation specific comments</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub is-valid(%credentials, $check-values) {
+    my $passport-keys = set &lt;byr iyr eyr hgt hcl ecl pid cid&gt;;
+    my $north-pole-credentials = $passport-keys ⊖ 'cid';
+
+    my $keys = set %credentials.keys;
+    my $valid-keys = $keys ~~ $passport-keys || $keys ~~ $north-pole-credentials;
+
+    if $valid-keys &amp;&amp; $check-values {
+        my ($byr, $iyr, $eyr, $hgt, $hcl, $ecl, $pid) = %credentials&lt;byr iyr eyr hgt hcl ecl pid&gt;.map(*.Str); # [1]
+
+        my $valid-byr = so $byr ~~ /^&lt;digit&gt; ** 4$/ &amp;&amp; $byr.Int ∈ set (1920..2002); # [2][3]
+        my $valid-iyr = so $iyr ~~ /^&lt;digit&gt; ** 4$/ &amp;&amp; $iyr.Int ∈ set (2010..2020);
+        my $valid-eyr = so $eyr ~~ /^&lt;digit&gt; ** 4$/ &amp;&amp; $eyr.Int ∈ set (2020..2030);
+        my $valid-hgt = gather {
+            given $hgt {
+                when /^(&lt;digit&gt;+)'in'$/ { take $/[0].Int ∈ set (59..76) }
+                when /^(&lt;digit&gt;+)'cm'$/ { take $/[0].Int ∈ set (150..193) }
+                default                 { take False }
+            }
+        }.head;
+        my $valid-hcl = so $hcl ~~ /^'#'&lt;xdigit&gt; ** 6$/;                             # [4]
+        my $valid-ecl = $ecl ∈ set &lt;amb blu brn gry grn hzl oth&gt;;
+        my $valid-pid = so $pid ~~ /^&lt;digit&gt; ** 9$/;
+        $valid-byr &amp;&amp; $valid-iyr &amp;&amp; $valid-eyr &amp;&amp; $valid-hgt &amp;&amp; $valid-hcl &amp;&amp; $valid-ecl &amp;&amp; $valid-pid;
+    } else {
+        $valid-keys;
+    }
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    say $file.IO
+          .slurp
+          .split(/\n\n/)
+          .map(-&gt; $entry {
+              $entry
+                .split(/&lt;space&gt;/)
+                .map(*.split(':'))
+                .map(-&gt; ($key, $value) { $key.trim =&gt; $value.trim })
+                .Hash
+          })
+          .map(&amp;is-valid.assuming(*, $p2)) # [5]
+          .grep(* == True)
+          .elems;
+}
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
+$ raku main.raku input.txt
+237
+
+# Part 2
+$ raku main.raku --p2 input.txt
+172
+</code></pre></div></div>
+
+<h4 id="explanation-1">Explanation</h4>
+
+<p>This solution could be faster by <a href="https://en.wikipedia.org/wiki/Short-circuit_evaluation">short-circuiting</a> after each check, but I was going for readability here, so it works.</p>
+
+<p>All that really changed from part 1 is our <code class="language-plaintext highlighter-rouge">is-valid</code> check, and I feel the logic is fairly straight forward. We basically just unpack the items from our passport (assuming it has all the keys), then test the for validity using a combination of regexes and set containment operators. If all conditions are met, we return <code class="language-plaintext highlighter-rouge">True</code>, else <code class="language-plaintext highlighter-rouge">False</code>.</p>
+
+<p>Because it is so straight forward, it was even more maddening when I was off by one. See #2 below for the trap I was falling into!</p>
+
+<h5 id="specific-comments-1">Specific Comments</h5>
+
+<ol>
+  <li>Hashes (and lists, for that matter) have a special syntax where you can provide multiple space-seprated keys and it will return all of the values as a list. We then map these entries to strings and unpack them. Again, the <code class="language-plaintext highlighter-rouge">&lt;...&gt;</code> automatically quotes our keys, so we don’t have to.</li>
+  <li>Originally this line (along with the rest) looked like <code class="language-plaintext highlighter-rouge">(59..76).contains($byr.Int)</code>. The logic is exactly the same, but this is apparently a <a href="https://docs.raku.org/language/traps#Lists_become_strings,_so_beware_.contains()">well-documented trap</a>. Basically <code class="language-plaintext highlighter-rouge">.contains</code> does not test for presence of an element. It converts the list to a string and checks if the given substring exists within it. I don’t fully know which item was erroneously getting matched here, but it caused the outcome to be 173 instead of 172.</li>
+  <li>The solution to the above trap is to use set containment operators as shown here. Once again, we are using the Unicode operator, this time we use the <a href="https://en.wikipedia.org/wiki/Element_(mathematics)#Notation_and_terminology">“is an element of”</a> set operator.</li>
+  <li><code class="language-plaintext highlighter-rouge">&lt;xdigit&gt;</code> is a built-in metacharacter for the characters <code class="language-plaintext highlighter-rouge">0-9</code>, <code class="language-plaintext highlighter-rouge">a-f</code>, and <code class="language-plaintext highlighter-rouge">A-F</code>.</li>
+  <li>The way Raku handles <a href="https://en.wikipedia.org/wiki/Partial_function">partial functions</a> is the <a href="https://docs.raku.org/routine/assuming"><code class="language-plaintext highlighter-rouge">assuming</code></a> method, which allows you to fix one or more parameters when calling a subroutine.</li>
+</ol>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>I had a hard time tracking down that bug! I eventually got help from someone on the <a href="http://reddit.com/r/rakulang">Raku subreddit</a> who was able to point me in the right direction.</p>
+
+<p>With that being said, I am really learning a lot through this exercise. In fact, I am noticing mistakes (or rather, code smells) in my previous solutions! I am not planning on editing them out though; it’s always good to see where you came from to remember how far you’ve come!</p>
+
+<p>See y’all for day 5!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#advent-of-code" class="page__taxonomy-item" rel="tag">Advent of Code</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#raku" class="page__taxonomy-item" rel="tag">Raku</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-04T00:00:00-06:00">December 4, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+4%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-04%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-04%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-04%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/advent-of-code-day-03/" class="pagination--pager" title="Advent of Code: Day 3
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-03/" rel="permalink">Advent of Code: Day 3
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-03T00:00:00-06:00">December 3, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming program...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-02/" rel="permalink">Advent of Code: Day 2
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-02T00:00:00-06:00">December 2, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) rea...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-01/" rel="permalink">Advent of Code: Day 1
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-01T00:00:00-06:00">December 1, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-089/" rel="permalink">Perl Weekly Challenge 89
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-11-30T00:00:00-06:00">November 30, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Back again with challenge 89! I was able to tackle this one the day it was released, but I doubt that will be the case going forward.
+
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Connect:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+        
+      
+        
+          <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i> Stack Overflow</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Aaron Smith. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>
