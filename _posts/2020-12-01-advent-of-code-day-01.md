@@ -26,7 +26,7 @@ Given a file full of integers (one per line), find the single pair of integers t
 
 [GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku)
 
-See below for explanation and any implemenation specific comments
+See below for explanation and any implementation specific comments.
 
 ```
 sub MAIN($file) {
@@ -65,7 +65,7 @@ Given the same file as before, find the _3_ numbers that add up to `2020` and fi
 
 [GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku)
 
-See below for explanation and any implemenation specific comments
+See below for explanation and any implementation specific comments.
 
 ```
 sub MAIN($file, Bool :$p2 = False) {                # [1]

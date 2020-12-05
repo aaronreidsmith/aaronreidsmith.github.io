@@ -61,7 +61,7 @@ Our job is to find how many passports are either valid or "valid"
 
 [GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku)
 
-See below for explanation and any implemenation specific comments
+See below for explanation and any implemtenation specific comments.
 
 ```
 sub is-valid(%credentials) {
@@ -147,7 +147,7 @@ Now it needs to check both keys and values with the following stipulations:
 
 [GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku)
 
-See below for explanation and any implemenation specific comments
+See below for explanation and any implementation specific comments.
 
 ```
 sub is-valid(%credentials, $check-values) {

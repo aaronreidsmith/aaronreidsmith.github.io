@@ -53,7 +53,7 @@ Output:
 
 [GitHub Link](https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-088/aaronreidsmith/raku/ch-1.raku)
 
-See below for explanation and any specific implementation comments
+See below for explanation and any specific implementation comments.
 
 ```
 subset PositiveInt of Int where { $_ ~~ Int && $_ > 0 } # [1]
@@ -134,7 +134,7 @@ Output:
 
 [GitHub Link](https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-088/aaronreidsmith/raku/ch-2.raku)
 
-See below for explanation and any specific implementation comments
+See below for explanation and any specific implementation comments.
 
 ```
 subset PositiveInt of Int where { $_ ~~ Int && $_ > 0 }

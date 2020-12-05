@@ -40,7 +40,7 @@ gcd(1,2) + gcd(1,3) + gcd(1,4) + gcd(2,3) + gcd(2,4) + gcd(3,4)
 
 [GitHub Link](https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-089/aaronreidsmith/raku/ch-1.raku)
 
-See below for explanation and any specific implementation comments
+See below for explanation and any specific implementation comments.
 
 ```
 sub MAIN($N where $N ~~ Int && $N > 0) {
@@ -107,7 +107,7 @@ c + e + g = 15
 
 [GitHub Link](https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-089/aaronreidsmith/raku/ch-2.raku)
 
-See below for explanation and any implementation-specific comments
+See below for explanation and any implementation-specific comments.
 
 ```
 subset OddPositiveInt of Int where { $_ ~~ Int && $_ > 0 && !($_ %% 2) }
