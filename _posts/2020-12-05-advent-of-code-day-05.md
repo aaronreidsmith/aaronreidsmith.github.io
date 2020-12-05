@@ -61,7 +61,7 @@ Our task is to find the maximum seat number in the list of scanned boarding pass
 
 [GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/05/raku/main.raku)
 
-See below for explanation and any implementation specific comments.
+See below for explanation and any implementation-specific comments.
 
 ```
 sub binary-search(@list, @possible-rows, $lower-symbol) {
@@ -124,7 +124,7 @@ As a caveat, the seat numbers do _not_ start at 1, so we have to take that into 
 
 [GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/05/raku/main.raku)
 
-See below for explanation and any implementation specific comments.
+See below for explanation and any implementation-specific comments.
 
 ```
 sub binary-search(@list, @possible-rows, $lower-symbol) {

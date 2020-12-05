@@ -30,7 +30,7 @@ Additionally, this is a magic mountain, so the pattern on each row repeats out t
 
 [GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku)
 
-See below for explanation and any implementation specific comments.
+See below for explanation and any implementation-specific comments.
 
 ```
 sub traverse(@mountain, $trees-encountered = 0, $i = 0, $j = 0) {
@@ -91,7 +91,7 @@ Then, we must find the product of all the trees we hit with each traversal
 
 [GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku)
 
-See below for explanation and any implementation specific comments.
+See below for explanation and any implementation-specific comments.
 
 ```
 sub traverse(@mountain, $i-increment, $j-increment, $trees-encountered = 0, $i = 0, $j = 0) {

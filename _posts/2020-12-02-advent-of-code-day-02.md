@@ -33,7 +33,7 @@ Our job is to find how many passwords are **valid**.
 
 [GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku)
 
-See below for explanation and any implementation specific comments.
+See below for explanation and any implementation-specific comments.
 
 ```
 grammar PasswordEntry {
@@ -114,7 +114,7 @@ The password "qqqqqqqqqq" must contain a "q" character in position 10 or 14 (but
 
 [GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku)
 
-See below for explanation and any implementation specific comments.
+See below for explanation and any implementation-specific comments.
 
 ```
 grammar PasswordEntry {
