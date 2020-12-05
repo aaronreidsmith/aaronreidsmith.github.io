@@ -28,4 +28,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-03/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 4",
+        "excerpt":"Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details! The Problem Part 1 This problem may require a little more back-story than...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-04/",
+        "teaser": null
       }]

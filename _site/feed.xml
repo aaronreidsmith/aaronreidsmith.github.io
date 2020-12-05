@@ -1,4 +1,231 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-03T08:41:25-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 3</title><link href="http://localhost:4000/blog/advent-of-code-day-03/" rel="alternate" type="text/html" title="Advent of Code: Day 3" /><published>2020-12-03T00:00:00-06:00</published><updated>2020-12-03T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-03</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-03/">&lt;p&gt;Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a &lt;a href=&quot;https://two-wrongs.com/myth-of-the-day-functional-programmers-dont-use-loops&quot;&gt;for-loop in functional programming programming&lt;/a&gt;, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-04T20:11:31-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 4</title><link href="http://localhost:4000/blog/advent-of-code-day-04/" rel="alternate" type="text/html" title="Advent of Code: Day 4" /><published>2020-12-04T00:00:00-06:00</published><updated>2020-12-04T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-04</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-04/">&lt;p&gt;Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;This problem may require a little more back-story than my previous posts.&lt;/p&gt;
+
+&lt;p&gt;We’re traveling for the holidays, but realized we forgot our passport! Luckily, we have our North Pole Credentials that have all the same information except Country ID (you know, the thing that makes a passport useful). A passport contains the following fields:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;byr (Birth Year)
+iyr (Issue Year)
+eyr (Expiration Year)
+hgt (Height)
+hcl (Hair Color)
+ecl (Eye Color)
+pid (Passport ID)
+cid (Country ID
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Unfortunately we are stuck in a long line because the passport scanner is down. Apparently it is having trouble detecting which passports have all the required fields. We’re nice folks though, so we’re going to offer our skills up to the border agents to fix their passport scanner (and maybe we can slip in a “bug” to ignore the fact that we don’t have a passport?).&lt;/p&gt;
+
+&lt;p&gt;We are given a batch file of passport information as our input. Each passport is separated by a blank line, and each item in the passport is separated by either a newline or a space. Example:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
+byr:1937 iyr:2017 cid:147 hgt:183cm
+
+iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884
+hcl:#cfa07d byr:1929
+
+hcl:#ae17e1 iyr:2013
+eyr:2024
+ecl:brn pid:760753108 byr:1931
+hgt:179cm
+
+hcl:#cfa07d eyr:2025 pid:166559648
+iyr:2011 ecl:brn hgt:59in
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Passport 1 is valid because it has all required fields&lt;/li&gt;
+  &lt;li&gt;Passport 2 is invalid because it is missing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hgt&lt;/code&gt; field&lt;/li&gt;
+  &lt;li&gt;Passport 3 is “valid” because it contains everything but &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cid&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Passport 4 is invalid because it is missing both the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cid&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;byr&lt;/code&gt; fields&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Our job is to find how many passports are either valid or “valid”&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub is-valid(%credentials) {
+    my $passport-keys = set &amp;lt;byr iyr eyr hgt hcl ecl pid cid&amp;gt;;   # [1]
+    my $north-pole-credentials = $passport-keys ⊖ 'cid';         # [2]
+
+    my $keys = set %credentials.keys;
+
+    $keys ~~ $passport-keys || $keys ~~ $north-pole-credentials; # [3]
+}
+
+sub MAIN($file) {
+    say $file.IO
+          .slurp
+          .split(/\n\n/)
+          .map(-&amp;gt; $entry {
+              $entry
+                .split(/&amp;lt;space&amp;gt;/)
+                .map(*.split(':'))
+                .map(-&amp;gt; ($key, $value) { $key.trim =&amp;gt; $value.trim })
+                .Hash
+          })
+          .map(&amp;amp;is-valid)
+          .grep(* == True)
+          .elems;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+237
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;The hardest part to step one was getting our data out of the batch file and into a data structure (in this case, a list of hashes). You’ll notice this time we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IO.slurp&lt;/code&gt; instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IO.lines&lt;/code&gt; to pull all the data into one string to manipulate it ourselves. Once we have the file as a string, we apply the following steps:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Split the data on 2 newlines (aka, a blank line between entries)&lt;/li&gt;
+  &lt;li&gt;Then for each passport entry split on the the &lt;a href=&quot;https://docs.raku.org/language/regexes#Predefined_character_classes&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;space&amp;gt;&lt;/code&gt;&lt;/a&gt; character (which is an alias for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\s&lt;/code&gt;), giving us an inner list containing colon-separated key-value pairs&lt;/li&gt;
+  &lt;li&gt;For each key-value pair, we split on the comma&lt;/li&gt;
+  &lt;li&gt;We then take all our pairs and turn them into actual &lt;a href=&quot;https://docs.raku.org/type/Pair&quot;&gt;Pair&lt;/a&gt; objects&lt;/li&gt;
+  &lt;li&gt;We use the Pair objects as an interim to convert each entry to a &lt;a href=&quot;https://docs.raku.org/type/Hash&quot;&gt;Hash&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;At this point, our sample input above would look something like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(
+  {byr =&amp;gt; 1937, cid =&amp;gt; 147, ecl =&amp;gt; gry, eyr =&amp;gt; 2020, hcl =&amp;gt; #fffffd, hgt =&amp;gt; 183cm, iyr =&amp;gt; 2017, pid =&amp;gt; 860033327},
+  {byr =&amp;gt; 1929, cid =&amp;gt; 350, ecl =&amp;gt; amb, eyr =&amp;gt; 2023, hcl =&amp;gt; #cfa07d, iyr =&amp;gt; 2013, pid =&amp;gt; 028048884},
+  {byr =&amp;gt; 1931, ecl =&amp;gt; brn, eyr =&amp;gt; 2024, hcl =&amp;gt; #ae17e1, hgt =&amp;gt; 179cm, iyr =&amp;gt; 2013, pid =&amp;gt; 760753108},
+  {ecl =&amp;gt; brn, eyr =&amp;gt; 2025, hcl =&amp;gt; #cfa07d, hgt =&amp;gt; 59in, iyr =&amp;gt; 2011, pid =&amp;gt; 166559648}
+)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We then map our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is-valid&lt;/code&gt; function over this list of hashes and count how many &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt;s we get&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;...&amp;gt;&lt;/code&gt; syntax is a special way of making a list of strings. It implicitly quotes each space-separated entry. We then cast this list to a set.&lt;/li&gt;
+  &lt;li&gt;Raku is big on Unicode operators, and I try to use them where I can. In this case, we are using the &lt;a href=&quot;https://en.wikipedia.org/wiki/Symmetric_difference&quot;&gt;Set difference&lt;/a&gt; operator commonly seen in mathematics classes. It gives us a new set containing everything except &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cid&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Now we have our valid and “valid” sets, so we just check if our current passport entry matches either one using the &lt;a href=&quot;https://docs.raku.org/language/operators#index-entry-smartmatch_operator&quot;&gt;smartmatch&lt;/a&gt; operator.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;So, after helping security out with their passport issue, now they’re starting to get suspicious that &lt;em&gt;too&lt;/em&gt; many people are getting through, so we need to tighten up our script.&lt;/p&gt;
+
+&lt;p&gt;Now it needs to check both keys and values with the following stipulations:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Birth Year - Must be a 4-digit number between 1920 and 2002 (inclusive)&lt;/li&gt;
+  &lt;li&gt;Issue Year - Must be a 4-digit number between 2010 and 2020 (inclusive)&lt;/li&gt;
+  &lt;li&gt;Expiration Year - Must be a 4-digit number between 2020 and 2030 (inclusive)&lt;/li&gt;
+  &lt;li&gt;Height - A number followed by either &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;in&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cm&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;If &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;in&lt;/code&gt;, height must be between 59 and 76 (inclusive)&lt;/li&gt;
+      &lt;li&gt;If &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cm&lt;/code&gt;, height must be between 150 and 193 (inclusive)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Hair Color - Must be a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#&lt;/code&gt; character followed by exactly 6 characters &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0-9&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a-f&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Eye Color - Must be one of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;amb, blu, brn, grn, gry, hzl, oth&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Passport ID - 9-digit number including leading zeroes&lt;/li&gt;
+  &lt;li&gt;Country ID - We still want to ignore this or we won’t get through&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub is-valid(%credentials, $check-values) {
+    my $passport-keys = set &amp;lt;byr iyr eyr hgt hcl ecl pid cid&amp;gt;;
+    my $north-pole-credentials = $passport-keys ⊖ 'cid';
+
+    my $keys = set %credentials.keys;
+    my $valid-keys = $keys ~~ $passport-keys || $keys ~~ $north-pole-credentials;
+
+    if $valid-keys &amp;amp;&amp;amp; $check-values {
+        my ($byr, $iyr, $eyr, $hgt, $hcl, $ecl, $pid) = %credentials&amp;lt;byr iyr eyr hgt hcl ecl pid&amp;gt;.map(*.Str); # [1]
+
+        my $valid-byr = so $byr ~~ /^&amp;lt;digit&amp;gt; ** 4$/ &amp;amp;&amp;amp; $byr.Int ∈ set (1920..2002); # [2][3]
+        my $valid-iyr = so $iyr ~~ /^&amp;lt;digit&amp;gt; ** 4$/ &amp;amp;&amp;amp; $iyr.Int ∈ set (2010..2020);
+        my $valid-eyr = so $eyr ~~ /^&amp;lt;digit&amp;gt; ** 4$/ &amp;amp;&amp;amp; $eyr.Int ∈ set (2020..2030);
+        my $valid-hgt = gather {
+            given $hgt {
+                when /^(&amp;lt;digit&amp;gt;+)'in'$/ { take $/[0].Int ∈ set (59..76) }
+                when /^(&amp;lt;digit&amp;gt;+)'cm'$/ { take $/[0].Int ∈ set (150..193) }
+                default                 { take False }
+            }
+        }.head;
+        my $valid-hcl = so $hcl ~~ /^'#'&amp;lt;xdigit&amp;gt; ** 6$/;                             # [4]
+        my $valid-ecl = $ecl ∈ set &amp;lt;amb blu brn gry grn hzl oth&amp;gt;;
+        my $valid-pid = so $pid ~~ /^&amp;lt;digit&amp;gt; ** 9$/;
+        $valid-byr &amp;amp;&amp;amp; $valid-iyr &amp;amp;&amp;amp; $valid-eyr &amp;amp;&amp;amp; $valid-hgt &amp;amp;&amp;amp; $valid-hcl &amp;amp;&amp;amp; $valid-ecl &amp;amp;&amp;amp; $valid-pid;
+    } else {
+        $valid-keys;
+    }
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    say $file.IO
+          .slurp
+          .split(/\n\n/)
+          .map(-&amp;gt; $entry {
+              $entry
+                .split(/&amp;lt;space&amp;gt;/)
+                .map(*.split(':'))
+                .map(-&amp;gt; ($key, $value) { $key.trim =&amp;gt; $value.trim })
+                .Hash
+          })
+          .map(&amp;amp;is-valid.assuming(*, $p2)) # [5]
+          .grep(* == True)
+          .elems;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
+$ raku main.raku input.txt
+237
+
+# Part 2
+$ raku main.raku --p2 input.txt
+172
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;This solution could be faster by &lt;a href=&quot;https://en.wikipedia.org/wiki/Short-circuit_evaluation&quot;&gt;short-circuiting&lt;/a&gt; after each check, but I was going for readability here, so it works.&lt;/p&gt;
+
+&lt;p&gt;All that really changed from part 1 is our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is-valid&lt;/code&gt; check, and I feel the logic is fairly straight forward. We basically just unpack the items from our passport (assuming it has all the keys), then test the for validity using a combination of regexes and set containment operators. If all conditions are met, we return &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt;, else &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;False&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Because it is so straight forward, it was even more maddening when I was off by one. See #2 below for the trap I was falling into!&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Hashes (and lists, for that matter) have a special syntax where you can provide multiple space-seprated keys and it will return all of the values as a list. We then map these entries to strings and unpack them. Again, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;...&amp;gt;&lt;/code&gt; automatically quotes our keys, so we don’t have to.&lt;/li&gt;
+  &lt;li&gt;Originally this line (along with the rest) looked like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(59..76).contains($byr.Int)&lt;/code&gt;. The logic is exactly the same, but this is apparently a &lt;a href=&quot;https://docs.raku.org/language/traps#Lists_become_strings,_so_beware_.contains()&quot;&gt;well-documented trap&lt;/a&gt;. Basically &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.contains&lt;/code&gt; does not test for presence of an element. It converts the list to a string and checks if the given substring exists within it. I don’t fully know which item was erroneously getting matched here, but it caused the outcome to be 173 instead of 172.&lt;/li&gt;
+  &lt;li&gt;The solution to the above trap is to use set containment operators as shown here. Once again, we are using the Unicode operator, this time we use the &lt;a href=&quot;https://en.wikipedia.org/wiki/Element_(mathematics)#Notation_and_terminology&quot;&gt;“is an element of”&lt;/a&gt; set operator.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;xdigit&amp;gt;&lt;/code&gt; is a built-in metacharacter for the characters &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0-9&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a-f&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;A-F&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;The way Raku handles &lt;a href=&quot;https://en.wikipedia.org/wiki/Partial_function&quot;&gt;partial functions&lt;/a&gt; is the &lt;a href=&quot;https://docs.raku.org/routine/assuming&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;assuming&lt;/code&gt;&lt;/a&gt; method, which allows you to fix one or more parameters when calling a subroutine.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I had a hard time tracking down that bug! I eventually got help from someone on the &lt;a href=&quot;http://reddit.com/r/rakulang&quot;&gt;Raku subreddit&lt;/a&gt; who was able to point me in the right direction.&lt;/p&gt;
+
+&lt;p&gt;With that being said, I am really learning a lot through this exercise. In fact, I am noticing mistakes (or rather, code smells) in my previous solutions! I am not planning on editing them out though; it’s always good to see where you came from to remember how far you’ve come!&lt;/p&gt;
+
+&lt;p&gt;See y’all for day 5!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!</summary></entry><entry><title type="html">Advent of Code: Day 3</title><link href="http://localhost:4000/blog/advent-of-code-day-03/" rel="alternate" type="text/html" title="Advent of Code: Day 3" /><published>2020-12-03T00:00:00-06:00</published><updated>2020-12-03T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-03</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-03/">&lt;p&gt;Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a &lt;a href=&quot;https://two-wrongs.com/myth-of-the-day-functional-programmers-dont-use-loops&quot;&gt;for-loop in functional programming programming&lt;/a&gt;, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion.&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
