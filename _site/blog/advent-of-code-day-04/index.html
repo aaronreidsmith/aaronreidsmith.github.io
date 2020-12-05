@@ -442,7 +442,7 @@ sub MAIN($file) {
 <ol>
   <li>The <code class="language-plaintext highlighter-rouge">&lt;...&gt;</code> syntax is a special way of making a list of strings. It implicitly quotes each space-separated entry. We then cast this list to a set.</li>
   <li>Raku is big on Unicode operators, and I try to use them where I can. In this case, we are using the <a href="https://en.wikipedia.org/wiki/Symmetric_difference">set difference</a> operator commonly seen in mathematics classes. It gives us a new set containing everything except <code class="language-plaintext highlighter-rouge">cid</code>.</li>
-  <li>Now we have our valid and “valid” sets (entries that contain everything except Country ID), so we just check if our current passport entry matches either one using the <a href="https://docs.raku.org/language/operators#index-entry-smartmatch_operator">smartmatch</a> operator.</li>
+  <li>Now we have our valid and “valid” (entries that contain everything except Country ID) sets, so we just check if our current passport entry matches either one using the <a href="https://docs.raku.org/language/operators#index-entry-smartmatch_operator">smartmatch</a> operator.</li>
 </ol>
 
 <h3 id="part-2">Part 2</h3>

@@ -124,7 +124,7 @@ We then map our `is-valid` function over this list of hashes and count how many 
 
 1. The `<...>` syntax is a special way of making a list of strings. It implicitly quotes each space-separated entry. We then cast this list to a set.
 2. Raku is big on Unicode operators, and I try to use them where I can. In this case, we are using the [set difference](https://en.wikipedia.org/wiki/Symmetric_difference) operator commonly seen in mathematics classes. It gives us a new set containing everything except `cid`.
-3. Now we have our valid and "valid" sets (entries that contain everything except Country ID), so we just check if our current passport entry matches either one using the [smartmatch](https://docs.raku.org/language/operators#index-entry-smartmatch_operator) operator.
+3. Now we have our valid and "valid" (entries that contain everything except Country ID) sets, so we just check if our current passport entry matches either one using the [smartmatch](https://docs.raku.org/language/operators#index-entry-smartmatch_operator) operator.
 
 ### Part 2
 
