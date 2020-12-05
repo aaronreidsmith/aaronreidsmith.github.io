@@ -182,11 +182,11 @@ If the user _does_ specify `p2`, we also calculate our minimum seat number (sinc
 
 ##### Specific Comments
 
-1. A set is a scalar instead of a collection in Raku (note the `$` sigil instead of the `@` sigil), so we have to convert it to a list using the `.keys` method. Or course, there is only one thing in it, so we then call `.head` to get that item
+1. A set is a scalar instead of a collection in Raku (note the `$` sigil instead of the `@` sigil), so we have to convert it to a list using the `.keys` method. Of course, there is only one thing in it, so we then call `.head` to get that item.
 
 
 ## Final Thoughts
 
-This exercise has me diving more and more into [set theory](https://en.wikipedia.org/wiki/Set_theory). It's awesome that Raku lets (and encourages) use of the Unicode operators found in math textbooks. Their reasoning for this is that it is easier to take an algorithm from paper to code when you are allowed to use the same notation in each place. Now to find a keyboard to be able to type these symbols!
+This exercise has me diving more and more into [set theory](https://en.wikipedia.org/wiki/Set_theory). It's awesome that Raku allows (and encourages) use of the Unicode operators found in math textbooks. Their reasoning for this is that it is easier to take an algorithm from paper to code when you are allowed to use the same notation in each place. Now to find a keyboard to be able to type these symbols!
 
 So far we are 5 for 5 with pure functional solutions. 20% of the way there!
