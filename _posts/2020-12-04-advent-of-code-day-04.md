@@ -123,8 +123,8 @@ We then map our `is-valid` function over this list of hashes and count how many 
 ##### Specific Comments
 
 1. The `<...>` syntax is a special way of making a list of strings. It implicitly quotes each space-separated entry. We then cast this list to a set.
-2. Raku is big on Unicode operators, and I try to use them where I can. In this case, we are using the [Set difference](https://en.wikipedia.org/wiki/Symmetric_difference) operator commonly seen in mathematics classes. It gives us a new set containing everything except `cid`.
-3. Now we have our valid and "valid" sets, so we just check if our current passport entry matches either one using the [smartmatch](https://docs.raku.org/language/operators#index-entry-smartmatch_operator) operator.
+2. Raku is big on Unicode operators, and I try to use them where I can. In this case, we are using the [set difference](https://en.wikipedia.org/wiki/Symmetric_difference) operator commonly seen in mathematics classes. It gives us a new set containing everything except `cid`.
+3. Now we have our valid and "valid" sets (entries that contain everything except Country ID), so we just check if our current passport entry matches either one using the [smartmatch](https://docs.raku.org/language/operators#index-entry-smartmatch_operator) operator.
 
 ### Part 2
 
@@ -218,7 +218,7 @@ Because it is so straight forward, it was even more maddening when I was off by 
 
 ##### Specific Comments
 
-1. Hashes (and lists, for that matter) have a special syntax where you can provide multiple space-seprated keys and it will return all of the values as a list. We then map these entries to strings and unpack them. Again, the `<...>` automatically quotes our keys, so we don't have to.
+1. Hashes (and lists, for that matter) have a special syntax where you can provide multiple space-separated keys and it will return all of the values as a list. We then map these entries to strings and unpack them. Again, the `<...>` automatically quotes our keys, so we don't have to.
 2. Originally this line (along with the rest) looked like `(59..76).contains($byr.Int)`. The logic is exactly the same, but this is apparently a [well-documented trap](https://docs.raku.org/language/traps#Lists_become_strings,_so_beware_.contains()). Basically `.contains` does not test for presence of an element. It converts the list to a string and checks if the given substring exists within it. I don't fully know which item was erroneously getting matched here, but it caused the outcome to be 173 instead of 172.
 3. The solution to the above trap is to use set containment operators as shown here. Once again, we are using the Unicode operator, this time we use the ["is an element of"](https://en.wikipedia.org/wiki/Element_(mathematics)#Notation_and_terminology) set operator.
 4. `<xdigit>` is a built-in metacharacter for the characters `0-9`, `a-f`, and `A-F`.
