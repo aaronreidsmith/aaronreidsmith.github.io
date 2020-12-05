@@ -1,4 +1,184 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-05T09:45:37-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 4</title><link href="http://localhost:4000/blog/advent-of-code-day-04/" rel="alternate" type="text/html" title="Advent of Code: Day 4" /><published>2020-12-04T00:00:00-06:00</published><updated>2020-12-04T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-04</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-04/">&lt;p&gt;Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-05T10:58:08-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 5</title><link href="http://localhost:4000/blog/advent-of-code-day-05/" rel="alternate" type="text/html" title="Advent of Code: Day 5" /><published>2020-12-05T00:00:00-06:00</published><updated>2020-12-05T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-05</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-05/">&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Binary_search_algorithm&quot;&gt;Binary search&lt;/a&gt; is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right hand side of the shelf, then narrow down your search from there. This is obviously more efficient than searching from the left hand side of the bookshelf.&lt;/p&gt;
+
+&lt;p&gt;That was our task with today’s problem. Yet again, we get to bust out our old friend recursion to solve this problem fairly easily in a functional manner.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;After &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-04/&quot;&gt;yesterday’s fiasco&lt;/a&gt; of just getting through the airport, we find ourselves on the plane. Lo and behold, we dropped our boarding pass, but they still let us on the plane with the holiday rush.&lt;/p&gt;
+
+&lt;p&gt;Luckily, we use our phone to scan &lt;em&gt;all&lt;/em&gt; the boarding passes nearby into a file full of lines that look like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;FBFBBFFRLR
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The first seven characters define what row (0 through 127, inclusive) everyone’s seat is in, and the last three characters refer to that seat’s column (0 through 7, inclusive). For example, given the above input:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Start by considering the whole range, rows 0 through 127&lt;/li&gt;
+  &lt;li&gt;F means to take the lower half, keeping rows 0 through 63&lt;/li&gt;
+  &lt;li&gt;B means to take the upper half, keeping rows 32 through 63&lt;/li&gt;
+  &lt;li&gt;F means to take the lower half, keeping rows 32 through 47&lt;/li&gt;
+  &lt;li&gt;B means to take the upper half, keeping rows 40 through 47&lt;/li&gt;
+  &lt;li&gt;B keeps rows 44 through 47&lt;/li&gt;
+  &lt;li&gt;F keeps rows 44 through 45&lt;/li&gt;
+  &lt;li&gt;The final F keeps the lower of the two, row 44&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Similarly for the columns:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Start by considering the whole range, columns 0 through 7&lt;/li&gt;
+  &lt;li&gt;R means to take the upper half, keeping columns 4 through 7&lt;/li&gt;
+  &lt;li&gt;L means to take the lower half, keeping columns 4 through 5&lt;/li&gt;
+  &lt;li&gt;The final R keeps the upper of the two, column 5&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And finally, to find someone’s seat number, we have the following calculation:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(row_number * seats_in_row) + column_number = seat_number
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Which yields:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(44 * 8) + 5 = 357
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Our task is to find the maximum seat number in the list of scanned boarding passes.&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/05/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implemenation specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub binary-search(@list, @possible-rows, $lower-symbol) {
+    if @possible-rows.elems == 1 {
+        @possible-rows.head;
+    } else {
+        my ($first-item, @rest-of-list) := @list[0,1..*];                                  # [1][2]
+        my $half-way-point = @possible-rows.elems div 2;                                   # [3]
+        if $first-item eq $lower-symbol {                                                  # [4]
+            binary-search(@rest-of-list, @possible-rows[^$half-way-point], $lower-symbol); # [5]
+        } else {
+            binary-search(@rest-of-list, @possible-rows[$half-way-point..*], $lower-symbol);
+        }
+    }
+}
+
+sub find-seat($boarding-pass) {
+    my (@row-definition, @column-definition) := $boarding-pass.comb.rotor(7, :partial); # [6]
+    my $row = binary-search(@row-definition, (^128), 'F');
+    my $column = binary-search(@column-definition, (^8), 'L');
+    ($row * 8) + $column;
+}
+
+sub MAIN($file) {
+    say $file.IO.lines.map(&amp;amp;find-seat).max;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+828
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;binary-search&lt;/code&gt; subroutine itself is fairly straight forward. It takes the list of characters (something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(F, B, F, B, B, F, F)&lt;/code&gt;), the list of possible rows/columns (something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(0..127)&lt;/code&gt;, and what character means “lower half” (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;F&lt;/code&gt; for front or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;L&lt;/code&gt; for left).&lt;/p&gt;
+
+&lt;p&gt;If there is only one item in the list of remaming rows/columns, that’s our answer and we return. Otherwise, we check if we are keeping the left half or right half and call the function again with the smaller input.&lt;/p&gt;
+
+&lt;p&gt;We wrap this function in a helper function called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find-seat&lt;/code&gt; which includes the multiplication logic, then map it over our input lines. Finally, we call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;max&lt;/code&gt; to find the max seat number.&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;When unpacking a list in this manner, the left hand side is normally one or more scalars (denoted by the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$&lt;/code&gt; sigil). When unpacking using a list on the left hand side, we have to use the special &lt;a href=&quot;https://docs.raku.org/language/operators#index-entry-Binding_operator&quot;&gt;binding&lt;/a&gt; operator (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:=&lt;/code&gt;) or everything will get “slurped” (Raku’s terminology, not mine) into the list instead of being split between the list and scalar.&lt;/li&gt;
+  &lt;li&gt;I used some special Hash syntax yesterday to extract multiple keys at the same time. This is the equivalent List sytanx (comma-separated instead of space-separated).&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;div&lt;/code&gt; is Raku’s integer division operator. Even though we know our input will alwas be a multiple of two, it never hurts to use best practices!&lt;/li&gt;
+  &lt;li&gt;In the past few posts for string comparison I was using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$x cmp $y == Same&lt;/code&gt;. I finally stumbled upon the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eq&lt;/code&gt; operator and no longer have that code smell!&lt;/li&gt;
+  &lt;li&gt;This line (and others) contain special range syntax. Basically &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;^$half-way-point&lt;/code&gt; is the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(0..^$half-way-point)&lt;/code&gt;, meaning everything from zero to the half-way point, exclusive.&lt;/li&gt;
+  &lt;li&gt;This line splits the input into a list of characters and then uses the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rotor&lt;/code&gt; function to split it into groups of 7. Since our second group (the column definition) is of size 3, we need to pass the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:partial&lt;/code&gt; parameter in, or else it will get dropped for being too small. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:partial&lt;/code&gt; is special syntax to pass in a boolean flag named &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;partial&lt;/code&gt; as true. This is the equivalent of passing in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;partial =&amp;gt; True&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;Now that we’ve found the maximum seat, the flight attendants are asking us to take our seat! Our seat is the only seat number not in the list of boarding passes we scanned. And of course instead of just looking around the plane and finding the empty seat, we sit in the aisle and tweak our program to tell us where to go.&lt;/p&gt;
+
+&lt;p&gt;As a caveat, the seat numbers do &lt;em&gt;not&lt;/em&gt; start at 1, so we have to take that into consideration.&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/05/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub binary-search(@list, @possible-rows, $lower-symbol) {
+    if @possible-rows.elems == 1 {
+        @possible-rows.head;
+    } else {
+        my ($first-item, @rest-of-list) := @list[0,1..*];
+        my $half-way-point = @possible-rows.elems div 2;
+        if $first-item eq $lower-symbol {
+            binary-search(@rest-of-list, @possible-rows[^$half-way-point], $lower-symbol);
+        } else {
+            binary-search(@rest-of-list, @possible-rows[$half-way-point..*], $lower-symbol);
+        }
+    }
+}
+
+sub find-seat($boarding-pass) {
+    my (@row-definition, @column-definition) := $boarding-pass.comb.rotor(7, :partial);
+    my $row = binary-search(@row-definition, (^128), 'F');
+    my $column = binary-search(@column-definition, (^8), 'L');
+    ($row * 8) + $column;
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my @seats =  $file.IO.lines.map(&amp;amp;find-seat);
+    my $max-seat = @seats.max;
+    if $p2 {
+        my $min-seat = @seats.min;
+        my $all-seats = set ($min-seat..$max-seat);
+        my @missing-seats = ($all-seats ⊖ set @seats).keys; # [1]
+        say @missing-seats.head;
+    } else {
+        say $max-seat;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
+$ raku main.raku input.txt
+828
+
+# Part 2
+$ raku main.raku --p2 input.txt
+565
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;You’ll notice all we did was tweak our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; method a bit. We still find all the seat numbers, and if the user doesn’t specify &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p2&lt;/code&gt;, we print the maximum.&lt;/p&gt;
+
+&lt;p&gt;If the user &lt;em&gt;does&lt;/em&gt; specify &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p2&lt;/code&gt;, we also calculate our minimum seat number (since the seats don’t start at 1). We then find the set of &lt;em&gt;all&lt;/em&gt; seats (being the range from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$min-seat&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$max-seat&lt;/code&gt;). We then use our handy dandy &lt;a href=&quot;https://en.wikipedia.org/wiki/Symmetric_difference&quot;&gt;symmetric difference&lt;/a&gt; operator to find the difference between all possible seats and the list of seats we scanned. The difference, of course, being our seat. We find it just in time before the flight attendants drag us out. Phew!&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;A set is a scalar instead of a collection in Raku (note the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$&lt;/code&gt; sigil instead of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@&lt;/code&gt; sigil), so we have to convert it to a list using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.keys&lt;/code&gt; method. Or course, there is only one thing in it, so we then call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.head&lt;/code&gt; to get that item&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;This exercise has me diving more and more into &lt;a href=&quot;https://en.wikipedia.org/wiki/Set_theory&quot;&gt;set theory&lt;/a&gt;. It’s awesome that Raku lets (and encourages) use of the Unicode operators found in math textbooks. Their resoning for this is that it is easier to take an algorithm from paper to code when you are allowed to use the same notation in each place. Now to find a keyboard to be able to type these symbols!&lt;/p&gt;
+
+&lt;p&gt;So far we are 5 for 5 with pure functional solutions. 20% of the way there!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right hand side of the shelf, then narrow down your search from there. This is obviously more efficient than searching from the left hand side of the bookshelf.</summary></entry><entry><title type="html">Advent of Code: Day 4</title><link href="http://localhost:4000/blog/advent-of-code-day-04/" rel="alternate" type="text/html" title="Advent of Code: Day 4" /><published>2020-12-04T00:00:00-06:00</published><updated>2020-12-04T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-04</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-04/">&lt;p&gt;Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -50,7 +230,7 @@ iyr:2011 ecl:brn hgt:59in
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implemtenation specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub is-valid(%credentials) {
     my $passport-keys = set &amp;lt;byr iyr eyr hgt hcl ecl pid cid&amp;gt;;   # [1]
@@ -142,7 +322,7 @@ sub MAIN($file) {
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub is-valid(%credentials, $check-values) {
     my $passport-keys = set &amp;lt;byr iyr eyr hgt hcl ecl pid cid&amp;gt;;
@@ -245,7 +425,7 @@ $ raku main.raku --p2 input.txt
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub traverse(@mountain, $trees-encountered = 0, $i = 0, $j = 0) {
     if $i &amp;gt; @mountain.elems - 1 {
@@ -310,7 +490,7 @@ sub MAIN($file) {
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub traverse(@mountain, $i-increment, $j-increment, $trees-encountered = 0, $i = 0, $j = 0) {
     if $i &amp;gt; @mountain.elems - 1 {
@@ -394,7 +574,7 @@ The password &quot;qqqqqqqqqq&quot; must contain between 10 and 14 (inclusive) &
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grammar PasswordEntry {
     token TOP { ^(&amp;lt;digit&amp;gt;+)'-'(&amp;lt;digit&amp;gt;+) &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;)':' &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;+)$ } # [1]
@@ -479,7 +659,7 @@ The password &quot;qqqqqqqqqq&quot; must contain a &quot;q&quot; character in po
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implemtenation specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grammar PasswordEntry {
     token TOP { ^(&amp;lt;digit&amp;gt;+)'-'(&amp;lt;digit&amp;gt;+) &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;)':' &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;+)$ }
@@ -564,7 +744,7 @@ $ raku main.raku --p2 input.txt
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
     say $file.IO.lines                           # [1]
@@ -603,7 +783,7 @@ $ raku main.raku --p2 input.txt
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file, Bool :$p2 = False) {                # [1]
     say $file.IO.lines
@@ -669,7 +849,7 @@ gcd(1,2) + gcd(1,3) + gcd(1,4) + gcd(2,3) + gcd(2,4) + gcd(3,4)
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-089/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any specific implementation comments&lt;/p&gt;
+&lt;p&gt;See below for explanation and any specific implementation comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($N where $N ~~ Int &amp;amp;&amp;amp; $N &amp;gt; 0) {
     my @pairs = (1..$N).combinations(2);                    # [1]
@@ -734,7 +914,7 @@ c + e + g = 15
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-089/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implementation-specific comments&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset OddPositiveInt of Int where { $_ ~~ Int &amp;amp;&amp;amp; $_ &amp;gt; 0 &amp;amp;&amp;amp; !($_ %% 2) }
 
@@ -931,7 +1111,7 @@ Output:
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-088/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any specific implementation comments&lt;/p&gt;
+&lt;p&gt;See below for explanation and any specific implementation comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset PositiveInt of Int where { $_ ~~ Int &amp;amp;&amp;amp; $_ &amp;gt; 0 } # [1]
 
@@ -1014,7 +1194,7 @@ Output:
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-088/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any specific implementation comments&lt;/p&gt;
+&lt;p&gt;See below for explanation and any specific implementation comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset PositiveInt of Int where { $_ ~~ Int &amp;amp;&amp;amp; $_ &amp;gt; 0 }
 

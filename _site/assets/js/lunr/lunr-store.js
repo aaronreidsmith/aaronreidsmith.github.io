@@ -34,4 +34,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-04/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 5",
+        "excerpt":"Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right hand side of the shelf, then narrow down your search from there....","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-05/",
+        "teaser": null
       }]
