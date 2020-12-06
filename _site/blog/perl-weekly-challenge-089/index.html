@@ -331,7 +331,7 @@
         
         <p>Back again with challenge 89! I was able to tackle this one the day it was released, but I doubt that will be the case going forward.</p>
 
-<p>Once again, it seems the first task can be tackled easily in a functional way and the second one ends up being more imperative. Hoping I can try to do more things functionally in the future!</p>
+<p>Once again, it seems the first task can be tackled easily in a functional way, and the second one ends up being more imperative. Hoping I can try to do more things functionally in the future!</p>
 
 <h2 id="task-1-gcd-sum">Task 1: GCD Sum</h2>
 
@@ -359,7 +359,7 @@ gcd(1,2) + gcd(1,3) + gcd(1,4) + gcd(2,3) + gcd(2,4) + gcd(3,4)
 
 <p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-089/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
 
-<p>See below for explanation and any specific implementation comments.</p>
+<p>See below for explanation and any implementation-specific comments.</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub MAIN($N where $N ~~ Int &amp;&amp; $N &gt; 0) {
     my @pairs = (1..$N).combinations(2);                    # [1]
@@ -564,12 +564,12 @@ $ raku ch-2.raku 3 True
   <li>If the calculated row position is -1 &amp; calculated column position is n, the new position would be: (0, n-2).</li>
 </ol>
 
-<p>Basically, we just start in the middle right square and apply the above criteria iteratively and it works for any odd-side-lengthed square.</p>
+<p>Basically, we just start in the middle right square and apply the above criteria iteratively, and it works for any odd-side-lengthed square.</p>
 
 <h4 id="specific-comments-1">Specific comments</h4>
 
 <ol>
-  <li>Raku supports Unicode, so you’ll notice I used <code class="language-plaintext highlighter-rouge">$side-length²</code> rather than <code class="language-plaintext highlighter-rouge">$side-length ** 2</code>. It’s a small feature that I find helps readibilty (but can be hard to write)!</li>
+  <li>Raku supports Unicode, so you’ll notice I used <code class="language-plaintext highlighter-rouge">$side-length²</code> rather than <code class="language-plaintext highlighter-rouge">$side-length ** 2</code>. It’s a small feature that I find helps readabilty (but can be hard to write)!</li>
   <li>This has been called out as a <a href="https://docs.raku.org/language/traps#Using_[%E2%80%A6]_metaoperator_with_a_list_of_lists">trick to avoid</a> because it fails when you get a matrix with 1 row. Since it is being used in a debugging function and if we <em>did</em> get a 1-row matrix it would be 1x1, so I think it is safe to use here</li>
   <li>I don’t really like that <code class="language-plaintext highlighter-rouge">so</code> is the subroutine used to cast input to a boolean, so I just wanted to call out that (a) that is what these lines are doing and (b) I don’t like the terminology.</li>
 </ol>
@@ -671,6 +671,51 @@ $ raku ch-2.raku 3 True
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-06/" rel="permalink">Advent of Code: Day 6
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-06T00:00:00-06:00">December 6, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Well, our old pal set theory reared its ugly beautiful head again today. I’m very happy with the middle ground I found between conciseness and readability wi...</p>
+  </article>
+</div>
+
         
           
 
@@ -802,52 +847,7 @@ $ raku ch-2.raku 3 True
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming program...</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-02/" rel="permalink">Advent of Code: Day 2
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-02T00:00:00-06:00">December 2, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          5 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) rea...</p>
+    <p class="archive__item-excerpt" itemprop="description">Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programmi...</p>
   </article>
 </div>
 

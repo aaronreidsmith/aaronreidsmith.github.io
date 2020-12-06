@@ -379,7 +379,7 @@ iyr:2011 ecl:brn hgt:59in
 
 <p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku">GitHub Link</a></p>
 
-<p>See below for explanation and any implemtenation specific comments.</p>
+<p>See below for explanation and any implementation-specific comments.</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub is-valid(%credentials) {
     my $passport-keys = set &lt;byr iyr eyr hgt hcl ecl pid cid&gt;;   # [1]
@@ -464,14 +464,14 @@ sub MAIN($file) {
   <li>Hair Color - Must be a <code class="language-plaintext highlighter-rouge">#</code> character followed by exactly 6 characters <code class="language-plaintext highlighter-rouge">0-9</code> or <code class="language-plaintext highlighter-rouge">a-f</code></li>
   <li>Eye Color - Must be one of <code class="language-plaintext highlighter-rouge">amb, blu, brn, grn, gry, hzl, oth</code></li>
   <li>Passport ID - 9-digit number including leading zeroes</li>
-  <li>Country ID - We still want to ignore this or we won’t get through</li>
+  <li>Country ID - We still want to ignore this, or we won’t get through</li>
 </ul>
 
 <h4 id="solution-1">Solution</h4>
 
 <p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku">GitHub Link</a></p>
 
-<p>See below for explanation and any implementation specific comments.</p>
+<p>See below for explanation and any implementation-specific comments.</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub is-valid(%credentials, $check-values) {
     my $passport-keys = set &lt;byr iyr eyr hgt hcl ecl pid cid&gt;;
@@ -541,7 +541,7 @@ $ raku main.raku --p2 input.txt
 <h5 id="specific-comments-1">Specific Comments</h5>
 
 <ol>
-  <li>Hashes have a special syntax where you can provide multiple space-separated keys and it will return all of the values as a list. We then map these entries to strings and unpack them. Again, the <code class="language-plaintext highlighter-rouge">&lt;...&gt;</code> automatically quotes our keys, so we don’t have to.</li>
+  <li>Hashes have a special syntax where you can provide multiple space-separated keys, and it will return all the values as a list. We then map these entries to strings and unpack them. Again, the <code class="language-plaintext highlighter-rouge">&lt;...&gt;</code> automatically quotes our keys, so we don’t have to.</li>
   <li>Originally this line (along with the rest) looked like <code class="language-plaintext highlighter-rouge">(59..76).contains($byr.Int)</code>. The logic is exactly the same, but this is apparently a <a href="https://docs.raku.org/language/traps#Lists_become_strings,_so_beware_.contains()">well-documented trap</a>. Basically <code class="language-plaintext highlighter-rouge">.contains</code> does not test for presence of an element. It converts the list to a string and checks if the given substring exists within it. I don’t fully know which item was erroneously getting matched here, but it caused the outcome to be 173 instead of 172.</li>
   <li>The solution to the above trap is to use set containment operators as shown here. Once again, we are using the Unicode operator, this time we use the <a href="https://en.wikipedia.org/wiki/Element_(mathematics)#Notation_and_terminology">“is an element of”</a> set operator.</li>
   <li><code class="language-plaintext highlighter-rouge">&lt;xdigit&gt;</code> is a built-in metacharacter for the characters <code class="language-plaintext highlighter-rouge">0-9</code>, <code class="language-plaintext highlighter-rouge">a-f</code>, and <code class="language-plaintext highlighter-rouge">A-F</code>.</li>
@@ -657,6 +657,51 @@ $ raku main.raku --p2 input.txt
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
+        <a href="/blog/advent-of-code-day-06/" rel="permalink">Advent of Code: Day 6
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-06T00:00:00-06:00">December 6, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Well, our old pal set theory reared its ugly beautiful head again today. I’m very happy with the middle ground I found between conciseness and readability wi...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
         <a href="/blog/advent-of-code-day-05/" rel="permalink">Advent of Code: Day 5
 </a>
       
@@ -733,7 +778,7 @@ $ raku main.raku --p2 input.txt
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming program...</p>
+    <p class="archive__item-excerpt" itemprop="description">Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programmi...</p>
   </article>
 </div>
 
@@ -779,53 +824,6 @@ $ raku main.raku --p2 input.txt
 
 
     <p class="archive__item-excerpt" itemprop="description">We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) rea...</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-01/" rel="permalink">Advent of Code: Day 1
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-01T00:00:00-06:00">December 1, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          4 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.
-
-</p>
   </article>
 </div>
 

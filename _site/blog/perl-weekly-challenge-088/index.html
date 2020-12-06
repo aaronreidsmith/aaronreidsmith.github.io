@@ -331,9 +331,9 @@
         
         <p>I have always been a fan of Perl (and its younger brother Raku), but, since leaving the Bioinformatics world, have not found any real-world scenarios to flex those muscles.</p>
 
-<p>I recently stumbled upon the <a href="https://perlweeklychallenge.org/">Perl Weekly Challenge</a> and decided it would be a great way to keep up-to-date with the community. I participated for the first time this week and thought it would be fun to do a write up of how I approached the problems. In the future, I will start publishing my blogs earlier in the week so that I can include a link to it in my PR.</p>
+<p>I recently stumbled upon the <a href="https://perlweeklychallenge.org/">Perl Weekly Challenge</a> and decided it would be a great way to keep up-to-date with the community. I participated for the first time this week and thought it would be fun to do a write-up of how I approached the problems. In the future, I will start publishing my blogs earlier in the week so that I can include a link to it in my PR.</p>
 
-<p>So, without further adieu, let’s dive in.</p>
+<p>So, without further ado, let’s dive in.</p>
 
 <h2 id="task-1-array-of-product">Task 1: Array of Product</h2>
 
@@ -372,7 +372,7 @@ Output:
 
 <p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-088/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
 
-<p>See below for explanation and any specific implementation comments.</p>
+<p>See below for explanation and any implementation-specific comments.</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>subset PositiveInt of Int where { $_ ~~ Int &amp;&amp; $_ &gt; 0 } # [1]
 
@@ -455,7 +455,7 @@ Output:
 
 <p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-088/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
 
-<p>See below for explanation and any specific implementation comments.</p>
+<p>See below for explanation and any implementation-specific comments.</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>subset PositiveInt of Int where { $_ ~~ Int &amp;&amp; $_ &gt; 0 }
 
@@ -570,7 +570,7 @@ $ raku ch-2.raku 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
   </li>
   <li>Starting in the top left corner, walk to the right (<code class="language-plaintext highlighter-rouge">EAST</code>) with the following logic: if we hit the edge or a visited cell, turn right, else keep going.
     <ul>
-      <li>We always “visit” the current cell by marking it visted and adding it to the output</li>
+      <li>We always “visit” the current cell by marking it visited and adding it to the output</li>
     </ul>
   </li>
 </ol>
@@ -681,6 +681,51 @@ $ raku ch-2.raku 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-06/" rel="permalink">Advent of Code: Day 6
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-06T00:00:00-06:00">December 6, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Well, our old pal set theory reared its ugly beautiful head again today. I’m very happy with the middle ground I found between conciseness and readability wi...</p>
+  </article>
+</div>
+
         
           
 
@@ -812,52 +857,7 @@ $ raku ch-2.raku 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming program...</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-02/" rel="permalink">Advent of Code: Day 2
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-02T00:00:00-06:00">December 2, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          5 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) rea...</p>
+    <p class="archive__item-excerpt" itemprop="description">Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programmi...</p>
   </article>
 </div>
 

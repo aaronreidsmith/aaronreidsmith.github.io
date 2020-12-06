@@ -339,7 +339,7 @@
 10-14 q: qqqqqqqqq
 </code></pre></div></div>
 
-<p>Which can be interpretted as a password policy that reads as such:</p>
+<p>Which can be interpreted as a password policy that reads as such:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The password "ababa" must contain between 1 and 3 (inclusive) "a" characters
 The password "qqqqqqqqqq" must contain between 10 and 14 (inclusive) "q" characters
@@ -351,7 +351,7 @@ The password "qqqqqqqqqq" must contain between 10 and 14 (inclusive) "q" charact
 
 <p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku">GitHub Link</a></p>
 
-<p>See below for explanation and any implementation specific comments.</p>
+<p>See below for explanation and any implementation-specific comments.</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grammar PasswordEntry {
     token TOP { ^(&lt;digit&gt;+)'-'(&lt;digit&gt;+) &lt;.ws&gt; (&lt;[a..z]&gt;)':' &lt;.ws&gt; (&lt;[a..z]&gt;+)$ } # [1]
@@ -385,7 +385,7 @@ sub MAIN($file) {
 
 <h4 id="explanation">Explanation</h4>
 
-<p>We do a couple things here:</p>
+<p>We do a couple of things here:</p>
 
 <p>First we pull in all the lines in the file, then parse them using our <code class="language-plaintext highlighter-rouge">PasswordEntry</code> grammar. See below for the explanation on the grammar.</p>
 
@@ -398,7 +398,7 @@ sub MAIN($file) {
 <ol>
   <li>We could just define a regex like <code class="language-plaintext highlighter-rouge">my $regex = /pattern/</code>, but I wanted to combine the parse step <em>and</em> the business logic of determining if it is a valid password; we will get into that second part below.
     <ul>
-      <li>When definining a grammar, you always have to define a <code class="language-plaintext highlighter-rouge">TOP</code> token the encompasses everything. If I had a more complex grammar, I could define subtokens that could be used in the <code class="language-plaintext highlighter-rouge">TOP</code> token (or any other defined tokens).</li>
+      <li>When defining a grammar, you always have to define a <code class="language-plaintext highlighter-rouge">TOP</code> token the encompasses everything. If I had a more complex grammar, I could define subtokens that could be used in the <code class="language-plaintext highlighter-rouge">TOP</code> token (or any other defined tokens).</li>
       <li>For the non-regex folks, the way this reads is:
         <ul>
           <li>Start of line</li>
@@ -413,18 +413,18 @@ sub MAIN($file) {
           <li>End of line</li>
         </ul>
       </li>
-      <li>Additionally, you’ll notice the four sets of parenthese that define <em>capture groups</em>, meaning when this grammar parses a line successfully, it will return the four groups in an array.</li>
+      <li>Additionally, you’ll notice the four sets of parentheses that define <em>capture groups</em>, meaning when this grammar parses a line successfully, it will return the four groups in an array.</li>
     </ul>
   </li>
   <li>When we use the parser (<code class="language-plaintext highlighter-rouge">PasswordEntry.parse</code>), we are able to supply this <code class="language-plaintext highlighter-rouge">actions</code> class that has methods corresponding to the tokens in the parser. This is where any business logic should take place. For example, any type casting or object creation to be used in the outer scope. In this case, like I said above, we want to parse and reduce to <code class="language-plaintext highlighter-rouge">True</code> or <code class="language-plaintext highlighter-rouge">False</code> in one pass. So what our <code class="language-plaintext highlighter-rouge">TOP</code> method does is take the match <code class="language-plaintext highlighter-rouge">$/</code> (this is a special variable, I would never name something like this), extract the four groups defined in the grammar, and cast them to the correct types. We then count the number of times the target appears in the password and see if it is in range.</li>
   <li><code class="language-plaintext highlighter-rouge">comb</code> takes a string and turns it into a list of characters. When supplied with a string argument (in this case, <code class="language-plaintext highlighter-rouge">$target</code>), it turns the string into a list <em>and</em> filters it down to elements that equal the supplied character.</li>
-  <li>There is some special syntax going on on this line. I could have written <code class="language-plaintext highlighter-rouge">PasswordEntry.parse($row, actions =&gt; $actions)</code>, and used <code class="language-plaintext highlighter-rouge">$actions</code> as a named keyword. But, since my variable has the same name as the target argument, I am able to pass it in as <code class="language-plaintext highlighter-rouge">:$actions</code>. It reminds me of <code class="language-plaintext highlighter-rouge">**kwargs</code> in Python.</li>
+  <li>There is some special syntax happening on this line. I could have written <code class="language-plaintext highlighter-rouge">PasswordEntry.parse($row, actions =&gt; $actions)</code>, and used <code class="language-plaintext highlighter-rouge">$actions</code> as a named keyword. But, since my variable has the same name as the target argument, I am able to pass it in as <code class="language-plaintext highlighter-rouge">:$actions</code>. It reminds me of <code class="language-plaintext highlighter-rouge">**kwargs</code> in Python.</li>
   <li>I <em>hate</em> that I have to say <code class="language-plaintext highlighter-rouge">* == True</code>, but <code class="language-plaintext highlighter-rouge">grep</code> would not work otherwise, so I guess that is just an edge case.</li>
 </ol>
 
 <h3 id="part-2">Part 2</h3>
 
-<p>Given the same file as before, the interpretation of the lines has changed. Given the same lines as above, the intperpretation should now be:</p>
+<p>Given the same file as before, the interpretation of the lines has changed. Given the same lines as above, the interpretation should now be:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The password "ababa" must contain an "a" character in position 1 or 3 (but not both)
 The password "qqqqqqqqqq" must contain a "q" character in position 10 or 14 (but not both)
@@ -436,7 +436,7 @@ The password "qqqqqqqqqq" must contain a "q" character in position 10 or 14 (but
 
 <p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku">GitHub Link</a></p>
 
-<p>See below for explanation and any implemtenation specific comments.</p>
+<p>See below for explanation and any implementation-specific comments.</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grammar PasswordEntry {
     token TOP { ^(&lt;digit&gt;+)'-'(&lt;digit&gt;+) &lt;.ws&gt; (&lt;[a..z]&gt;)':' &lt;.ws&gt; (&lt;[a..z]&gt;+)$ }
@@ -606,6 +606,51 @@ $ raku main.raku --p2 input.txt
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
+        <a href="/blog/advent-of-code-day-06/" rel="permalink">Advent of Code: Day 6
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-06T00:00:00-06:00">December 6, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Well, our old pal set theory reared its ugly beautiful head again today. I’m very happy with the middle ground I found between conciseness and readability wi...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
         <a href="/blog/advent-of-code-day-05/" rel="permalink">Advent of Code: Day 5
 </a>
       
@@ -727,54 +772,7 @@ $ raku main.raku --p2 input.txt
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming program...</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-01/" rel="permalink">Advent of Code: Day 1
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-01T00:00:00-06:00">December 1, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          4 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programmi...</p>
   </article>
 </div>
 

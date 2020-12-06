@@ -1,4 +1,128 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-05T10:58:08-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 5</title><link href="http://localhost:4000/blog/advent-of-code-day-05/" rel="alternate" type="text/html" title="Advent of Code: Day 5" /><published>2020-12-05T00:00:00-06:00</published><updated>2020-12-05T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-05</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-05/">&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Binary_search_algorithm&quot;&gt;Binary search&lt;/a&gt; is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right hand side of the shelf, then narrow down your search from there. This is obviously more efficient than searching from the left hand side of the bookshelf.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-06T08:14:37-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 6</title><link href="http://localhost:4000/blog/advent-of-code-day-06/" rel="alternate" type="text/html" title="Advent of Code: Day 6" /><published>2020-12-06T00:00:00-06:00</published><updated>2020-12-06T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-06</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-06/">&lt;p&gt;Well, our old pal &lt;a href=&quot;https://en.wikipedia.org/wiki/Set_theory&quot;&gt;set theory&lt;/a&gt; reared its &lt;del&gt;ugly&lt;/del&gt; beautiful head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;On &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-04/&quot;&gt;day four&lt;/a&gt; we helped out airport security with their passport scanner, and &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-05/&quot;&gt;yesterday&lt;/a&gt; we wrote a program to find our seat on the airplane after losing our boarding pass. Today we are about to land, and it’s time to fill out customs declaration form.&lt;/p&gt;
+
+&lt;p&gt;This form has 26 yes or no questions marked “A” through “Z.” We fill ours out quickly and notice the family next to us having some issues with theirs; they ask us for help. Pretty soon we have offered to help everyone on the plane, and we end up with a file that looks like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;abc
+
+a
+b
+c
+
+ab
+ac
+
+a
+a
+a
+a
+
+b
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Where each family is distinguished by a blank space, and each person’s answers are on their own line, and the presence of a letter means that person answered “yes.” Additionally, we only count a “yes” once per family. So the above could be interpreted as follows:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The first group contains one person who answered “yes” to 3 questions: a, b, and c&lt;/li&gt;
+  &lt;li&gt;The second group contains three people; combined, they answered “yes” to 3 questions: a, b, and c&lt;/li&gt;
+  &lt;li&gt;The third group contains two people; combined, they answered “yes” to 3 questions: a, b, and c&lt;/li&gt;
+  &lt;li&gt;The fourth group contains four people; combined, they answered “yes” to only 1 question, a&lt;/li&gt;
+  &lt;li&gt;The last group contains one person who answered “yes” to only 1 question, b&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The sum of these counts is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3 + 3 + 3 + 1 + 1 = 11&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Our job is to find the sum of distinct “yes” answers (one per question per family) for the entire plane.&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/06/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
+    say [+] $file.IO
+              .lines(:nl-in(&quot;\n\n&quot;))                        # [1]
+              .map(-&amp;gt; $group {
+                (set $group.subst(&quot;\n&quot;, '', :g).comb).elems # [2]
+              });
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+6809
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;This one is short and sweet due to the tools Raku gives us. First, we read the file in and split it into families (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:nl-in(&quot;\n\n&quot;)&lt;/code&gt;; see below for details). Then, for each family, we combine everyone’s answers into one line, convert it to a list, then convert it to a set (which removes duplicates). We then count the number of elements in each set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.elems&lt;/code&gt; and sum &lt;em&gt;all&lt;/em&gt; the sets using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[+]&lt;/code&gt; metaoperator.&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;By default &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.lines&lt;/code&gt; will split the input file on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\n&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\r\n&lt;/code&gt; newline characters. But Raku gives us the tools to tell it to split on whatever we want. In this case, we tell it to split on 2 newline characters, which delineate our families. Additionally, as opposed to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IO.slurp&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IO.lines&lt;/code&gt; is lazy, so it does not pull the whole file into memory; something to think about if we had a large file.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;subst&lt;/code&gt; is Raku’s string replacement method (not to be confused with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;substr&lt;/code&gt;, its substring method). What’s important here is the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:g&lt;/code&gt; flag we pass in, which say to replace all newlines in the string rather than just the first one.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;As soon as we finished processing everyone’s customs forms, we realize we misread the instructions! We don’t want to count where &lt;em&gt;anyone&lt;/em&gt; answered yes, we want to count where &lt;em&gt;everyone&lt;/em&gt; answered yes. We need to tweak our solution quickly before we land!&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/06/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub part-one($group) {
+    (set $group.subst(&quot;\n&quot;, '', :g).comb).elems;
+}
+
+sub part-two($group) {
+    [∩] $group.split(&quot;\n&quot;).map(-&amp;gt; $entry { set $entry.comb }); # [1]
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    say [+] $file.IO.lines(:nl-in(&quot;\n\n&quot;)).map($p2 ?? &amp;amp;part-two !! &amp;amp;part-one);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
+$ raku main.raku input.txt
+6809
+
+# Part 2
+$ raku main.raku --p2 input.txt
+3394
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;So the first obvious difference is we refactored our part one solution to its own subroutine, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;part-one&lt;/code&gt;, but the logic is the same. Then we added the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;part-two&lt;/code&gt; with the new logic.&lt;/p&gt;
+
+&lt;p&gt;In &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;part-two&lt;/code&gt;, rather than combine the whole family’s input, we split them into individual people &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.split(&quot;\n&quot;)&lt;/code&gt;, and then convert each person’s answers to a set. Finally, we use reduction metaoperator (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[&amp;lt;operator&amp;gt;]&lt;/code&gt;) to apply the &lt;a href=&quot;https://en.wikipedia.org/wiki/Intersection_(set_theory)&quot;&gt;set intersection&lt;/a&gt; operator to all the sets in the family.&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Once again, we use the Unicode operator (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;∩&lt;/code&gt;) as opposed to the ASCII operator (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(&amp;amp;)&lt;/code&gt;). You may have seen me use the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[+]&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[*]&lt;/code&gt; metaoperators, but this is a new one. The actual operator here is the bracket pair. Basically, when Raku sees the bracket pair, it just applies the operator inside it to all items in the list. So, in this case, it does something like the following:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[∩] (Set(a b c), Set(b c d), Set(c d e)) == Set(a b c) ∩ Set(b c d) ∩ Set(c d e) == Set(c)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;Nothing much to add to this one today. A short and sweet question with a short and sweet answer!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Well, our old pal set theory reared its ugly beautiful head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!</summary></entry><entry><title type="html">Advent of Code: Day 5</title><link href="http://localhost:4000/blog/advent-of-code-day-05/" rel="alternate" type="text/html" title="Advent of Code: Day 5" /><published>2020-12-05T00:00:00-06:00</published><updated>2020-12-05T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-05</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-05/">&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Binary_search_algorithm&quot;&gt;Binary search&lt;/a&gt; is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right-hand side of the shelf, then narrow down your search from there. This is obviously more efficient than searching from the left-hand side of the bookshelf.&lt;/p&gt;
 
 &lt;p&gt;That was our task with today’s problem. Yet again, we get to bust out our old friend recursion to solve this problem fairly easily in a functional manner.&lt;/p&gt;
 
@@ -26,7 +150,7 @@
   &lt;li&gt;The final F keeps the lower of the two, row 44&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Similarly for the columns:&lt;/p&gt;
+&lt;p&gt;Similarly, for the columns:&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Start by considering the whole range, columns 0 through 7&lt;/li&gt;
@@ -51,7 +175,7 @@
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/05/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implemenation specific comments.&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub binary-search(@list, @possible-rows, $lower-symbol) {
     if @possible-rows.elems == 1 {
@@ -87,18 +211,18 @@ sub MAIN($file) {
 
 &lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
 
-&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;binary-search&lt;/code&gt; subroutine itself is fairly straight forward. It takes the list of characters (something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(F, B, F, B, B, F, F)&lt;/code&gt;), the list of possible rows/columns (something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(0..127)&lt;/code&gt;, and what character means “lower half” (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;F&lt;/code&gt; for front or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;L&lt;/code&gt; for left).&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;binary-search&lt;/code&gt; subroutine itself is fairly straight forward. It takes the list of characters (something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(F, B, F, B, B, F, F)&lt;/code&gt;), the list of possible rows/columns (something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(0..127)&lt;/code&gt;), and what character means “lower half” (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;F&lt;/code&gt; for front or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;L&lt;/code&gt; for left).&lt;/p&gt;
 
-&lt;p&gt;If there is only one item in the list of remaming rows/columns, that’s our answer and we return. Otherwise, we check if we are keeping the left half or right half and call the function again with the smaller input.&lt;/p&gt;
+&lt;p&gt;If there is only one item in the list of remaining rows/columns, that’s our answer, and we return. Otherwise, we check if we are keeping the left half or right half and call the function again with the smaller input.&lt;/p&gt;
 
 &lt;p&gt;We wrap this function in a helper function called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find-seat&lt;/code&gt; which includes the multiplication logic, then map it over our input lines. Finally, we call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;max&lt;/code&gt; to find the max seat number.&lt;/p&gt;
 
 &lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;When unpacking a list in this manner, the left hand side is normally one or more scalars (denoted by the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$&lt;/code&gt; sigil). When unpacking using a list on the left hand side, we have to use the special &lt;a href=&quot;https://docs.raku.org/language/operators#index-entry-Binding_operator&quot;&gt;binding&lt;/a&gt; operator (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:=&lt;/code&gt;) or everything will get “slurped” (Raku’s terminology, not mine) into the list instead of being split between the list and scalar.&lt;/li&gt;
-  &lt;li&gt;I used some special Hash syntax yesterday to extract multiple keys at the same time. This is the equivalent List sytanx (comma-separated instead of space-separated).&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;div&lt;/code&gt; is Raku’s integer division operator. Even though we know our input will alwas be a multiple of two, it never hurts to use best practices!&lt;/li&gt;
+  &lt;li&gt;When unpacking a list in this manner, the left-hand side is normally one or more scalars (denoted by the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$&lt;/code&gt; sigil). When unpacking using a list on the left-hand side, we have to use the special &lt;a href=&quot;https://docs.raku.org/language/operators#index-entry-Binding_operator&quot;&gt;binding&lt;/a&gt; operator (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:=&lt;/code&gt;) or everything will get “slurped” (Raku’s terminology, not mine) into the list instead of being split between the list and scalar.&lt;/li&gt;
+  &lt;li&gt;I used some special Hash syntax yesterday to extract multiple keys at the same time. This is the equivalent List syntax (comma-separated instead of space-separated).&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;div&lt;/code&gt; is Raku’s integer division operator. Even though we know our input will always be a multiple of two, it never hurts to use best practices!&lt;/li&gt;
   &lt;li&gt;In the past few posts for string comparison I was using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$x cmp $y == Same&lt;/code&gt;. I finally stumbled upon the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eq&lt;/code&gt; operator and no longer have that code smell!&lt;/li&gt;
   &lt;li&gt;This line (and others) contain special range syntax. Basically &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;^$half-way-point&lt;/code&gt; is the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(0..^$half-way-point)&lt;/code&gt;, meaning everything from zero to the half-way point, exclusive.&lt;/li&gt;
   &lt;li&gt;This line splits the input into a list of characters and then uses the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rotor&lt;/code&gt; function to split it into groups of 7. Since our second group (the column definition) is of size 3, we need to pass the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:partial&lt;/code&gt; parameter in, or else it will get dropped for being too small. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:partial&lt;/code&gt; is special syntax to pass in a boolean flag named &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;partial&lt;/code&gt; as true. This is the equivalent of passing in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;partial =&amp;gt; True&lt;/code&gt;&lt;/li&gt;
@@ -114,7 +238,7 @@ sub MAIN($file) {
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/05/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implemenation specific comments&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub binary-search(@list, @possible-rows, $lower-symbol) {
     if @possible-rows.elems == 1 {
@@ -166,19 +290,19 @@ $ raku main.raku --p2 input.txt
 
 &lt;p&gt;You’ll notice all we did was tweak our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; method a bit. We still find all the seat numbers, and if the user doesn’t specify &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p2&lt;/code&gt;, we print the maximum.&lt;/p&gt;
 
-&lt;p&gt;If the user &lt;em&gt;does&lt;/em&gt; specify &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p2&lt;/code&gt;, we also calculate our minimum seat number (since the seats don’t start at 1). We then find the set of &lt;em&gt;all&lt;/em&gt; seats (being the range from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$min-seat&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$max-seat&lt;/code&gt;). We then use our handy dandy &lt;a href=&quot;https://en.wikipedia.org/wiki/Symmetric_difference&quot;&gt;symmetric difference&lt;/a&gt; operator to find the difference between all possible seats and the list of seats we scanned. The difference, of course, being our seat. We find it just in time before the flight attendants drag us out. Phew!&lt;/p&gt;
+&lt;p&gt;If the user &lt;em&gt;does&lt;/em&gt; specify &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p2&lt;/code&gt;, we also calculate our minimum seat number (since the seats don’t start at 1). We then find the set of &lt;em&gt;all&lt;/em&gt; seats (being the range from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$min-seat&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$max-seat&lt;/code&gt;). We then use our handy dandy &lt;a href=&quot;https://en.wikipedia.org/wiki/Symmetric_difference&quot;&gt;symmetric difference&lt;/a&gt; operator to find the difference between all possible seats, and the list of seats we scanned. The difference, of course, being our seat. We find it just in time before the flight attendants drag us out. Phew!&lt;/p&gt;
 
 &lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;A set is a scalar instead of a collection in Raku (note the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$&lt;/code&gt; sigil instead of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@&lt;/code&gt; sigil), so we have to convert it to a list using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.keys&lt;/code&gt; method. Or course, there is only one thing in it, so we then call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.head&lt;/code&gt; to get that item&lt;/li&gt;
+  &lt;li&gt;A set is a scalar instead of a collection in Raku (note the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$&lt;/code&gt; sigil instead of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@&lt;/code&gt; sigil), so we have to convert it to a list using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.keys&lt;/code&gt; method. Of course, there is only one thing in it, so we then call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.head&lt;/code&gt; to get that item.&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;This exercise has me diving more and more into &lt;a href=&quot;https://en.wikipedia.org/wiki/Set_theory&quot;&gt;set theory&lt;/a&gt;. It’s awesome that Raku lets (and encourages) use of the Unicode operators found in math textbooks. Their resoning for this is that it is easier to take an algorithm from paper to code when you are allowed to use the same notation in each place. Now to find a keyboard to be able to type these symbols!&lt;/p&gt;
+&lt;p&gt;This exercise has me diving more and more into &lt;a href=&quot;https://en.wikipedia.org/wiki/Set_theory&quot;&gt;set theory&lt;/a&gt;. It’s awesome that Raku allows (and encourages) use of the Unicode operators found in math textbooks. Their reasoning for this is that it is easier to take an algorithm from paper to code when you are allowed to use the same notation in each place. Now to find a keyboard to be able to type these symbols!&lt;/p&gt;
 
-&lt;p&gt;So far we are 5 for 5 with pure functional solutions. 20% of the way there!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right hand side of the shelf, then narrow down your search from there. This is obviously more efficient than searching from the left hand side of the bookshelf.</summary></entry><entry><title type="html">Advent of Code: Day 4</title><link href="http://localhost:4000/blog/advent-of-code-day-04/" rel="alternate" type="text/html" title="Advent of Code: Day 4" /><published>2020-12-04T00:00:00-06:00</published><updated>2020-12-04T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-04</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-04/">&lt;p&gt;Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!&lt;/p&gt;
+&lt;p&gt;So far we are 5 for 5 with pure functional solutions. 20% of the way there!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right-hand side of the shelf, then narrow down your search from there. This is obviously more efficient than searching from the left-hand side of the bookshelf.</summary></entry><entry><title type="html">Advent of Code: Day 4</title><link href="http://localhost:4000/blog/advent-of-code-day-04/" rel="alternate" type="text/html" title="Advent of Code: Day 4" /><published>2020-12-04T00:00:00-06:00</published><updated>2020-12-04T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-04</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-04/">&lt;p&gt;Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -230,7 +354,7 @@ iyr:2011 ecl:brn hgt:59in
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implemtenation specific comments.&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub is-valid(%credentials) {
     my $passport-keys = set &amp;lt;byr iyr eyr hgt hcl ecl pid cid&amp;gt;;   # [1]
@@ -315,14 +439,14 @@ sub MAIN($file) {
   &lt;li&gt;Hair Color - Must be a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#&lt;/code&gt; character followed by exactly 6 characters &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0-9&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a-f&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;Eye Color - Must be one of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;amb, blu, brn, grn, gry, hzl, oth&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;Passport ID - 9-digit number including leading zeroes&lt;/li&gt;
-  &lt;li&gt;Country ID - We still want to ignore this or we won’t get through&lt;/li&gt;
+  &lt;li&gt;Country ID - We still want to ignore this, or we won’t get through&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implementation specific comments.&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub is-valid(%credentials, $check-values) {
     my $passport-keys = set &amp;lt;byr iyr eyr hgt hcl ecl pid cid&amp;gt;;
@@ -392,7 +516,7 @@ $ raku main.raku --p2 input.txt
 &lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;Hashes have a special syntax where you can provide multiple space-separated keys and it will return all of the values as a list. We then map these entries to strings and unpack them. Again, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;...&amp;gt;&lt;/code&gt; automatically quotes our keys, so we don’t have to.&lt;/li&gt;
+  &lt;li&gt;Hashes have a special syntax where you can provide multiple space-separated keys, and it will return all the values as a list. We then map these entries to strings and unpack them. Again, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;...&amp;gt;&lt;/code&gt; automatically quotes our keys, so we don’t have to.&lt;/li&gt;
   &lt;li&gt;Originally this line (along with the rest) looked like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(59..76).contains($byr.Int)&lt;/code&gt;. The logic is exactly the same, but this is apparently a &lt;a href=&quot;https://docs.raku.org/language/traps#Lists_become_strings,_so_beware_.contains()&quot;&gt;well-documented trap&lt;/a&gt;. Basically &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.contains&lt;/code&gt; does not test for presence of an element. It converts the list to a string and checks if the given substring exists within it. I don’t fully know which item was erroneously getting matched here, but it caused the outcome to be 173 instead of 172.&lt;/li&gt;
   &lt;li&gt;The solution to the above trap is to use set containment operators as shown here. Once again, we are using the Unicode operator, this time we use the &lt;a href=&quot;https://en.wikipedia.org/wiki/Element_(mathematics)#Notation_and_terminology&quot;&gt;“is an element of”&lt;/a&gt; set operator.&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;xdigit&amp;gt;&lt;/code&gt; is a built-in metacharacter for the characters &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0-9&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a-f&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;A-F&lt;/code&gt;.&lt;/li&gt;
@@ -405,7 +529,7 @@ $ raku main.raku --p2 input.txt
 
 &lt;p&gt;With that being said, I am really learning a lot through this exercise. In fact, I am noticing mistakes (or rather, code smells) in my previous solutions! I am not planning on editing them out though; it’s always good to see where you came from to remember how far you’ve come!&lt;/p&gt;
 
-&lt;p&gt;See y’all for day 5!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!</summary></entry><entry><title type="html">Advent of Code: Day 3</title><link href="http://localhost:4000/blog/advent-of-code-day-03/" rel="alternate" type="text/html" title="Advent of Code: Day 3" /><published>2020-12-03T00:00:00-06:00</published><updated>2020-12-03T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-03</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-03/">&lt;p&gt;Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a &lt;a href=&quot;https://two-wrongs.com/myth-of-the-day-functional-programmers-dont-use-loops&quot;&gt;for-loop in functional programming programming&lt;/a&gt;, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion.&lt;/p&gt;
+&lt;p&gt;See y’all for day 5!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!</summary></entry><entry><title type="html">Advent of Code: Day 3</title><link href="http://localhost:4000/blog/advent-of-code-day-03/" rel="alternate" type="text/html" title="Advent of Code: Day 3" /><published>2020-12-03T00:00:00-06:00</published><updated>2020-12-03T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-03</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-03/">&lt;p&gt;Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a &lt;a href=&quot;https://two-wrongs.com/myth-of-the-day-functional-programmers-dont-use-loops&quot;&gt;for-loop in functional programming programming&lt;/a&gt;, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion.&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -425,7 +549,7 @@ $ raku main.raku --p2 input.txt
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implementation specific comments.&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub traverse(@mountain, $trees-encountered = 0, $i = 0, $j = 0) {
     if $i &amp;gt; @mountain.elems - 1 {
@@ -467,7 +591,7 @@ sub MAIN($file) {
   &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; has a special meaning when used in front of a list. It flattens any inner lists to the top level. So, for example, if we had &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|((1, 2), (3, 4))&lt;/code&gt;, that would equal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 2, 3, 4)&lt;/code&gt;.&lt;/li&gt;
   &lt;li&gt;Reminder that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.comb&lt;/code&gt; splits the input into a list of characters.&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xx&lt;/code&gt; is a special operator that takes the input list and concatenates it to itself &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; times (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N = *&lt;/code&gt; here; see below). So, for example, if we had &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 2) xx 2&lt;/code&gt;, that would yield &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;((1, 2), (1, 2))&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xx&lt;/code&gt; allows the &lt;a href=&quot;https://docs.raku.org/type/Whatever&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Whatever&lt;/code&gt;&lt;/a&gt; character (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt;) on the right hand side, and in that case it returns a lazy, infinite concatenation of the left hand side.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xx&lt;/code&gt; allows the &lt;a href=&quot;https://docs.raku.org/type/Whatever&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Whatever&lt;/code&gt;&lt;/a&gt; character (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt;) on the right-hand side, and in that case it returns a lazy, infinite concatenation of the left-hand side.&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;So, to summarize the above comments, we take the line and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;comb&lt;/code&gt; it to a list. Then, we concatenate that list infinitely to have a list of lists, which we flatten using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; operator. Since this happens in a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt;, it applies to each line, so we have one finite outer list containing multiple infinite lists. We then traverse the outer list.&lt;/p&gt;
@@ -490,7 +614,7 @@ sub MAIN($file) {
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implementation specific comments.&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub traverse(@mountain, $i-increment, $j-increment, $trees-encountered = 0, $i = 0, $j = 0) {
     if $i &amp;gt; @mountain.elems - 1 {
@@ -550,7 +674,7 @@ $ raku main.raku --p2 input.txt
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;I felt this problem came very serendipitously; I was &lt;em&gt;just&lt;/em&gt; reading about the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xx&lt;/code&gt; operators last night, so I am glad I got to put them to use. Recursion (and more specifically tail recursion) is always a fun approach, and it let us tackle this problem functionally. 3 for 3! Let’s see what tomorrow brings.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion.</summary></entry><entry><title type="html">Advent of Code: Day 2</title><link href="http://localhost:4000/blog/advent-of-code-day-02/" rel="alternate" type="text/html" title="Advent of Code: Day 2" /><published>2020-12-02T00:00:00-06:00</published><updated>2020-12-02T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-02</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-02/">&lt;p&gt;We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!&lt;/p&gt;
+&lt;p&gt;I felt this problem came very serendipitously; I was &lt;em&gt;just&lt;/em&gt; reading about the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xx&lt;/code&gt; operators last night, so I am glad I got to put them to use. Recursion (and more specifically tail recursion) is always a fun approach, and it let us tackle this problem functionally. 3 for 3! Let’s see what tomorrow brings.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion.</summary></entry><entry><title type="html">Advent of Code: Day 2</title><link href="http://localhost:4000/blog/advent-of-code-day-02/" rel="alternate" type="text/html" title="Advent of Code: Day 2" /><published>2020-12-02T00:00:00-06:00</published><updated>2020-12-02T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-02</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-02/">&lt;p&gt;We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -562,7 +686,7 @@ $ raku main.raku --p2 input.txt
 10-14 q: qqqqqqqqq
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Which can be interpretted as a password policy that reads as such:&lt;/p&gt;
+&lt;p&gt;Which can be interpreted as a password policy that reads as such:&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The password &quot;ababa&quot; must contain between 1 and 3 (inclusive) &quot;a&quot; characters
 The password &quot;qqqqqqqqqq&quot; must contain between 10 and 14 (inclusive) &quot;q&quot; characters
@@ -574,7 +698,7 @@ The password &quot;qqqqqqqqqq&quot; must contain between 10 and 14 (inclusive) &
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implementation specific comments.&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grammar PasswordEntry {
     token TOP { ^(&amp;lt;digit&amp;gt;+)'-'(&amp;lt;digit&amp;gt;+) &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;)':' &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;+)$ } # [1]
@@ -608,7 +732,7 @@ sub MAIN($file) {
 
 &lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
 
-&lt;p&gt;We do a couple things here:&lt;/p&gt;
+&lt;p&gt;We do a couple of things here:&lt;/p&gt;
 
 &lt;p&gt;First we pull in all the lines in the file, then parse them using our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PasswordEntry&lt;/code&gt; grammar. See below for the explanation on the grammar.&lt;/p&gt;
 
@@ -621,7 +745,7 @@ sub MAIN($file) {
 &lt;ol&gt;
   &lt;li&gt;We could just define a regex like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;my $regex = /pattern/&lt;/code&gt;, but I wanted to combine the parse step &lt;em&gt;and&lt;/em&gt; the business logic of determining if it is a valid password; we will get into that second part below.
     &lt;ul&gt;
-      &lt;li&gt;When definining a grammar, you always have to define a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TOP&lt;/code&gt; token the encompasses everything. If I had a more complex grammar, I could define subtokens that could be used in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TOP&lt;/code&gt; token (or any other defined tokens).&lt;/li&gt;
+      &lt;li&gt;When defining a grammar, you always have to define a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TOP&lt;/code&gt; token the encompasses everything. If I had a more complex grammar, I could define subtokens that could be used in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TOP&lt;/code&gt; token (or any other defined tokens).&lt;/li&gt;
       &lt;li&gt;For the non-regex folks, the way this reads is:
         &lt;ul&gt;
           &lt;li&gt;Start of line&lt;/li&gt;
@@ -636,18 +760,18 @@ sub MAIN($file) {
           &lt;li&gt;End of line&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/li&gt;
-      &lt;li&gt;Additionally, you’ll notice the four sets of parenthese that define &lt;em&gt;capture groups&lt;/em&gt;, meaning when this grammar parses a line successfully, it will return the four groups in an array.&lt;/li&gt;
+      &lt;li&gt;Additionally, you’ll notice the four sets of parentheses that define &lt;em&gt;capture groups&lt;/em&gt;, meaning when this grammar parses a line successfully, it will return the four groups in an array.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;When we use the parser (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PasswordEntry.parse&lt;/code&gt;), we are able to supply this &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;actions&lt;/code&gt; class that has methods corresponding to the tokens in the parser. This is where any business logic should take place. For example, any type casting or object creation to be used in the outer scope. In this case, like I said above, we want to parse and reduce to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;False&lt;/code&gt; in one pass. So what our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TOP&lt;/code&gt; method does is take the match &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$/&lt;/code&gt; (this is a special variable, I would never name something like this), extract the four groups defined in the grammar, and cast them to the correct types. We then count the number of times the target appears in the password and see if it is in range.&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;comb&lt;/code&gt; takes a string and turns it into a list of characters. When supplied with a string argument (in this case, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$target&lt;/code&gt;), it turns the string into a list &lt;em&gt;and&lt;/em&gt; filters it down to elements that equal the supplied character.&lt;/li&gt;
-  &lt;li&gt;There is some special syntax going on on this line. I could have written &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PasswordEntry.parse($row, actions =&amp;gt; $actions)&lt;/code&gt;, and used &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$actions&lt;/code&gt; as a named keyword. But, since my variable has the same name as the target argument, I am able to pass it in as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:$actions&lt;/code&gt;. It reminds me of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;**kwargs&lt;/code&gt; in Python.&lt;/li&gt;
+  &lt;li&gt;There is some special syntax happening on this line. I could have written &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PasswordEntry.parse($row, actions =&amp;gt; $actions)&lt;/code&gt;, and used &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$actions&lt;/code&gt; as a named keyword. But, since my variable has the same name as the target argument, I am able to pass it in as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:$actions&lt;/code&gt;. It reminds me of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;**kwargs&lt;/code&gt; in Python.&lt;/li&gt;
   &lt;li&gt;I &lt;em&gt;hate&lt;/em&gt; that I have to say &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;* == True&lt;/code&gt;, but &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;grep&lt;/code&gt; would not work otherwise, so I guess that is just an edge case.&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
 
-&lt;p&gt;Given the same file as before, the interpretation of the lines has changed. Given the same lines as above, the intperpretation should now be:&lt;/p&gt;
+&lt;p&gt;Given the same file as before, the interpretation of the lines has changed. Given the same lines as above, the interpretation should now be:&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The password &quot;ababa&quot; must contain an &quot;a&quot; character in position 1 or 3 (but not both)
 The password &quot;qqqqqqqqqq&quot; must contain a &quot;q&quot; character in position 10 or 14 (but not both)
@@ -659,7 +783,7 @@ The password &quot;qqqqqqqqqq&quot; must contain a &quot;q&quot; character in po
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implemtenation specific comments.&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grammar PasswordEntry {
     token TOP { ^(&amp;lt;digit&amp;gt;+)'-'(&amp;lt;digit&amp;gt;+) &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;)':' &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;+)$ }
@@ -728,13 +852,13 @@ $ raku main.raku --p2 input.txt
 
 &lt;p&gt;Another functional and (in my opinion) beautiful solution! In my day job, I actually maintain a grammar defined using &lt;a href=&quot;https://www.antlr.org/&quot;&gt;ANTLR&lt;/a&gt;, so it is fun to see tools with the same concepts in other languages. Looking forward to getting to use grammars more in Raku. See y’all tomorrow!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!</summary></entry><entry><title type="html">Advent of Code: Day 1</title><link href="http://localhost:4000/blog/advent-of-code-day-01/" rel="alternate" type="text/html" title="Advent of Code: Day 1" /><published>2020-12-01T00:00:00-06:00</published><updated>2020-12-01T07:40:30-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-01</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-01/">&lt;p&gt;Turns out I started blogging just in time for the &lt;a href=&quot;https://adventofcode.com/&quot;&gt;Advent of Code&lt;/a&gt;, an annual series of daily challenges that run from December 1st to December 25th.&lt;/p&gt;
 
-&lt;p&gt;These problems remind me a lot of &lt;a href=&quot;https://projecteuler.net/&quot;&gt;Project Euler&lt;/a&gt;, because they are not concerned with the readability or speed of your code, just the output. That means that any goals one wishes to accomplish should be set personally (there &lt;em&gt;is&lt;/em&gt; technically a leaderboard, but I find you have to be online very late at night to catch the posts and it is not worth the stress during the holiday season).&lt;/p&gt;
+&lt;p&gt;These problems remind me a lot of &lt;a href=&quot;https://projecteuler.net/&quot;&gt;Project Euler&lt;/a&gt;, because they are not concerned with the readability or speed of your code, just the output. That means that any goals one wishes to accomplish should be set personally (there &lt;em&gt;is&lt;/em&gt; technically a leaderboard, but I find you have to be online very late at night to catch the posts, and it is not worth the stress during the holiday season).&lt;/p&gt;
 
 &lt;p&gt;My goal, as you may have guessed from my previous posts, is to complete these challenges in &lt;em&gt;at least&lt;/em&gt; Raku and to do so utilizing a functional programming paradigm. Let’s dive into day 1 and see if I can do it!&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
-&lt;p&gt;I am not going to copy and paste the explanation of the problem here like I do for the Perl Weekly Challenge, because it is &lt;em&gt;so&lt;/em&gt; long and I want to encourage users to go attempt the challenge themselves! Instead, I will write a summary of what the challenge is and my solution.&lt;/p&gt;
+&lt;p&gt;I am not going to copy and paste the explanation of the problem here like I do for the Perl Weekly Challenge, because it is &lt;em&gt;so&lt;/em&gt; long, and I want to encourage users to go attempt the challenge themselves! Instead, I will write a summary of what the challenge is and my solution.&lt;/p&gt;
 
 &lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
 
@@ -744,7 +868,7 @@ $ raku main.raku --p2 input.txt
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implementation specific comments.&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
     say $file.IO.lines                           # [1]
@@ -763,12 +887,12 @@ $ raku main.raku --p2 input.txt
 
 &lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
 
-&lt;p&gt;This is fairly straight forward and I feel Raku reads very cleanly. Basically, we read the entire file into a list (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IO.lines&lt;/code&gt;), then find all the pairs in that list, filter those pairs down to where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$a + $b == 2020&lt;/code&gt;, then multiply those two numbers together!&lt;/p&gt;
+&lt;p&gt;This is fairly straight forward, and I feel Raku reads very cleanly. Basically, we read the entire file into a list (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IO.lines&lt;/code&gt;), then find all the pairs in that list, filter those pairs down to where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$a + $b == 2020&lt;/code&gt;, then multiply those two numbers together!&lt;/p&gt;
 
 &lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;I’m a sucker for good IO. I feel reading/writing files in languages like Java or Scala is so cumbersome that I try to avoid it at all costs. Languages like Raku were &lt;em&gt;built&lt;/em&gt; for text manipultion, so it makes sense that the IO is great, but I just wanted to call out how easy it is to get the lines of a file in a list.&lt;/li&gt;
+  &lt;li&gt;I’m a sucker for good IO. I feel reading/writing files in languages like Java or Scala is so cumbersome that I try to avoid it at all costs. Languages like Raku were &lt;em&gt;built&lt;/em&gt; for text manipulation, so it makes sense that the IO is great, but I just wanted to call out how easy it is to get the lines of a file in a list.&lt;/li&gt;
   &lt;li&gt;As I said in my &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-089/#specific-comments&quot;&gt;previous post&lt;/a&gt;, I see the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;combinations&lt;/code&gt; feature coming back a lot in these puzzles. I love that it is built right in.&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;grep&lt;/code&gt; is familiar to most &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*nix&lt;/code&gt; users, and it is the equivalent of a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;filter&lt;/code&gt; in more traditional functional languages. In this case, we are filtering down to only pairs that add up to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2020&lt;/code&gt;.&lt;/li&gt;
   &lt;li&gt;At this point this list looks like this: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(($a, $b))&lt;/code&gt;, so we still want to map over the outer list and multiply the pair together.&lt;/li&gt;
@@ -783,7 +907,7 @@ $ raku main.raku --p2 input.txt
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any implementation specific comments.&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file, Bool :$p2 = False) {                # [1]
     say $file.IO.lines
@@ -814,14 +938,14 @@ $ raku main.raku --p2 input.txt
 &lt;ol&gt;
   &lt;li&gt;Using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:$p2&lt;/code&gt; notation says to Raku “create a command line flag called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--p2&lt;/code&gt; and assign it to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$p2&lt;/code&gt; with a default of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;False&lt;/code&gt;”. Creating command line interfaces can be kind of a pain in a lot of languages, so I am happy that is built right into the language.&lt;/li&gt;
   &lt;li&gt;This is the check to see if we are doing part 1 or part 2. Raku’s ternary operator is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;condition ?? true !! false&lt;/code&gt; rather than the traditional &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;condition ? true : false&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Since we have to remove all the pair hardcoding, we can generalize it as a list called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@combo&lt;/code&gt; and then just find the sum of the entire combo using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[+]&lt;/code&gt; meta operator. We perform a similar generalization for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt; step.&lt;/li&gt;
+  &lt;li&gt;Since we have to remove all the pair hard-coding, we can generalize it as a list called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@combo&lt;/code&gt; and then just find the sum of the entire combo using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[+]&lt;/code&gt; meta operator. We perform a similar generalization for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt; step.&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
 &lt;p&gt;So far so good with my goal to write Raku solutions functionally! Check my &lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code&quot;&gt;GitHub&lt;/a&gt; to see any other solutions (and any other languages, if I get around to them). This was a fun little dip into the Advent of Code, and I am looking forward to the rest of the month!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.</summary></entry><entry><title type="html">Perl Weekly Challenge 89</title><link href="http://localhost:4000/blog/perl-weekly-challenge-089/" rel="alternate" type="text/html" title="Perl Weekly Challenge 89" /><published>2020-11-30T00:00:00-06:00</published><updated>2020-12-01T07:40:30-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-089</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-089/">&lt;p&gt;Back again with challenge 89! I was able to tackle this one the day it was released, but I doubt that will be the case going forward.&lt;/p&gt;
 
-&lt;p&gt;Once again, it seems the first task can be tackled easily in a functional way and the second one ends up being more imperative. Hoping I can try to do more things functionally in the future!&lt;/p&gt;
+&lt;p&gt;Once again, it seems the first task can be tackled easily in a functional way, and the second one ends up being more imperative. Hoping I can try to do more things functionally in the future!&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-gcd-sum&quot;&gt;Task 1: GCD Sum&lt;/h2&gt;
 
@@ -849,7 +973,7 @@ gcd(1,2) + gcd(1,3) + gcd(1,4) + gcd(2,3) + gcd(2,4) + gcd(3,4)
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-089/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any specific implementation comments.&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($N where $N ~~ Int &amp;amp;&amp;amp; $N &amp;gt; 0) {
     my @pairs = (1..$N).combinations(2);                    # [1]
@@ -1054,12 +1178,12 @@ $ raku ch-2.raku 3 True
   &lt;li&gt;If the calculated row position is -1 &amp;amp; calculated column position is n, the new position would be: (0, n-2).&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;Basically, we just start in the middle right square and apply the above criteria iteratively and it works for any odd-side-lengthed square.&lt;/p&gt;
+&lt;p&gt;Basically, we just start in the middle right square and apply the above criteria iteratively, and it works for any odd-side-lengthed square.&lt;/p&gt;
 
 &lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific comments&lt;/h4&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;Raku supports Unicode, so you’ll notice I used &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$side-length²&lt;/code&gt; rather than &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$side-length ** 2&lt;/code&gt;. It’s a small feature that I find helps readibilty (but can be hard to write)!&lt;/li&gt;
+  &lt;li&gt;Raku supports Unicode, so you’ll notice I used &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$side-length²&lt;/code&gt; rather than &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$side-length ** 2&lt;/code&gt;. It’s a small feature that I find helps readabilty (but can be hard to write)!&lt;/li&gt;
   &lt;li&gt;This has been called out as a &lt;a href=&quot;https://docs.raku.org/language/traps#Using_[%E2%80%A6]_metaoperator_with_a_list_of_lists&quot;&gt;trick to avoid&lt;/a&gt; because it fails when you get a matrix with 1 row. Since it is being used in a debugging function and if we &lt;em&gt;did&lt;/em&gt; get a 1-row matrix it would be 1x1, so I think it is safe to use here&lt;/li&gt;
   &lt;li&gt;I don’t really like that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;so&lt;/code&gt; is the subroutine used to cast input to a boolean, so I just wanted to call out that (a) that is what these lines are doing and (b) I don’t like the terminology.&lt;/li&gt;
 &lt;/ol&gt;
@@ -1070,9 +1194,9 @@ $ raku ch-2.raku 3 True
 
 &lt;p&gt;With that being said, I am kind of disappointed in myself for just copying old code for task two. For one, I have grown as a programmer since writing that, and two, it seems past-me just copied that code from somewhere on the internet. While it was kind of challenging porting it to Raku, I feel like it was the lazy way out.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Back again with challenge 89! I was able to tackle this one the day it was released, but I doubt that will be the case going forward.</summary></entry><entry><title type="html">Perl Weekly Challenge 88</title><link href="http://localhost:4000/blog/perl-weekly-challenge-088/" rel="alternate" type="text/html" title="Perl Weekly Challenge 88" /><published>2020-11-29T00:00:00-06:00</published><updated>2020-12-01T07:40:30-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-088</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-088/">&lt;p&gt;I have always been a fan of Perl (and its younger brother Raku), but, since leaving the Bioinformatics world, have not found any real-world scenarios to flex those muscles.&lt;/p&gt;
 
-&lt;p&gt;I recently stumbled upon the &lt;a href=&quot;https://perlweeklychallenge.org/&quot;&gt;Perl Weekly Challenge&lt;/a&gt; and decided it would be a great way to keep up-to-date with the community. I participated for the first time this week and thought it would be fun to do a write up of how I approached the problems. In the future, I will start publishing my blogs earlier in the week so that I can include a link to it in my PR.&lt;/p&gt;
+&lt;p&gt;I recently stumbled upon the &lt;a href=&quot;https://perlweeklychallenge.org/&quot;&gt;Perl Weekly Challenge&lt;/a&gt; and decided it would be a great way to keep up-to-date with the community. I participated for the first time this week and thought it would be fun to do a write-up of how I approached the problems. In the future, I will start publishing my blogs earlier in the week so that I can include a link to it in my PR.&lt;/p&gt;
 
-&lt;p&gt;So, without further adieu, let’s dive in.&lt;/p&gt;
+&lt;p&gt;So, without further ado, let’s dive in.&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-array-of-product&quot;&gt;Task 1: Array of Product&lt;/h2&gt;
 
@@ -1111,7 +1235,7 @@ Output:
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-088/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any specific implementation comments.&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset PositiveInt of Int where { $_ ~~ Int &amp;amp;&amp;amp; $_ &amp;gt; 0 } # [1]
 
@@ -1194,7 +1318,7 @@ Output:
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-088/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;See below for explanation and any specific implementation comments.&lt;/p&gt;
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset PositiveInt of Int where { $_ ~~ Int &amp;amp;&amp;amp; $_ &amp;gt; 0 }
 
@@ -1309,7 +1433,7 @@ $ raku ch-2.raku 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
   &lt;/li&gt;
   &lt;li&gt;Starting in the top left corner, walk to the right (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EAST&lt;/code&gt;) with the following logic: if we hit the edge or a visited cell, turn right, else keep going.
     &lt;ul&gt;
-      &lt;li&gt;We always “visit” the current cell by marking it visted and adding it to the output&lt;/li&gt;
+      &lt;li&gt;We always “visit” the current cell by marking it visited and adding it to the output&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ol&gt;
