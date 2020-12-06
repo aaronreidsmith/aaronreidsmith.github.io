@@ -42,7 +42,7 @@ var store = [{
         "teaser": null
       },{
         "title": "Advent of Code: Day 6",
-        "excerpt":"Well, our old pal set theory reared its ugly beautiful head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2! The Problem Part 1 On day four we helped out...","categories": ["Blog"],
+        "excerpt":"Well, our old pal set theory reared its head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2! The Problem Part 1 On day four we helped out airport security...","categories": ["Blog"],
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-06/",
         "teaser": null

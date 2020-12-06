@@ -7,7 +7,7 @@ tags:
   - Raku
 ---
 
-Well, our old pal [set theory](https://en.wikipedia.org/wiki/Set_theory) reared its ~~ugly~~ beautiful head again today. I'm very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!
+Well, our old pal [set theory](https://en.wikipedia.org/wiki/Set_theory) reared its head again today. I'm very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!
 
 ## The Problem
 
