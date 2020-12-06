@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Advent of Code: Day 5 - Aaron Smith</title>
-<meta name="description" content="Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right-hand side of the shelf, then narrow down your search from there. This is obviously more efficient than searching from the left-hand side of the bookshelf.">
+<!-- begin _includes/seo.html --><title>Advent of Code: Day 6 - Aaron Smith</title>
+<meta name="description" content="Well, our old pal set theory reared its ugly beautiful head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Advent of Code: Day 5">
-<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-05/">
+<meta property="og:title" content="Advent of Code: Day 6">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-06/">
 
 
-  <meta property="og:description" content="Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right-hand side of the shelf, then narrow down your search from there. This is obviously more efficient than searching from the left-hand side of the bookshelf.">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-12-05T00:00:00-06:00">
+  <meta property="og:description" content="Well, our old pal set theory reared its ugly beautiful head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-05/">
+
+  <meta property="article:published_time" content="2020-12-06T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-06/">
 
 
 
@@ -285,15 +285,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Advent of Code: Day 5">
-    <meta itemprop="description" content="Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right-hand side of the shelf, then narrow down your search from there. This is obviously more efficient than searching from the left-hand side of the bookshelf.">
-    <meta itemprop="datePublished" content="2020-12-05T00:00:00-06:00">
+    <meta itemprop="headline" content="Advent of Code: Day 6">
+    <meta itemprop="description" content="Well, our old pal set theory reared its ugly beautiful head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!">
+    <meta itemprop="datePublished" content="2020-12-06T00:00:00-06:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 5
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 6
 </h1>
           
 
@@ -302,7 +302,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-05T00:00:00-06:00">December 5, 2020</time>
+        <time datetime="2020-12-06T00:00:00-06:00">December 6, 2020</time>
       </span>
     
 
@@ -315,7 +315,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          6 minute read
+          4 minute read
         
       </span>
     
@@ -327,156 +327,99 @@
 
       <section class="page__content" itemprop="text">
         
-        <p><a href="https://en.wikipedia.org/wiki/Binary_search_algorithm">Binary search</a> is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right-hand side of the shelf, then narrow down your search from there. This is obviously more efficient than searching from the left-hand side of the bookshelf.</p>
-
-<p>That was our task with today’s problem. Yet again, we get to bust out our old friend recursion to solve this problem fairly easily in a functional manner.</p>
+        <p>Well, our old pal <a href="https://en.wikipedia.org/wiki/Set_theory">set theory</a> reared its <del>ugly</del> beautiful head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!</p>
 
 <h2 id="the-problem">The Problem</h2>
 
 <h3 id="part-1">Part 1</h3>
 
-<p>After <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-04/">yesterday’s fiasco</a> of just getting through the airport, we find ourselves on the plane. Lo and behold, we dropped our boarding pass, but they still let us on the plane with the holiday rush.</p>
+<p>On <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-04/">day four</a> we helped out airport security with their passport scanner, and <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-05/">yesterday</a> we wrote a program to find our seat on the airplane after losing our boarding pass. Today we are about to land, and it’s time to fill out customs declaration form.</p>
 
-<p>Luckily, we use our phone to scan <em>all</em> the boarding passes nearby into a file full of lines that look like this:</p>
+<p>This form has 26 yes or no questions marked “A” through “Z.” We fill ours out quickly and notice the family next to us having some issues with theirs; they ask us for help. Pretty soon we have offered to help everyone on the plane, and we end up with a file that looks like this:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FBFBBFFRLR
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>abc
+
+a
+b
+c
+
+ab
+ac
+
+a
+a
+a
+a
+
+b
 </code></pre></div></div>
 
-<p>The first seven characters define what row (0 through 127, inclusive) everyone’s seat is in, and the last three characters refer to that seat’s column (0 through 7, inclusive). For example, given the above input:</p>
+<p>Where each family is distinguished by a blank space, and each person’s answers are on their own line, and the presence of a letter means that person answered “yes.” Additionally, we only count a “yes” once per family. So the above could be interpreted as follows:</p>
 
 <ul>
-  <li>Start by considering the whole range, rows 0 through 127</li>
-  <li>F means to take the lower half, keeping rows 0 through 63</li>
-  <li>B means to take the upper half, keeping rows 32 through 63</li>
-  <li>F means to take the lower half, keeping rows 32 through 47</li>
-  <li>B means to take the upper half, keeping rows 40 through 47</li>
-  <li>B keeps rows 44 through 47</li>
-  <li>F keeps rows 44 through 45</li>
-  <li>The final F keeps the lower of the two, row 44</li>
+  <li>The first group contains one person who answered “yes” to 3 questions: a, b, and c</li>
+  <li>The second group contains three people; combined, they answered “yes” to 3 questions: a, b, and c</li>
+  <li>The third group contains two people; combined, they answered “yes” to 3 questions: a, b, and c</li>
+  <li>The fourth group contains four people; combined, they answered “yes” to only 1 question, a</li>
+  <li>The last group contains one person who answered “yes” to only 1 question, b</li>
 </ul>
 
-<p>Similarly, for the columns:</p>
+<p>The sum of these counts is <code class="language-plaintext highlighter-rouge">3 + 3 + 3 + 1 + 1 = 11</code>.</p>
 
-<ul>
-  <li>Start by considering the whole range, columns 0 through 7</li>
-  <li>R means to take the upper half, keeping columns 4 through 7</li>
-  <li>L means to take the lower half, keeping columns 4 through 5</li>
-  <li>The final R keeps the upper of the two, column 5</li>
-</ul>
-
-<p>And finally, to find someone’s seat number, we have the following calculation:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(row_number * seats_in_row) + column_number = seat_number
-</code></pre></div></div>
-
-<p>Which yields:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(44 * 8) + 5 = 357
-</code></pre></div></div>
-
-<p>Our task is to find the maximum seat number in the list of scanned boarding passes.</p>
+<p>Our job is to find the sum of distinct “yes” answers (one per question per family) for the entire plane.</p>
 
 <h4 id="solution">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/05/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/06/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub binary-search(@list, @possible-rows, $lower-symbol) {
-    if @possible-rows.elems == 1 {
-        @possible-rows.head;
-    } else {
-        my ($first-item, @rest-of-list) := @list[0,1..*];                                  # [1][2]
-        my $half-way-point = @possible-rows.elems div 2;                                   # [3]
-        if $first-item eq $lower-symbol {                                                  # [4]
-            binary-search(@rest-of-list, @possible-rows[^$half-way-point], $lower-symbol); # [5]
-        } else {
-            binary-search(@rest-of-list, @possible-rows[$half-way-point..*], $lower-symbol);
-        }
-    }
-}
-
-sub find-seat($boarding-pass) {
-    my (@row-definition, @column-definition) := $boarding-pass.comb.rotor(7, :partial); # [6]
-    my $row = binary-search(@row-definition, (^128), 'F');
-    my $column = binary-search(@column-definition, (^8), 'L');
-    ($row * 8) + $column;
-}
-
-sub MAIN($file) {
-    say $file.IO.lines.map(&amp;find-seat).max;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub MAIN($file) {
+    say [+] $file.IO
+              .lines(:nl-in("\n\n"))                        # [1]
+              .map(-&gt; $group {
+                (set $group.subst("\n", '', :g).comb).elems # [2]
+              });
 }
 </code></pre></div></div>
 
 <p>This runs as such:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
-828
+6809
 </code></pre></div></div>
 
 <h4 id="explanation">Explanation</h4>
 
-<p>The <code class="language-plaintext highlighter-rouge">binary-search</code> subroutine itself is fairly straight forward. It takes the list of characters (something like <code class="language-plaintext highlighter-rouge">(F, B, F, B, B, F, F)</code>), the list of possible rows/columns (something like <code class="language-plaintext highlighter-rouge">(0..127)</code>), and what character means “lower half” (<code class="language-plaintext highlighter-rouge">F</code> for front or <code class="language-plaintext highlighter-rouge">L</code> for left).</p>
-
-<p>If there is only one item in the list of remaining rows/columns, that’s our answer, and we return. Otherwise, we check if we are keeping the left half or right half and call the function again with the smaller input.</p>
-
-<p>We wrap this function in a helper function called <code class="language-plaintext highlighter-rouge">find-seat</code> which includes the multiplication logic, then map it over our input lines. Finally, we call <code class="language-plaintext highlighter-rouge">max</code> to find the max seat number.</p>
+<p>This one is short and sweet due to the tools Raku gives us. First, we read the file in and split it into families (<code class="language-plaintext highlighter-rouge">:nl-in("\n\n")</code>; see below for details). Then, for each family, we combine everyone’s answers into one line, convert it to a list, then convert it to a set (which removes duplicates). We then count the number of elements in each set <code class="language-plaintext highlighter-rouge">.elems</code> and sum <em>all</em> the sets using the <code class="language-plaintext highlighter-rouge">[+]</code> metaoperator.</p>
 
 <h5 id="specific-comments">Specific Comments</h5>
 
 <ol>
-  <li>When unpacking a list in this manner, the left-hand side is normally one or more scalars (denoted by the <code class="language-plaintext highlighter-rouge">$</code> sigil). When unpacking using a list on the left-hand side, we have to use the special <a href="https://docs.raku.org/language/operators#index-entry-Binding_operator">binding</a> operator (<code class="language-plaintext highlighter-rouge">:=</code>) or everything will get “slurped” (Raku’s terminology, not mine) into the list instead of being split between the list and scalar.</li>
-  <li>I used some special Hash syntax yesterday to extract multiple keys at the same time. This is the equivalent List syntax (comma-separated instead of space-separated).</li>
-  <li><code class="language-plaintext highlighter-rouge">div</code> is Raku’s integer division operator. Even though we know our input will always be a multiple of two, it never hurts to use best practices!</li>
-  <li>In the past few posts for string comparison I was using <code class="language-plaintext highlighter-rouge">$x cmp $y == Same</code>. I finally stumbled upon the <code class="language-plaintext highlighter-rouge">eq</code> operator and no longer have that code smell!</li>
-  <li>This line (and others) contain special range syntax. Basically <code class="language-plaintext highlighter-rouge">^$half-way-point</code> is the same as <code class="language-plaintext highlighter-rouge">(0..^$half-way-point)</code>, meaning everything from zero to the half-way point, exclusive.</li>
-  <li>This line splits the input into a list of characters and then uses the <code class="language-plaintext highlighter-rouge">rotor</code> function to split it into groups of 7. Since our second group (the column definition) is of size 3, we need to pass the <code class="language-plaintext highlighter-rouge">:partial</code> parameter in, or else it will get dropped for being too small. <code class="language-plaintext highlighter-rouge">:partial</code> is special syntax to pass in a boolean flag named <code class="language-plaintext highlighter-rouge">partial</code> as true. This is the equivalent of passing in <code class="language-plaintext highlighter-rouge">partial =&gt; True</code></li>
+  <li>By default <code class="language-plaintext highlighter-rouge">.lines</code> will split the input file on the <code class="language-plaintext highlighter-rouge">\n</code> and <code class="language-plaintext highlighter-rouge">\r\n</code> newline characters. But Raku gives us the tools to tell it to split on whatever we want. In this case, we tell it to split on 2 newline characters, which delineate our families. Additionally, as opposed to <code class="language-plaintext highlighter-rouge">IO.slurp</code>, <code class="language-plaintext highlighter-rouge">IO.lines</code> is lazy, so it does not pull the whole file into memory; something to think about if we had a large file.</li>
+  <li><code class="language-plaintext highlighter-rouge">subst</code> is Raku’s string replacement method (not to be confused with <code class="language-plaintext highlighter-rouge">substr</code>, its substring method). What’s important here is the <code class="language-plaintext highlighter-rouge">:g</code> flag we pass in, which say to replace all newlines in the string rather than just the first one.</li>
 </ol>
 
 <h3 id="part-2">Part 2</h3>
 
-<p>Now that we’ve found the maximum seat, the flight attendants are asking us to take our seat! Our seat is the only seat number not in the list of boarding passes we scanned. And of course instead of just looking around the plane and finding the empty seat, we sit in the aisle and tweak our program to tell us where to go.</p>
-
-<p>As a caveat, the seat numbers do <em>not</em> start at 1, so we have to take that into consideration.</p>
+<p>As soon as we finished processing everyone’s customs forms, we realize we misread the instructions! We don’t want to count where <em>anyone</em> answered yes, we want to count where <em>everyone</em> answered yes. We need to tweak our solution quickly before we land!</p>
 
 <h4 id="solution-1">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/05/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/06/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub binary-search(@list, @possible-rows, $lower-symbol) {
-    if @possible-rows.elems == 1 {
-        @possible-rows.head;
-    } else {
-        my ($first-item, @rest-of-list) := @list[0,1..*];
-        my $half-way-point = @possible-rows.elems div 2;
-        if $first-item eq $lower-symbol {
-            binary-search(@rest-of-list, @possible-rows[^$half-way-point], $lower-symbol);
-        } else {
-            binary-search(@rest-of-list, @possible-rows[$half-way-point..*], $lower-symbol);
-        }
-    }
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub part-one($group) {
+    (set $group.subst("\n", '', :g).comb).elems;
 }
 
-sub find-seat($boarding-pass) {
-    my (@row-definition, @column-definition) := $boarding-pass.comb.rotor(7, :partial);
-    my $row = binary-search(@row-definition, (^128), 'F');
-    my $column = binary-search(@column-definition, (^8), 'L');
-    ($row * 8) + $column;
+sub part-two($group) {
+    [∩] $group.split("\n").map(-&gt; $entry { set $entry.comb }); # [1]
 }
 
 sub MAIN($file, Bool :$p2 = False) {
-    my @seats =  $file.IO.lines.map(&amp;find-seat);
-    my $max-seat = @seats.max;
-    if $p2 {
-        my $min-seat = @seats.min;
-        my $all-seats = set ($min-seat..$max-seat);
-        my @missing-seats = ($all-seats ⊖ set @seats).keys; # [1]
-        say @missing-seats.head;
-    } else {
-        say $max-seat;
-    }
+    say [+] $file.IO.lines(:nl-in("\n\n")).map($p2 ?? &amp;part-two !! &amp;part-one);
 }
 </code></pre></div></div>
 
@@ -484,30 +427,31 @@ sub MAIN($file, Bool :$p2 = False) {
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
 $ raku main.raku input.txt
-828
+6809
 
 # Part 2
 $ raku main.raku --p2 input.txt
-565
+3394
 </code></pre></div></div>
 
 <h4 id="explanation-1">Explanation</h4>
 
-<p>You’ll notice all we did was tweak our <code class="language-plaintext highlighter-rouge">MAIN</code> method a bit. We still find all the seat numbers, and if the user doesn’t specify <code class="language-plaintext highlighter-rouge">p2</code>, we print the maximum.</p>
+<p>So the first obvious difference is we refactored our part one solution to its own subroutine, <code class="language-plaintext highlighter-rouge">part-one</code>, but the logic is the same. Then we added the <code class="language-plaintext highlighter-rouge">part-two</code> with the new logic.</p>
 
-<p>If the user <em>does</em> specify <code class="language-plaintext highlighter-rouge">p2</code>, we also calculate our minimum seat number (since the seats don’t start at 1). We then find the set of <em>all</em> seats (being the range from <code class="language-plaintext highlighter-rouge">$min-seat</code> to <code class="language-plaintext highlighter-rouge">$max-seat</code>). We then use our handy dandy <a href="https://en.wikipedia.org/wiki/Symmetric_difference">symmetric difference</a> operator to find the difference between all possible seats, and the list of seats we scanned. The difference, of course, being our seat. We find it just in time before the flight attendants drag us out. Phew!</p>
+<p>In <code class="language-plaintext highlighter-rouge">part-two</code>, rather than combine the whole family’s input, we split them into individual people <code class="language-plaintext highlighter-rouge">.split("\n")</code>, and then convert each person’s answers to a set. Finally, we use reduction metaoperator (<code class="language-plaintext highlighter-rouge">[&lt;operator&gt;]</code>) to apply the <a href="https://en.wikipedia.org/wiki/Intersection_(set_theory)">set intersection</a> operator to all the sets in the family.</p>
 
 <h5 id="specific-comments-1">Specific Comments</h5>
 
 <ol>
-  <li>A set is a scalar instead of a collection in Raku (note the <code class="language-plaintext highlighter-rouge">$</code> sigil instead of the <code class="language-plaintext highlighter-rouge">@</code> sigil), so we have to convert it to a list using the <code class="language-plaintext highlighter-rouge">.keys</code> method. Of course, there is only one thing in it, so we then call <code class="language-plaintext highlighter-rouge">.head</code> to get that item.</li>
+  <li>Once again, we use the Unicode operator (<code class="language-plaintext highlighter-rouge">∩</code>) as opposed to the ASCII operator (<code class="language-plaintext highlighter-rouge">(&amp;)</code>). You may have seen me use the <code class="language-plaintext highlighter-rouge">[+]</code> or <code class="language-plaintext highlighter-rouge">[*]</code> metaoperators, but this is a new one. The actual operator here is the bracket pair. Basically, when Raku sees the bracket pair, it just applies the operator inside it to all items in the list. So, in this case, it does something like the following:</li>
 </ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[∩] (Set(a b c), Set(b c d), Set(c d e)) == Set(a b c) ∩ Set(b c d) ∩ Set(c d e) == Set(c)
+</code></pre></div></div>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>This exercise has me diving more and more into <a href="https://en.wikipedia.org/wiki/Set_theory">set theory</a>. It’s awesome that Raku allows (and encourages) use of the Unicode operators found in math textbooks. Their reasoning for this is that it is easier to take an algorithm from paper to code when you are allowed to use the same notation in each place. Now to find a keyboard to be able to type these symbols!</p>
-
-<p>So far we are 5 for 5 with pure functional solutions. 20% of the way there!</p>
+<p>Nothing much to add to this one today. A short and sweet question with a short and sweet answer!</p>
 
         
       </section>
@@ -560,7 +504,7 @@ $ raku main.raku --p2 input.txt
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-05T00:00:00-06:00">December 5, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-06T00:00:00-06:00">December 6, 2020</time></p>
 
 
       </footer>
@@ -570,23 +514,22 @@ $ raku main.raku --p2 input.txt
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+5%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-05%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+6%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-06%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-05%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-06%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-05%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-06%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/advent-of-code-day-04/" class="pagination--pager" title="Advent of Code: Day 4
+      <a href="/blog/advent-of-code-day-05/" class="pagination--pager" title="Advent of Code: Day 5
 ">Previous</a>
     
     
-      <a href="/blog/advent-of-code-day-06/" class="pagination--pager" title="Advent of Code: Day 6
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -610,7 +553,7 @@ $ raku main.raku --p2 input.txt
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/blog/advent-of-code-day-06/" rel="permalink">Advent of Code: Day 6
+        <a href="/blog/advent-of-code-day-05/" rel="permalink">Advent of Code: Day 5
 </a>
       
     </h2>
@@ -621,7 +564,7 @@ $ raku main.raku --p2 input.txt
       
       <span class="page__meta-date">
         <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-06T00:00:00-06:00">December 6, 2020</time>
+        <time datetime="2020-12-05T00:00:00-06:00">December 5, 2020</time>
       </span>
     
 
@@ -634,14 +577,14 @@ $ raku main.raku --p2 input.txt
       <span class="page__meta-readtime">
         <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
-          4 minute read
+          6 minute read
         
       </span>
     
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Well, our old pal set theory reared its ugly beautiful head again today. I’m very happy with the middle ground I found between conciseness and readability wi...</p>
+    <p class="archive__item-excerpt" itemprop="description">Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name sta...</p>
   </article>
 </div>
 

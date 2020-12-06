@@ -10,7 +10,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>Advent of Code: Day 3 - Aaron Smith</title>
-<meta name="description" content="Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion.">
+<meta name="description" content="Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion.">
 
 
   <meta name="author" content="Aaron Smith">
@@ -26,7 +26,7 @@
 <meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-03/">
 
 
-  <meta property="og:description" content="Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion.">
+  <meta property="og:description" content="Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion.">
 
 
 
@@ -286,7 +286,7 @@
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Advent of Code: Day 3">
-    <meta itemprop="description" content="Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion.">
+    <meta itemprop="description" content="Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion.">
     <meta itemprop="datePublished" content="2020-12-03T00:00:00-06:00">
     
 
@@ -327,7 +327,7 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a <a href="https://two-wrongs.com/myth-of-the-day-functional-programmers-dont-use-loops">for-loop in functional programming programming</a>, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion.</p>
+        <p>Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a <a href="https://two-wrongs.com/myth-of-the-day-functional-programmers-dont-use-loops">for-loop in functional programming programming</a>, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion.</p>
 
 <h2 id="the-problem">The Problem</h2>
 
@@ -347,7 +347,7 @@
 
 <p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku">GitHub Link</a></p>
 
-<p>See below for explanation and any implementation specific comments.</p>
+<p>See below for explanation and any implementation-specific comments.</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub traverse(@mountain, $trees-encountered = 0, $i = 0, $j = 0) {
     if $i &gt; @mountain.elems - 1 {
@@ -389,7 +389,7 @@ sub MAIN($file) {
   <li><code class="language-plaintext highlighter-rouge">|</code> has a special meaning when used in front of a list. It flattens any inner lists to the top level. So, for example, if we had <code class="language-plaintext highlighter-rouge">|((1, 2), (3, 4))</code>, that would equal <code class="language-plaintext highlighter-rouge">(1, 2, 3, 4)</code>.</li>
   <li>Reminder that <code class="language-plaintext highlighter-rouge">.comb</code> splits the input into a list of characters.</li>
   <li><code class="language-plaintext highlighter-rouge">xx</code> is a special operator that takes the input list and concatenates it to itself <code class="language-plaintext highlighter-rouge">N</code> times (<code class="language-plaintext highlighter-rouge">N = *</code> here; see below). So, for example, if we had <code class="language-plaintext highlighter-rouge">(1, 2) xx 2</code>, that would yield <code class="language-plaintext highlighter-rouge">((1, 2), (1, 2))</code>.</li>
-  <li><code class="language-plaintext highlighter-rouge">xx</code> allows the <a href="https://docs.raku.org/type/Whatever"><code class="language-plaintext highlighter-rouge">Whatever</code></a> character (<code class="language-plaintext highlighter-rouge">*</code>) on the right hand side, and in that case it returns a lazy, infinite concatenation of the left hand side.</li>
+  <li><code class="language-plaintext highlighter-rouge">xx</code> allows the <a href="https://docs.raku.org/type/Whatever"><code class="language-plaintext highlighter-rouge">Whatever</code></a> character (<code class="language-plaintext highlighter-rouge">*</code>) on the right-hand side, and in that case it returns a lazy, infinite concatenation of the left-hand side.</li>
 </ol>
 
 <p>So, to summarize the above comments, we take the line and <code class="language-plaintext highlighter-rouge">comb</code> it to a list. Then, we concatenate that list infinitely to have a list of lists, which we flatten using the <code class="language-plaintext highlighter-rouge">|</code> operator. Since this happens in a <code class="language-plaintext highlighter-rouge">map</code>, it applies to each line, so we have one finite outer list containing multiple infinite lists. We then traverse the outer list.</p>
@@ -412,7 +412,7 @@ sub MAIN($file) {
 
 <p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku">GitHub Link</a></p>
 
-<p>See below for explanation and any implementation specific comments.</p>
+<p>See below for explanation and any implementation-specific comments.</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub traverse(@mountain, $i-increment, $j-increment, $trees-encountered = 0, $i = 0, $j = 0) {
     if $i &gt; @mountain.elems - 1 {
@@ -575,6 +575,51 @@ $ raku main.raku --p2 input.txt
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
+        <a href="/blog/advent-of-code-day-06/" rel="permalink">Advent of Code: Day 6
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-06T00:00:00-06:00">December 6, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Well, our old pal set theory reared its ugly beautiful head again today. I’m very happy with the middle ground I found between conciseness and readability wi...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
         <a href="/blog/advent-of-code-day-05/" rel="permalink">Advent of Code: Day 5
 </a>
       
@@ -697,53 +742,6 @@ $ raku main.raku --p2 input.txt
 
 
     <p class="archive__item-excerpt" itemprop="description">We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) rea...</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-01/" rel="permalink">Advent of Code: Day 1
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-01T00:00:00-06:00">December 1, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          4 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.
-
-</p>
   </article>
 </div>
 

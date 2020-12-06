@@ -6,7 +6,7 @@ var store = [{
         "teaser": null
       },{
         "title": "Perl Weekly Challenge 89",
-        "excerpt":"Back again with challenge 89! I was able to tackle this one the day it was released, but I doubt that will be the case going forward. Once again, it seems the first task can be tackled easily in a functional way and the second one ends up being more...","categories": ["Blog"],
+        "excerpt":"Back again with challenge 89! I was able to tackle this one the day it was released, but I doubt that will be the case going forward. Once again, it seems the first task can be tackled easily in a functional way, and the second one ends up being more...","categories": ["Blog"],
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "http://localhost:4000/blog/perl-weekly-challenge-089/",
         "teaser": null
@@ -24,7 +24,7 @@ var store = [{
         "teaser": null
       },{
         "title": "Advent of Code: Day 3",
-        "excerpt":"Today was the first problem that I felt lended itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s toolbelt: recursion. The Problem Part 1 We are going sledding this...","categories": ["Blog"],
+        "excerpt":"Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion. The Problem Part 1 We are going sledding...","categories": ["Blog"],
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-03/",
         "teaser": null
@@ -36,8 +36,14 @@ var store = [{
         "teaser": null
       },{
         "title": "Advent of Code: Day 5",
-        "excerpt":"Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right hand side of the shelf, then narrow down your search from there....","categories": ["Blog"],
+        "excerpt":"Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right-hand side of the shelf, then narrow down your search from there. This...","categories": ["Blog"],
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-05/",
+        "teaser": null
+      },{
+        "title": "Advent of Code: Day 6",
+        "excerpt":"Well, our old pal set theory reared its ugly beautiful head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2! The Problem Part 1 On day four we helped out...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-06/",
         "teaser": null
       }]
