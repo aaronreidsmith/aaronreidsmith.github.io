@@ -150,7 +150,7 @@ Rather than waste my whole day on the issue, I decided to fall back to ol' relia
 ##### Specific Comments
 
 1. Dataclasses are a fairly recent addition to Python, and are similar to Scala [case classes](https://docs.scala-lang.org/tour/case-classes.html). The idea is they generate the `__init__` and other helper functions for you, and are meant to be used to store data with keys (similar to a [`namedtuple`](https://docs.python.org/3/library/collections.html)).
-2. To use an object as a key in a dictionary, it has to implement `__hash__` and `__eq__`. By default, the `dataclass` does not generate a `__hash__` function for us, but it will with `unsafe_hash=True`. Normally you would want to implement your own `__hash__` function, but it is safe in this case
+2. To use an object as a key in a dictionary, it has to implement `__hash__` and `__eq__`. By default, the `dataclass` does not generate a `__hash__` function for us, but it will with `unsafe_hash=True`. Normally you would want to implement your own `__hash__` function, but it is safe in this case.
 
 ### Part 2
 
