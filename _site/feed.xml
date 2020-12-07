@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-07T16:44:35-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 7</title><link href="http://localhost:4000/blog/advent-of-code-day-07/" rel="alternate" type="text/html" title="Advent of Code: Day 7" /><published>2020-12-07T00:00:00-06:00</published><updated>2020-12-07T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-07</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-07/">&lt;p&gt;Well, today was our streak breaker. For the life of me, I could not get Raku to run in a timely manner. I ended up reverting to Python and using a more imperative approach. Nevertheless, I am sharing it here for anyone who cares!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-07T16:46:56-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 7</title><link href="http://localhost:4000/blog/advent-of-code-day-07/" rel="alternate" type="text/html" title="Advent of Code: Day 7" /><published>2020-12-07T00:00:00-06:00</published><updated>2020-12-07T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-07</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-07/">&lt;p&gt;Well, today was our streak breaker. For the life of me, I could not get Raku to run in a timely manner. I ended up reverting to Python and using a more imperative approach. Nevertheless, I am sharing it here for anyone who cares!&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -246,7 +246,125 @@ Part 2: 41559
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;While I am bummed that I failed in my goal to write functional Raku for all 25 days of this thing, I think it is important to note that it is best to use the right tool for the job. I think I could have struggled through it in Raku, but I don’t have the time, patience, or know-how to do that; especially when we’ve got another challenge coming tomorrow! I will continue to try to do the rest of the problems in functional Raku, but if I can’t do it, at least we’ve already bridged that gap!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Python" /><summary type="html">Well, today was our streak breaker. For the life of me, I could not get Raku to run in a timely manner. I ended up reverting to Python and using a more imperative approach. Nevertheless, I am sharing it here for anyone who cares!</summary></entry><entry><title type="html">Advent of Code: Day 6</title><link href="http://localhost:4000/blog/advent-of-code-day-06/" rel="alternate" type="text/html" title="Advent of Code: Day 6" /><published>2020-12-06T00:00:00-06:00</published><updated>2020-12-06T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-06</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-06/">&lt;p&gt;Well, our old pal &lt;a href=&quot;https://en.wikipedia.org/wiki/Set_theory&quot;&gt;set theory&lt;/a&gt; reared its head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!&lt;/p&gt;
+&lt;p&gt;While I am bummed that I failed in my goal to write functional Raku for all 25 days of this thing, I think it is important to note that it is best to use the right tool for the job. I think I could have struggled through it in Raku, but I don’t have the time, patience, or know-how to do that; especially when we’ve got another challenge coming tomorrow! I will continue to try to do the rest of the problems in functional Raku, but if I can’t do it, at least we’ve already bridged that gap!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Python" /><summary type="html">Well, today was our streak breaker. For the life of me, I could not get Raku to run in a timely manner. I ended up reverting to Python and using a more imperative approach. Nevertheless, I am sharing it here for anyone who cares!</summary></entry><entry><title type="html">Perl Weekly Challenge 90</title><link href="http://localhost:4000/blog/perl-weekly-challenge-090/" rel="alternate" type="text/html" title="Perl Weekly Challenge 90" /><published>2020-12-07T00:00:00-06:00</published><updated>2020-12-07T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-090</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-090/">&lt;p&gt;Today was a busy day with both &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-07/&quot;&gt;Advent of Code&lt;/a&gt; and the Perl Weekly Challenge. Luckily, the PWC was short and sweet this week, and a nice breather after the Advent of Code.&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-dna-sequence&quot;&gt;Task 1: DNA Sequence&lt;/h2&gt;
+
+&lt;p&gt;You are given DNA sequence, GTAAACCCCTTTTCATTTAGACAGATCGACTCCTTATCCATTCTCAGAGATGTGTTGCTGGTCGCCG.&lt;/p&gt;
+
+&lt;p&gt;Write a script to print nucleotide count in the given DNA sequence. Also print the complementary sequence where Thymine (T) on one strand is always facing an adenine (A) and vice versa; guanine (G) is always facing a cytosine (C) and vice versa.&lt;/p&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-090/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset ValidDna of Str where { $_ ~~ /^^[A|T|G|C]+$$/ }
+
+sub MAIN($dna where $dna ~~ ValidDna, Bool :rc(:$reverse-complement) = False) { # [1]
+    say &quot;Input stats:\n{$dna.comb.Bag.Hash}\n&quot;;                                 # [2]
+
+    say &quot;Complement:&quot;;
+    my $translated = $dna.trans('ATGC' =&amp;gt; 'TACG');                              # [3]
+    if $reverse-complement {
+        say &quot;5'-{$translated.flip}-3'&quot;;
+    } else {
+        say &quot;3'-$translated-5'&quot;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku GTAAACCCCTTTTCATTTAGACAGATCGACTCCTTATCCATTCTCAGAGATGTGTTGCTGGTCGCCG
+Input stats:
+A	14
+C	18
+G	13
+T	22
+
+Complement:
+3'-CATTTGGGGAAAAGTAAATCTGTCTAGCTGAGGAATAGGTAAGAGTCTCTACACAACGACCAGCGGC-5'
+
+$ raku ch-1.raku --reverse-complement GTAAACCCCTTTTCATTTAGACAGATCGACTCCTTATCCATTCTCAGAGATGTGTTGCTGGTCGCCG
+Input stats:
+A	14
+C	18
+G	13
+T	22
+
+Complement:
+5'-CGGCGACCAGCAACACATCTCTGAGAATGGATAAGGAGTCGATCTGTCTAAATGAAAAGGGGTTTAC-3'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;Coming from a Biochemistry background, this one is rather simple. However, the question does not take into consideration that DNA has a &lt;a href=&quot;https://en.wikipedia.org/wiki/Directionality_(molecular_biology)&quot;&gt;direction&lt;/a&gt;. Generally, if you are handed a string like this, you expect it to be read from 5’ to 3’ (5 prime to 3 prime). Because of the directionality, the opposite strand would be 3’ to 5’.&lt;/p&gt;
+
+&lt;p&gt;So generally, when a question asks for the complementary strand, they want the &lt;em&gt;reverse&lt;/em&gt; complement, so it is shown 5’ to 3’. This question did not specify, so I wrote an answer that handles both.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;This syntax allows us to give aliases to our command line arguments. In this case, we accept either &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--rc&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--reverse-complement&lt;/code&gt; and store it in a variable called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$reverse-complement&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;A &lt;a href=&quot;https://docs.raku.org/type/Bag&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Bag&lt;/code&gt;&lt;/a&gt; is a weighted collection. When passed the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;List&lt;/code&gt; produced by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.comb&lt;/code&gt;, it generates a bag with the weight of each letter. We only convert it to a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt; for pretty printing.&lt;/li&gt;
+  &lt;li&gt;Raku’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt; method is a single-pass method, meaning you won’t translate &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;A&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;T&lt;/code&gt; and then accidentally translate it back to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;A&lt;/code&gt; with a second pass.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-ethiopian-multiplication&quot;&gt;Task 2: Ethiopian Multiplication&lt;/h2&gt;
+
+&lt;p&gt;You are given two positive numbers &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$A&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$B&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to demonstrate &lt;a href=&quot;https://threesixty360.wordpress.com/2009/06/09/ethiopian-multiplication/&quot;&gt;Ethiopian Multiplication&lt;/a&gt; using the given numbers.&lt;/p&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-090/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset PositiveInt of Int where { $_ ~~ Int &amp;amp;&amp;amp; $_ &amp;gt; 0 }
+
+sub generate-pairs($a, $b) {
+    sprintf(&quot;%02d, %02d&quot;, $a, $b).put;
+    if $a == 1 {
+        (($a, $b),);
+    } else {
+        (($a, $b), |generate-pairs($a div 2, $b * 2));
+    }
+}
+
+sub MAIN(PositiveInt $A, PositiveInt $B) {
+    say &quot;Input: A: $A, B: $B&quot;;
+    say &quot;Divide A by 2 (ignoring remainders) until it is 1. Multiply B by 2 as we go:&quot;;
+    my @pairs = generate-pairs($A, $B);
+    say &quot;Then, wherever A is odd, we add the Bs together:&quot;;
+    my @odd-bs = @pairs.grep(-&amp;gt; @pair { !(@pair[0] %% 2) }).map(-&amp;gt; @pair { @pair[1] });
+    say &quot;{@odd-bs.join(' + ')} = {@odd-bs.sum}&quot;;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 14 12
+Input: A=14, B=12
+Divide A by 2 (ignoring remainders) until it is 1. Multiply B by 2 as we go:
+14, 12
+07, 24
+03, 48
+01, 96
+Then, wherever A is odd, we add the Bs together:
+24 + 48 + 96 = 168
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;This is a very straightforward solution; most of the mess in the code is from the messages printed out. Basically, we generate our pairs (and print them) using recursion, then filter them down to where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$A&lt;/code&gt; is odd, and add up the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$B&lt;/code&gt;s.&lt;/p&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;This week was super easy, so not much to add! Jump over to my blog on &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-07/&quot;&gt;day 7 of the Advent of Code&lt;/a&gt; for something more challenging.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Today was a busy day with both Advent of Code and the Perl Weekly Challenge. Luckily, the PWC was short and sweet this week, and a nice breather after the Advent of Code.</summary></entry><entry><title type="html">Advent of Code: Day 6</title><link href="http://localhost:4000/blog/advent-of-code-day-06/" rel="alternate" type="text/html" title="Advent of Code: Day 6" /><published>2020-12-06T00:00:00-06:00</published><updated>2020-12-06T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-06</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-06/">&lt;p&gt;Well, our old pal &lt;a href=&quot;https://en.wikipedia.org/wiki/Set_theory&quot;&gt;set theory&lt;/a&gt; reared its head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 

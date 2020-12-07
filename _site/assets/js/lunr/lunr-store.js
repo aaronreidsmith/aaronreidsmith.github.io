@@ -52,4 +52,10 @@ var store = [{
         "tags": ["Advent of Code","Python"],
         "url": "http://localhost:4000/blog/advent-of-code-day-07/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 90",
+        "excerpt":"Today was a busy day with both Advent of Code and the Perl Weekly Challenge. Luckily, the PWC was short and sweet this week, and a nice breather after the Advent of Code. Task 1: DNA Sequence You are given DNA sequence, GTAAACCCCTTTTCATTTAGACAGATCGACTCCTTATCCATTCTCAGAGATGTGTTGCTGGTCGCCG. Write a script to print nucleotide count...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "http://localhost:4000/blog/perl-weekly-challenge-090/",
+        "teaser": null
       }]
