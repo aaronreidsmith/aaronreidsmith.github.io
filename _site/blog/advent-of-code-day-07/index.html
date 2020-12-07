@@ -1,0 +1,929 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Advent of Code: Day 7 - Aaron Smith</title>
+<meta name="description" content="Well, today was our streak breaker. For the life of me, I could not get Raku to run in a timely manner. I ended up reverting to Python and using a more imperative approach. Nevertheless, I am sharing it here for anyone who cares!">
+
+
+  <meta name="author" content="Aaron Smith">
+  
+  <meta property="article:author" content="Aaron Smith">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Aaron Smith">
+<meta property="og:title" content="Advent of Code: Day 7">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-07/">
+
+
+  <meta property="og:description" content="Well, today was our streak breaker. For the life of me, I could not get Raku to run in a timely manner. I ended up reverting to Python and using a more imperative approach. Nevertheless, I am sharing it here for anyone who cares!">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-07T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-07/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Aaron Smith Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Aaron Smith Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/tags/">Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/assets/files/aaron_smith_resume.pdf">Resume</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/headshot-square.jpg" alt="Aaron Smith" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Aaron Smith</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Data Engineer specializing in streaming data at scale, especially on AWS</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Connect</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Austin, TX</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Advent of Code: Day 7">
+    <meta itemprop="description" content="Well, today was our streak breaker. For the life of me, I could not get Raku to run in a timely manner. I ended up reverting to Python and using a more imperative approach. Nevertheless, I am sharing it here for anyone who cares!">
+    <meta itemprop="datePublished" content="2020-12-07T00:00:00-06:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 7
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-07T00:00:00-06:00">December 7, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          6 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Well, today was our streak breaker. For the life of me, I could not get Raku to run in a timely manner. I ended up reverting to Python and using a more imperative approach. Nevertheless, I am sharing it here for anyone who cares!</p>
+
+<h2 id="the-problem">The Problem</h2>
+
+<h3 id="part-1">Part 1</h3>
+
+<p>For the past few days, we have been traveling. First we had troubles at <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-04/">the airport</a>, then we had trouble <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-05/">finding our seat</a>, and then we had issues filling out the <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-06/">customs form</a>. But, we have landed safely and are ready to enjoy our vacation!</p>
+
+<p>However, our luggage is taking a long time getting to the carousel due to recent luggage rules that have been put into effect. We are given a list of the rules that looks like the following:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>light red bags contain 1 bright white bag, 2 muted yellow bags.
+dark orange bags contain 3 bright white bags, 4 muted yellow bags.
+bright white bags contain 1 shiny gold bag.
+muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.
+shiny gold bags contain 1 dark olive bag, 2 vibrant plum bags.
+dark olive bags contain 3 faded blue bags, 4 dotted black bags.
+vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
+faded blue bags contain no other bags.
+dotted black bags contain no other bags.
+</code></pre></div></div>
+
+<p>We have a <strong>shiny gold</strong> bag, and we want to know how many color combinations there are for the outermost bag. With the above example, we have:</p>
+
+<ul>
+  <li>A bright white bag, which can hold our shiny gold bag directly</li>
+  <li>A muted yellow bag, which can hold our shiny gold bag directly, plus some other bags</li>
+  <li>A dark orange bag, which can hold bright white and muted yellow bags, either of which could then hold our shiny gold bag</li>
+  <li>A light red bag, which can hold bright white and muted yellow bags, either of which could then hold our shiny gold bag</li>
+</ul>
+
+<p>So the question is, given a much larger input file, how many outermost bags can eventually hold our shiny gold bag?</p>
+
+<h4 id="solution">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/07/python/main.py">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+
+<span class="o">@</span><span class="n">dataclass</span><span class="p">(</span><span class="n">unsafe_hash</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="c1"># [1][2]
+</span><span class="k">class</span> <span class="nc">Bag</span><span class="p">:</span>
+    <span class="n">adjective</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">color</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="k">def</span> <span class="nf">contains_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">rules</span><span class="p">):</span>
+        <span class="n">rule</span> <span class="o">=</span> <span class="n">rules</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+        <span class="n">held_bags</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">rule</span><span class="p">.</span><span class="n">contents</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">bag</span> <span class="o">==</span> <span class="n">target</span> <span class="ow">or</span> <span class="n">bag</span><span class="p">.</span><span class="n">contains_target</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">rules</span><span class="p">)</span> <span class="k">for</span> <span class="n">bag</span> <span class="ow">in</span> <span class="n">held_bags</span><span class="p">)</span>
+        
+
+<span class="o">@</span><span class="n">dataclass</span>
+<span class="k">class</span> <span class="nc">Rule</span><span class="p">:</span>
+    <span class="n">bag</span><span class="p">:</span> <span class="n">Bag</span>
+    <span class="n">contents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Bag</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+
+
+<span class="k">def</span> <span class="nf">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+    <span class="n">bag_desc</span><span class="p">,</span> <span class="n">contents</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">' contain '</span><span class="p">)</span>
+
+    <span class="c1"># Create Bag
+</span>    <span class="n">adjective</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">bag_desc</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)</span>
+    <span class="n">bag</span> <span class="o">=</span> <span class="n">Bag</span><span class="p">(</span><span class="n">adjective</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+    <span class="c1"># Fill in contents
+</span>    <span class="n">_contents</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">contents</span> <span class="o">!=</span> <span class="s">'no other bags.'</span><span class="p">:</span>
+        <span class="n">inner_bags</span> <span class="o">=</span> <span class="n">contents</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">', '</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_bag</span> <span class="ow">in</span> <span class="n">inner_bags</span><span class="p">:</span>
+            <span class="n">quantity</span><span class="p">,</span> <span class="n">adjective</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_bag</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)</span>
+            <span class="n">inner_bag</span> <span class="o">=</span> <span class="p">(</span><span class="n">Bag</span><span class="p">(</span><span class="n">adjective</span><span class="p">,</span> <span class="n">color</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">quantity</span><span class="p">))</span>
+            <span class="n">_contents</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">inner_bag</span><span class="p">)</span>
+
+    <span class="c1"># Turn the contents into a rule and return
+</span>    <span class="n">rule</span> <span class="o">=</span> <span class="n">Rule</span><span class="p">(</span><span class="n">bag</span><span class="p">,</span> <span class="n">_contents</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">bag</span><span class="p">,</span> <span class="n">rule</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">input_file</span> <span class="o">=</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">rules</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">file</span><span class="p">:</span>
+            <span class="n">stripped</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">bag</span><span class="p">,</span> <span class="n">rule</span> <span class="o">=</span> <span class="n">parse_line</span><span class="p">(</span><span class="n">stripped</span><span class="p">)</span>
+            <span class="n">rules</span><span class="p">[</span><span class="n">bag</span><span class="p">]</span> <span class="o">=</span> <span class="n">rule</span>
+
+    <span class="n">target</span> <span class="o">=</span> <span class="n">Bag</span><span class="p">(</span><span class="s">'shiny'</span><span class="p">,</span> <span class="s">'gold'</span><span class="p">)</span>
+
+    <span class="n">can_hold_target</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">bag</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">bag</span><span class="p">.</span><span class="n">contains_target</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">rules</span><span class="p">):</span>
+            <span class="n">can_hold_target</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+    <span class="k">print</span><span class="p">(</span><span class="n">can_hold_target</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python main.py input.txt
+151
+</code></pre></div></div>
+
+<h4 id="explanation">Explanation</h4>
+
+<p>The logic of this one is fairly straightforward:</p>
+
+<ol>
+  <li>For each line in the file, we turn it into a key-value pair of <code class="language-plaintext highlighter-rouge">Bag</code> and <code class="language-plaintext highlighter-rouge">Rule</code>, where the <code class="language-plaintext highlighter-rouge">Bag</code> contains the color of the outer bag and the <code class="language-plaintext highlighter-rouge">Rule</code> contains a list of inner bags, as well as how many of them we hold.</li>
+  <li>For each outer bag we call <code class="language-plaintext highlighter-rouge">.contains_target</code> which will recursively check if this bag will ever hold our shiny gold bag.</li>
+  <li>We tally up the outer bags that returned <code class="language-plaintext highlighter-rouge">True</code> above.</li>
+</ol>
+
+<p>I tried to apply this logic in Raku, but I just kept finding myself fighting the type system.</p>
+
+<p>First, rather than the inelegant parsing I did here, I tried to use one of Raku’s <a href="https://docs.raku.org/type/Grammar">grammars</a>, which ended up being clunky, and it took me several hours just to get the data to parse.</p>
+
+<p>Once it was parsed to my liking, I ran into an issue that <code class="language-plaintext highlighter-rouge">Hash</code>es only use strings as keys. There <em>is</em> a way to circumvent it, but there is a <a href="https://docs.raku.org/language/hashmap#index-entry-non-string_keys">known bug</a> in the compiler that casts them to strings anyway.</p>
+
+<p>Finally, after rewriting my parser and using parameterized hashes as the above documentation suggested, I began fighting their type system. Here is what a <code class="language-plaintext highlighter-rouge">Hash</code>’s declaration looks like:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Hash is Map { }
+class Map does Associative does Iterable { }
+role Associative[::TValue = Mu, ::TKey = Str(Any)] { }
+role Iterable { }
+</code></pre></div></div>
+
+<p>So some functions expect a <code class="language-plaintext highlighter-rouge">Hash</code>, others expect an <code class="language-plaintext highlighter-rouge">Iterable</code> others an <code class="language-plaintext highlighter-rouge">Associative</code>. With non-parameterized types, they all work great and it just converts it to what it needs at runtime. However, with the parameterized types needed to circumvent the <code class="language-plaintext highlighter-rouge">Hash</code> issue, I would get errors like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error: Expected Associative[Bag] but found Hash[Bag]
+</code></pre></div></div>
+
+<p>Rather than waste my whole day on the issue, I decided to fall back to ol’ reliable: Python.</p>
+
+<h5 id="specific-comments">Specific Comments</h5>
+
+<ol>
+  <li>Dataclasses are a fairly recent addition to Python, and are similar to Scala <a href="https://docs.scala-lang.org/tour/case-classes.html">case classes</a>. The idea is they generate the <code class="language-plaintext highlighter-rouge">__init__</code> and other helper functions for you, and are meant to be used to store data with keys (similar to a <a href="https://docs.python.org/3/library/collections.html"><code class="language-plaintext highlighter-rouge">namedtuple</code></a>).</li>
+  <li>To use an object as a key in a dictionary, it has to implement <code class="language-plaintext highlighter-rouge">__hash__</code> and <code class="language-plaintext highlighter-rouge">__eq__</code>. By default, the <code class="language-plaintext highlighter-rouge">dataclass</code> does not generate a <code class="language-plaintext highlighter-rouge">__hash__</code> function for us, but it will with <code class="language-plaintext highlighter-rouge">unsafe_hash=True</code>. Normally you would want to implement your own <code class="language-plaintext highlighter-rouge">__hash__</code> function, but it is safe in this case</li>
+</ol>
+
+<h3 id="part-2">Part 2</h3>
+
+<p>Now the question flips: if our <em>outermost</em> bag is our shiny gold bag, how many bags are we required to store inside of it?</p>
+
+<h4 id="solution-1">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/07/python/main.py">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+
+<span class="o">@</span><span class="n">dataclass</span><span class="p">(</span><span class="n">unsafe_hash</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Bag</span><span class="p">:</span>
+    <span class="n">adjective</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">color</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="k">def</span> <span class="nf">contains_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">rules</span><span class="p">):</span>
+        <span class="n">rule</span> <span class="o">=</span> <span class="n">rules</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+        <span class="n">held_bags</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">rule</span><span class="p">.</span><span class="n">contents</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">bag</span> <span class="o">==</span> <span class="n">target</span> <span class="ow">or</span> <span class="n">bag</span><span class="p">.</span><span class="n">contains_target</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">rules</span><span class="p">)</span> <span class="k">for</span> <span class="n">bag</span> <span class="ow">in</span> <span class="n">held_bags</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_contents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rules</span><span class="p">):</span>
+        <span class="n">contents</span> <span class="o">=</span> <span class="n">rules</span><span class="p">[</span><span class="bp">self</span><span class="p">].</span><span class="n">contents</span>
+        <span class="n">total_bags</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">bag</span><span class="p">,</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="n">contents</span><span class="p">:</span>
+            <span class="n">total_bags</span> <span class="o">+=</span> <span class="n">quantity</span> <span class="o">+</span> <span class="p">(</span><span class="n">quantity</span> <span class="o">*</span> <span class="n">bag</span><span class="p">.</span><span class="n">get_contents</span><span class="p">(</span><span class="n">rules</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">total_bags</span>
+
+
+<span class="o">@</span><span class="n">dataclass</span>
+<span class="k">class</span> <span class="nc">Rule</span><span class="p">:</span>
+    <span class="n">bag</span><span class="p">:</span> <span class="n">Bag</span>
+    <span class="n">contents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Bag</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+
+
+<span class="k">def</span> <span class="nf">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+    <span class="n">bag_desc</span><span class="p">,</span> <span class="n">contents</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">' contain '</span><span class="p">)</span>
+
+    <span class="c1"># Create Bag
+</span>    <span class="n">adjective</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">bag_desc</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)</span>
+    <span class="n">bag</span> <span class="o">=</span> <span class="n">Bag</span><span class="p">(</span><span class="n">adjective</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+    <span class="c1"># Fill in contents
+</span>    <span class="n">_contents</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">contents</span> <span class="o">!=</span> <span class="s">'no other bags.'</span><span class="p">:</span>
+        <span class="n">inner_bags</span> <span class="o">=</span> <span class="n">contents</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">', '</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_bag</span> <span class="ow">in</span> <span class="n">inner_bags</span><span class="p">:</span>
+            <span class="n">quantity</span><span class="p">,</span> <span class="n">adjective</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_bag</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)</span>
+            <span class="n">inner_bag</span> <span class="o">=</span> <span class="p">(</span><span class="n">Bag</span><span class="p">(</span><span class="n">adjective</span><span class="p">,</span> <span class="n">color</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">quantity</span><span class="p">))</span>
+            <span class="n">_contents</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">inner_bag</span><span class="p">)</span>
+
+    <span class="c1"># Turn the contents into a rule and return
+</span>    <span class="n">rule</span> <span class="o">=</span> <span class="n">Rule</span><span class="p">(</span><span class="n">bag</span><span class="p">,</span> <span class="n">_contents</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">bag</span><span class="p">,</span> <span class="n">rule</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">input_file</span> <span class="o">=</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">rules</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">file</span><span class="p">:</span>
+            <span class="n">stripped</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">bag</span><span class="p">,</span> <span class="n">rule</span> <span class="o">=</span> <span class="n">parse_line</span><span class="p">(</span><span class="n">stripped</span><span class="p">)</span>
+            <span class="n">rules</span><span class="p">[</span><span class="n">bag</span><span class="p">]</span> <span class="o">=</span> <span class="n">rule</span>
+
+    <span class="n">target</span> <span class="o">=</span> <span class="n">Bag</span><span class="p">(</span><span class="s">'shiny'</span><span class="p">,</span> <span class="s">'gold'</span><span class="p">)</span>
+
+    <span class="c1"># Part 1
+</span>    <span class="n">can_hold_target</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">bag</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">bag</span><span class="p">.</span><span class="n">contains_target</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">rules</span><span class="p">):</span>
+            <span class="n">can_hold_target</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># Part 2
+</span>    <span class="n">total_contents</span> <span class="o">=</span> <span class="n">target</span><span class="p">.</span><span class="n">get_contents</span><span class="p">(</span><span class="n">rules</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">f'Part 1: </span><span class="si">{</span><span class="n">can_hold_target</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">f'Part 2: </span><span class="si">{</span><span class="n">total_contents</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python main.py input.txt
+Part 1: 151
+Part 2: 41559
+</code></pre></div></div>
+
+<h4 id="explanation-1">Explanation</h4>
+
+<p>As you can see, all we had to add was our <code class="language-plaintext highlighter-rouge">get_contents</code> function to the <code class="language-plaintext highlighter-rouge">Bag</code> class. For each bag in the shiny gold bag, it counts not only the bag itself, but all the bags within it as well.</p>
+
+<p>I don’t have any implementation-specific comments on this one, as it is pretty straightforward, especially with such a small change from part 1. The only thing I will say is I did not add the CLI that I have added to my Raku solutions because it is much more cumbersome in Python. Every language has its strong suits!</p>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>While I am bummed that I failed in my goal to write functional Raku for all 25 days of this thing, I think it is important to note that it is best to use the right tool for the job. I think I could have struggled through it in Raku, but I don’t have the time, patience, or know-how to do that; especially when we’ve got another challenge coming tomorrow! I will continue to try to do the rest of the problems in functional Raku, but if I can’t do it, at least we’ve already bridged that gap!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#advent-of-code" class="page__taxonomy-item" rel="tag">Advent of Code</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#python" class="page__taxonomy-item" rel="tag">Python</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-07T00:00:00-06:00">December 7, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+7%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-07%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-07%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-07%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/advent-of-code-day-06/" class="pagination--pager" title="Advent of Code: Day 6
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-06/" rel="permalink">Advent of Code: Day 6
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-06T00:00:00-06:00">December 6, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Well, our old pal set theory reared its head again today. I’m very happy with the middle ground I found between conciseness and readability with this challen...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-05/" rel="permalink">Advent of Code: Day 5
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-05T00:00:00-06:00">December 5, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          6 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name sta...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-04/" rel="permalink">Advent of Code: Day 4
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-04T00:00:00-06:00">December 4, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-03/" rel="permalink">Advent of Code: Day 3
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-03T00:00:00-06:00">December 3, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programmi...</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Connect:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+        
+      
+        
+          <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i> Stack Overflow</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Aaron Smith. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>
