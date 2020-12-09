@@ -1,4 +1,163 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-08T21:00:48-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 8</title><link href="http://localhost:4000/blog/advent-of-code-day-08/" rel="alternate" type="text/html" title="Advent of Code: Day 8" /><published>2020-12-08T00:00:00-06:00</published><updated>2020-12-08T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-08</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-08/">&lt;p&gt;Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-09T08:54:17-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 9</title><link href="http://localhost:4000/blog/advent-of-code-day-09/" rel="alternate" type="text/html" title="Advent of Code: Day 9" /><published>2020-12-09T00:00:00-06:00</published><updated>2020-12-09T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-09</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-09/">&lt;p&gt;Today we have a classic &lt;a href=&quot;https://www.geeksforgeeks.org/window-sliding-technique/&quot;&gt;sliding window&lt;/a&gt; problem. But, instead of the traditional iterative approach, we take a recursive approach.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;After helping our seatmate fix his Game Boy &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-08/&quot;&gt;yesterday&lt;/a&gt;, we find ourselves bored on the plane. Why not pass the time with a little mid-air hacking?&lt;/p&gt;
+
+&lt;p&gt;We hook our computer up to the seat-back entertainment center, but it is protected by the e&lt;strong&gt;X&lt;/strong&gt;change-&lt;strong&gt;M&lt;/strong&gt;asking &lt;strong&gt;A&lt;/strong&gt;ddition &lt;strong&gt;S&lt;/strong&gt;ystem (XMAS), which is a cipher with a documented weakness.&lt;/p&gt;
+
+&lt;p&gt;XMAS starts by sending us 25 numbers (a “preamble”). The 26th number should be the sum of two numbers in the preamble. The 27th number should be the sum of its previous 25 numbers, and so on. Here is an example with a preamble of size 5:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;35
+20
+15
+25
+47
+40
+62
+55
+65
+95
+102
+117
+150
+182
+127
+219
+299
+277
+309
+576
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We can see how the pattern works here:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;40 is the sum of 15 and 25&lt;/li&gt;
+  &lt;li&gt;62 is the sum of 15 and 47&lt;/li&gt;
+  &lt;li&gt;55 is the sum of 15 and 40&lt;/li&gt;
+  &lt;li&gt;etc.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The first step in attacking the weakness of the cipher is that exactly one number doesn’t follow the pattern. In this case 127 is not the sum of any numbers in the previous 5 (95, 102, 117, 150, 182). Our job is to find the invalid number in the XMAS cipher.&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/09/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub find-invalid(@list, $window-start = 0, $window-size = 25) {                               # [1]
+    my $window-end = $window-start + $window-size - 1;
+    my $target-number = @list[$window-end + 1];
+    my @preamble-combinations = @list[$window-start..$window-end].combinations(2).map(*.sum); # [2]
+    if $target-number ∈ @preamble-combinations {
+        find-invalid(@list, $window-start + 1);
+    } else {
+        $target-number;
+    }
+}
+
+sub MAIN($file) {
+    say find-invalid($file.IO.lines.map(*.Int));
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+31161678
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;First, we pull all of our numbers into a list and turn them into integers. Once we’ve done that, we pass the list to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find-invalid&lt;/code&gt;, which will find the sliding window and target value we are looking for (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@list[0..24]&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@list[25]&lt;/code&gt; in the first iteration). We then find all possible combinations in that 25-item list (via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.combinations(2)&lt;/code&gt;) and sum each pair (vis &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.map(*.sum&lt;/code&gt;). If the target &lt;em&gt;is&lt;/em&gt; in the list of sums, it is valid, and we go to the next sliding window. If it is &lt;em&gt;not&lt;/em&gt;, we found our invalid term and return.&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;I added a parameter for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$window-size&lt;/code&gt; here because I had a feeling it would change in part two. It did not, but I left it in here to give an idea of my thought process.&lt;/li&gt;
+  &lt;li&gt;I am trying to get more consistent in using dot operators (like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.sum&lt;/code&gt;) rather than mixing paradigms. With that being said, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.map([+] *)&lt;/code&gt; didn’t work here to begin with; it wanted me to do something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.map(-&amp;gt; @pair { [+] @pair })&lt;/code&gt;. I think it was interpreting the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; as a multiplication operator instead of a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Whatever&lt;/code&gt; star, so it was getting confused. All the more reason to use dot operators, I guess!&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;The second step of finding the weakness relies on the invalid number found above.&lt;/p&gt;
+
+&lt;p&gt;We need to find a contiguous set of numbers (size two or greater) in the input that add up to our invalid input. Once we have found that contiguous range, we need to add the minimum and maximum numbers in the range; that is our encryption weakness.&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/09/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub find-invalid(@list, $window-start = 0, $window-size = 25) {
+    my $window-end = $window-start + $window-size - 1;
+    my $target-number = @list[$window-end + 1];
+    my @preamble-combinations = @list[$window-start..$window-end].combinations(2).map(*.sum);
+    if $target-number ∈ @preamble-combinations {
+        find-invalid(@list, $window-start + 1);
+    } else {
+        $target-number;
+    }
+}
+
+sub find-contiguous-range(@list, $target, $start = 0, $end = 1) {
+    my @range = @list[$start..$end];
+    given @range.sum {
+        when * &amp;lt; $target  { find-contiguous-range(@list, $target, $start, $end + 1) }       # [1][2]
+        when * == $target { @range }
+        when * &amp;gt; $target  { find-contiguous-range(@list, $target, $start + 1, $start + 2) }
+    }
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my @input = $file.IO.lines.map(*.Int);
+    my $invalid = find-invalid(@input);
+    if $p2 {
+        my @contiguous-range = find-contiguous-range(@input.reverse, $invalid); # [3]
+        say @contiguous-range.min + @contiguous-range.max;
+    } else {
+        say $invalid;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
+$ raku main.raku input.txt
+31161678
+
+# Part 2
+$ raku main.raku --p2 input.txt
+5453868
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find-invalid&lt;/code&gt; subroutine stays the same, but we now assign the output of it to a variable. If the user is running part one, we print and exit. If the user is running part two, we recursively search the list for a range that adds up to the invalid number. We use the following criteria:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Start with window size two&lt;/li&gt;
+  &lt;li&gt;If the sum of the window is less than the target, increase it by one and try again&lt;/li&gt;
+  &lt;li&gt;If the sum of the window is the target, return the range&lt;/li&gt;
+  &lt;li&gt;If the sum of the window is greater than the target, move the start of the window by one, resize to a window of size two and start again&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+&lt;ol&gt;
+  &lt;li&gt;This is an annoying trap that I almost fell into: since Raku treats &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;foo&amp;gt;&lt;/code&gt; the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;('foo')&lt;/code&gt;, I was unable to just write &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;when &amp;lt; $target&lt;/code&gt;. It’s annoying to me because I &lt;em&gt;can&lt;/em&gt; write &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;when $target&lt;/code&gt; instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;when * == $target&lt;/code&gt;, but I left all three with the same pattern for consistency.&lt;/li&gt;
+  &lt;li&gt;Either &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$_&lt;/code&gt; can be used here. Since I am using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; in other places, I used it for consistency.&lt;/li&gt;
+  &lt;li&gt;We exploit the fact that our input is &lt;em&gt;kind of&lt;/em&gt; in order. When I say &lt;em&gt;kind of&lt;/em&gt; I mean all the two-digit numbers are before all the three-digit numbers, etc. Because our invalid number is so large, I started our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;contiguous-range&lt;/code&gt; check from the end of the list. This paid off, as the solution did not even finish when starting from the beginning, but finished fairly quickly starting from the end.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I’m realizing how &lt;em&gt;slow&lt;/em&gt; Raku is (both to write and to run). It’s disappointing because Perl (Raku’s older brother) is slow to write, but at least it is fast to run (as far as interpreted languages go). I guess there is a reason &lt;a href=&quot;https://github.com/github/linguist/pull/5104#issuecomment-739561686&quot;&gt;fewer than 200&lt;/a&gt; are using it on GitHub. Regardless, I am committed to finishing the challenge I set forward for my self (barring Day 7 *shakes fist*). See y’all for day 10!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today we have a classic sliding window problem. But, instead of the traditional iterative approach, we take a recursive approach.</summary></entry><entry><title type="html">Advent of Code: Day 8</title><link href="http://localhost:4000/blog/advent-of-code-day-08/" rel="alternate" type="text/html" title="Advent of Code: Day 8" /><published>2020-12-08T00:00:00-06:00</published><updated>2020-12-08T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-08</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-08/">&lt;p&gt;Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end!&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -188,7 +347,7 @@ $ raku main.raku --p2 input.txt
 
 &lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
 
-&lt;p&gt;The logic here is fairly straight forward (albeit brute force) as well. Basically, we find all combinations of our input with a single code point change (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@fixed-instructions&lt;/code&gt;), find &lt;em&gt;all&lt;/em&gt; solutions to those codes (infinite and terminal), filter down to the terminal solution and print the output.&lt;/p&gt;
+&lt;p&gt;The logic here is fairly straightforward (albeit brute force) as well. Basically, we find all combinations of our input with a single code point change (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@fixed-instructions&lt;/code&gt;), find &lt;em&gt;all&lt;/em&gt; solutions to those codes (infinite and terminal), filter down to the terminal solution and print the output.&lt;/p&gt;
 
 &lt;p&gt;The hard part here was copying &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@cells&lt;/code&gt; multiple times into &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@fixed-instructions&lt;/code&gt;. I ran into an issue where all of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@fixed-instructions&lt;/code&gt; was pointing to the same memory address, so after traversing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@fixed-instructions[0]&lt;/code&gt;, the rest of the inputs were tainted. This issue was fixed by the (awkward) &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.deepmaps&lt;/code&gt;. See #2 below for additional details.&lt;/p&gt;
 
@@ -1511,253 +1670,4 @@ $ raku main.raku --p2 input.txt
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;So far so good with my goal to write Raku solutions functionally! Check my &lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code&quot;&gt;GitHub&lt;/a&gt; to see any other solutions (and any other languages, if I get around to them). This was a fun little dip into the Advent of Code, and I am looking forward to the rest of the month!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.</summary></entry><entry><title type="html">Perl Weekly Challenge 89</title><link href="http://localhost:4000/blog/perl-weekly-challenge-089/" rel="alternate" type="text/html" title="Perl Weekly Challenge 89" /><published>2020-11-30T00:00:00-06:00</published><updated>2020-12-01T07:40:30-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-089</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-089/">&lt;p&gt;Back again with challenge 89! I was able to tackle this one the day it was released, but I doubt that will be the case going forward.&lt;/p&gt;
-
-&lt;p&gt;Once again, it seems the first task can be tackled easily in a functional way, and the second one ends up being more imperative. Hoping I can try to do more things functionally in the future!&lt;/p&gt;
-
-&lt;h2 id=&quot;task-1-gcd-sum&quot;&gt;Task 1: GCD Sum&lt;/h2&gt;
-
-&lt;p&gt;You are given a positive integer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Write a script to sum &lt;a href=&quot;https://en.wikipedia.org/wiki/Greatest_common_divisor&quot;&gt;GCD&lt;/a&gt; of all possible unique pairs between 1 and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 3
-Output: 3
-
-gcd(1,2) + gcd(1,3) + gcd(2,3)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 4
-Output: 7
-
-gcd(1,2) + gcd(1,3) + gcd(1,4) + gcd(2,3) + gcd(2,4) + gcd(3,4)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-089/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($N where $N ~~ Int &amp;amp;&amp;amp; $N &amp;gt; 0) {
-    my @pairs = (1..$N).combinations(2);                    # [1]
-    say [+] @pairs.map(-&amp;gt; @pair { @pair[0] gcd @pair[1] }); # [2][3]
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 3
-3
-
-$ raku ch-1.raku 4
-7
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;The thought process here is pretty straight forward:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Find all pairs from 1 to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Find the GCD of each pair&lt;/li&gt;
-  &lt;li&gt;Sum the GCDs produced in step 2&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;You’ll see my functional programming background bubbling up again. In fact, this could honestly be a one-liner if I weren’t going for readability:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;say [+] (1..$N).combinations(2).map(-&amp;gt; @pair { @pair[0] gcd @pair[1] });
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Raku provided a great subroutine to find all the pairs in a list (&lt;a href=&quot;https://docs.raku.org/routine/combinations&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;combinations&lt;/code&gt;&lt;/a&gt;). In fact, it is generalized such that you can take more than just pairs (if I didn’t provide a number, it would find &lt;em&gt;all&lt;/em&gt; combinations from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;size=0&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;size=$N&lt;/code&gt;), so it may come back in future problems!&lt;/li&gt;
-  &lt;li&gt;This was an interesting one for me. In Scala, since it is so strongly and statically typed, we know that the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@pairs&lt;/code&gt; list contains lists itself, so you could just say: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pairs.map(_._1 gcd _._2)&lt;/code&gt;. In Raku, I had to use the &lt;a href=&quot;https://docs.raku.org/language/functions#Blocks_and_lambdas&quot;&gt;pointy block&lt;/a&gt; notation to give the mapped items a name and, more importantly, a sigil to treat it as a list.&lt;/li&gt;
-  &lt;li&gt;I &lt;em&gt;love&lt;/em&gt; that a lot of simple things (like &lt;a href=&quot;https://docs.raku.org/routine/gcd&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gcd&lt;/code&gt;&lt;/a&gt; or &lt;a href=&quot;https://docs.raku.org/routine/is-prime&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is-prime&lt;/code&gt;&lt;/a&gt;) are built right into Raku. It saves a lot of boilerplate code and potentially bad implementation of these functions.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;task-2-magic-matrix&quot;&gt;Task 2: Magic Matrix&lt;/h2&gt;
-
-&lt;p&gt;Write a script to display matrix as below with numbers &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1 - 9&lt;/code&gt;. Please make sure numbers are used once.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[ a b c ]
-[ d e f ]
-[ g h i ]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;So that it satisfies the following:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;a + b + c = 15
-d + e + f = 15
-g + h + i = 15
-a + d + g = 15
-b + e + h = 15
-c + f + i = 15
-a + e + i = 15
-c + e + g = 15
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-089/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset OddPositiveInt of Int where { $_ ~~ Int &amp;amp;&amp;amp; $_ &amp;gt; 0 &amp;amp;&amp;amp; !($_ %% 2) }
-
-sub MAIN($side-length where $side-length ~~ OddPositiveInt = 3, $debug where $debug ~~ Bool = False) {
-    my @matrix = generate-matrix($side-length);
-    my @filled-in-matrix = fill-in-matrix(@matrix, $side-length);
-    for @filled-in-matrix -&amp;gt; @row {
-        say '[ ' ~ @row.join(' ') ~ ' ]';
-    }
-    if $debug {
-        print &quot;\n&quot;;
-        validate-matrix(@filled-in-matrix, $side-length);
-    }
-}
-
-# Generate a 2D matrix that we can fill in with the proper numbers.
-# For 3x3 it would output:
-#  [0 0 0]
-#  [0 0 0]
-#  [0 0 0]
-sub generate-matrix($side-length) {
-    my @matrix = Array.new;
-    for ^$side-length -&amp;gt; $i {
-        my @row = Array.new;
-        for (($i * $side-length) + 1..($i * $side-length) + $side-length) {
-            @row.push(0);
-        }
-        @matrix.push(@row);
-    }
-    @matrix
-}
-
-# Actual business logic here. It takes the empty array and fills it in to be &quot;magic&quot;
-# Such that all rows, columns, and the two diagonals add up to $side-length * ($side-length² + 1) / 2
-sub fill-in-matrix(@matrix, $side-length) {
-    my $num = 1;
-    my $row = floor($side-length / 2);
-    my $col = $side-length - 1;
-
-    while $num &amp;lt;= $side-length² {                # [1]
-        if $row == -1 &amp;amp;&amp;amp; $col == $side-length {  # Condition 3 (see below)
-            $col = $side-length - 2;
-            $row = 0;
-        } else {
-            if $col == $side-length {            # Condition 1 (see below)
-                $col = 0;
-            }
-            if $row &amp;lt; 0 {
-                $row = $side-length - 1;
-            }
-        }
-        if @matrix[$row][$col] != 0 {           # Condition 2 (see below)
-            $col -= 2;
-            $row++;
-        } else {
-            @matrix[$row][$col] = $num;
-            $num++;
-            $col++;
-            $row--;
-        }
-    }
-    @matrix;
-}
-
-# Helper function to validate output matrix and print the validation
-sub validate-matrix(@matrix, $side-length) {
-    my @rows = @matrix;
-    my @columns = [Z] @matrix;                                                   # [2]
-    my @diagonal = @matrix.kv.map(-&amp;gt; $i, @row { @row[$i] });
-    my @counter-diagonal = @matrix.kv.map(-&amp;gt; $i, @row { @row[*-$i-1] });
-
-    my $target = ($side-length * ($side-length² + 1) / 2).Int;
-
-    my $valid-rows = so @rows.map(-&amp;gt; @row { [+] @row }).all == $target;          # [3]
-    my $valid-cols = so @columns.map(-&amp;gt; @column { [+] @column }).all == $target;
-    my $valid-diag = so ([+] @diagonal) == $target;
-    my $valid-counter-diag = so ([+] @counter-diagonal) == $target;
-
-    if $valid-rows &amp;amp;&amp;amp; $valid-cols &amp;amp;&amp;amp; $valid-diag &amp;amp;&amp;amp; $valid-counter-diag {
-        for @rows -&amp;gt; @row {
-            say @row.join(' + ') ~ ' = ' ~ $target;
-        }
-        for @columns -&amp;gt; @column {
-            say @column.join(' + ') ~ ' = ' ~ $target;
-        }
-        say @diagonal.join(' + ') ~ ' = ' ~ $target;
-        say @counter-diagonal.join(' + ') ~ ' = ' ~ $target;
-    } else {
-        die &quot;Not a valid magic matrix&quot;;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku
-[ 2 7 6 ]
-[ 9 5 1 ]
-[ 4 3 8 ]
-
-# There is an optional `debug` parameter that can be supplied, but the `side-length` argument must also be provided
-$ raku ch-2.raku 3 True
-[ 2 7 6 ]
-[ 9 5 1 ]
-[ 4 3 8 ]
-
-2 + 7 + 6 = 15
-9 + 5 + 1 = 15
-4 + 3 + 8 = 15
-2 + 9 + 4 = 15
-7 + 5 + 3 = 15
-6 + 1 + 8 = 15
-2 + 5 + 8 = 15
-6 + 5 + 4 = 15
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;It should be noted this program only works with odd side-length squares&lt;/p&gt;
-
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;Full disclosure, I have done this problem before, so I basically just ported some old code. There are two steps to this problem before we even get to implementation:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Find the pattern for what the sum is
-    &lt;ul&gt;
-      &lt;li&gt;As seen in the code, you will find it is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N(N²+1)/2&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Draw some “magic matrices” to see if you can find any patterns&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;You will find 3 patterns hold true (I am copying these from &lt;a href=&quot;https://www.geeksforgeeks.org/magic-square/&quot;&gt;Geeks for Geeks&lt;/a&gt;):&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;The position of next number is calculated by decrementing row number of the previous number by 1, and incrementing the column number of the previous number by 1. At any time, if the calculated row position becomes -1, it will wrap around to n-1. Similarly, if the calculated column position becomes n, it will wrap around to 0.&lt;/li&gt;
-  &lt;li&gt;If the magic square already contains a number at the calculated position, calculated column position will be decremented by 2, and calculated row position will be incremented by 1.&lt;/li&gt;
-  &lt;li&gt;If the calculated row position is -1 &amp;amp; calculated column position is n, the new position would be: (0, n-2).&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Basically, we just start in the middle right square and apply the above criteria iteratively, and it works for any odd-side-lengthed square.&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Raku supports Unicode, so you’ll notice I used &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$side-length²&lt;/code&gt; rather than &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$side-length ** 2&lt;/code&gt;. It’s a small feature that I find helps readabilty (but can be hard to write)!&lt;/li&gt;
-  &lt;li&gt;This has been called out as a &lt;a href=&quot;https://docs.raku.org/language/traps#Using_[%E2%80%A6]_metaoperator_with_a_list_of_lists&quot;&gt;trick to avoid&lt;/a&gt; because it fails when you get a matrix with 1 row. Since it is being used in a debugging function and if we &lt;em&gt;did&lt;/em&gt; get a 1-row matrix it would be 1x1, so I think it is safe to use here&lt;/li&gt;
-  &lt;li&gt;I don’t really like that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;so&lt;/code&gt; is the subroutine used to cast input to a boolean, so I just wanted to call out that (a) that is what these lines are doing and (b) I don’t like the terminology.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;I’m really glad I decided to start doing these challenges weekly, and I may even go back and attempt old challenges if I have time.&lt;/p&gt;
-
-&lt;p&gt;With that being said, I am kind of disappointed in myself for just copying old code for task two. For one, I have grown as a programmer since writing that, and two, it seems past-me just copied that code from somewhere on the internet. While it was kind of challenging porting it to Raku, I feel like it was the lazy way out.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Back again with challenge 89! I was able to tackle this one the day it was released, but I doubt that will be the case going forward.</summary></entry></feed>
+&lt;p&gt;So far so good with my goal to write Raku solutions functionally! Check my &lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code&quot;&gt;GitHub&lt;/a&gt; to see any other solutions (and any other languages, if I get around to them). This was a fun little dip into the Advent of Code, and I am looking forward to the rest of the month!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.</summary></entry></feed>
