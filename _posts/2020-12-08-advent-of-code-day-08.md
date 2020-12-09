@@ -201,7 +201,7 @@ $ raku main.raku --p2 input.txt
 
 #### Explanation
 
-The logic here is fairly straight forward (albeit brute force) as well. Basically, we find all combinations of our input with a single code point change (`@fixed-instructions`), find _all_ solutions to those codes (infinite and terminal), filter down to the terminal solution and print the output.
+The logic here is fairly straightforward (albeit brute force) as well. Basically, we find all combinations of our input with a single code point change (`@fixed-instructions`), find _all_ solutions to those codes (infinite and terminal), filter down to the terminal solution and print the output.
 
 The hard part here was copying `@cells` multiple times into `@fixed-instructions`. I ran into an issue where all of `@fixed-instructions` was pointing to the same memory address, so after traversing `@fixed-instructions[0]`, the rest of the inputs were tainted. This issue was fixed by the (awkward) `.deepmaps`. See #2 below for additional details.
 
