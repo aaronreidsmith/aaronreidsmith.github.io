@@ -517,7 +517,7 @@ $ raku main.raku --p2 input.txt
 
 <h4 id="explanation-1">Explanation</h4>
 
-<p>The logic here is fairly straight forward (albeit brute force) as well. Basically, we find all combinations of our input with a single code point change (<code class="language-plaintext highlighter-rouge">@fixed-instructions</code>), find <em>all</em> solutions to those codes (infinite and terminal), filter down to the terminal solution and print the output.</p>
+<p>The logic here is fairly straightforward (albeit brute force) as well. Basically, we find all combinations of our input with a single code point change (<code class="language-plaintext highlighter-rouge">@fixed-instructions</code>), find <em>all</em> solutions to those codes (infinite and terminal), filter down to the terminal solution and print the output.</p>
 
 <p>The hard part here was copying <code class="language-plaintext highlighter-rouge">@cells</code> multiple times into <code class="language-plaintext highlighter-rouge">@fixed-instructions</code>. I ran into an issue where all of <code class="language-plaintext highlighter-rouge">@fixed-instructions</code> was pointing to the same memory address, so after traversing <code class="language-plaintext highlighter-rouge">@fixed-instructions[0]</code>, the rest of the inputs were tainted. This issue was fixed by the (awkward) <code class="language-plaintext highlighter-rouge">.deepmaps</code>. See #2 below for additional details.</p>
 
@@ -607,7 +607,8 @@ $ raku main.raku --p2 input.txt
 ">Previous</a>
     
     
-      <a href="#" class="pagination--pager disabled">Next</a>
+      <a href="/blog/advent-of-code-day-09/" class="pagination--pager" title="Advent of Code: Day 9
+">Next</a>
     
   </nav>
 
@@ -621,6 +622,53 @@ $ raku main.raku --p2 input.txt
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-09/" rel="permalink">Advent of Code: Day 9
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-09T00:00:00-06:00">December 9, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today we have a classic sliding window problem. But, instead of the traditional iterative approach, we take a recursive approach.
+
+</p>
+  </article>
+</div>
+
         
           
 
@@ -753,51 +801,6 @@ $ raku main.raku --p2 input.txt
 
 
     <p class="archive__item-excerpt" itemprop="description">Well, our old pal set theory reared its head again today. I’m very happy with the middle ground I found between conciseness and readability with this challen...</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-05/" rel="permalink">Advent of Code: Day 5
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-05T00:00:00-06:00">December 5, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          6 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name sta...</p>
   </article>
 </div>
 

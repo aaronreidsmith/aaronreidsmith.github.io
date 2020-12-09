@@ -64,4 +64,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-08/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 9",
+        "excerpt":"Today we have a classic sliding window problem. But, instead of the traditional iterative approach, we take a recursive approach. The Problem Part 1 After helping our seatmate fix his Game Boy yesterday, we find ourselves bored on the plane. Why not pass the time with a little mid-air hacking?...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-09/",
+        "teaser": null
       }]

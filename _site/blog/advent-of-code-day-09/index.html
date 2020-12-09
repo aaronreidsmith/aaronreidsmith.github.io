@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Advent of Code: Day 1 - Aaron Smith</title>
-<meta name="description" content="Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.">
+<!-- begin _includes/seo.html --><title>Advent of Code: Day 9 - Aaron Smith</title>
+<meta name="description" content="Today we have a classic sliding window problem. But, instead of the traditional iterative approach, we take a recursive approach.">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,28 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Advent of Code: Day 1">
-<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-01/">
+<meta property="og:title" content="Advent of Code: Day 9">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-09/">
 
 
-  <meta property="og:description" content="Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.">
-
-
-
+  <meta property="og:description" content="Today we have a classic sliding window problem. But, instead of the traditional iterative approach, we take a recursive approach.">
 
 
 
 
-  <meta property="article:published_time" content="2020-12-01T00:00:00-06:00">
 
 
 
-  <meta property="article:modified_time" content="2020-12-01T07:40:30-06:00">
+  <meta property="article:published_time" content="2020-12-09T00:00:00-06:00">
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-01/">
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-09/">
 
 
 
@@ -287,15 +285,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Advent of Code: Day 1">
-    <meta itemprop="description" content="Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.">
-    <meta itemprop="datePublished" content="2020-12-01T00:00:00-06:00">
-    <meta itemprop="dateModified" content="2020-12-01T07:40:30-06:00">
+    <meta itemprop="headline" content="Advent of Code: Day 9">
+    <meta itemprop="description" content="Today we have a classic sliding window problem. But, instead of the traditional iterative approach, we take a recursive approach.">
+    <meta itemprop="datePublished" content="2020-12-09T00:00:00-06:00">
+    
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 1
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 9
 </h1>
           
 
@@ -304,7 +302,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-01T00:00:00-06:00">December 1, 2020</time>
+        <time datetime="2020-12-09T00:00:00-06:00">December 9, 2020</time>
       </span>
     
 
@@ -317,7 +315,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          4 minute read
+          5 minute read
         
       </span>
     
@@ -329,71 +327,131 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>Turns out I started blogging just in time for the <a href="https://adventofcode.com/">Advent of Code</a>, an annual series of daily challenges that run from December 1st to December 25th.</p>
-
-<p>These problems remind me a lot of <a href="https://projecteuler.net/">Project Euler</a>, because they are not concerned with the readability or speed of your code, just the output. That means that any goals one wishes to accomplish should be set personally (there <em>is</em> technically a leaderboard, but I find you have to be online very late at night to catch the posts, and it is not worth the stress during the holiday season).</p>
-
-<p>My goal, as you may have guessed from my previous posts, is to complete these challenges in <em>at least</em> Raku and to do so utilizing a functional programming paradigm. Let’s dive into day 1 and see if I can do it!</p>
+        <p>Today we have a classic <a href="https://www.geeksforgeeks.org/window-sliding-technique/">sliding window</a> problem. But, instead of the traditional iterative approach, we take a recursive approach.</p>
 
 <h2 id="the-problem">The Problem</h2>
 
-<p>I am not going to copy and paste the explanation of the problem here like I do for the Perl Weekly Challenge, because it is <em>so</em> long, and I want to encourage users to go attempt the challenge themselves! Instead, I will write a summary of what the challenge is and my solution.</p>
-
 <h3 id="part-1">Part 1</h3>
 
-<p>Given a file full of integers (one per line), find the single pair of integers that adds up to <code class="language-plaintext highlighter-rouge">2020</code>, then find the product of those two numbers.</p>
+<p>After helping our seatmate fix his Game Boy <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-08/">yesterday</a>, we find ourselves bored on the plane. Why not pass the time with a little mid-air hacking?</p>
+
+<p>We hook our computer up to the seat-back entertainment center, but it is protected by the e<strong>X</strong>change-<strong>M</strong>asking <strong>A</strong>ddition <strong>S</strong>ystem (XMAS), which is a cipher with a documented weakness.</p>
+
+<p>XMAS starts by sending us 25 numbers (a “preamble”). The 26th number should be the sum of two numbers in the preamble. The 27th number should be the sum of its previous 25 numbers, and so on. Here is an example with a preamble of size 5:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>35
+20
+15
+25
+47
+40
+62
+55
+65
+95
+102
+117
+150
+182
+127
+219
+299
+277
+309
+576
+</code></pre></div></div>
+
+<p>We can see how the pattern works here:</p>
+
+<ul>
+  <li>40 is the sum of 15 and 25</li>
+  <li>62 is the sum of 15 and 47</li>
+  <li>55 is the sum of 15 and 40</li>
+  <li>etc.</li>
+</ul>
+
+<p>The first step in attacking the weakness of the cipher is that exactly one number doesn’t follow the pattern. In this case 127 is not the sum of any numbers in the previous 5 (95, 102, 117, 150, 182). Our job is to find the invalid number in the XMAS cipher.</p>
 
 <h4 id="solution">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/09/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub MAIN($file) {
-    say $file.IO.lines                           # [1]
-          .combinations(2)                       # [2]
-          .grep(-&gt; ($a, $b) { $a + $b == 2020 }) # [3]
-          .map(-&gt; ($a, $b) { $a * $b })          # [4]
-          .head;                                 # [5]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub find-invalid(@list, $window-start = 0, $window-size = 25) {                               # [1]
+    my $window-end = $window-start + $window-size - 1;
+    my $target-number = @list[$window-end + 1];
+    my @preamble-combinations = @list[$window-start..$window-end].combinations(2).map(*.sum); # [2]
+    if $target-number ∈ @preamble-combinations {
+        find-invalid(@list, $window-start + 1);
+    } else {
+        $target-number;
+    }
+}
+
+sub MAIN($file) {
+    say find-invalid($file.IO.lines.map(*.Int));
 }
 </code></pre></div></div>
 
 <p>This runs as such:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
-1020036
+31161678
 </code></pre></div></div>
 
 <h4 id="explanation">Explanation</h4>
 
-<p>This is fairly straight forward, and I feel Raku reads very cleanly. Basically, we read the entire file into a list (<code class="language-plaintext highlighter-rouge">IO.lines</code>), then find all the pairs in that list, filter those pairs down to where <code class="language-plaintext highlighter-rouge">$a + $b == 2020</code>, then multiply those two numbers together!</p>
+<p>First, we pull all of our numbers into a list and turn them into integers. Once we’ve done that, we pass the list to <code class="language-plaintext highlighter-rouge">find-invalid</code>, which will find the sliding window and target value we are looking for (<code class="language-plaintext highlighter-rouge">@list[0..24]</code> and <code class="language-plaintext highlighter-rouge">@list[25]</code> in the first iteration). We then find all possible combinations in that 25-item list (via <code class="language-plaintext highlighter-rouge">.combinations(2)</code>) and sum each pair (vis <code class="language-plaintext highlighter-rouge">.map(*.sum</code>). If the target <em>is</em> in the list of sums, it is valid, and we go to the next sliding window. If it is <em>not</em>, we found our invalid term and return.</p>
 
 <h5 id="specific-comments">Specific Comments</h5>
 
 <ol>
-  <li>I’m a sucker for good IO. I feel reading/writing files in languages like Java or Scala is so cumbersome that I try to avoid it at all costs. Languages like Raku were <em>built</em> for text manipulation, so it makes sense that the IO is great, but I just wanted to call out how easy it is to get the lines of a file in a list.</li>
-  <li>As I said in my <a href="https://aaronreidsmith.github.io/blog/perl-weekly-challenge-089/#specific-comments">previous post</a>, I see the <code class="language-plaintext highlighter-rouge">combinations</code> feature coming back a lot in these puzzles. I love that it is built right in.</li>
-  <li><code class="language-plaintext highlighter-rouge">grep</code> is familiar to most <code class="language-plaintext highlighter-rouge">*nix</code> users, and it is the equivalent of a <code class="language-plaintext highlighter-rouge">filter</code> in more traditional functional languages. In this case, we are filtering down to only pairs that add up to <code class="language-plaintext highlighter-rouge">2020</code>.</li>
-  <li>At this point this list looks like this: <code class="language-plaintext highlighter-rouge">(($a, $b))</code>, so we still want to map over the outer list and multiply the pair together.</li>
-  <li>Since <code class="language-plaintext highlighter-rouge">map</code> returns a list, we need to grab the first item from that list for pretty printing.</li>
+  <li>I added a parameter for <code class="language-plaintext highlighter-rouge">$window-size</code> here because I had a feeling it would change in part two. It did not, but I left it in here to give an idea of my thought process.</li>
+  <li>I am trying to get more consistent in using dot operators (like <code class="language-plaintext highlighter-rouge">.sum</code>) rather than mixing paradigms. With that being said, <code class="language-plaintext highlighter-rouge">.map([+] *)</code> didn’t work here to begin with; it wanted me to do something like <code class="language-plaintext highlighter-rouge">.map(-&gt; @pair { [+] @pair })</code>. I think it was interpreting the <code class="language-plaintext highlighter-rouge">*</code> as a multiplication operator instead of a <code class="language-plaintext highlighter-rouge">Whatever</code> star, so it was getting confused. All the more reason to use dot operators, I guess!</li>
 </ol>
 
 <h3 id="part-2">Part 2</h3>
 
-<p>Given the same file as before, find the <em>3</em> numbers that add up to <code class="language-plaintext highlighter-rouge">2020</code> and find their product.</p>
+<p>The second step of finding the weakness relies on the invalid number found above.</p>
+
+<p>We need to find a contiguous set of numbers (size two or greater) in the input that add up to our invalid input. Once we have found that contiguous range, we need to add the minimum and maximum numbers in the range; that is our encryption weakness.</p>
 
 <h4 id="solution-1">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/09/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub MAIN($file, Bool :$p2 = False) {                # [1]
-    say $file.IO.lines
-          .combinations($p2 ?? 3 !! 2)              # [2]
-          .grep(-&gt; @combo { ([+] @combo) == 2020 }) # [3]
-          .map(-&gt; @combo { [*] @combo })
-          .head;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub find-invalid(@list, $window-start = 0, $window-size = 25) {
+    my $window-end = $window-start + $window-size - 1;
+    my $target-number = @list[$window-end + 1];
+    my @preamble-combinations = @list[$window-start..$window-end].combinations(2).map(*.sum);
+    if $target-number ∈ @preamble-combinations {
+        find-invalid(@list, $window-start + 1);
+    } else {
+        $target-number;
+    }
+}
+
+sub find-contiguous-range(@list, $target, $start = 0, $end = 1) {
+    my @range = @list[$start..$end];
+    given @range.sum {
+        when * &lt; $target  { find-contiguous-range(@list, $target, $start, $end + 1) }       # [1][2]
+        when * == $target { @range }
+        when * &gt; $target  { find-contiguous-range(@list, $target, $start + 1, $start + 2) }
+    }
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my @input = $file.IO.lines.map(*.Int);
+    my $invalid = find-invalid(@input);
+    if $p2 {
+        my @contiguous-range = find-contiguous-range(@input.reverse, $invalid); # [3]
+        say @contiguous-range.min + @contiguous-range.max;
+    } else {
+        say $invalid;
+    }
 }
 </code></pre></div></div>
 
@@ -401,28 +459,34 @@
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
 $ raku main.raku input.txt
-1020036
+31161678
 
 # Part 2
 $ raku main.raku --p2 input.txt
-286977330
+5453868
 </code></pre></div></div>
 
 <h4 id="explanation-1">Explanation</h4>
 
-<p>Since it is basically the same problem, it only makes sense to modify the script we have already written rather than starting from scratch. Basically, everywhere where we hardcoded <code class="language-plaintext highlighter-rouge">$a, $b</code> needs to be generalized to some list. In this case, we added a <code class="language-plaintext highlighter-rouge">p2</code> CLI flag that allows the users to specify if they are doing part 1 or part 2. If they are doing part 2 we find trios instead of pairs, then perform the same “business logic” on that collection.</p>
-
-<h5 id="specific-comments-1">Specific Comments</h5>
+<p>our <code class="language-plaintext highlighter-rouge">find-invalid</code> subroutine stays the same, but we now assign the output of it to a variable. If the user is running part one, we print and exit. If the user is running part two, we recursively search the list for a range that adds up to the invalid number. We use the following criteria:</p>
 
 <ol>
-  <li>Using the <code class="language-plaintext highlighter-rouge">:$p2</code> notation says to Raku “create a command line flag called <code class="language-plaintext highlighter-rouge">--p2</code> and assign it to <code class="language-plaintext highlighter-rouge">$p2</code> with a default of <code class="language-plaintext highlighter-rouge">False</code>”. Creating command line interfaces can be kind of a pain in a lot of languages, so I am happy that is built right into the language.</li>
-  <li>This is the check to see if we are doing part 1 or part 2. Raku’s ternary operator is <code class="language-plaintext highlighter-rouge">condition ?? true !! false</code> rather than the traditional <code class="language-plaintext highlighter-rouge">condition ? true : false</code>.</li>
-  <li>Since we have to remove all the pair hard-coding, we can generalize it as a list called <code class="language-plaintext highlighter-rouge">@combo</code> and then just find the sum of the entire combo using the <code class="language-plaintext highlighter-rouge">[+]</code> meta operator. We perform a similar generalization for the <code class="language-plaintext highlighter-rouge">map</code> step.</li>
+  <li>Start with window size two</li>
+  <li>If the sum of the window is less than the target, increase it by one and try again</li>
+  <li>If the sum of the window is the target, return the range</li>
+  <li>If the sum of the window is greater than the target, move the start of the window by one, resize to a window of size two and start again</li>
+</ol>
+
+<h5 id="specific-comments-1">Specific Comments</h5>
+<ol>
+  <li>This is an annoying trap that I almost fell into: since Raku treats <code class="language-plaintext highlighter-rouge">&lt;foo&gt;</code> the same as <code class="language-plaintext highlighter-rouge">('foo')</code>, I was unable to just write <code class="language-plaintext highlighter-rouge">when &lt; $target</code>. It’s annoying to me because I <em>can</em> write <code class="language-plaintext highlighter-rouge">when $target</code> instead of <code class="language-plaintext highlighter-rouge">when * == $target</code>, but I left all three with the same pattern for consistency.</li>
+  <li>Either <code class="language-plaintext highlighter-rouge">*</code> or <code class="language-plaintext highlighter-rouge">$_</code> can be used here. Since I am using <code class="language-plaintext highlighter-rouge">*</code> in other places, I used it for consistency.</li>
+  <li>We exploit the fact that our input is <em>kind of</em> in order. When I say <em>kind of</em> I mean all the two-digit numbers are before all the three-digit numbers, etc. Because our invalid number is so large, I started our <code class="language-plaintext highlighter-rouge">contiguous-range</code> check from the end of the list. This paid off, as the solution did not even finish when starting from the beginning, but finished fairly quickly starting from the end.</li>
 </ol>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>So far so good with my goal to write Raku solutions functionally! Check my <a href="https://github.com/aaronreidsmith/advent-of-code">GitHub</a> to see any other solutions (and any other languages, if I get around to them). This was a fun little dip into the Advent of Code, and I am looking forward to the rest of the month!</p>
+<p>I’m realizing how <em>slow</em> Raku is (both to write and to run). It’s disappointing because Perl (Raku’s older brother) is slow to write, but at least it is fast to run (as far as interpreted languages go). I guess there is a reason <a href="https://github.com/github/linguist/pull/5104#issuecomment-739561686">fewer than 200</a> are using it on GitHub. Regardless, I am committed to finishing the challenge I set forward for my self (barring Day 7 *shakes fist*). See y’all for day 10!</p>
 
         
       </section>
@@ -475,7 +539,7 @@ $ raku main.raku --p2 input.txt
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-01">December 1, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-09T00:00:00-06:00">December 9, 2020</time></p>
 
 
       </footer>
@@ -485,23 +549,22 @@ $ raku main.raku --p2 input.txt
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+1%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-01%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+9%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-09%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-01%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-09%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-01%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-09%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/perl-weekly-challenge-089/" class="pagination--pager" title="Perl Weekly Challenge 89
+      <a href="/blog/advent-of-code-day-08/" class="pagination--pager" title="Advent of Code: Day 8
 ">Previous</a>
     
     
-      <a href="/blog/advent-of-code-day-02/" class="pagination--pager" title="Advent of Code: Day 2
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -515,53 +578,6 @@ $ raku main.raku --p2 input.txt
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-09/" rel="permalink">Advent of Code: Day 9
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-09T00:00:00-06:00">December 9, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          5 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">Today we have a classic sliding window problem. But, instead of the traditional iterative approach, we take a recursive approach.
-
-</p>
-  </article>
-</div>
-
         
           
 
@@ -686,7 +702,7 @@ $ raku main.raku --p2 input.txt
       <span class="page__meta-readtime">
         <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
-          7 minute read
+          6 minute read
         
       </span>
     
@@ -694,6 +710,51 @@ $ raku main.raku --p2 input.txt
 
 
     <p class="archive__item-excerpt" itemprop="description">Well, today was our streak breaker. For the life of me, I could not get Raku to run in a timely manner. I ended up reverting to Python and using a more imper...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-06/" rel="permalink">Advent of Code: Day 6
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-06T00:00:00-06:00">December 6, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Well, our old pal set theory reared its head again today. I’m very happy with the middle ground I found between conciseness and readability with this challen...</p>
   </article>
 </div>
 
