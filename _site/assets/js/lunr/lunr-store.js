@@ -58,4 +58,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "http://localhost:4000/blog/perl-weekly-challenge-090/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 8",
+        "excerpt":"Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end! The Problem Part 1 We’re still traveling to our destination (see the past few...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-08/",
+        "teaser": null
       }]
