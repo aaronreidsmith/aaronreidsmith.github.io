@@ -167,4 +167,4 @@ our `find-invalid` subroutine stays the same, but we now assign the output of it
 
 ## Final Thoughts
 
-I'm realizing how _slow_ Raku is (both to write and to run). It's disappointing because Perl (Raku's older brother) is slow to write, but at least it is fast to run (as far as interpreted languages go). I guess there is a reason [fewer than 200 people](https://github.com/github/linguist/pull/5104#issuecomment-739561686) are using it on GitHub. Regardless, I am committed to finishing the challenge I set forward for my self (barring Day 7 \*shakes fist\*). See y'all for day 10!
+I'm realizing how _slow_ Raku is (both to write and to run). It's disappointing because Perl (Raku's older brother) is slow to write, but at least it is fast to run (as far as interpreted languages go). I guess there is a reason [fewer than 200 people](https://github.com/github/linguist/pull/5104#issuecomment-739561686) are using it on GitHub. Regardless, I am committed to finishing the challenge I set forward for myself (barring Day 7 \*shakes fist\*). See y'all for day 10!
