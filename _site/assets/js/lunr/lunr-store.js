@@ -70,4 +70,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-09/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 10",
+        "excerpt":"Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details! The Problem Part 1 We are trying to plug our phone into...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-10/",
+        "teaser": null
       }]
