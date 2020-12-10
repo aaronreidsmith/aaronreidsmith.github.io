@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Advent of Code: Day 8 - Aaron Smith</title>
-<meta name="description" content="Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end!">
+<!-- begin _includes/seo.html --><title>Advent of Code: Day 10 - Aaron Smith</title>
+<meta name="description" content="Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Advent of Code: Day 8">
-<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-08/">
+<meta property="og:title" content="Advent of Code: Day 10">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-10/">
 
 
-  <meta property="og:description" content="Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end!">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-12-08T00:00:00-06:00">
+  <meta property="og:description" content="Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-08/">
+
+  <meta property="article:published_time" content="2020-12-10T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-10/">
 
 
 
@@ -285,15 +285,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Advent of Code: Day 8">
-    <meta itemprop="description" content="Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end!">
-    <meta itemprop="datePublished" content="2020-12-08T00:00:00-06:00">
+    <meta itemprop="headline" content="Advent of Code: Day 10">
+    <meta itemprop="description" content="Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!">
+    <meta itemprop="datePublished" content="2020-12-10T00:00:00-06:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 8
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 10
 </h1>
           
 
@@ -302,7 +302,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-08T00:00:00-06:00">December 8, 2020</time>
+        <time datetime="2020-12-10T00:00:00-06:00">December 10, 2020</time>
       </span>
     
 
@@ -315,7 +315,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          5 minute read
+          4 minute read
         
       </span>
     
@@ -327,179 +327,108 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end!</p>
+        <p>Part two today <em>almost</em> forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!</p>
 
 <h2 id="the-problem">The Problem</h2>
 
 <h3 id="part-1">Part 1</h3>
 
-<p>We’re still traveling to our destination (see the past few blogs of the <a href="https://www.adventofcode.com">Advent of Code</a> itself for more backstory).</p>
+<p>We are trying to plug our phone into the seat-back plug, but the problem is it puts out the wrong <em>joltage</em>. We have a handful of adaptors labeled by their output joltage (our input), and our device is rated for 3 jolts above the maximum adaptor joltage. Each adaptor can be plugged into an adaptor 1-, 2-, or 3-jolts below it (i.e., a 4-jolt adaptor can plug into a 1-, 2- or 3-jolt plug).</p>
 
-<p>We are on another flight, and the kid in the seat next to us is having an issue with his Game Boy. We are able to isolate the boot code, and it looks like this:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nop +0
-acc +1
-jmp +4
-acc +3
-jmp -3
-acc -99
-acc +1
-jmp -4
-acc +6
-</code></pre></div></div>
-
-<p>Where each instruction means the following:</p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">nop</code>: No operation, move to the next entry</li>
-  <li><code class="language-plaintext highlighter-rouge">jmp</code>: Jump to the entry specified by the number (+1 means next entry, -1 means previous entry, etc.)</li>
-  <li><code class="language-plaintext highlighter-rouge">acc</code>: Increment an accumulator the specified amount of times, then go to the next entry</li>
-</ul>
-
-<p>The example instructions, as well as our input, create an infinite loop. Our task is to find the value of the accumulator immediately before any instruction is executed a second time.</p>
+<p>We are bored on this flight, so, treating the seat-back outlet as zero jolts, we want to find a solution that uses <em>every</em> adaptor we own. Once we have found the right sequence, we want to multiply the number of 1-jolt differences by the number of 3-jolt differences.</p>
 
 <h4 id="solution">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/08/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/10/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub accumulate(@instructions is copy, $pointer = 0, $accumulator = 0) { # [1]
-    if @instructions[$pointer]&lt;visited&gt; {
-        $accumulator;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub find-differences(@joltage, $pointer = 0, @differences = ()) {
+    if $pointer == @joltage.elems - 1 {
+        @differences;
     } else {
-        @instructions[$pointer]&lt;visited&gt; = True;
-        given @instructions[$pointer]&lt;operation&gt; {
-            when 'acc' {
-                accumulate(
-                    @instructions,
-                    $pointer + 1,
-                    $accumulator + @instructions[$pointer]&lt;value&gt;
-                );
-            }
-            when 'jmp' {
-                accumulate(
-                    @instructions,
-                    $pointer + @instructions[$pointer]&lt;value&gt;,
-                    $accumulator
-                );
-            }
-            when 'nop' {
-                accumulate(@instructions, $pointer + 1, $accumulator);
-            }
-        }
+        my $a = @joltage[$pointer];
+        my $b = @joltage[$pointer + 1];
+        find-differences(@joltage, $pointer + 1, (|@differences, $b - $a));
     }
 }
 
-
 sub MAIN($file) {
-    my @cells = $file.IO.lines.map(-&gt; $line {
-        my ($operation, $value) = $line.split(' ');
-        { :$operation, value =&gt; $value.Int, :!visited } # [2]
-    });
-    say accumulate(@cells);
+    my @adaptors = $file.IO.lines.map(*.Int).sort;
+    my $device-joltage = @adaptors.max + 3;
+    my @joltage-list = (0, |@adaptors, $device-joltage); # [1]
+    my @differences = find-differences(@joltage-list);
+    say @differences.grep(* == 1).elems * @differences.grep(* == 3).elems;
 }
 </code></pre></div></div>
 
 <p>This runs as such:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
-1600
+2176
 </code></pre></div></div>
 
 <h4 id="explanation">Explanation</h4>
 
-<p>The logic here is fairly simple. First, we split our input into a list of <code class="language-plaintext highlighter-rouge">Hash</code> objects that look like this:</p>
+<p>The logic laid out in <code class="language-plaintext highlighter-rouge">MAIN</code> is pretty clear.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{ operation =&gt; 'jmp|acc|nop', value =&gt; &lt;value&gt;, visited =&gt; False }
-</code></pre></div></div>
-
-<p>We then recursively traverse this list of cells until we hit one that is <code class="language-plaintext highlighter-rouge">visited =&gt; True</code>, and we return the accumulator at that point.</p>
+<ol>
+  <li>We pull out all of our adaptors and sort them by output joltage</li>
+  <li>We find out device voltage (<code class="language-plaintext highlighter-rouge">@adaptors.max + 3</code>)</li>
+  <li>We make our final joltage list including the outlet (<code class="language-plaintext highlighter-rouge">0</code>) and our device</li>
+  <li>We find all the differences between each adaptor</li>
+  <li>We multiply the 1-joltage differences by the 3-joltage differences</li>
+</ol>
 
 <h5 id="specific-comments">Specific Comments</h5>
 
 <ol>
-  <li>We mark the <code class="language-plaintext highlighter-rouge">@instructions</code> variable as a copy so that we can manipulate it in the <code class="language-plaintext highlighter-rouge">accumulate</code> subroutine without affecting the outer scope.</li>
-  <li>We use two shorthands on this line. The first being <code class="language-plaintext highlighter-rouge">:$operation</code>, which is shorthand for <code class="language-plaintext highlighter-rouge">operation =&gt; $operation</code>, and the second being <code class="language-plaintext highlighter-rouge">:!visited</code>, which is shorthand for <code class="language-plaintext highlighter-rouge">visited =&gt; False</code>. I don’t really like mixing the paradigms, but IntelliJ was complaining about it, so what are you gonna do? 🤷🏻‍♂️</li>
+  <li>I’ve used this before, but I wanted to call it out as it is used in a few places in this solution. This is called a <a href="https://docs.raku.org/type/Slip"><code class="language-plaintext highlighter-rouge">Slip</code></a>, which basically unpacks a list into the outer list. So this is a way of prepending and appending items to a list at the same time.</li>
 </ol>
 
 <h3 id="part-2">Part 2</h3>
 
-<p>Now that we have a program to interpret the boot code, we find that there is a bug in the boot code itself. Either a <code class="language-plaintext highlighter-rouge">nop</code> was switched for a <code class="language-plaintext highlighter-rouge">jmp</code> or vice versa, in exactly one place in the code. Swapping the right code back to its original form will allow the boot code to terminate rather than running forever.</p>
-
-<p>We need to find the value of the accumulator in the terminal solution.</p>
+<p>Now that we have found the one solution that uses all adaptors, we want to find <em>all</em> possible solutions that will connect our device to the plug. Looking at our adaptors we realize there must be more than a <strong>trillion</strong> ways to arrange them, so we have to be smart about how we approach it.</p>
 
 <h4 id="solution-1">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/08/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/10/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub accumulate(@instructions is copy, $pointer = 0, $accumulator = 0, $part-two = False) {
-    if $part-two &amp;&amp; $pointer == @instructions.elems {
-        ($accumulator, 'Terminal');
-    } elsif @instructions[$pointer]&lt;visited&gt; {
-        ($accumulator, 'Infinite');
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use experimental :cached;
+
+sub find-differences(@joltage-list, $pointer = 0, @differences = ()) {
+    if $pointer == @joltage-list.elems - 1 {
+        @differences;
     } else {
-        @instructions[$pointer]&lt;visited&gt; = True;
-        given @instructions[$pointer]&lt;operation&gt; {
-            when 'acc' {
-                accumulate(
-                    @instructions,
-                    $pointer + 1,
-                    $accumulator + @instructions[$pointer]&lt;value&gt;,
-                    $part-two
-                );
-            }
-            when 'jmp' {
-                accumulate(
-                    @instructions,
-                    $pointer + @instructions[$pointer]&lt;value&gt;,
-                    $accumulator,
-                    $part-two
-                );
-            }
-            when 'nop' {
-                accumulate(@instructions, $pointer + 1, $accumulator, $part-two);
-            }
+        my $a = @joltage-list[$pointer];
+        my $b = @joltage-list[$pointer + 1];
+        find-differences(@joltage-list, $pointer + 1, (|@differences, $b - $a));
+    }
+}
+
+sub find-paths($current-joltage, @joltage-list) is cached {   # [1]
+    given $current-joltage {
+        when * == @joltage-list.max { 1 }
+        when * ∉ @joltage-list      { 0 }                     # [2][3]
+        default {
+            find-paths($current-joltage + 1, @joltage-list) +
+            find-paths($current-joltage + 2, @joltage-list) + # [4]
+            find-paths($current-joltage + 3, @joltage-list);
         }
     }
 }
 
-
 sub MAIN($file, Bool :$p2 = False) {
-    my @cells = $file.IO.lines.map(-&gt; $line {
-        my ($operation, $value) = $line.split(' ');
-        { :$operation, value =&gt; $value.Int, :!visited }
-    });
+    my @adaptors = $file.IO.lines.map(*.Int).sort;
+    my $device-joltage = @adaptors.max + 3;
+    my @joltage-list = (0, |@adaptors, $device-joltage);
     if $p2 {
-        my @fixed-instructions = gather {
-            for @cells.kv -&gt; $index, %cell {
-                given %cell&lt;operation&gt;.Str {
-                    when /^[nop|jmp]$/ {                                               # [1]
-                        my @cells-copy = @cells.deepmap(-&gt; $entry is copy { $entry }); # [2]
-                        my %cell-copy = %cell.deepmap(-&gt; $entry is copy { $entry });
-                        when 'nop' {
-                            %cell-copy&lt;operation&gt; = 'jmp';
-                            @cells-copy[$index] = %cell-copy;
-                            take @cells-copy;
-                        }
-                        when 'jmp' {
-                            %cell-copy&lt;operation&gt; = 'nop';
-                            @cells-copy[$index] = %cell-copy;
-                            take @cells-copy;
-                        }
-                    }
-                }
-            }
-        };
-        say @fixed-instructions
-            .map(&amp;accumulate.assuming(*, 0, 0, $p2))
-            .grep(-&gt; @pair { @pair[1] eq 'Terminal' })
-            .head  # Gives us the first item in the above list
-            .head; # Gives us the number in the pair returned from `accumulate`
+        say find-paths(0, @joltage-list);
     } else {
-        say accumulate(@cells).head;
+        my @differences = find-differences(@joltage-list);
+        say @differences.grep(* == 1).elems * @differences.grep(* == 3).elems;
     }
 }
 </code></pre></div></div>
@@ -508,28 +437,37 @@ sub MAIN($file, Bool :$p2 = False) {
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
 $ raku main.raku input.txt
-1600
+2176
 
 # Part 2
 $ raku main.raku --p2 input.txt
-1543
+18512297918464
 </code></pre></div></div>
 
 <h4 id="explanation-1">Explanation</h4>
 
-<p>The logic here is fairly straightforward (albeit brute force) as well. Basically, we find all combinations of our input with a single code point change (<code class="language-plaintext highlighter-rouge">@fixed-instructions</code>), find <em>all</em> solutions to those codes (infinite and terminal), filter down to the terminal solution and print the output.</p>
+<p>There is a lot of fluff going on from part one that we can ignore. We generate the same <code class="language-plaintext highlighter-rouge">@joltage-list</code> and pass it to <code class="language-plaintext highlighter-rouge">find-paths</code> starting at <code class="language-plaintext highlighter-rouge">joltage = 0</code>. This subroutine does the following:</p>
 
-<p>The hard part here was copying <code class="language-plaintext highlighter-rouge">@cells</code> multiple times into <code class="language-plaintext highlighter-rouge">@fixed-instructions</code>. I ran into an issue where all of <code class="language-plaintext highlighter-rouge">@fixed-instructions</code> was pointing to the same memory address, so after traversing <code class="language-plaintext highlighter-rouge">@fixed-instructions[0]</code>, the rest of the inputs were tainted. This issue was fixed by the (awkward) <code class="language-plaintext highlighter-rouge">.deepmaps</code>. See #2 below for additional details.</p>
+<ol>
+  <li>If we have hit the max joltage (device joltage) mark this as a valid path (<code class="language-plaintext highlighter-rouge">1</code>)</li>
+  <li>If the joltage we are currently on is not in the set of adaptors, mark it as invalid (<code class="language-plaintext highlighter-rouge">0</code>)</li>
+  <li>Otherwise, recursively find the valid paths for any adaptors that could plug into this one (i.e. <code class="language-plaintext highlighter-rouge">n+1</code>, <code class="language-plaintext highlighter-rouge">n+2</code>, and <code class="language-plaintext highlighter-rouge">n+3</code>) and add them up</li>
+</ol>
+
+<p>This looks pretty brute-force, right? Well, that is where the <code class="language-plaintext highlighter-rouge">is cached</code> trait comes in. See #1 below for details!</p>
 
 <h5 id="specific-comments-1">Specific Comments</h5>
+
 <ol>
-  <li>Interestingly <code class="language-plaintext highlighter-rouge">when 'nop' || 'jmp'</code> does not work here. I suspect it has to do with the fact that <code class="language-plaintext highlighter-rouge">when</code> operates <a href="https://docs.raku.org/language/control#index-entry-control_flow__given-given">very eagerly</a> and as soon as it finds a match, it skips the rest of the lines of input. Generally that happens in a code block, but I guess it can happen in the <code class="language-plaintext highlighter-rouge">when</code> statement itself.</li>
-  <li>I knew I needed a mutable copy of the original input here. Originally I tried <code class="language-plaintext highlighter-rouge">@cells-copy = @cells</code>, but that didn’t work. Eventually I stumbled upon <code class="language-plaintext highlighter-rouge">.clone</code>, which it seems <a href="https://docs.raku.org/routine/clone"><em>intentionally</em> doesn’t work</a> on <code class="language-plaintext highlighter-rouge">@</code>- or <code class="language-plaintext highlighter-rouge">%</code>-sigiled variables. Finally, I <a href="https://stackoverflow.com/a/38585401/10696164">stumbled upon</a> this awkward <code class="language-plaintext highlighter-rouge">.deepcopy</code> syntax which is not only incredibly ugly, but also incredibly slow. For reference, part one runs in 0.48 seconds on my machine and part two runs in 28.7 seconds.</li>
+  <li>Coming from a Python background, I am familiar with <a href="https://docs.python.org/3/library/functools.html#functools.cache"><code class="language-plaintext highlighter-rouge">functools.cache</code></a>, a decorator that basically builds a dictionary of input to output such that expensive functions are only calculated once. Basically, the first call would compute the value and store it in the cache and any subsequent calls to that functions with the same input would use the cached value instead; this optimization is called <a href="https://en.wikipedia.org/wiki/Memoization">memoization</a>. In Raku, this is an <a href="https://docs.raku.org/language/experimental#cached">experimental trait</a> called <code class="language-plaintext highlighter-rouge">cached</code> which can be applied to subroutines to achieve the same memoization goal. Basically, the reason this is not a brute-force approach is because we will only compute <code class="language-plaintext highlighter-rouge">find-paths</code> once for each input rather than the traditional re-computing that can happen in recursive functions.</li>
+  <li>This is the first time using this operator, so I want to call it out: <code class="language-plaintext highlighter-rouge">∉</code> is the “element not part of set” operator.</li>
+  <li>This function could be optimized by <em>only</em> looking at joltages in the input list, but instead we just look at everything from <code class="language-plaintext highlighter-rouge">0..N</code>. If it is not in the input list, we just mark it as an invalid path.</li>
+  <li>Because <code class="language-plaintext highlighter-rouge">find-paths($current-joltage + 1, @joltage-list)</code> will recursively call more <code class="language-plaintext highlighter-rouge">find-paths</code> functions, this line uses the cache, so the only operation really happening here is the addition.</li>
 </ol>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>Today’s problem helped me get back on the functional Raku track after a <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-07/">frustrating day 7</a>. However, I am going to have to do more digging on copies of iterables in Raku, because a 60x performance decrease is not really acceptable for this kind of thing, especially when the input is relatively small (&lt;1000 lines).</p>
+<p>A lot of my solutions for the Advent of Code so far have been recursive (and relatively slow). I am glad I found out about the <code class="language-plaintext highlighter-rouge">is cached</code> trait, and I am looking forward to applying it to more solutions in the future!</p>
 
         
       </section>
@@ -582,7 +520,7 @@ $ raku main.raku --p2 input.txt
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-08T00:00:00-06:00">December 8, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-10T00:00:00-06:00">December 10, 2020</time></p>
 
 
       </footer>
@@ -592,23 +530,22 @@ $ raku main.raku --p2 input.txt
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+8%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-08%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+10%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-10%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-08%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-10%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-08%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-10%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/perl-weekly-challenge-090/" class="pagination--pager" title="Perl Weekly Challenge 90
+      <a href="/blog/advent-of-code-day-09/" class="pagination--pager" title="Advent of Code: Day 9
 ">Previous</a>
     
     
-      <a href="/blog/advent-of-code-day-09/" class="pagination--pager" title="Advent of Code: Day 9
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -622,51 +559,6 @@ $ raku main.raku --p2 input.txt
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-10/" rel="permalink">Advent of Code: Day 10
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-10T00:00:00-06:00">December 10, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          4 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me d...</p>
-  </article>
-</div>
-
         
           
 
@@ -711,6 +603,51 @@ $ raku main.raku --p2 input.txt
     <p class="archive__item-excerpt" itemprop="description">Today we have a classic sliding window problem. But, instead of the traditional iterative approach, we take a recursive approach.
 
 </p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-08/" rel="permalink">Advent of Code: Day 8
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-08T00:00:00-06:00">December 8, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of th...</p>
   </article>
 </div>
 

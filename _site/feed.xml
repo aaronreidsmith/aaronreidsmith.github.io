@@ -1,4 +1,144 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-09T08:54:17-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 9</title><link href="http://localhost:4000/blog/advent-of-code-day-09/" rel="alternate" type="text/html" title="Advent of Code: Day 9" /><published>2020-12-09T00:00:00-06:00</published><updated>2020-12-09T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-09</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-09/">&lt;p&gt;Today we have a classic &lt;a href=&quot;https://www.geeksforgeeks.org/window-sliding-technique/&quot;&gt;sliding window&lt;/a&gt; problem. But, instead of the traditional iterative approach, we take a recursive approach.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-10T09:28:42-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 10</title><link href="http://localhost:4000/blog/advent-of-code-day-10/" rel="alternate" type="text/html" title="Advent of Code: Day 10" /><published>2020-12-10T00:00:00-06:00</published><updated>2020-12-10T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-10</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-10/">&lt;p&gt;Part two today &lt;em&gt;almost&lt;/em&gt; forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;We are trying to plug our phone into the seat-back plug, but the problem is it puts out the wrong &lt;em&gt;joltage&lt;/em&gt;. We have a handful of adaptors labeled by their output joltage (our input), and our device is rated for 3 jolts above the maximum adaptor joltage. Each adaptor can be plugged into an adaptor 1-, 2-, or 3-jolts below it (i.e., a 4-jolt adaptor can plug into a 1-, 2- or 3-jolt plug).&lt;/p&gt;
+
+&lt;p&gt;We are bored on this flight, so, treating the seat-back outlet as zero jolts, we want to find a solution that uses &lt;em&gt;every&lt;/em&gt; adaptor we own. Once we have found the right sequence, we want to multiply the number of 1-jolt differences by the number of 3-jolt differences.&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/10/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub find-differences(@joltage, $pointer = 0, @differences = ()) {
+    if $pointer == @joltage.elems - 1 {
+        @differences;
+    } else {
+        my $a = @joltage[$pointer];
+        my $b = @joltage[$pointer + 1];
+        find-differences(@joltage, $pointer + 1, (|@differences, $b - $a));
+    }
+}
+
+sub MAIN($file) {
+    my @adaptors = $file.IO.lines.map(*.Int).sort;
+    my $device-joltage = @adaptors.max + 3;
+    my @joltage-list = (0, |@adaptors, $device-joltage); # [1]
+    my @differences = find-differences(@joltage-list);
+    say @differences.grep(* == 1).elems * @differences.grep(* == 3).elems;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+2176
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;The logic laid out in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; is pretty clear.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;We pull out all of our adaptors and sort them by output joltage&lt;/li&gt;
+  &lt;li&gt;We find out device voltage (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@adaptors.max + 3&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;We make our final joltage list including the outlet (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;) and our device&lt;/li&gt;
+  &lt;li&gt;We find all the differences between each adaptor&lt;/li&gt;
+  &lt;li&gt;We multiply the 1-joltage differences by the 3-joltage differences&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;I’ve used this before, but I wanted to call it out as it is used in a few places in this solution. This is called a &lt;a href=&quot;https://docs.raku.org/type/Slip&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Slip&lt;/code&gt;&lt;/a&gt;, which basically unpacks a list into the outer list. So this is a way of prepending and appending items to a list at the same time.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;Now that we have found the one solution that uses all adaptors, we want to find &lt;em&gt;all&lt;/em&gt; possible solutions that will connect our device to the plug. Looking at our adaptors we realize there must be more than a &lt;strong&gt;trillion&lt;/strong&gt; ways to arrange them, so we have to be smart about how we approach it.&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/10/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use experimental :cached;
+
+sub find-differences(@joltage-list, $pointer = 0, @differences = ()) {
+    if $pointer == @joltage-list.elems - 1 {
+        @differences;
+    } else {
+        my $a = @joltage-list[$pointer];
+        my $b = @joltage-list[$pointer + 1];
+        find-differences(@joltage-list, $pointer + 1, (|@differences, $b - $a));
+    }
+}
+
+sub find-paths($current-joltage, @joltage-list) is cached {   # [1]
+    given $current-joltage {
+        when * == @joltage-list.max { 1 }
+        when * ∉ @joltage-list      { 0 }                     # [2][3]
+        default {
+            find-paths($current-joltage + 1, @joltage-list) +
+            find-paths($current-joltage + 2, @joltage-list) + # [4]
+            find-paths($current-joltage + 3, @joltage-list);
+        }
+    }
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my @adaptors = $file.IO.lines.map(*.Int).sort;
+    my $device-joltage = @adaptors.max + 3;
+    my @joltage-list = (0, |@adaptors, $device-joltage);
+    if $p2 {
+        say find-paths(0, @joltage-list);
+    } else {
+        my @differences = find-differences(@joltage-list);
+        say @differences.grep(* == 1).elems * @differences.grep(* == 3).elems;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
+$ raku main.raku input.txt
+2176
+
+# Part 2
+$ raku main.raku --p2 input.txt
+18512297918464
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;There is a lot of fluff going on from part one that we can ignore. We generate the same &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@joltage-list&lt;/code&gt; and pass it to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find-paths&lt;/code&gt; starting at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;joltage = 0&lt;/code&gt;. This subroutine does the following:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;If we have hit the max joltage (device joltage) mark this as a valid path (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;If the joltage we are currently on is not in the set of adaptors, mark it as invalid (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;Otherwise, recursively find the valid paths for any adaptors that could plug into this one (i.e. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n+1&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n+2&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n+3&lt;/code&gt;) and add them up&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;This looks pretty brute-force, right? Well, that is where the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is cached&lt;/code&gt; trait comes in. See #1 below for details!&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Coming from a Python background, I am familiar with &lt;a href=&quot;https://docs.python.org/3/library/functools.html#functools.cache&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;functools.cache&lt;/code&gt;&lt;/a&gt;, a decorator that basically builds a dictionary of input to output such that expensive functions are only calculated once. Basically, the first call would compute the value and store it in the cache and any subsequent calls to that functions with the same input would use the cached value instead; this optimization is called &lt;a href=&quot;https://en.wikipedia.org/wiki/Memoization&quot;&gt;memoization&lt;/a&gt;. In Raku, this is an &lt;a href=&quot;https://docs.raku.org/language/experimental#cached&quot;&gt;experimental trait&lt;/a&gt; called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cached&lt;/code&gt; which can be applied to subroutines to achieve the same memoization goal. Basically, the reason this is not a brute-force approach is because we will only compute &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find-paths&lt;/code&gt; once for each input rather than the traditional re-computing that can happen in recursive functions.&lt;/li&gt;
+  &lt;li&gt;This is the first time using this operator, so I want to call it out: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;∉&lt;/code&gt; is the “element not part of set” operator.&lt;/li&gt;
+  &lt;li&gt;This function could be optimized by &lt;em&gt;only&lt;/em&gt; looking at joltages in the input list, but instead we just look at everything from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0..N&lt;/code&gt;. If it is not in the input list, we just mark it as an invalid path.&lt;/li&gt;
+  &lt;li&gt;Because &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find-paths($current-joltage + 1, @joltage-list)&lt;/code&gt; will recursively call more &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find-paths&lt;/code&gt; functions, this line uses the cache, so the only operation really happening here is the addition.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;A lot of my solutions for the Advent of Code so far have been recursive (and relatively slow). I am glad I found out about the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is cached&lt;/code&gt; trait, and I am looking forward to applying it to more solutions in the future!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!</summary></entry><entry><title type="html">Advent of Code: Day 9</title><link href="http://localhost:4000/blog/advent-of-code-day-09/" rel="alternate" type="text/html" title="Advent of Code: Day 9" /><published>2020-12-09T00:00:00-06:00</published><updated>2020-12-09T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-09</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-09/">&lt;p&gt;Today we have a classic &lt;a href=&quot;https://www.geeksforgeeks.org/window-sliding-technique/&quot;&gt;sliding window&lt;/a&gt; problem. But, instead of the traditional iterative approach, we take a recursive approach.&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -157,7 +297,7 @@ $ raku main.raku --p2 input.txt
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;I’m realizing how &lt;em&gt;slow&lt;/em&gt; Raku is (both to write and to run). It’s disappointing because Perl (Raku’s older brother) is slow to write, but at least it is fast to run (as far as interpreted languages go). I guess there is a reason &lt;a href=&quot;https://github.com/github/linguist/pull/5104#issuecomment-739561686&quot;&gt;fewer than 200&lt;/a&gt; are using it on GitHub. Regardless, I am committed to finishing the challenge I set forward for my self (barring Day 7 *shakes fist*). See y’all for day 10!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today we have a classic sliding window problem. But, instead of the traditional iterative approach, we take a recursive approach.</summary></entry><entry><title type="html">Advent of Code: Day 8</title><link href="http://localhost:4000/blog/advent-of-code-day-08/" rel="alternate" type="text/html" title="Advent of Code: Day 8" /><published>2020-12-08T00:00:00-06:00</published><updated>2020-12-08T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-08</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-08/">&lt;p&gt;Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end!&lt;/p&gt;
+&lt;p&gt;I’m realizing how &lt;em&gt;slow&lt;/em&gt; Raku is (both to write and to run). It’s disappointing because Perl (Raku’s older brother) is slow to write, but at least it is fast to run (as far as interpreted languages go). I guess there is a reason &lt;a href=&quot;https://github.com/github/linguist/pull/5104#issuecomment-739561686&quot;&gt;fewer than 200 people&lt;/a&gt; are using it on GitHub. Regardless, I am committed to finishing the challenge I set forward for myself (barring Day 7 *shakes fist*). See y’all for day 10!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today we have a classic sliding window problem. But, instead of the traditional iterative approach, we take a recursive approach.</summary></entry><entry><title type="html">Advent of Code: Day 8</title><link href="http://localhost:4000/blog/advent-of-code-day-08/" rel="alternate" type="text/html" title="Advent of Code: Day 8" /><published>2020-12-08T00:00:00-06:00</published><updated>2020-12-08T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-08</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-08/">&lt;p&gt;Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end!&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -1577,97 +1717,4 @@ $ raku main.raku --p2 input.txt
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Another functional and (in my opinion) beautiful solution! In my day job, I actually maintain a grammar defined using &lt;a href=&quot;https://www.antlr.org/&quot;&gt;ANTLR&lt;/a&gt;, so it is fun to see tools with the same concepts in other languages. Looking forward to getting to use grammars more in Raku. See y’all tomorrow!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!</summary></entry><entry><title type="html">Advent of Code: Day 1</title><link href="http://localhost:4000/blog/advent-of-code-day-01/" rel="alternate" type="text/html" title="Advent of Code: Day 1" /><published>2020-12-01T00:00:00-06:00</published><updated>2020-12-01T07:40:30-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-01</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-01/">&lt;p&gt;Turns out I started blogging just in time for the &lt;a href=&quot;https://adventofcode.com/&quot;&gt;Advent of Code&lt;/a&gt;, an annual series of daily challenges that run from December 1st to December 25th.&lt;/p&gt;
-
-&lt;p&gt;These problems remind me a lot of &lt;a href=&quot;https://projecteuler.net/&quot;&gt;Project Euler&lt;/a&gt;, because they are not concerned with the readability or speed of your code, just the output. That means that any goals one wishes to accomplish should be set personally (there &lt;em&gt;is&lt;/em&gt; technically a leaderboard, but I find you have to be online very late at night to catch the posts, and it is not worth the stress during the holiday season).&lt;/p&gt;
-
-&lt;p&gt;My goal, as you may have guessed from my previous posts, is to complete these challenges in &lt;em&gt;at least&lt;/em&gt; Raku and to do so utilizing a functional programming paradigm. Let’s dive into day 1 and see if I can do it!&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;p&gt;I am not going to copy and paste the explanation of the problem here like I do for the Perl Weekly Challenge, because it is &lt;em&gt;so&lt;/em&gt; long, and I want to encourage users to go attempt the challenge themselves! Instead, I will write a summary of what the challenge is and my solution.&lt;/p&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;Given a file full of integers (one per line), find the single pair of integers that adds up to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2020&lt;/code&gt;, then find the product of those two numbers.&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
-    say $file.IO.lines                           # [1]
-          .combinations(2)                       # [2]
-          .grep(-&amp;gt; ($a, $b) { $a + $b == 2020 }) # [3]
-          .map(-&amp;gt; ($a, $b) { $a * $b })          # [4]
-          .head;                                 # [5]
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-1020036
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;This is fairly straight forward, and I feel Raku reads very cleanly. Basically, we read the entire file into a list (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IO.lines&lt;/code&gt;), then find all the pairs in that list, filter those pairs down to where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$a + $b == 2020&lt;/code&gt;, then multiply those two numbers together!&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;I’m a sucker for good IO. I feel reading/writing files in languages like Java or Scala is so cumbersome that I try to avoid it at all costs. Languages like Raku were &lt;em&gt;built&lt;/em&gt; for text manipulation, so it makes sense that the IO is great, but I just wanted to call out how easy it is to get the lines of a file in a list.&lt;/li&gt;
-  &lt;li&gt;As I said in my &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-089/#specific-comments&quot;&gt;previous post&lt;/a&gt;, I see the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;combinations&lt;/code&gt; feature coming back a lot in these puzzles. I love that it is built right in.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;grep&lt;/code&gt; is familiar to most &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*nix&lt;/code&gt; users, and it is the equivalent of a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;filter&lt;/code&gt; in more traditional functional languages. In this case, we are filtering down to only pairs that add up to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2020&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;At this point this list looks like this: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(($a, $b))&lt;/code&gt;, so we still want to map over the outer list and multiply the pair together.&lt;/li&gt;
-  &lt;li&gt;Since &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt; returns a list, we need to grab the first item from that list for pretty printing.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;Given the same file as before, find the &lt;em&gt;3&lt;/em&gt; numbers that add up to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2020&lt;/code&gt; and find their product.&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file, Bool :$p2 = False) {                # [1]
-    say $file.IO.lines
-          .combinations($p2 ?? 3 !! 2)              # [2]
-          .grep(-&amp;gt; @combo { ([+] @combo) == 2020 }) # [3]
-          .map(-&amp;gt; @combo { [*] @combo })
-          .head;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
-$ raku main.raku input.txt
-1020036
-
-# Part 2
-$ raku main.raku --p2 input.txt
-286977330
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;Since it is basically the same problem, it only makes sense to modify the script we have already written rather than starting from scratch. Basically, everywhere where we hardcoded &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$a, $b&lt;/code&gt; needs to be generalized to some list. In this case, we added a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p2&lt;/code&gt; CLI flag that allows the users to specify if they are doing part 1 or part 2. If they are doing part 2 we find trios instead of pairs, then perform the same “business logic” on that collection.&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:$p2&lt;/code&gt; notation says to Raku “create a command line flag called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--p2&lt;/code&gt; and assign it to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$p2&lt;/code&gt; with a default of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;False&lt;/code&gt;”. Creating command line interfaces can be kind of a pain in a lot of languages, so I am happy that is built right into the language.&lt;/li&gt;
-  &lt;li&gt;This is the check to see if we are doing part 1 or part 2. Raku’s ternary operator is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;condition ?? true !! false&lt;/code&gt; rather than the traditional &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;condition ? true : false&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Since we have to remove all the pair hard-coding, we can generalize it as a list called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@combo&lt;/code&gt; and then just find the sum of the entire combo using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[+]&lt;/code&gt; meta operator. We perform a similar generalization for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt; step.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;So far so good with my goal to write Raku solutions functionally! Check my &lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code&quot;&gt;GitHub&lt;/a&gt; to see any other solutions (and any other languages, if I get around to them). This was a fun little dip into the Advent of Code, and I am looking forward to the rest of the month!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.</summary></entry></feed>
+&lt;p&gt;Another functional and (in my opinion) beautiful solution! In my day job, I actually maintain a grammar defined using &lt;a href=&quot;https://www.antlr.org/&quot;&gt;ANTLR&lt;/a&gt;, so it is fun to see tools with the same concepts in other languages. Looking forward to getting to use grammars more in Raku. See y’all tomorrow!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!</summary></entry></feed>
