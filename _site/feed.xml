@@ -1,4 +1,278 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-10T09:28:42-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 10</title><link href="http://localhost:4000/blog/advent-of-code-day-10/" rel="alternate" type="text/html" title="Advent of Code: Day 10" /><published>2020-12-10T00:00:00-06:00</published><updated>2020-12-10T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-10</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-10/">&lt;p&gt;Part two today &lt;em&gt;almost&lt;/em&gt; forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-11T15:51:01-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 11</title><link href="http://localhost:4000/blog/advent-of-code-day-11/" rel="alternate" type="text/html" title="Advent of Code: Day 11" /><published>2020-12-11T00:00:00-06:00</published><updated>2020-12-11T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-11</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-11/">&lt;p&gt;I am giving myself half credit for today; the solution I came up with &lt;em&gt;is&lt;/em&gt; in Raku, but it is an iterative solution. Additionally, this solution is &lt;em&gt;slow&lt;/em&gt;. In fact, it was so slow that in between runs I was able to write a &lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/11/python/main.py&quot;&gt;Python solution&lt;/a&gt; (with the same logic) that ran much faster.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;We finally landed, and the last leg of our journey is via ferry, and we are all spilling into the waiting area right now. We are trying to find the best place to sit, so we make a quick sketch of the seat map in the waiting area (our input). Here is an example:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;L.LL.LL.LL
+LLLLLLL.LL
+L.L.L..L..
+LLLL.LL.LL
+L.LL.LL.LL
+L.LLLLL.LL
+..L.L.....
+LLLLLLLLLL
+L.LLLLLL.L
+L.LLLLL.LL
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Each position is either floor (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.&lt;/code&gt;), an empty seat (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;L&lt;/code&gt;) or an occupied seat (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;We are apparently traveling with a bunch of psychopaths who adhere to the following rules when finding a seat. For these rules the term “neighbor” is used to describe any of the eight seats (vertically, horizontally, and diagonally) immediately adjacent to the target chair.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;If the seat is empty and zero neighbors are occupied, the seat becomes occupied&lt;/li&gt;
+  &lt;li&gt;If the seat is occupied and four or more neighbors are occupied, the seat becomes empty&lt;/li&gt;
+  &lt;li&gt;Otherwise, the seat stays the same.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The interesting thing about the layout is that (following the above rules) it will &lt;em&gt;eventually&lt;/em&gt; reach a steady state. How many seats are occupied when it reaches steady state?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/11/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;enum SeatState &amp;lt;Occupied Empty Floor&amp;gt;; # [1]
+
+sub find-equilibrium(@state) {
+    my ($max-row, $max-col) = @state.elems, @state[0].elems;
+    my @directions = (
+        (-1, 0), # N
+        (-1, 1), # NE
+        (0, 1),  # E
+        (1, 1),  # SE
+        (1, 0),  # S
+        (1, -1), # SW
+        (0, -1), # W
+        (-1, -1) # NW
+    );
+
+    sub occupied-neighbors(@seat-map, $row, $col) {
+        sub neighbor(@direction) {
+            my ($new-row, $new-col) = $row, $col;
+            loop {
+                $new-row += @direction[0];
+                $new-col += @direction[1];
+                if ($new-row &amp;lt; 0 || $new-row &amp;gt;= $max-row || $new-col &amp;lt; 0 || $new-col &amp;gt;= $max-col) {
+                    return 'Out of Bounds';
+                } else {
+                    return @seat-map[$new-row][$new-col]; # [2]
+                }
+            }
+        }
+        @directions.map(&amp;amp;neighbor).grep(* eq Occupied).elems;
+    }
+
+    my @old-state;
+    while @old-state ne @state {
+        @old-state = @state;
+        @state = ();
+        for ^$max-row -&amp;gt; $row {
+            my @new-row;
+            for ^$max-col -&amp;gt; $col {
+                my $current-seat = @old-state[$row][$col];
+                my $occupied-neighbors = occupied-neighbors(@old-state, $row, $col);
+                if $current-seat eq Empty &amp;amp;&amp;amp; $occupied-neighbors == 0 {
+                    @new-row.push(Occupied);
+                } elsif $current-seat eq Occupied &amp;amp;&amp;amp; $occupied-neighbors &amp;gt;= 4 {
+                    @new-row.push(Empty);
+                } else {
+                    @new-row.push($current-seat);
+                }
+            }
+            @state.push(@new-row);
+        }
+    }
+    @old-state[*;*].grep(* eq Occupied).elems; # [3][4]
+}
+
+
+sub MAIN($file) {
+    my @seats = $file.IO.lines.map(-&amp;gt; $line {
+        $line.comb.map(-&amp;gt; $char {
+            given $char {
+                when '#' { Occupied }
+                when 'L' { Empty }
+                when '.' { Floor }
+            }
+        })
+    });
+    say find-equilibrium(@seats);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+2152
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;The logic here is basically as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;First, make a 2D array of the input, where each cell is a valid &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SeatState&lt;/code&gt; (no use passing those cryptic characters around) and pass that to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find-equilibrium&lt;/code&gt; subroutine.&lt;/li&gt;
+  &lt;li&gt;In the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find-equilibrium&lt;/code&gt; subroutine, we basically iterate until &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@old-state&lt;/code&gt; equals &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@state&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;For each cell we find count the occupied neighbors and the apply the rules (by comparing to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@old-state&lt;/code&gt;):
+    &lt;ul&gt;
+      &lt;li&gt;If the current seat is&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Empty&lt;/code&gt; and the neighbors areall &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Empty&lt;/code&gt;, make it &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Occupied&lt;/code&gt;.&lt;/li&gt;
+      &lt;li&gt;If the current seat is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Occupied&lt;/code&gt; and four or more neighbors are &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Occupied&lt;/code&gt;, make it &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Empty&lt;/code&gt;.&lt;/li&gt;
+      &lt;li&gt;Otherwise, leave it alone.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Finally, we count up the occupied cells.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;I just used an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;enum&lt;/code&gt; for clarity when reading this; it makes it a lot easier to understand than something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if $seat eq '#'&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;This is one of the few times you will see me use an explicit &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;return&lt;/code&gt; in Raku (especially functional Raku). In general, the last statement evaluated in the block is the return value. But, since we have an infinite &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;loop&lt;/code&gt;, we have to add the explicit &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;return&lt;/code&gt; statements here.&lt;/li&gt;
+  &lt;li&gt;This is the Raku way to &lt;a href=&quot;https://docs.raku.org/language/subscripts#index-entry-flattening_&quot;&gt;flatten a 2D list&lt;/a&gt;. If it were a 3D list, we would do &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@list[*;*;*]&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;==&lt;/code&gt; is only used for numbers in Raku; everything else should us &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eq&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ne&lt;/code&gt;, etc.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;We realize that the pattern the pattern the waiting passengers is following is not actually as simple as we made it.&lt;/p&gt;
+
+&lt;p&gt;They are actually looking for the &lt;em&gt;first seat they can see&lt;/em&gt; in all eight directions rather than just the eight adjacent chairs. For example, the empty chair below would see eight occupied seats:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.......#.
+...#.....
+.#.......
+.........
+..#L....#
+....#....
+.........
+#........
+...#.....
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Additionally, people seem to be more tolerant than expected and will only vacate their seat if &lt;strong&gt;five or more&lt;/strong&gt; occupied seats are visible. How many seats are occupied at steady state now?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/11/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;enum SeatState &amp;lt;Occupied Empty Floor&amp;gt;;
+
+sub find-equilibrium(@state, Int $min-occupied, Bool $only-immediate) {
+    my ($max-row, $max-col) = @state.elems, @state[0].elems;
+    my @directions = (
+        (-1, 0), # N
+        (-1, 1), # NE
+        (0, 1),  # E
+        (1, 1),  # SE
+        (1, 0),  # S
+        (1, -1), # SW
+        (0, -1), # W
+        (-1, -1) # NW
+    );
+
+    sub occupied-neighbors(@seat-map, $row, $col) {
+        sub neighbor(@direction) {
+            my ($new-row, $new-col) = $row, $col;
+            my $valid-seats = Set[SeatState].new(Occupied, Empty);
+            loop {
+                $new-row += @direction[0];
+                $new-col += @direction[1];
+                if ($new-row &amp;lt; 0 || $new-row &amp;gt;= $max-row || $new-col &amp;lt; 0 || $new-col &amp;gt;= $max-col) {
+                    return 'Out of Bounds';
+                } else {
+                    my $seat = @seat-map[$new-row][$new-col];
+                    if $seat ∈ $valid-seats || $only-immediate {
+                        return $seat;
+                    }
+                }
+            }
+        }
+        @directions.map(&amp;amp;neighbor).grep(* eq Occupied).elems;
+    }
+
+    my @old-state;
+    while @old-state ne @state {
+        @old-state = @state;
+        @state = ();
+        for ^$max-row -&amp;gt; $row {
+            my @new-row;
+            for ^$max-col -&amp;gt; $col {
+                my $current-seat = @old-state[$row][$col];
+                my $occupied-neighbors = occupied-neighbors(@old-state, $row, $col);
+                if $current-seat eq Empty &amp;amp;&amp;amp; $occupied-neighbors == 0 {
+                    @new-row.push(Occupied);
+                } elsif $current-seat eq Occupied &amp;amp;&amp;amp; $occupied-neighbors &amp;gt;= $min-occupied {
+                    @new-row.push(Empty);
+                } else {
+                    @new-row.push($current-seat);
+                }
+            }
+            @state.push(@new-row);
+        }
+    }
+    @old-state[*;*].grep(* eq Occupied).elems;
+}
+
+
+sub MAIN($file, Bool :$p2 = False) {
+    my @seats = $file.IO.lines.map(-&amp;gt; $line {
+        $line.comb.map(-&amp;gt; $char {
+            given $char {
+                when '#' { Occupied }
+                when 'L' { Empty }
+                when '.' { Floor }
+            }
+        })
+    });
+    my $min-occupied = $p2 ?? 5 !! 4;
+    my $only-immediate = !$p2;
+    say find-equilibrium(@seats, $min-occupied, $only-immediate);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
+$ raku main.raku input.txt
+2152
+
+# Part 2
+$ raku main.raku --p2 input.txt
+1937
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;This code looks almost the same. Here are the &lt;em&gt;only&lt;/em&gt; changes to the code:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find-equilibrium&lt;/code&gt; now takes two additional parameters:
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$min-occupied&lt;/code&gt;: How many nearby seats need to be occupied for someone to vacate theirs.&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$only-immediate&lt;/code&gt;: Whether or not we should only look at the eight immediate neighbors.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;elsif&lt;/code&gt; block has been changed to utilize &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$min-occupied&lt;/code&gt; instead of being hard-coded to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;4&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; subroutine will define &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$min-occupied&lt;/code&gt; as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5&lt;/code&gt; if it’s part two, otherwise &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;4&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; subroutine will define &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$only-immediate&lt;/code&gt; as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;False&lt;/code&gt; if it’s part two, otherwise &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;That’s it!&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;p&gt;Nothing for part two!&lt;/p&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;This solution is just begging to be done iteratively, so I can’t blame myself too much for naturally leaning towards an iterative approach. With that being said, I would love to see some functional approaches to this just to better my understanding of the functional mindset.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">I am giving myself half credit for today; the solution I came up with is in Raku, but it is an iterative solution. Additionally, this solution is slow. In fact, it was so slow that in between runs I was able to write a Python solution (with the same logic) that ran much faster.</summary></entry><entry><title type="html">Advent of Code: Day 10</title><link href="http://localhost:4000/blog/advent-of-code-day-10/" rel="alternate" type="text/html" title="Advent of Code: Day 10" /><published>2020-12-10T00:00:00-06:00</published><updated>2020-12-10T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-10</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-10/">&lt;p&gt;Part two today &lt;em&gt;almost&lt;/em&gt; forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -1541,180 +1815,4 @@ $ raku main.raku --p2 input.txt
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;I felt this problem came very serendipitously; I was &lt;em&gt;just&lt;/em&gt; reading about the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xx&lt;/code&gt; operators last night, so I am glad I got to put them to use. Recursion (and more specifically tail recursion) is always a fun approach, and it let us tackle this problem functionally. 3 for 3! Let’s see what tomorrow brings.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion.</summary></entry><entry><title type="html">Advent of Code: Day 2</title><link href="http://localhost:4000/blog/advent-of-code-day-02/" rel="alternate" type="text/html" title="Advent of Code: Day 2" /><published>2020-12-02T00:00:00-06:00</published><updated>2020-12-02T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-02</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-02/">&lt;p&gt;We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;Given a file full of lines that look like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1-3 a: ababa
-10-14 q: qqqqqqqqq
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Which can be interpreted as a password policy that reads as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The password &quot;ababa&quot; must contain between 1 and 3 (inclusive) &quot;a&quot; characters
-The password &quot;qqqqqqqqqq&quot; must contain between 10 and 14 (inclusive) &quot;q&quot; characters
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Our job is to find how many passwords are &lt;strong&gt;valid&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grammar PasswordEntry {
-    token TOP { ^(&amp;lt;digit&amp;gt;+)'-'(&amp;lt;digit&amp;gt;+) &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;)':' &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;+)$ } # [1]
-}
-
-grammar PasswordEntryActions {
-    method TOP($/) {                                                          # [2]
-        my $range-start  = $/[0].Int;
-        my $range-end    = $/[1].Int;
-        my $target       = $/[2].Str;
-        my $password     = $/[3].Str;
-        my $target-count = $password.comb($target).elems;                     # [3]
-        make so $range-start &amp;lt;= $target-count &amp;amp;&amp;amp; $target-count &amp;lt;= $range-end;
-    }
-}
-
-sub MAIN($file) {
-    my $actions = PasswordEntryActions.new;
-    say $file.IO.lines
-          .map(-&amp;gt; $row { PasswordEntry.parse($row, :$actions).made }) # [4]
-          .grep(* == True)                                            # [5]
-          .elems;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-393
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;We do a couple of things here:&lt;/p&gt;
-
-&lt;p&gt;First we pull in all the lines in the file, then parse them using our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PasswordEntry&lt;/code&gt; grammar. See below for the explanation on the grammar.&lt;/p&gt;
-
-&lt;p&gt;When we parse each line, we specify what actions should take place with the parsed text (in this case, we pass it to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PasswordEntryActions&lt;/code&gt; to do post-processing). &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PasswordEntryActions&lt;/code&gt; takes the input (a &lt;a href=&quot;https://docs.raku.org/type/Match&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Match&lt;/code&gt;&lt;/a&gt; object), and determines if the parsed password contains the right number of target characters.&lt;/p&gt;
-
-&lt;p&gt;These are then filtered down to only those that &lt;em&gt;do&lt;/em&gt; contain the right number of characters (valid passwords) and counted.&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;We could just define a regex like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;my $regex = /pattern/&lt;/code&gt;, but I wanted to combine the parse step &lt;em&gt;and&lt;/em&gt; the business logic of determining if it is a valid password; we will get into that second part below.
-    &lt;ul&gt;
-      &lt;li&gt;When defining a grammar, you always have to define a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TOP&lt;/code&gt; token the encompasses everything. If I had a more complex grammar, I could define subtokens that could be used in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TOP&lt;/code&gt; token (or any other defined tokens).&lt;/li&gt;
-      &lt;li&gt;For the non-regex folks, the way this reads is:
-        &lt;ul&gt;
-          &lt;li&gt;Start of line&lt;/li&gt;
-          &lt;li&gt;An integer (captured group, see below)&lt;/li&gt;
-          &lt;li&gt;Followed by a dash&lt;/li&gt;
-          &lt;li&gt;Followed by an integer (captured group, see below)&lt;/li&gt;
-          &lt;li&gt;Followed by a space&lt;/li&gt;
-          &lt;li&gt;Followed by a single lowercase letter (captured group, see below)&lt;/li&gt;
-          &lt;li&gt;Followed by a colon&lt;/li&gt;
-          &lt;li&gt;Followed by a space&lt;/li&gt;
-          &lt;li&gt;Followed by one or more lowercase letters (captured group, see below)&lt;/li&gt;
-          &lt;li&gt;End of line&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;Additionally, you’ll notice the four sets of parentheses that define &lt;em&gt;capture groups&lt;/em&gt;, meaning when this grammar parses a line successfully, it will return the four groups in an array.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;When we use the parser (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PasswordEntry.parse&lt;/code&gt;), we are able to supply this &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;actions&lt;/code&gt; class that has methods corresponding to the tokens in the parser. This is where any business logic should take place. For example, any type casting or object creation to be used in the outer scope. In this case, like I said above, we want to parse and reduce to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;False&lt;/code&gt; in one pass. So what our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TOP&lt;/code&gt; method does is take the match &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$/&lt;/code&gt; (this is a special variable, I would never name something like this), extract the four groups defined in the grammar, and cast them to the correct types. We then count the number of times the target appears in the password and see if it is in range.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;comb&lt;/code&gt; takes a string and turns it into a list of characters. When supplied with a string argument (in this case, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$target&lt;/code&gt;), it turns the string into a list &lt;em&gt;and&lt;/em&gt; filters it down to elements that equal the supplied character.&lt;/li&gt;
-  &lt;li&gt;There is some special syntax happening on this line. I could have written &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PasswordEntry.parse($row, actions =&amp;gt; $actions)&lt;/code&gt;, and used &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$actions&lt;/code&gt; as a named keyword. But, since my variable has the same name as the target argument, I am able to pass it in as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:$actions&lt;/code&gt;. It reminds me of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;**kwargs&lt;/code&gt; in Python.&lt;/li&gt;
-  &lt;li&gt;I &lt;em&gt;hate&lt;/em&gt; that I have to say &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;* == True&lt;/code&gt;, but &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;grep&lt;/code&gt; would not work otherwise, so I guess that is just an edge case.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;Given the same file as before, the interpretation of the lines has changed. Given the same lines as above, the interpretation should now be:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The password &quot;ababa&quot; must contain an &quot;a&quot; character in position 1 or 3 (but not both)
-The password &quot;qqqqqqqqqq&quot; must contain a &quot;q&quot; character in position 10 or 14 (but not both)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; These strings are 1-indexed instead of 0-indexed, so we have to account for that.&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grammar PasswordEntry {
-    token TOP { ^(&amp;lt;digit&amp;gt;+)'-'(&amp;lt;digit&amp;gt;+) &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;)':' &amp;lt;.ws&amp;gt; (&amp;lt;[a..z]&amp;gt;+)$ }
-}
-
-class PartOneActions {
-    method TOP($/) {
-        my $range-start  = $/[0].Int;
-        my $range-end    = $/[1].Int;
-        my $target       = $/[2].Str;
-        my $password     = $/[3].Str;
-        my $target-count = $password.comb($target).elems;
-        make so $range-start &amp;lt;= $target-count &amp;amp;&amp;amp; $target-count &amp;lt;= $range-end;
-    }
-}
-
-class PartTwoActions {
-    method TOP($/) {
-        my $position-one = $/[0].Int - 1;
-        my $position-two = $/[1].Int - 1;
-        my $target       = $/[2].Str;
-        my @password     = $/[3].Str.comb;
-        make so (
-            (@password[$position-one] cmp $target) == Same # [1][2]
-            xor                                            # [3]
-            (@password[$position-two] cmp $target) == Same
-        );
-    }
-}
-
-sub MAIN($file, Bool :$p2 = False) {
-    my $actions = $p2 ?? PartTwoActions.new !! PartOneActions.new;
-    say $file.IO.lines
-          .map(-&amp;gt; $row { PasswordEntry.parse($row, :$actions).made })
-          .grep(* == True)
-          .elems;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
-$ raku main.raku input.txt
-393
-
-# Part 2
-$ raku main.raku --p2 input.txt
-690
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;Similarly to &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-01/&quot;&gt;day 1&lt;/a&gt;, we can utilize the code already written and tweak it a little bit. In this case, the grammar stays the same, but the actions taken on each line need to change.&lt;/p&gt;
-
-&lt;p&gt;Again, we provide the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--p2&lt;/code&gt; flag, and then add the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PartTwoActions&lt;/code&gt; class to handle the business logic for the new interpretation of the password policy.&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;I had to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cmp&lt;/code&gt; instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;==&lt;/code&gt; here to get proper string comparison (otherwise, Raku tries to cast strings to hexadecimal).&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cmp&lt;/code&gt; returns &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Less&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;More&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Same&lt;/code&gt; instead of a boolean. I couldn’t find a way to cast &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Same&lt;/code&gt; to a boolean, because it casts it as such &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Same -&amp;gt; 0 -&amp;gt; False&lt;/code&gt;, when what we really want is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt;, so I had to add the ugly &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;== Same&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; is a junction operator in Raku, so it has the handy dandy &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xor&lt;/code&gt; operator utilized here.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;Another functional and (in my opinion) beautiful solution! In my day job, I actually maintain a grammar defined using &lt;a href=&quot;https://www.antlr.org/&quot;&gt;ANTLR&lt;/a&gt;, so it is fun to see tools with the same concepts in other languages. Looking forward to getting to use grammars more in Raku. See y’all tomorrow!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">We’re back again with another functional Raku solution! This problem requires some text parsing as well, which is where Raku (and its older brother Perl) really shine, so that was quite a bit of fun to utilize. Let’s dive right in!</summary></entry></feed>
+&lt;p&gt;I felt this problem came very serendipitously; I was &lt;em&gt;just&lt;/em&gt; reading about the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xx&lt;/code&gt; operators last night, so I am glad I got to put them to use. Recursion (and more specifically tail recursion) is always a fun approach, and it let us tackle this problem functionally. 3 for 3! Let’s see what tomorrow brings.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion.</summary></entry></feed>
