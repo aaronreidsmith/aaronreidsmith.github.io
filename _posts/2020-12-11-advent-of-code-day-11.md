@@ -13,9 +13,30 @@ I am giving myself half credit for today; the solution I came up with _is_ in Ra
 
 ### Part 1
 
-We are trying to plug our phone into the seat-back plug, but the problem is it puts out the wrong _joltage_. We have a handful of adaptors labeled by their output joltage (our input), and our device is rated for 3 jolts above the maximum adaptor joltage. Each adaptor can be plugged into an adaptor 1-, 2-, or 3-jolts below it (i.e., a 4-jolt adaptor can plug into a 1-, 2- or 3-jolt plug).
+We finally landed, and the last leg of our journey is via ferry, and we are all spilling into the waiting area right now. We are trying to find the best place to sit, so we make a quick sketch of the seat map in the waiting area (our input). Here is an example:
 
-We are bored on this flight, so, treating the seat-back outlet as zero jolts, we want to find a solution that uses _every_ adaptor we own. Once we have found the right sequence, we want to multiply the number of 1-jolt differences by the number of 3-jolt differences.
+```
+L.LL.LL.LL
+LLLLLLL.LL
+L.L.L..L..
+LLLL.LL.LL
+L.LL.LL.LL
+L.LLLLL.LL
+..L.L.....
+LLLLLLLLLL
+L.LLLLLL.L
+L.LLLLL.LL
+```	
+
+Each position is either floor (`.`), an empty seat (`L`) or an occupied seat (`#`).
+
+We are apparently traveling with a bunch of psychopaths who adhere to the following rules when finding a seat. For these rules the term "neighbor" is used to describe any of the eight seats (vertically, horizontally, and diagonally) immediately adjacent to the target chair. 
+
+- If the seat is empty and zero neighbors are occupied, the seat becomes occupied
+- If the seat is occupied and four or more neighbors are occupied, the seat becomes empty
+- Otherwise, the seat stays the same.
+
+The interesting thing about the layout is that (following the above rules) it will _eventually_ reach a steady state. How many seats are occupied when it reaches steady state?
 
 #### Solution
 
@@ -24,7 +45,7 @@ We are bored on this flight, so, treating the seat-back outlet as zero jolts, we
 See below for explanation and any implementation-specific comments.
 
 ```
-enum SeatState <Occupied Empty Floor>;
+enum SeatState <Occupied Empty Floor>; # [1]
 
 sub find-equilibrium(@state) {
     my ($max-row, $max-col) = @state.elems, @state[0].elems;
@@ -48,7 +69,7 @@ sub find-equilibrium(@state) {
                 if ($new-row < 0 || $new-row >= $max-row || $new-col < 0 || $new-col >= $max-col) {
                     return 'Out of Bounds';
                 } else {
-                    return @seat-map[$new-row][$new-col];
+                    return @seat-map[$new-row][$new-col]; # [2]
                 }
             }
         }
@@ -75,7 +96,7 @@ sub find-equilibrium(@state) {
             @state.push(@new-row);
         }
     }
-    @old-state[*;*].grep(* eq Occupied).elems;
+    @old-state[*;*].grep(* eq Occupied).elems; # [3][4]
 }
 
 
@@ -102,9 +123,42 @@ $ raku main.raku input.txt
 
 #### Explanation
 
+The logic here is basically as follows:
+
+1. First, make a 2D array of the input, where each cell is a valid `SeatState` (no use passing those cryptic characters around) and pass that to the `find-equilibrium` subroutine.
+2. In the `find-equilibrium` subroutine, we basically iterate until `@old-state` equals `@state`.
+3. For each cell we find count the occupied neighbors and the apply the rules (by comparing to `@old-state`):
+  - If the current seat is`Empty` and the neighbors areall `Empty`, make it `Occupied`.
+  - If the current seat is `Occupied` and four or more neighbors are `Occupied`, make it `Empty`.
+  - Otherwise, leave it alone.
+4. Finally, we count up the occupied cells.
+
 ##### Specific Comments
 
+1. I just used an `enum` for clarity when reading this; it makes it a lot easier to understand than something like `if $seat eq '#'`.
+2. This is one of the few times you will see me use an explicit `return` in Raku (especially functional Raku). In general, the last statement evaluated in the block is the return value. But, since we have an infinite `loop`, we have to add the explicit `return` statements here.
+3. This is the Raku way to [flatten a 2D list](https://docs.raku.org/language/subscripts#index-entry-flattening_). If it were a 3D list, we would do `@list[*;*;*]`.
+4. `==` is only used for numbers in Raku; everything else should us `eq`, `ne`, etc.
+
 ### Part 2
+
+We realize that the pattern the pattern the waiting passengers is following is not actually as simple as we made it.
+
+They are actually looking for the _first seat they can see_ in all eight directions rather than just the eight adjacent chairs. For example, the empty chair below would see eight occupied seats:
+
+```
+.......#.
+...#.....
+.#.......
+.........
+..#L....#
+....#....
+.........
+#........
+...#.....
+```
+
+Additionally, people seem to be more tolerant than expected and will only vacate their seat if **five or more** occupied seats are visible. How many seats are occupied at steady state now?
 
 #### Solution
 
@@ -202,7 +256,22 @@ $ raku main.raku --p2 input.txt
 
 #### Explanation
 
+This code looks almost the same. Here are the _only_ changes to the code:
+
+1. `find-equilibrium` now takes two additional parameters:
+	- `$min-occupied`: How many nearby seats need to be occupied for someone to vacate theirs.
+	- `$only-immediate`: Whether or not we should only look at the eight immediate neighbors.
+2. The `elsif` block has been changed to utilize `$min-occupied` instead of being hard-coded to `4`.
+3. The `MAIN` subroutine will define `$min-occupied` as `5` if it's part two, otherwise `4`.
+4. The `MAIN` subroutine will define `$only-immediate` as `False` if it's part two, otherwise `True`.
+
+That's it!
+
 ##### Specific Comments
 
+Nothing for part two!
+
 ## Final Thoughts
+
+This solution is just begging to be done iteratively, so I can't blame myself too much for naturally leaning towards an iterative approach. With that being said, I would love to see some functional approaches to this just to better my understanding of the functional mindset.
 

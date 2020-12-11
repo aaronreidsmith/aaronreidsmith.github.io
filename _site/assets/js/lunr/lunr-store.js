@@ -76,4 +76,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-10/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 11",
+        "excerpt":"I am giving myself half credit for today; the solution I came up with is in Raku, but it is an iterative solution. Additionally, this solution is slow. In fact, it was so slow that in between runs I was able to write a Python solution (with the same logic)...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-11/",
+        "teaser": null
       }]
