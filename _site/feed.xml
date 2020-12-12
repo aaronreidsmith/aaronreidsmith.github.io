@@ -1,4 +1,272 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-11T15:51:01-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 11</title><link href="http://localhost:4000/blog/advent-of-code-day-11/" rel="alternate" type="text/html" title="Advent of Code: Day 11" /><published>2020-12-11T00:00:00-06:00</published><updated>2020-12-11T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-11</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-11/">&lt;p&gt;I am giving myself half credit for today; the solution I came up with &lt;em&gt;is&lt;/em&gt; in Raku, but it is an iterative solution. Additionally, this solution is &lt;em&gt;slow&lt;/em&gt;. In fact, it was so slow that in between runs I was able to write a &lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/11/python/main.py&quot;&gt;Python solution&lt;/a&gt; (with the same logic) that ran much faster.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-12T14:04:26-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 12</title><link href="http://localhost:4000/blog/advent-of-code-day-12/" rel="alternate" type="text/html" title="Advent of Code: Day 12" /><published>2020-12-12T00:00:00-06:00</published><updated>2020-12-12T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-12</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-12/">&lt;p&gt;Today was the first day where I didn’t use the same code for parts one and two – they were just too different! Other than that, this is a classic recursive solution with a hint of middle school algebra.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;We finally got on the ferry to our vacation destination after the &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-11/&quot;&gt;day 11&lt;/a&gt; nonsense. However, we hit a patch of bad weather that knocked the navigation computer out. Luckily, as it was dying, it printed out its final instructions, and the captain needs help interpreting what it produced.&lt;/p&gt;
+
+&lt;p&gt;The instructions (our input) consist of single-character actions followed by values. Here is an example followed by our interpretation for the captain:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;F10
+N3
+F7
+R90
+F11
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Action &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; means to move north by the given value.&lt;/li&gt;
+  &lt;li&gt;Action &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;S&lt;/code&gt; means to move south by the given value.&lt;/li&gt;
+  &lt;li&gt;Action &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;E&lt;/code&gt; means to move east by the given value.&lt;/li&gt;
+  &lt;li&gt;Action &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;W&lt;/code&gt; means to move west by the given value.&lt;/li&gt;
+  &lt;li&gt;Action &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;L&lt;/code&gt; means to turn left the given number of degrees.&lt;/li&gt;
+  &lt;li&gt;Action &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;R&lt;/code&gt; means to turn right the given number of degrees.&lt;/li&gt;
+  &lt;li&gt;Action &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;F&lt;/code&gt; means to move forward by the given value in the direction the ship is currently facing.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Our ship is fairly sophisticated, so it does not need to face the direction it is moving. If we are currently facing east, what is the &lt;a href=&quot;https://en.wikipedia.org/wiki/Taxicab_geometry&quot;&gt;Manhattan distance&lt;/a&gt; from where we started after we execute the instructions?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/12/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub turn-ship($facing-direction, $turning-direction, $degrees) {
+    my %turns = (
+        N =&amp;gt; { L =&amp;gt; 'W', R =&amp;gt; 'E' },  # [1][2]
+        E =&amp;gt; { L =&amp;gt; 'N', R =&amp;gt; 'S' },
+        S =&amp;gt; { L =&amp;gt; 'E', R =&amp;gt; 'W' },
+        W =&amp;gt; { L =&amp;gt; 'S', R =&amp;gt; 'N' }
+    );
+
+    if $degrees == 0 {
+        $facing-direction;
+    } else {
+        my $new-degrees = $degrees - 90;
+        my $new-direction = %turns{$facing-direction}{$turning-direction};
+        turn-ship($new-direction, $turning-direction, $new-degrees);
+    }
+}
+
+sub traverse(
+    @directions,
+    $pointer = 0,
+    $current-direction = 'E',
+    @current-position = (0, 0)
+) {
+    if $pointer == @directions.elems {
+        @current-position.map(*.abs).sum;
+    } else {
+        my ($i, $j) = @current-position;
+        my $new-pointer = $pointer + 1;
+        my $direction = @directions[$pointer].subst('F', $current-direction); # [3]
+        given $direction {
+            # Traversal directions
+            when /(N|E|S|W)(&amp;lt;digit&amp;gt;+)/ {
+                my @new-position = do given $/[0].Str {                       # [4]
+                    when 'N' { ($i - $/[1].Int, $j) }
+                    when 'E' { ($i, $j + $/[1].Int) }
+                    when 'S' { ($i + $/[1].Int, $j) }
+                    when 'W' { ($i, $j - $/[1].Int) }
+                };
+                traverse(
+                    @directions,
+                    $new-pointer,
+                    $current-direction,
+                    @new-position
+                );
+            }
+            # Turning directions
+            when /(L|R)(&amp;lt;digit&amp;gt;+)/ {
+                traverse(
+                    @directions,
+                    $new-pointer,
+                    turn-ship($current-direction, $/[0].Str, $/[1].Int),
+                    ($i, $j)
+                );
+            }
+        }
+    }
+}
+
+sub MAIN($file) {
+    say traverse($file.IO.lines);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+1186
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; only has one line; most of the logic happens in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse&lt;/code&gt;. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse&lt;/code&gt; is a recursive subroutine that requires: the directions, a pointer to which step we are on, the direction we are currently facing, and an ordered pair describing our current position.&lt;/p&gt;
+
+&lt;p&gt;The logic in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse&lt;/code&gt; is pretty simple:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;If we are at the end of the list of directions, return the sum of the absolute values of our position (aka the Manhattan distance); otherwise, we will read the next instruction.&lt;/li&gt;
+  &lt;li&gt;If the next instruction is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N|E|S|W|F&lt;/code&gt;, we simply move our position in the desired direction and go to the next instruction.&lt;/li&gt;
+  &lt;li&gt;If the next instruction is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;L&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;F&lt;/code&gt;, we call the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;turn-ship&lt;/code&gt; subroutine that will recursively turn the ship 90° at a time, then go to the next instruction.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Keys in hashes are strings by default, so you will notice we only put quotes around the values.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{...}&lt;/code&gt; is the anonymous &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt; constructor, so it can be used to create a nested hash. You will notice we don’t use it for the outer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt;; the reason for this is the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%&lt;/code&gt; sigil already denotes that the right-hand-side of the expression is a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt;, so it is redundant. In fact, the parentheses are unnecessary as well, but they make it more readable.&lt;/li&gt;
+  &lt;li&gt;Whenever we encounter an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;F&lt;/code&gt; it just means “go in the direction we are already facing.” Rather than have a special &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;when&lt;/code&gt; block for it, we just replace it with the direction we are already facing.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;You might have seen me do something like this in the past:&lt;/p&gt;
+
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; my $y = gather {
+     given $y {
+         when * { take &amp;lt;value&amp;gt; }
+     }
+ }.head;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;This is because I am used to the Scala paradigm of something like this:&lt;/p&gt;
+
+    &lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;The problem is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gather/take&lt;/code&gt; returns a list when I just need one value (hence the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.head&lt;/code&gt;). Well, it turns out that there is a subroutine called &lt;a href=&quot;https://docs.raku.org/routine/do&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;do&lt;/code&gt;&lt;/a&gt; that can prefix any &lt;a href=&quot;https://docs.raku.org/type/Supply&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Supply&lt;/code&gt;&lt;/a&gt;, which allows the values in the block to be returned/assigned to a variable rather than having to use the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gather/take&lt;/code&gt; trick. It’s not the prettiest, but it works!&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;After all that, it turns out that the instructions had come with interpretation instructions printed on the back. 🤦🏻 Almost all instructions refer to the manipulation of some waypoint relative to the ship. Here is the &lt;em&gt;real&lt;/em&gt; interpretation:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Action &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; means to move the waypoint north by the given value.&lt;/li&gt;
+  &lt;li&gt;Action &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;S&lt;/code&gt; means to move the waypoint south by the given value.&lt;/li&gt;
+  &lt;li&gt;Action &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;E&lt;/code&gt; means to move the waypoint east by the given value.&lt;/li&gt;
+  &lt;li&gt;Action &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;W&lt;/code&gt; means to move the waypoint west by the given value.&lt;/li&gt;
+  &lt;li&gt;Action &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;L&lt;/code&gt; means to rotate the waypoint around the ship left (counter-clockwise) the given number of degrees.&lt;/li&gt;
+  &lt;li&gt;Action &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;R&lt;/code&gt; means to rotate the waypoint around the ship right (clockwise) the given number of degrees.&lt;/li&gt;
+  &lt;li&gt;Action &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;F&lt;/code&gt; means to move forward to the waypoint a number of times equal to the given value.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If we start with a waypoint 1 unit north and 10 units east, what is our final Manhattan distance from our starting position?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;For brevity on this one, since the two solutions do not overlap, I did not copy the part one code from above. If you would like to see it, see the link below.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/12/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1 code here
+# ...
+
+sub rotate-waypoint(@waypoint, $direction, $degrees) {
+    if $degrees == 0 {
+        @waypoint;
+    } else {
+        my ($i, $j) = @waypoint;
+        my $new-degrees = $degrees - 90;
+        given $direction {
+            when 'L' { rotate-waypoint((-$j, $i), $direction, $new-degrees) } # [1]
+            when 'R' { rotate-waypoint(($j, -$i), $direction, $new-degrees) }
+        }
+    }
+}
+
+sub traverse-part2(
+    @directions,
+    $pointer = 0,
+    @current-position = (0, 0),
+    @waypoint = (-1, 10)        # [2]
+) {
+    if $pointer == @directions.elems {
+        @current-position.map(*.abs).sum;
+    } else {
+        my ($waypoint-i, $waypoint-j) = @waypoint;
+        my $new-pointer = $pointer + 1;
+        given @directions[$pointer] {
+            # Waypoint translation directions
+            when /(N|E|S|W)(&amp;lt;digit&amp;gt;)/ {
+                my @new-waypoint = do given $/[0].Str {
+                    when 'N' { ($waypoint-i - $/[1].Int, $waypoint-j) }
+                    when 'E' { ($waypoint-i, $waypoint-j + $/[1].Int) }
+                    when 'S' { ($waypoint-i + $/[1].Int, $waypoint-j) }
+                    when 'W' { ($waypoint-i, $waypoint-j - $/[1].Int) }
+                };
+                traverse-part2(
+                    @directions,
+                    $new-pointer,
+                    @current-position,
+                    @new-waypoint
+                );
+            }
+            # Waypoint rotation directions
+            when /(L|R)(&amp;lt;digit&amp;gt;+)/ {
+                traverse-part2(
+                    @directions,
+                    $new-pointer,
+                    @current-position,
+                    rotate-waypoint(@waypoint, $/[0].Str, $/[1].Int)
+                );
+            }
+            # Ship-moving direction
+            when /F(&amp;lt;digit&amp;gt;+)/ {
+                my $number-of-moves = $/[0].Int;
+                my ($i, $j) = @current-position;
+                my $new-i = $i + ($number-of-moves * $waypoint-i);
+                my $new-j = $j + ($number-of-moves * $waypoint-j);
+                traverse-part2(
+                    @directions,
+                    $new-pointer,
+                    ($new-i, $new-j),
+                    @waypoint
+                );
+            }
+        }
+    }
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my @directions = $file.IO.lines;
+    say $p2 ?? traverse-part2(@directions) !! traverse-part1(@directions);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
+$ raku main.raku input.txt
+1186
+
+# Part 2
+$ raku main.raku --p2 input.txt
+47806
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;The logic here is familiar, but just different enough to warrant its own subroutine. The only editing from the original function was to rename &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse-part1&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Basically, instead of storing our current direction, we store our waypoint position. When a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N|E|S|W&lt;/code&gt; instruction comes in, we move it accordingly. When a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;L|R&lt;/code&gt; instruction comes in, we use a little &lt;a href=&quot;https://calcworkshop.com/transformations/rotation-rules/&quot;&gt;middle school algebra&lt;/a&gt; to rotate the waypoint (via the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rotate-waypoint&lt;/code&gt; subroutine). And finally, when an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;F&lt;/code&gt; instruction comes in, we move towards the way point &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; times, where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; is the value supplied with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;F&lt;/code&gt; instruction.&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;We were able to exploit the fact that all of our degrees were increments of 90. When we rotate the point &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(x, y)&lt;/code&gt; point counter clockwise it becomes &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(-y, x)&lt;/code&gt;, and, when we rotate the same point clockwise it becomes &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(y, -x)&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Since we are treating the grid as a grid from the top left and growing downward, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(-1, 10)&lt;/code&gt; indicates 1 unit north and 10 units east.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;This was a fun little weekend exercise. Almost halfway to the end; see y’all tomorrow!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today was the first day where I didn’t use the same code for parts one and two – they were just too different! Other than that, this is a classic recursive solution with a hint of middle school algebra.</summary></entry><entry><title type="html">Advent of Code: Day 11</title><link href="http://localhost:4000/blog/advent-of-code-day-11/" rel="alternate" type="text/html" title="Advent of Code: Day 11" /><published>2020-12-11T00:00:00-06:00</published><updated>2020-12-11T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-11</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-11/">&lt;p&gt;I am giving myself half credit for today; the solution I came up with &lt;em&gt;is&lt;/em&gt; in Raku, but it is an iterative solution. Additionally, this solution is &lt;em&gt;slow&lt;/em&gt;. In fact, it was so slow that in between runs I was able to write a &lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/11/python/main.py&quot;&gt;Python solution&lt;/a&gt; (with the same logic) that ran much faster.&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -1670,149 +1938,4 @@ $ raku main.raku --p2 input.txt
 
 &lt;p&gt;With that being said, I am really learning a lot through this exercise. In fact, I am noticing mistakes (or rather, code smells) in my previous solutions! I am not planning on editing them out though; it’s always good to see where you came from to remember how far you’ve come!&lt;/p&gt;
 
-&lt;p&gt;See y’all for day 5!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!</summary></entry><entry><title type="html">Advent of Code: Day 3</title><link href="http://localhost:4000/blog/advent-of-code-day-03/" rel="alternate" type="text/html" title="Advent of Code: Day 3" /><published>2020-12-03T00:00:00-06:00</published><updated>2020-12-03T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-03</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-03/">&lt;p&gt;Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a &lt;a href=&quot;https://two-wrongs.com/myth-of-the-day-functional-programmers-dont-use-loops&quot;&gt;for-loop in functional programming programming&lt;/a&gt;, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion.&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;We are going sledding this week! Our job is to get to the bottom of the mountain following a specific path, and to count how many trees we would run into along the way.&lt;/p&gt;
-
-&lt;p&gt;Given a file that looks like the diagram below, we are to start in the top left of this file and traverse right three spaces and down one space until we hit the bottom, counting the number of hash signs (trees) we encounter.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...#..............#.#....#..#..
-...#..#..#..............#..#...
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Additionally, this is a magic mountain, so the pattern on each row repeats out to the right infinitely, and we have to account for that.&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub traverse(@mountain, $trees-encountered = 0, $i = 0, $j = 0) {
-    if $i &amp;gt; @mountain.elems - 1 {
-        $trees-encountered;
-    } else {
-        my $tree-hit = @mountain[$i][$j] cmp '#' == Same ?? 1 !! 0;
-        if $i == @mountain.elems - 1 {
-            $trees-encountered + $tree-hit;
-        } else {
-            traverse(@mountain, $trees-encountered + $tree-hit, $i + 1, $j + 3);
-        }
-    }
-}
-
-sub MAIN($file) {
-    say traverse($file.IO.lines.map(-&amp;gt; $line { |$line.comb xx * })); # [1][2][3][4]
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-191
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;Other than the below comments, I feel like this reads fairly easily. Basically, we turn our file into a list of infinite lists (described below) and then call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse&lt;/code&gt; on that outer list. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse&lt;/code&gt; is a &lt;a href=&quot;https://www.geeksforgeeks.org/tail-recursion/&quot;&gt;tail-recursive&lt;/a&gt; function with fairly simple logic:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;If we have already passed the bottom, return the number of trees we hit&lt;/li&gt;
-  &lt;li&gt;If we are at the bottom of the mountain, see if we are currently hitting a tree and then return &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$trees-encountered&lt;/code&gt; with the last tree included&lt;/li&gt;
-  &lt;li&gt;Otherwise, add the current tree hit to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$trees-encountered&lt;/code&gt; and go down one row and to the right three columns&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; has a special meaning when used in front of a list. It flattens any inner lists to the top level. So, for example, if we had &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|((1, 2), (3, 4))&lt;/code&gt;, that would equal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 2, 3, 4)&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Reminder that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.comb&lt;/code&gt; splits the input into a list of characters.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xx&lt;/code&gt; is a special operator that takes the input list and concatenates it to itself &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; times (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N = *&lt;/code&gt; here; see below). So, for example, if we had &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 2) xx 2&lt;/code&gt;, that would yield &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;((1, 2), (1, 2))&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xx&lt;/code&gt; allows the &lt;a href=&quot;https://docs.raku.org/type/Whatever&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Whatever&lt;/code&gt;&lt;/a&gt; character (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt;) on the right-hand side, and in that case it returns a lazy, infinite concatenation of the left-hand side.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;So, to summarize the above comments, we take the line and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;comb&lt;/code&gt; it to a list. Then, we concatenate that list infinitely to have a list of lists, which we flatten using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; operator. Since this happens in a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt;, it applies to each line, so we have one finite outer list containing multiple infinite lists. We then traverse the outer list.&lt;/p&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;Given the same file as before, we want to tackle it with five different traversals:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Right 1, down 1&lt;/li&gt;
-  &lt;li&gt;Right 3, down 1 (This is the slope we already checked)&lt;/li&gt;
-  &lt;li&gt;Right 5, down 1&lt;/li&gt;
-  &lt;li&gt;Right 7, down 1&lt;/li&gt;
-  &lt;li&gt;Right 1, down 2&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Then, we must find the product of all the trees we hit with each traversal&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub traverse(@mountain, $i-increment, $j-increment, $trees-encountered = 0, $i = 0, $j = 0) {
-    if $i &amp;gt; @mountain.elems - 1 {
-        $trees-encountered;
-    } else {
-        my $tree-hit = @mountain[$i][$j] cmp '#' == Same ?? 1 !! 0;
-        if $i == @mountain.elems - 1 {
-            $trees-encountered + $tree-hit;
-        } else {
-            traverse(
-                @mountain,
-                $i-increment,
-                $j-increment,
-                $trees-encountered + $tree-hit,
-                $i + $i-increment,
-                $j + $j-increment
-            );
-        }
-    }
-}
-
-sub MAIN($file, Bool :$p2 = False) {
-    my @traversals = $p2 ?? (
-        (1, 1),
-        (1, 3),
-        (1, 5),
-        (1, 7),
-        (2, 1)      # [1]
-    ) !! ((1, 3),); # [2]
-    say [*] @traversals.map(-&amp;gt; ($i-increment, $j-increment) {
-        traverse($file.IO.lines.map(-&amp;gt; $line { |$line.comb xx * }), $i-increment, $j-increment)
-    });
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
-$ raku main.raku input.txt
-191
-
-# Part 2
-$ raku main.raku --p2 input.txt
-1478615040
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;Again, we are able to tweak our code slightly and handle both parts one and two in one block. In this case, we added two arguments to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse&lt;/code&gt; to tell it the row step-size and column step-size. We then just add the list of lists corresponding to the five traversals noted above, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt; over them and calculate the product using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[*]&lt;/code&gt; operator! In the case of part one, it is a list of size one, so &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[*]&lt;/code&gt; will just return the single element.&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;The input file has 323 lines, so we will hit the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$i &amp;gt; @mountain.elems - 1&lt;/code&gt; case with this traversal, so it is a good thing we generalized it in the previous step!&lt;/li&gt;
-  &lt;li&gt;Need this to be a list of lists to map over it, so we need the comma to denote the outer list is of size one.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;I felt this problem came very serendipitously; I was &lt;em&gt;just&lt;/em&gt; reading about the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xx&lt;/code&gt; operators last night, so I am glad I got to put them to use. Recursion (and more specifically tail recursion) is always a fun approach, and it let us tackle this problem functionally. 3 for 3! Let’s see what tomorrow brings.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion.</summary></entry></feed>
+&lt;p&gt;See y’all for day 5!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!</summary></entry></feed>

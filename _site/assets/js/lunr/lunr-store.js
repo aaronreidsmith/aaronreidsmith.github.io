@@ -82,4 +82,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-11/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 12",
+        "excerpt":"Today was the first day where I didn’t use the same code for parts one and two – they were just too different! Other than that, this is a classic recursive solution with a hint of middle school algebra. The Problem Part 1 We finally got on the ferry to...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-12/",
+        "teaser": null
       }]
