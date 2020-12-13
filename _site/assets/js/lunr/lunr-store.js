@@ -88,4 +88,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-12/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 13",
+        "excerpt":"Today’s challenge was… interesting, to say the least. It may look short and sweet, but it is fairly complex and requires a fair bit of number theory for part two. The Problem Part 1 After yesterday’s fiasco, our ferry was forced to make an emergency stop on a different island....","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-13/",
+        "teaser": null
       }]

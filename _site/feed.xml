@@ -1,4 +1,227 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-12T14:04:26-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 12</title><link href="http://localhost:4000/blog/advent-of-code-day-12/" rel="alternate" type="text/html" title="Advent of Code: Day 12" /><published>2020-12-12T00:00:00-06:00</published><updated>2020-12-12T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-12</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-12/">&lt;p&gt;Today was the first day where I didn’t use the same code for parts one and two – they were just too different! Other than that, this is a classic recursive solution with a hint of middle school algebra.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-13T15:32:58-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 13</title><link href="http://localhost:4000/blog/advent-of-code-13/" rel="alternate" type="text/html" title="Advent of Code: Day 13" /><published>2020-12-13T00:00:00-06:00</published><updated>2020-12-13T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-13</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-13/">&lt;p&gt;Today’s challenge was… interesting, to say the least. It may look short and sweet, but it is fairly complex and requires a fair bit of &lt;a href=&quot;https://en.wikipedia.org/wiki/Number_theory&quot;&gt;number theory&lt;/a&gt; for part two.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;After &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-12/&quot;&gt;yesterday’s fiasco&lt;/a&gt;, our ferry was forced to make an emergency stop on a different island. Unfortunately, there are no ferries from this island to our destination island; once again, we will have to take a plane. To get to the airport, our only option is a bus. Bus IDs also correspond to how often they come. I.e., a bus with ID 7 will come at timestamps 0, 7, 14, etc.&lt;/p&gt;
+
+&lt;p&gt;We took a few notes (our input) on the bus schedule. Example:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;939
+7,13,x,x,59,x,31,19
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The first line is the earliest timestamp we will be able to make it to the bus station, and the second line is a list of bus IDs; buses that are out of service are denoted with an X. Given this information, our goal is to find the earliest bus that will get us to the airport. With the above example, we can see how this breaks down (in the below table a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;D&lt;/code&gt; means “departure”):&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;time   bus 7   bus 13  bus 59  bus 31  bus 19
+929      .       .       .       .       .
+930      .       .       .       D       .
+931      D       .       .       .       D
+932      .       .       .       .       .
+933      .       .       .       .       .
+934      .       .       .       .       .
+935      .       .       .       .       .
+936      .       D       .       .       .
+937      .       .       .       .       .
+938      D       .       .       .       .
+939      .       .       .       .       .  &amp;lt;--- Time we make it to the bus station
+940      .       .       .       .       .
+941      .       .       .       .       .
+942      .       .       .       .       .
+943      .       .       .       .       .
+944      .       .       D       .       .  &amp;lt;--- First bus that can take us to the airport
+945      D       .       .       .       .
+946      .       .       .       .       .
+947      .       .       .       .       .
+948      .       .       .       .       .
+949      .       D       .       .       .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Once we have found the bus that can take us to the airport, we need to calculate the product of the bus ID and our wait time. In the example above it would be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;59 * (944 - 939) = 295&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/13/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
+    my @input = $file.IO.lines;
+    my $arrival-time = @input[0].Int;
+    my @buses = @input[1].split(',').grep(* ne 'x').map(*.Int);
+    say [*] @buses
+            .map(-&amp;gt; $id { ($id, $id - $arrival-time % $id) })
+            .min(*[1])
+            .flat;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+261
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;Since our bus timestamps will always just be multiples of the bus ID, we can look at just the bus IDs themselves to find how long we will be waiting. When we calculate the remainder between &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$arrival-time&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$id&lt;/code&gt;, it will show us how many minutes have passed &lt;strong&gt;since the last bus&lt;/strong&gt;. Let’s look at this in context:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;939 % 7  = 1  (means there was a bus 1 minute ago)
+939 % 13 = 3  (means there was a bus 3 minutes ago)
+939 % 59 = 54 (means there was a bus 54 minutes ago)
+939 % 31 = 9  (means there was a bus 9 minutes ago)
+939 % 19 = 8  (means there was a bus 8 minutes ago)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;So, looking at the above, it is not immediately obvious what we need to do. Basically, since we know how often a bus comes, we want to minimize the value of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$id - &amp;lt;output of above&amp;gt;&lt;/code&gt;. To do that, we simply subtract the amount of time that has passed for each bus from its scheduled departure time:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 7 - (939 %  7) =  7 - 1  = 6
+13 - (939 % 13) = 13 - 3  = 10
+59 - (939 % 59) = 59 - 54 = 5
+31 - (939 % 31) = 31 - 9  = 22
+19 - (939 % 19) = 19 - 8  = 11
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;So from this, it is obvious that bus 59 has the shortest time to next departure, so that is the best choice. At this point, we multiple 59 * 5 and get 295.&lt;/p&gt;
+
+&lt;p&gt;I feel the code reflects this pretty well. The first three lines are just pulling the data in, removing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt; buses, and converting things to integers. After that, for each bus ID, we do the calculations above, then filter it down to the minimum wait time. Finally, we flatten it into one list and multiply the values (via the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[*]&lt;/code&gt; metaoperator). That’s it!&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;p&gt;No specific comments today; I feel it is pretty straightforward.&lt;/p&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;So after all the time we just spent to find the bus that will get us to the airport the fastest, we throw it all out the window.&lt;/p&gt;
+
+&lt;p&gt;The shuttle company is running a contest to find the earliest timestamp such that each bus will depart one minute after the next. In the case of an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt;, there no constraints on bus IDs in that slot. So, given the same input as above:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;7,13,x,x,59,x,31,19
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We are looking for a timestamp (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t&lt;/code&gt;) that satisfies these conditions:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Bus ID &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt; departs at timestamp &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Bus ID &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;13&lt;/code&gt; departs one minute after timestamp &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;There are no requirements or restrictions on departures at two or three minutes after timestamp &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Bus ID &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;59&lt;/code&gt; departs four minutes after timestamp &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;There are no requirements or restrictions on departures at five minutes after timestamp &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Bus ID &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;31&lt;/code&gt; departs six minutes after timestamp &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Bus ID &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;19&lt;/code&gt; departs seven minutes after timestamp &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In this example, the answer is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1068781&lt;/code&gt;, as shown here:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;time     bus 7   bus 13  bus 59  bus 31  bus 19
+1068773    .       .       .       .       .
+1068774    D       .       .       .       .
+1068775    .       .       .       .       .
+1068776    .       .       .       .       .
+1068777    .       .       .       .       .
+1068778    .       .       .       .       .
+1068779    .       .       .       .       .
+1068780    .       .       .       .       .
+1068781    D       .       .       .       .  &amp;lt;--- Bus 7 departs at timestamp `t`
+1068782    .       D       .       .       .  &amp;lt;--- Bus 13 departs 1 minutes after `t`
+1068783    .       .       .       .       .
+1068784    .       .       .       .       .
+1068785    .       .       D       .       .  &amp;lt;--- Bus 59 departs 4 minutes after `t`
+1068786    .       .       .       .       .
+1068787    .       .       .       D       .  &amp;lt;--- Bus 31 departs 6 minutes after `t`
+1068788    D       .       .       .       D  &amp;lt;--- Bus 19 departs 7 minutes after `t`
+1068789    .       .       .       .       .
+1068790    .       .       .       .       .
+1068791    .       .       .       .       .
+1068792    .       .       .       .       .
+1068793    .       .       .       .       .
+1068794    .       .       .       .       .
+1068795    D       D       .       .       .
+1068796    .       .       .       .       .
+1068797    .       .       .       .       .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Looking at our notes (our input), we realize that timestamp &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t&lt;/code&gt; will &lt;em&gt;surely&lt;/em&gt; be larger thn &lt;strong&gt;100 &lt;em&gt;trillion&lt;/em&gt;&lt;/strong&gt;, so we need to be smart about how we calculate it.&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/13/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file, Bool :$p2 = False) {
+    my @input = $file.IO.lines;
+    if $p2 {
+        # https://brilliant.org/wiki/chinese-remainder-theorem
+        my @buses = @input[1].split(',').antipairs.grep(*.key ne 'x');
+
+        my @times = @buses.map(*.key.Int);
+        my @offsets = @buses.map(-&amp;gt; $pair { $pair.key - $pair.value });
+
+        my $N = [*] @times;
+        my @x = do for @offsets Z @times -&amp;gt; ($offset, $depart-time) {
+            $offset * ($N div $depart-time) * expmod($N div $depart-time, -1, $depart-time);
+        }
+
+        say @x.sum % $N;
+    } else {
+        my @buses = @input[1].split(',').grep(* ne 'x').map(*.Int);
+        my $arrival-time = @input[0].Int;
+        say [*] @buses
+                .map(-&amp;gt; $id { ($id, $id - $arrival-time % $id) })
+                .min(*[1])
+                .flat;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
+$ raku main.raku input.txt
+261
+
+# Part 2
+$ raku main.raku --p2 input.txt
+807435693182510
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;So obviously, given the hint about 100 trillion in the problem, we can’t just brute force this. The brute force method (using the example data) would be to start at 100 trillion and basically just go one-by-one until each subsequent bus passes our tests. Given that our actual output is closer to 1 quadrillion, that would take &lt;em&gt;forever&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;That’s where number theory comes in. As I commented in the code, there is something called &lt;a href=&quot;https://en.wikipedia.org/wiki/Chinese_remainder_theorem&quot;&gt;Chinese remainder theorem&lt;/a&gt; that basically states the following:&lt;/p&gt;
+
+&lt;p&gt;Given the following items:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;A sequence &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt; of &lt;a href=&quot;https://en.wikipedia.org/wiki/Coprime_integers#Coprimality_in_sets&quot;&gt;pairwise coprime&lt;/a&gt; integers&lt;/li&gt;
+  &lt;li&gt;A sequence &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a&lt;/code&gt;, such that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0 &amp;lt;= ai &amp;lt; ni&lt;/code&gt; for every &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;An integer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; defined as the product of all integers in the sequence &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There is exactly one number, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt;, in the range &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0 &amp;lt;= x &amp;lt; N&lt;/code&gt; such that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x % ai == ni&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;I won’t go too deep into the math here, but basically (again, using example data) we have the following terms:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Our sequence &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7, 13, 59, 31, 19&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Our sequence &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a&lt;/code&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0, 1, 4, 6, 7&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Our number &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7 * 13 * 59 * 31 * 19 = 3162341&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And we basically solve for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt;. That’s pretty much as far as I can go with this explanation, as Chinese remainder theorem is pretty advanced for me as well. I just converted the proof in the commented link to Raku to make this work 🙂&lt;/p&gt;
+
+&lt;p&gt;When we do this with our real data, rather than running forever, it finishes in about 0.27 seconds (using a fairly slow language).&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;p&gt;I don’t fully understand the implementation here, so I have nothing to add 😂&lt;/p&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;We are officially past the halfway point! I wouldn’t say this was the toughest one, it felt like more of a trick question. Regardless, I expect the difficulty to start ramping quite a bit; hopefully I can keep up.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today’s challenge was… interesting, to say the least. It may look short and sweet, but it is fairly complex and requires a fair bit of number theory for part two.</summary></entry><entry><title type="html">Advent of Code: Day 12</title><link href="http://localhost:4000/blog/advent-of-code-day-12/" rel="alternate" type="text/html" title="Advent of Code: Day 12" /><published>2020-12-12T00:00:00-06:00</published><updated>2020-12-12T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-12</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-12/">&lt;p&gt;Today was the first day where I didn’t use the same code for parts one and two – they were just too different! Other than that, this is a classic recursive solution with a hint of middle school algebra.&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -1711,231 +1934,4 @@ $ raku main.raku --p2 input.txt
 
 &lt;p&gt;This exercise has me diving more and more into &lt;a href=&quot;https://en.wikipedia.org/wiki/Set_theory&quot;&gt;set theory&lt;/a&gt;. It’s awesome that Raku allows (and encourages) use of the Unicode operators found in math textbooks. Their reasoning for this is that it is easier to take an algorithm from paper to code when you are allowed to use the same notation in each place. Now to find a keyboard to be able to type these symbols!&lt;/p&gt;
 
-&lt;p&gt;So far we are 5 for 5 with pure functional solutions. 20% of the way there!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right-hand side of the shelf, then narrow down your search from there. This is obviously more efficient than searching from the left-hand side of the bookshelf.</summary></entry><entry><title type="html">Advent of Code: Day 4</title><link href="http://localhost:4000/blog/advent-of-code-day-04/" rel="alternate" type="text/html" title="Advent of Code: Day 4" /><published>2020-12-04T00:00:00-06:00</published><updated>2020-12-04T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-04</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-04/">&lt;p&gt;Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;This problem may require a little more back-story than my previous posts.&lt;/p&gt;
-
-&lt;p&gt;We’re traveling for the holidays, but realized we forgot our passport! Luckily, we have our North Pole Credentials that have all the same information except Country ID (you know, the thing that makes a passport useful). A passport contains the following fields:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;byr (Birth Year)
-iyr (Issue Year)
-eyr (Expiration Year)
-hgt (Height)
-hcl (Hair Color)
-ecl (Eye Color)
-pid (Passport ID)
-cid (Country ID
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Unfortunately we are stuck in a long line because the passport scanner is down. Apparently it is having trouble detecting which passports have all the required fields. We’re nice folks though, so we’re going to offer our skills up to the border agents to fix their passport scanner (and maybe we can slip in a “bug” to ignore the fact that we don’t have a passport?).&lt;/p&gt;
-
-&lt;p&gt;We are given a batch file of passport information as our input. Each passport is separated by a blank line, and each item in the passport is separated by either a newline or a space. Example:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
-byr:1937 iyr:2017 cid:147 hgt:183cm
-
-iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884
-hcl:#cfa07d byr:1929
-
-hcl:#ae17e1 iyr:2013
-eyr:2024
-ecl:brn pid:760753108 byr:1931
-hgt:179cm
-
-hcl:#cfa07d eyr:2025 pid:166559648
-iyr:2011 ecl:brn hgt:59in
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Passport 1 is valid because it has all required fields&lt;/li&gt;
-  &lt;li&gt;Passport 2 is invalid because it is missing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hgt&lt;/code&gt; field&lt;/li&gt;
-  &lt;li&gt;Passport 3 is “valid” because it contains everything but &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cid&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Passport 4 is invalid because it is missing both the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cid&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;byr&lt;/code&gt; fields&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Our job is to find how many passports are either valid or “valid”&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub is-valid(%credentials) {
-    my $passport-keys = set &amp;lt;byr iyr eyr hgt hcl ecl pid cid&amp;gt;;   # [1]
-    my $north-pole-credentials = $passport-keys ⊖ 'cid';         # [2]
-
-    my $keys = set %credentials.keys;
-
-    $keys ~~ $passport-keys || $keys ~~ $north-pole-credentials; # [3]
-}
-
-sub MAIN($file) {
-    say $file.IO
-          .slurp
-          .split(/\n\n/)
-          .map(-&amp;gt; $entry {
-              $entry
-                .split(/&amp;lt;space&amp;gt;/)
-                .map(*.split(':'))
-                .map(-&amp;gt; ($key, $value) { $key.trim =&amp;gt; $value.trim })
-                .Hash
-          })
-          .map(&amp;amp;is-valid)
-          .grep(* == True)
-          .elems;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-237
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;The hardest part to step one was getting our data out of the batch file and into a data structure (in this case, a list of hashes). You’ll notice this time we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IO.slurp&lt;/code&gt; instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IO.lines&lt;/code&gt; to pull all the data into one string to manipulate it ourselves. Once we have the file as a string, we apply the following steps:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Split the data on 2 newlines (aka, a blank line between entries)&lt;/li&gt;
-  &lt;li&gt;Then for each passport entry split on the the &lt;a href=&quot;https://docs.raku.org/language/regexes#Predefined_character_classes&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;space&amp;gt;&lt;/code&gt;&lt;/a&gt; character (which is an alias for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\s&lt;/code&gt;), giving us an inner list containing colon-separated key-value pairs&lt;/li&gt;
-  &lt;li&gt;For each key-value pair, we split on the comma&lt;/li&gt;
-  &lt;li&gt;We then take all our pairs and turn them into actual &lt;a href=&quot;https://docs.raku.org/type/Pair&quot;&gt;Pair&lt;/a&gt; objects&lt;/li&gt;
-  &lt;li&gt;We use the Pair objects as an interim to convert each entry to a &lt;a href=&quot;https://docs.raku.org/type/Hash&quot;&gt;Hash&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;At this point, our sample input above would look something like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(
-  {byr =&amp;gt; 1937, cid =&amp;gt; 147, ecl =&amp;gt; gry, eyr =&amp;gt; 2020, hcl =&amp;gt; #fffffd, hgt =&amp;gt; 183cm, iyr =&amp;gt; 2017, pid =&amp;gt; 860033327},
-  {byr =&amp;gt; 1929, cid =&amp;gt; 350, ecl =&amp;gt; amb, eyr =&amp;gt; 2023, hcl =&amp;gt; #cfa07d, iyr =&amp;gt; 2013, pid =&amp;gt; 028048884},
-  {byr =&amp;gt; 1931, ecl =&amp;gt; brn, eyr =&amp;gt; 2024, hcl =&amp;gt; #ae17e1, hgt =&amp;gt; 179cm, iyr =&amp;gt; 2013, pid =&amp;gt; 760753108},
-  {ecl =&amp;gt; brn, eyr =&amp;gt; 2025, hcl =&amp;gt; #cfa07d, hgt =&amp;gt; 59in, iyr =&amp;gt; 2011, pid =&amp;gt; 166559648}
-)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We then map our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is-valid&lt;/code&gt; function over this list of hashes and count how many &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt;s we get&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;...&amp;gt;&lt;/code&gt; syntax is a special way of making a list of strings. It implicitly quotes each space-separated entry. We then cast this list to a set.&lt;/li&gt;
-  &lt;li&gt;Raku is big on Unicode operators, and I try to use them where I can. In this case, we are using the &lt;a href=&quot;https://en.wikipedia.org/wiki/Symmetric_difference&quot;&gt;set difference&lt;/a&gt; operator commonly seen in mathematics classes. It gives us a new set containing everything except &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cid&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Now we have our valid and “valid” (entries that contain everything except Country ID) sets, so we just check if our current passport entry matches either one using the &lt;a href=&quot;https://docs.raku.org/language/operators#index-entry-smartmatch_operator&quot;&gt;smartmatch&lt;/a&gt; operator.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;So, after helping security out with their passport issue, now they’re starting to get suspicious that &lt;em&gt;too&lt;/em&gt; many people are getting through, so we need to tighten up our script.&lt;/p&gt;
-
-&lt;p&gt;Now it needs to check both keys and values with the following stipulations:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Birth Year - Must be a 4-digit number between 1920 and 2002 (inclusive)&lt;/li&gt;
-  &lt;li&gt;Issue Year - Must be a 4-digit number between 2010 and 2020 (inclusive)&lt;/li&gt;
-  &lt;li&gt;Expiration Year - Must be a 4-digit number between 2020 and 2030 (inclusive)&lt;/li&gt;
-  &lt;li&gt;Height - A number followed by either &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;in&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cm&lt;/code&gt;
-    &lt;ul&gt;
-      &lt;li&gt;If &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;in&lt;/code&gt;, height must be between 59 and 76 (inclusive)&lt;/li&gt;
-      &lt;li&gt;If &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cm&lt;/code&gt;, height must be between 150 and 193 (inclusive)&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Hair Color - Must be a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#&lt;/code&gt; character followed by exactly 6 characters &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0-9&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a-f&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Eye Color - Must be one of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;amb, blu, brn, grn, gry, hzl, oth&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Passport ID - 9-digit number including leading zeroes&lt;/li&gt;
-  &lt;li&gt;Country ID - We still want to ignore this, or we won’t get through&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub is-valid(%credentials, $check-values) {
-    my $passport-keys = set &amp;lt;byr iyr eyr hgt hcl ecl pid cid&amp;gt;;
-    my $north-pole-credentials = $passport-keys ⊖ 'cid';
-
-    my $keys = set %credentials.keys;
-    my $valid-keys = $keys ~~ $passport-keys || $keys ~~ $north-pole-credentials;
-
-    if $valid-keys &amp;amp;&amp;amp; $check-values {
-        my ($byr, $iyr, $eyr, $hgt, $hcl, $ecl, $pid) = %credentials&amp;lt;byr iyr eyr hgt hcl ecl pid&amp;gt;.map(*.Str); # [1]
-
-        my $valid-byr = so $byr ~~ /^&amp;lt;digit&amp;gt; ** 4$/ &amp;amp;&amp;amp; $byr.Int ∈ set (1920..2002); # [2][3]
-        my $valid-iyr = so $iyr ~~ /^&amp;lt;digit&amp;gt; ** 4$/ &amp;amp;&amp;amp; $iyr.Int ∈ set (2010..2020);
-        my $valid-eyr = so $eyr ~~ /^&amp;lt;digit&amp;gt; ** 4$/ &amp;amp;&amp;amp; $eyr.Int ∈ set (2020..2030);
-        my $valid-hgt = gather {
-            given $hgt {
-                when /^(&amp;lt;digit&amp;gt;+)'in'$/ { take $/[0].Int ∈ set (59..76) }
-                when /^(&amp;lt;digit&amp;gt;+)'cm'$/ { take $/[0].Int ∈ set (150..193) }
-                default                 { take False }
-            }
-        }.head;
-        my $valid-hcl = so $hcl ~~ /^'#'&amp;lt;xdigit&amp;gt; ** 6$/;                             # [4]
-        my $valid-ecl = $ecl ∈ set &amp;lt;amb blu brn gry grn hzl oth&amp;gt;;
-        my $valid-pid = so $pid ~~ /^&amp;lt;digit&amp;gt; ** 9$/;
-        $valid-byr &amp;amp;&amp;amp; $valid-iyr &amp;amp;&amp;amp; $valid-eyr &amp;amp;&amp;amp; $valid-hgt &amp;amp;&amp;amp; $valid-hcl &amp;amp;&amp;amp; $valid-ecl &amp;amp;&amp;amp; $valid-pid;
-    } else {
-        $valid-keys;
-    }
-}
-
-sub MAIN($file, Bool :$p2 = False) {
-    say $file.IO
-          .slurp
-          .split(/\n\n/)
-          .map(-&amp;gt; $entry {
-              $entry
-                .split(/&amp;lt;space&amp;gt;/)
-                .map(*.split(':'))
-                .map(-&amp;gt; ($key, $value) { $key.trim =&amp;gt; $value.trim })
-                .Hash
-          })
-          .map(&amp;amp;is-valid.assuming(*, $p2)) # [5]
-          .grep(* == True)
-          .elems;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
-$ raku main.raku input.txt
-237
-
-# Part 2
-$ raku main.raku --p2 input.txt
-172
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;This solution could be faster by &lt;a href=&quot;https://en.wikipedia.org/wiki/Short-circuit_evaluation&quot;&gt;short-circuiting&lt;/a&gt; after each check, but I was going for readability here, so it works.&lt;/p&gt;
-
-&lt;p&gt;All that really changed from part 1 is our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is-valid&lt;/code&gt; check, and I feel the logic is fairly straight forward. We basically just unpack the items from our passport (assuming it has all the keys), then test the for validity using a combination of regexes and set containment operators. If all conditions are met, we return &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt;, else &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;False&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Because it is so straight forward, it was even more maddening when I was off by one. See #2 below for the trap I was falling into!&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Hashes have a special syntax where you can provide multiple space-separated keys, and it will return all the values as a list. We then map these entries to strings and unpack them. Again, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;...&amp;gt;&lt;/code&gt; automatically quotes our keys, so we don’t have to.&lt;/li&gt;
-  &lt;li&gt;Originally this line (along with the rest) looked like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(59..76).contains($byr.Int)&lt;/code&gt;. The logic is exactly the same, but this is apparently a &lt;a href=&quot;https://docs.raku.org/language/traps#Lists_become_strings,_so_beware_.contains()&quot;&gt;well-documented trap&lt;/a&gt;. Basically &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.contains&lt;/code&gt; does not test for presence of an element. It converts the list to a string and checks if the given substring exists within it. I don’t fully know which item was erroneously getting matched here, but it caused the outcome to be 173 instead of 172.&lt;/li&gt;
-  &lt;li&gt;The solution to the above trap is to use set containment operators as shown here. Once again, we are using the Unicode operator, this time we use the &lt;a href=&quot;https://en.wikipedia.org/wiki/Element_(mathematics)#Notation_and_terminology&quot;&gt;“is an element of”&lt;/a&gt; set operator.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;xdigit&amp;gt;&lt;/code&gt; is a built-in metacharacter for the characters &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0-9&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a-f&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;A-F&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;The way Raku handles &lt;a href=&quot;https://en.wikipedia.org/wiki/Partial_function&quot;&gt;partial functions&lt;/a&gt; is the &lt;a href=&quot;https://docs.raku.org/routine/assuming&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;assuming&lt;/code&gt;&lt;/a&gt; method, which allows you to fix one or more parameters when calling a subroutine.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;I had a hard time tracking down that bug! I eventually got help from someone on the &lt;a href=&quot;http://reddit.com/r/rakulang&quot;&gt;Raku subreddit&lt;/a&gt; who was able to point me in the right direction.&lt;/p&gt;
-
-&lt;p&gt;With that being said, I am really learning a lot through this exercise. In fact, I am noticing mistakes (or rather, code smells) in my previous solutions! I am not planning on editing them out though; it’s always good to see where you came from to remember how far you’ve come!&lt;/p&gt;
-
-&lt;p&gt;See y’all for day 5!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today’s challenge was a rough one for me. Not because of the challenge itself, but because I fell into a trap in the Raku language that was giving me an off-by-one error. See Part 2 for details!</summary></entry></feed>
+&lt;p&gt;So far we are 5 for 5 with pure functional solutions. 20% of the way there!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right-hand side of the shelf, then narrow down your search from there. This is obviously more efficient than searching from the left-hand side of the bookshelf.</summary></entry></feed>

@@ -1,0 +1,907 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Advent of Code: Day 13 - Aaron Smith</title>
+<meta name="description" content="Today’s challenge was… interesting, to say the least. It may look short and sweet, but it is fairly complex and requires a fair bit of number theory for part two.">
+
+
+  <meta name="author" content="Aaron Smith">
+  
+  <meta property="article:author" content="Aaron Smith">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Aaron Smith">
+<meta property="og:title" content="Advent of Code: Day 13">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-13/">
+
+
+  <meta property="og:description" content="Today’s challenge was… interesting, to say the least. It may look short and sweet, but it is fairly complex and requires a fair bit of number theory for part two.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-13T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-13/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Aaron Smith Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Aaron Smith Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/tags/">Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/assets/files/aaron_smith_resume.pdf">Resume</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/headshot-square.jpg" alt="Aaron Smith" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Aaron Smith</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Data Engineer specializing in streaming data at scale, especially on AWS</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Connect</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Austin, TX</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Advent of Code: Day 13">
+    <meta itemprop="description" content="Today’s challenge was… interesting, to say the least. It may look short and sweet, but it is fairly complex and requires a fair bit of number theory for part two.">
+    <meta itemprop="datePublished" content="2020-12-13T00:00:00-06:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 13
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-13T00:00:00-06:00">December 13, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Today’s challenge was… interesting, to say the least. It may look short and sweet, but it is fairly complex and requires a fair bit of <a href="https://en.wikipedia.org/wiki/Number_theory">number theory</a> for part two.</p>
+
+<h2 id="the-problem">The Problem</h2>
+
+<h3 id="part-1">Part 1</h3>
+
+<p>After <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-12/">yesterday’s fiasco</a>, our ferry was forced to make an emergency stop on a different island. Unfortunately, there are no ferries from this island to our destination island; once again, we will have to take a plane. To get to the airport, our only option is a bus. Bus IDs also correspond to how often they come. I.e., a bus with ID 7 will come at timestamps 0, 7, 14, etc.</p>
+
+<p>We took a few notes (our input) on the bus schedule. Example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>939
+7,13,x,x,59,x,31,19
+</code></pre></div></div>
+
+<p>The first line is the earliest timestamp we will be able to make it to the bus station, and the second line is a list of bus IDs; buses that are out of service are denoted with an X. Given this information, our goal is to find the earliest bus that will get us to the airport. With the above example, we can see how this breaks down (in the below table a <code class="language-plaintext highlighter-rouge">D</code> means “departure”):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>time   bus 7   bus 13  bus 59  bus 31  bus 19
+929      .       .       .       .       .
+930      .       .       .       D       .
+931      D       .       .       .       D
+932      .       .       .       .       .
+933      .       .       .       .       .
+934      .       .       .       .       .
+935      .       .       .       .       .
+936      .       D       .       .       .
+937      .       .       .       .       .
+938      D       .       .       .       .
+939      .       .       .       .       .  &lt;--- Time we make it to the bus station
+940      .       .       .       .       .
+941      .       .       .       .       .
+942      .       .       .       .       .
+943      .       .       .       .       .
+944      .       .       D       .       .  &lt;--- First bus that can take us to the airport
+945      D       .       .       .       .
+946      .       .       .       .       .
+947      .       .       .       .       .
+948      .       .       .       .       .
+949      .       D       .       .       .
+</code></pre></div></div>
+
+<p>Once we have found the bus that can take us to the airport, we need to calculate the product of the bus ID and our wait time. In the example above it would be <code class="language-plaintext highlighter-rouge">59 * (944 - 939) = 295</code>.</p>
+
+<h4 id="solution">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/13/raku/main.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub MAIN($file) {
+    my @input = $file.IO.lines;
+    my $arrival-time = @input[0].Int;
+    my @buses = @input[1].split(',').grep(* ne 'x').map(*.Int);
+    say [*] @buses
+            .map(-&gt; $id { ($id, $id - $arrival-time % $id) })
+            .min(*[1])
+            .flat;
+}
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+261
+</code></pre></div></div>
+
+<h4 id="explanation">Explanation</h4>
+
+<p>Since our bus timestamps will always just be multiples of the bus ID, we can look at just the bus IDs themselves to find how long we will be waiting. When we calculate the remainder between <code class="language-plaintext highlighter-rouge">$arrival-time</code> and <code class="language-plaintext highlighter-rouge">$id</code>, it will show us how many minutes have passed <strong>since the last bus</strong>. Let’s look at this in context:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>939 % 7  = 1  (means there was a bus 1 minute ago)
+939 % 13 = 3  (means there was a bus 3 minutes ago)
+939 % 59 = 54 (means there was a bus 54 minutes ago)
+939 % 31 = 9  (means there was a bus 9 minutes ago)
+939 % 19 = 8  (means there was a bus 8 minutes ago)
+</code></pre></div></div>
+
+<p>So, looking at the above, it is not immediately obvious what we need to do. Basically, since we know how often a bus comes, we want to minimize the value of <code class="language-plaintext highlighter-rouge">$id - &lt;output of above&gt;</code>. To do that, we simply subtract the amount of time that has passed for each bus from its scheduled departure time:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 7 - (939 %  7) =  7 - 1  = 6
+13 - (939 % 13) = 13 - 3  = 10
+59 - (939 % 59) = 59 - 54 = 5
+31 - (939 % 31) = 31 - 9  = 22
+19 - (939 % 19) = 19 - 8  = 11
+</code></pre></div></div>
+
+<p>So from this, it is obvious that bus 59 has the shortest time to next departure, so that is the best choice. At this point, we multiple 59 * 5 and get 295.</p>
+
+<p>I feel the code reflects this pretty well. The first three lines are just pulling the data in, removing the <code class="language-plaintext highlighter-rouge">x</code> buses, and converting things to integers. After that, for each bus ID, we do the calculations above, then filter it down to the minimum wait time. Finally, we flatten it into one list and multiply the values (via the <code class="language-plaintext highlighter-rouge">[*]</code> metaoperator). That’s it!</p>
+
+<h5 id="specific-comments">Specific Comments</h5>
+
+<p>No specific comments today; I feel it is pretty straightforward.</p>
+
+<h3 id="part-2">Part 2</h3>
+
+<p>So after all the time we just spent to find the bus that will get us to the airport the fastest, we throw it all out the window.</p>
+
+<p>The shuttle company is running a contest to find the earliest timestamp such that each bus will depart one minute after the next. In the case of an <code class="language-plaintext highlighter-rouge">x</code>, there no constraints on bus IDs in that slot. So, given the same input as above:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>7,13,x,x,59,x,31,19
+</code></pre></div></div>
+
+<p>We are looking for a timestamp (<code class="language-plaintext highlighter-rouge">t</code>) that satisfies these conditions:</p>
+
+<ul>
+  <li>Bus ID <code class="language-plaintext highlighter-rouge">7</code> departs at timestamp <code class="language-plaintext highlighter-rouge">t</code>.</li>
+  <li>Bus ID <code class="language-plaintext highlighter-rouge">13</code> departs one minute after timestamp <code class="language-plaintext highlighter-rouge">t</code>.</li>
+  <li>There are no requirements or restrictions on departures at two or three minutes after timestamp <code class="language-plaintext highlighter-rouge">t</code>.</li>
+  <li>Bus ID <code class="language-plaintext highlighter-rouge">59</code> departs four minutes after timestamp <code class="language-plaintext highlighter-rouge">t</code>.</li>
+  <li>There are no requirements or restrictions on departures at five minutes after timestamp <code class="language-plaintext highlighter-rouge">t</code>.</li>
+  <li>Bus ID <code class="language-plaintext highlighter-rouge">31</code> departs six minutes after timestamp <code class="language-plaintext highlighter-rouge">t</code>.</li>
+  <li>Bus ID <code class="language-plaintext highlighter-rouge">19</code> departs seven minutes after timestamp <code class="language-plaintext highlighter-rouge">t</code>.</li>
+</ul>
+
+<p>In this example, the answer is <code class="language-plaintext highlighter-rouge">1068781</code>, as shown here:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>time     bus 7   bus 13  bus 59  bus 31  bus 19
+1068773    .       .       .       .       .
+1068774    D       .       .       .       .
+1068775    .       .       .       .       .
+1068776    .       .       .       .       .
+1068777    .       .       .       .       .
+1068778    .       .       .       .       .
+1068779    .       .       .       .       .
+1068780    .       .       .       .       .
+1068781    D       .       .       .       .  &lt;--- Bus 7 departs at timestamp `t`
+1068782    .       D       .       .       .  &lt;--- Bus 13 departs 1 minutes after `t`
+1068783    .       .       .       .       .
+1068784    .       .       .       .       .
+1068785    .       .       D       .       .  &lt;--- Bus 59 departs 4 minutes after `t`
+1068786    .       .       .       .       .
+1068787    .       .       .       D       .  &lt;--- Bus 31 departs 6 minutes after `t`
+1068788    D       .       .       .       D  &lt;--- Bus 19 departs 7 minutes after `t`
+1068789    .       .       .       .       .
+1068790    .       .       .       .       .
+1068791    .       .       .       .       .
+1068792    .       .       .       .       .
+1068793    .       .       .       .       .
+1068794    .       .       .       .       .
+1068795    D       D       .       .       .
+1068796    .       .       .       .       .
+1068797    .       .       .       .       .
+</code></pre></div></div>
+
+<p>Looking at our notes (our input), we realize that timestamp <code class="language-plaintext highlighter-rouge">t</code> will <em>surely</em> be larger thn <strong>100 <em>trillion</em></strong>, so we need to be smart about how we calculate it.</p>
+
+<h4 id="solution-1">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/13/raku/main.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub MAIN($file, Bool :$p2 = False) {
+    my @input = $file.IO.lines;
+    if $p2 {
+        # https://brilliant.org/wiki/chinese-remainder-theorem
+        my @buses = @input[1].split(',').antipairs.grep(*.key ne 'x');
+
+        my @times = @buses.map(*.key.Int);
+        my @offsets = @buses.map(-&gt; $pair { $pair.key - $pair.value });
+
+        my $N = [*] @times;
+        my @x = do for @offsets Z @times -&gt; ($offset, $depart-time) {
+            $offset * ($N div $depart-time) * expmod($N div $depart-time, -1, $depart-time);
+        }
+
+        say @x.sum % $N;
+    } else {
+        my @buses = @input[1].split(',').grep(* ne 'x').map(*.Int);
+        my $arrival-time = @input[0].Int;
+        say [*] @buses
+                .map(-&gt; $id { ($id, $id - $arrival-time % $id) })
+                .min(*[1])
+                .flat;
+    }
+}
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
+$ raku main.raku input.txt
+261
+
+# Part 2
+$ raku main.raku --p2 input.txt
+807435693182510
+</code></pre></div></div>
+
+<h4 id="explanation-1">Explanation</h4>
+
+<p>So obviously, given the hint about 100 trillion in the problem, we can’t just brute force this. The brute force method (using the example data) would be to start at 100 trillion and basically just go one-by-one until each subsequent bus passes our tests. Given that our actual output is closer to 1 quadrillion, that would take <em>forever</em>.</p>
+
+<p>That’s where number theory comes in. As I commented in the code, there is something called <a href="https://en.wikipedia.org/wiki/Chinese_remainder_theorem">Chinese remainder theorem</a> that basically states the following:</p>
+
+<p>Given the following items:</p>
+
+<ul>
+  <li>A sequence <code class="language-plaintext highlighter-rouge">n</code> of <a href="https://en.wikipedia.org/wiki/Coprime_integers#Coprimality_in_sets">pairwise coprime</a> integers</li>
+  <li>A sequence <code class="language-plaintext highlighter-rouge">a</code>, such that <code class="language-plaintext highlighter-rouge">0 &lt;= ai &lt; ni</code> for every <code class="language-plaintext highlighter-rouge">i</code></li>
+  <li>An integer <code class="language-plaintext highlighter-rouge">N</code> defined as the product of all integers in the sequence <code class="language-plaintext highlighter-rouge">n</code></li>
+</ul>
+
+<p>There is exactly one number, <code class="language-plaintext highlighter-rouge">x</code>, in the range <code class="language-plaintext highlighter-rouge">0 &lt;= x &lt; N</code> such that <code class="language-plaintext highlighter-rouge">x % ai == ni</code>.</p>
+
+<p>I won’t go too deep into the math here, but basically (again, using example data) we have the following terms:</p>
+
+<ul>
+  <li>Our sequence <code class="language-plaintext highlighter-rouge">n</code>: <code class="language-plaintext highlighter-rouge">7, 13, 59, 31, 19</code></li>
+  <li>Our sequence <code class="language-plaintext highlighter-rouge">a</code>: <code class="language-plaintext highlighter-rouge">0, 1, 4, 6, 7</code></li>
+  <li>Our number <code class="language-plaintext highlighter-rouge">N</code>: <code class="language-plaintext highlighter-rouge">7 * 13 * 59 * 31 * 19 = 3162341</code></li>
+</ul>
+
+<p>And we basically solve for <code class="language-plaintext highlighter-rouge">x</code>. That’s pretty much as far as I can go with this explanation, as Chinese remainder theorem is pretty advanced for me as well. I just converted the proof in the commented link to Raku to make this work 🙂</p>
+
+<p>When we do this with our real data, rather than running forever, it finishes in about 0.27 seconds (using a fairly slow language).</p>
+
+<h5 id="specific-comments-1">Specific Comments</h5>
+
+<p>I don’t fully understand the implementation here, so I have nothing to add 😂</p>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>We are officially past the halfway point! I wouldn’t say this was the toughest one, it felt like more of a trick question. Regardless, I expect the difficulty to start ramping quite a bit; hopefully I can keep up.</p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#advent-of-code" class="page__taxonomy-item" rel="tag">Advent of Code</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#raku" class="page__taxonomy-item" rel="tag">Raku</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-13T00:00:00-06:00">December 13, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+13%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-13%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-13%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-13%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/advent-of-code-day-12/" class="pagination--pager" title="Advent of Code: Day 12
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-12/" rel="permalink">Advent of Code: Day 12
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-12T00:00:00-06:00">December 12, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today was the first day where I didn’t use the same code for parts one and two – they were just too different! Other than that, this is a classic recursive s...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-11/" rel="permalink">Advent of Code: Day 11
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-11T00:00:00-06:00">December 11, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          6 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I am giving myself half credit for today; the solution I came up with is in Raku, but it is an iterative solution. Additionally, this solution is slow. In fa...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-10/" rel="permalink">Advent of Code: Day 10
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-10T00:00:00-06:00">December 10, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me d...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-09/" rel="permalink">Advent of Code: Day 9
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-09T00:00:00-06:00">December 9, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today we have a classic sliding window problem. But, instead of the traditional iterative approach, we take a recursive approach.
+
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Connect:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+        
+      
+        
+          <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i> Stack Overflow</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Aaron Smith. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>
