@@ -1,5 +1,6 @@
 ---
 title: "Advent of Code: Day 13"
+last_modified_at: 2020-12-14T19:46:00-05:00
 categories:
   - Blog
 tags:
@@ -13,7 +14,7 @@ Today's challenge was... interesting, to say the least. It may look short and sw
 
 ### Part 1
 
-After [yesterday's fiasco](https://aaronreidsmith.github.io/blog/advent-of-code-day-12/), our ferry was forced to make an emergency stop on a different island. Unfortunately, there are no ferries from this island to our destination island; once again, we will have to take a plane. To get to the airport, our only option is a bus. Bus IDs also correspond to how often they come. I.e., a bus with ID 7 will come at timestamps 0, 7, 14, etc.
+After [yesterday's fiasco](https://aaronreidsmith.github.io/blog/advent-of-code-day-12/), our ferry is being forced to make an emergency stop on a different island. Unfortunately, there are no ferries from this island to our destination island; once again, we will have to take a plane. To get to the airport, our only option is a bus. Bus IDs also correspond to how often they come. I.e., a bus with ID 7 will come at timestamps 0, 7, 14, etc.
 
 We took a few notes (our input) on the bus schedule. Example:
 

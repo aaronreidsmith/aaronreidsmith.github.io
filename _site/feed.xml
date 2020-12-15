@@ -1,10 +1,233 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-13T15:32:58-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 13</title><link href="http://localhost:4000/blog/advent-of-code-13/" rel="alternate" type="text/html" title="Advent of Code: Day 13" /><published>2020-12-13T00:00:00-06:00</published><updated>2020-12-13T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-13</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-13/">&lt;p&gt;Today’s challenge was… interesting, to say the least. It may look short and sweet, but it is fairly complex and requires a fair bit of &lt;a href=&quot;https://en.wikipedia.org/wiki/Number_theory&quot;&gt;number theory&lt;/a&gt; for part two.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-14T19:56:06-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 14</title><link href="http://localhost:4000/blog/advent-of-code-14/" rel="alternate" type="text/html" title="Advent of Code: Day 14" /><published>2020-12-14T00:00:00-06:00</published><updated>2020-12-14T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-14</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-14/">&lt;p&gt;Today was much less math-heavy than yesterday, although we will dive into an algorithm that would make it faster. However, I did do this problem more imperatively than functionally; read on to see why!&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
 &lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
 
-&lt;p&gt;After &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-12/&quot;&gt;yesterday’s fiasco&lt;/a&gt;, our ferry was forced to make an emergency stop on a different island. Unfortunately, there are no ferries from this island to our destination island; once again, we will have to take a plane. To get to the airport, our only option is a bus. Bus IDs also correspond to how often they come. I.e., a bus with ID 7 will come at timestamps 0, 7, 14, etc.&lt;/p&gt;
+&lt;p&gt;As we approach the mainland, the captain once again asks for our help; our computer system is not compatible with the port’s docking software. We quickly see that the docking parameters are not being properly initialized. The docking program is using a strange bitmask software, and we don’t have the proper chip to decode it. Luckily, we can emulate it.&lt;/p&gt;
+
+&lt;p&gt;Our input looks like the following:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
+mem[8] = 11
+mem[7] = 101
+mem[8] = 0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This defines a 36-bit bitmask and multiple memory addresses to update with bitmasked values. Here is how the bitmask is applied:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;value:  000000000000000000000000000000001011  (decimal 11)
+mask:   XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
+result: 000000000000000000000000000001001001  (decimal 73)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;First, a value (in this case 11) is converted to binary and then the mask is applied by using the mask character if it’s a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt; and the original character if it is an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt;. As you can see, this gives us the number 73 represented as binary. We then store &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;73&lt;/code&gt; at memory address 8 and move on to the next instruction.&lt;/p&gt;
+
+&lt;p&gt;Once all instructions have been applied, what is the sum of values in memory?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/14/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub apply-mask($mask, $num) {
+    my @mask-list = $mask.comb;
+    my @num-list  = $num.base(2).comb;
+
+    while @num-list.elems &amp;lt; @mask-list.elems {
+        @num-list.unshift(0);                                 # [1]
+    }
+
+    my @masked = gather {
+        for @mask-list Z @num-list -&amp;gt; ($mask-digit, $digit) { # [2]
+            take $mask-digit eq 'X' ?? $digit !! $mask-digit;
+        }
+    }
+
+    @masked.join.parse-base(2);
+}
+
+sub extract-values($line) {
+    my $address = $line.match(/\[(&amp;lt;digit&amp;gt;+)\]/)[0].Int;
+    my $value = $line.split(' = ')[1].Int;
+    ($address, $value)
+}
+
+sub MAIN($file) {
+    my $mask;
+    my @mem;
+    for $file.IO.lines -&amp;gt; $line {
+        if $line.starts-with('mask') {
+            $mask = $line.split(' = ')[1];
+        } else {
+            my ($address, $value) = extract-values($line);
+            @mem[$address] = apply-mask($mask, $value);
+        }
+    }
+    say @mem.sum; # [3]
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+17934269678453
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;So, first we define 2 helper functions:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;apply-mask&lt;/code&gt; takes a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mask&lt;/code&gt; string and an integer, then converts it to binary and iteratively works through the strings to apply the mask to the integer, then it casts the string back to a base-10 integer.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;extract-values&lt;/code&gt; simply parse the memory address and value to be masked from the input line.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; you can see how imperatively we did this. First, we define a mutable mask&lt;super&gt;*&lt;/super&gt; and memory register, then start iterating through the lines. If we hit a mask, overwrite our current one, otherwise extract the values, apply the mask, and add it to our memory register. Finally, just sum all the masked values up!&lt;/p&gt;
+
+&lt;super&gt;*&lt;/super&gt;
+&lt;p&gt;One thing about our input that was not super clear to me in the instructions is that we are given &lt;em&gt;multiple&lt;/em&gt; masks that we have to apply to the next N values (until we hit the next mask).&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;unshift&lt;/code&gt; adds values to the beginning of an array. Raku has no equivalent of Python’s &lt;a href=&quot;https://docs.python.org/3/library/itertools.html#itertools.zip_longest&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zip_longest&lt;/code&gt;&lt;/a&gt; function, so we have to make sure the input lists are exactly the same length.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Z&lt;/code&gt; is Raku’s zip operator. So &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 2, 3) Z (4, 5, 6)&lt;/code&gt; yields &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;((1, 4), (2, 5), (3, 6))&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Notice we never initialized a size of this array. Raku doesn’t require us to! It will implicitly fill in any unused slots with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Any&lt;/code&gt;, which is one of its undefined types. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Any&lt;/code&gt; is skipped during the sum, so it really is just as simple as saying &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@mem.sum&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;After all that business, we realize the docking computer must be running version 2 of the software while we are still on version 1. 🤦🏻&lt;/p&gt;
+
+&lt;p&gt;V2 of the software applies the bitmask to memory &lt;em&gt;addresses&lt;/em&gt;, not the &lt;em&gt;values&lt;/em&gt;. Additionally, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt; now means “floating” (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0 or 1&lt;/code&gt;), so we have to update both possible addresses. Here is an example:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;address: 000000000000000000000000000000101010  (decimal 42)
+mask:    000000000000000000000000000000X1001X
+result:  000000000000000000000000000000X1101X
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;After the mask, we are left with &lt;em&gt;four&lt;/em&gt; addresses to update:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;000000000000000000000000000000011010  (decimal 26)
+000000000000000000000000000000011011  (decimal 27)
+000000000000000000000000000000111010  (decimal 58)
+000000000000000000000000000000111011  (decimal 59)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Using V2, what is the sum of the memory addresses after initialization?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/14/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub find-all-masks(@zipped, $pointer = 0, @prefix = ()) {                          # [1]
+    if $pointer == @zipped.elems {
+        @prefix.join.parse-base(2);
+    } else {
+        my ($mask-digit, $digit) = @zipped[$pointer];
+        given $mask-digit {
+            when '0' { find-all-masks(@zipped, $pointer + 1, (|@prefix, $digit)) } # [2]
+            when '1' { find-all-masks(@zipped, $pointer + 1, (|@prefix, $mask-digit)) }
+            when 'X' {
+                |(
+                    find-all-masks(@zipped, $pointer + 1, (|@prefix, '0')),
+                    find-all-masks(@zipped, $pointer + 1, (|@prefix, '1'))
+                )
+            }
+        }
+    }
+}
+
+sub apply-mask($mask, $num, Bool $part-two = False) {
+    my @mask-list = $mask.comb;
+    my @num-list  = $num.base(2).comb;
+
+    while @num-list.elems &amp;lt; @mask-list.elems {
+        @num-list.unshift(0);
+    }
+
+    if $part-two {
+        find-all-masks(@mask-list Z @num-list);
+    } else {
+        my @masked = gather {
+            for @mask-list Z @num-list -&amp;gt; ($mask-digit, $digit) {
+                take $mask-digit eq 'X' ?? $digit !! $mask-digit;
+            }
+        }
+        @masked.join.parse-base(2);
+    }
+}
+
+sub extract-values($line) {
+    my $address = $line.match(/\[(&amp;lt;digit&amp;gt;+)\]/)[0].Int;
+    my $value = $line.split(' = ')[1].Int;
+    ($address, $value)
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my $mask;
+    my @mem;
+    for $file.IO.lines -&amp;gt; $line {
+        if $line.starts-with('mask') {
+            $mask = $line.split(' = ')[1];
+        } else {
+            my ($address, $value) = extract-values($line);
+            if $p2 {
+                for apply-mask($mask, $address, $p2) -&amp;gt; $index {
+                    @mem[$index] = $value;
+                }
+            } else {
+                @mem[$address] = apply-mask($mask, $value);
+            }
+        }
+    }
+    say @mem.sum;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
+$ raku main.raku input.txt
+17934269678453
+
+# Part 2
+$ raku main.raku --p2 input.txt
+3440662844064
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;We made a few tweaks to the original program:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;If it is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$part-two&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;apply-mask&lt;/code&gt; now returns a list of integers instead of just a single integer.&lt;/li&gt;
+  &lt;li&gt;Given the above, if it is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$p2&lt;/code&gt; in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt;, we iterate through the returned list.&lt;/li&gt;
+  &lt;li&gt;We added a function &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find-all-masks&lt;/code&gt; that will find all binary combinations for the “floating” bits.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The logic is pretty much the same, except using addresses instead of values!&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;This solution works, but it is &lt;em&gt;slow&lt;/em&gt; and memory intensive. The correct way to find all of these bit flips is by using something called a &lt;a href=&quot;https://en.wikipedia.org/wiki/Gray_code&quot;&gt;Gray code&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;We use these slips all over this to make sure we end up with just a 1D list (per call) when all is said and done.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I am enjoying learning about all the shortcuts that are necessary to make these things run in an acceptable amount of time. Maybe next year I will be able to think of them without writing the brute force solution first!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today was much less math-heavy than yesterday, although we will dive into an algorithm that would make it faster. However, I did do this problem more imperatively than functionally; read on to see why!</summary></entry><entry><title type="html">Advent of Code: Day 13</title><link href="http://localhost:4000/blog/advent-of-code-13/" rel="alternate" type="text/html" title="Advent of Code: Day 13" /><published>2020-12-13T00:00:00-06:00</published><updated>2020-12-14T18:46:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-13</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-13/">&lt;p&gt;Today’s challenge was… interesting, to say the least. It may look short and sweet, but it is fairly complex and requires a fair bit of &lt;a href=&quot;https://en.wikipedia.org/wiki/Number_theory&quot;&gt;number theory&lt;/a&gt; for part two.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;After &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-12/&quot;&gt;yesterday’s fiasco&lt;/a&gt;, our ferry is being forced to make an emergency stop on a different island. Unfortunately, there are no ferries from this island to our destination island; once again, we will have to take a plane. To get to the airport, our only option is a bus. Bus IDs also correspond to how often they come. I.e., a bus with ID 7 will come at timestamps 0, 7, 14, etc.&lt;/p&gt;
 
 &lt;p&gt;We took a few notes (our input) on the bus schedule. Example:&lt;/p&gt;
 
@@ -83,7 +306,7 @@
 19 - (939 % 19) = 19 - 8  = 11
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;So from this, it is obvious that bus 59 has the shortest time to next departure, so that is the best choice. At this point, we multiple 59 * 5 and get 295.&lt;/p&gt;
+&lt;p&gt;So from this, it is obvious that bus 59 has the shortest time to next departure, so that is the best choice. At this point, we multiply 59 * 5 and get 295.&lt;/p&gt;
 
 &lt;p&gt;I feel the code reflects this pretty well. The first three lines are just pulling the data in, removing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt; buses, and converting things to integers. After that, for each bus ID, we do the calculations above, then filter it down to the minimum wait time. Finally, we flatten it into one list and multiply the values (via the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[*]&lt;/code&gt; metaoperator). That’s it!&lt;/p&gt;
 
@@ -1754,184 +1977,4 @@ $ raku main.raku --p2 input.txt
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Nothing much to add to this one today. A short and sweet question with a short and sweet answer!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Well, our old pal set theory reared its head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!</summary></entry><entry><title type="html">Advent of Code: Day 5</title><link href="http://localhost:4000/blog/advent-of-code-day-05/" rel="alternate" type="text/html" title="Advent of Code: Day 5" /><published>2020-12-05T00:00:00-06:00</published><updated>2020-12-05T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-05</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-05/">&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Binary_search_algorithm&quot;&gt;Binary search&lt;/a&gt; is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right-hand side of the shelf, then narrow down your search from there. This is obviously more efficient than searching from the left-hand side of the bookshelf.&lt;/p&gt;
-
-&lt;p&gt;That was our task with today’s problem. Yet again, we get to bust out our old friend recursion to solve this problem fairly easily in a functional manner.&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;After &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-04/&quot;&gt;yesterday’s fiasco&lt;/a&gt; of just getting through the airport, we find ourselves on the plane. Lo and behold, we dropped our boarding pass, but they still let us on the plane with the holiday rush.&lt;/p&gt;
-
-&lt;p&gt;Luckily, we use our phone to scan &lt;em&gt;all&lt;/em&gt; the boarding passes nearby into a file full of lines that look like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;FBFBBFFRLR
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The first seven characters define what row (0 through 127, inclusive) everyone’s seat is in, and the last three characters refer to that seat’s column (0 through 7, inclusive). For example, given the above input:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Start by considering the whole range, rows 0 through 127&lt;/li&gt;
-  &lt;li&gt;F means to take the lower half, keeping rows 0 through 63&lt;/li&gt;
-  &lt;li&gt;B means to take the upper half, keeping rows 32 through 63&lt;/li&gt;
-  &lt;li&gt;F means to take the lower half, keeping rows 32 through 47&lt;/li&gt;
-  &lt;li&gt;B means to take the upper half, keeping rows 40 through 47&lt;/li&gt;
-  &lt;li&gt;B keeps rows 44 through 47&lt;/li&gt;
-  &lt;li&gt;F keeps rows 44 through 45&lt;/li&gt;
-  &lt;li&gt;The final F keeps the lower of the two, row 44&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Similarly, for the columns:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Start by considering the whole range, columns 0 through 7&lt;/li&gt;
-  &lt;li&gt;R means to take the upper half, keeping columns 4 through 7&lt;/li&gt;
-  &lt;li&gt;L means to take the lower half, keeping columns 4 through 5&lt;/li&gt;
-  &lt;li&gt;The final R keeps the upper of the two, column 5&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;And finally, to find someone’s seat number, we have the following calculation:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(row_number * seats_in_row) + column_number = seat_number
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Which yields:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(44 * 8) + 5 = 357
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Our task is to find the maximum seat number in the list of scanned boarding passes.&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/05/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub binary-search(@list, @possible-rows, $lower-symbol) {
-    if @possible-rows.elems == 1 {
-        @possible-rows.head;
-    } else {
-        my ($first-item, @rest-of-list) := @list[0,1..*];                                  # [1][2]
-        my $half-way-point = @possible-rows.elems div 2;                                   # [3]
-        if $first-item eq $lower-symbol {                                                  # [4]
-            binary-search(@rest-of-list, @possible-rows[^$half-way-point], $lower-symbol); # [5]
-        } else {
-            binary-search(@rest-of-list, @possible-rows[$half-way-point..*], $lower-symbol);
-        }
-    }
-}
-
-sub find-seat($boarding-pass) {
-    my (@row-definition, @column-definition) := $boarding-pass.comb.rotor(7, :partial); # [6]
-    my $row = binary-search(@row-definition, (^128), 'F');
-    my $column = binary-search(@column-definition, (^8), 'L');
-    ($row * 8) + $column;
-}
-
-sub MAIN($file) {
-    say $file.IO.lines.map(&amp;amp;find-seat).max;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-828
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;binary-search&lt;/code&gt; subroutine itself is fairly straight forward. It takes the list of characters (something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(F, B, F, B, B, F, F)&lt;/code&gt;), the list of possible rows/columns (something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(0..127)&lt;/code&gt;), and what character means “lower half” (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;F&lt;/code&gt; for front or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;L&lt;/code&gt; for left).&lt;/p&gt;
-
-&lt;p&gt;If there is only one item in the list of remaining rows/columns, that’s our answer, and we return. Otherwise, we check if we are keeping the left half or right half and call the function again with the smaller input.&lt;/p&gt;
-
-&lt;p&gt;We wrap this function in a helper function called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;find-seat&lt;/code&gt; which includes the multiplication logic, then map it over our input lines. Finally, we call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;max&lt;/code&gt; to find the max seat number.&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;When unpacking a list in this manner, the left-hand side is normally one or more scalars (denoted by the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$&lt;/code&gt; sigil). When unpacking using a list on the left-hand side, we have to use the special &lt;a href=&quot;https://docs.raku.org/language/operators#index-entry-Binding_operator&quot;&gt;binding&lt;/a&gt; operator (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:=&lt;/code&gt;) or everything will get “slurped” (Raku’s terminology, not mine) into the list instead of being split between the list and scalar.&lt;/li&gt;
-  &lt;li&gt;I used some special Hash syntax yesterday to extract multiple keys at the same time. This is the equivalent List syntax (comma-separated instead of space-separated).&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;div&lt;/code&gt; is Raku’s integer division operator. Even though we know our input will always be a multiple of two, it never hurts to use best practices!&lt;/li&gt;
-  &lt;li&gt;In the past few posts for string comparison I was using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$x cmp $y == Same&lt;/code&gt;. I finally stumbled upon the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eq&lt;/code&gt; operator and no longer have that code smell!&lt;/li&gt;
-  &lt;li&gt;This line (and others) contain special range syntax. Basically &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;^$half-way-point&lt;/code&gt; is the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(0..^$half-way-point)&lt;/code&gt;, meaning everything from zero to the half-way point, exclusive.&lt;/li&gt;
-  &lt;li&gt;This line splits the input into a list of characters and then uses the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rotor&lt;/code&gt; function to split it into groups of 7. Since our second group (the column definition) is of size 3, we need to pass the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:partial&lt;/code&gt; parameter in, or else it will get dropped for being too small. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:partial&lt;/code&gt; is special syntax to pass in a boolean flag named &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;partial&lt;/code&gt; as true. This is the equivalent of passing in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;partial =&amp;gt; True&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;Now that we’ve found the maximum seat, the flight attendants are asking us to take our seat! Our seat is the only seat number not in the list of boarding passes we scanned. And of course instead of just looking around the plane and finding the empty seat, we sit in the aisle and tweak our program to tell us where to go.&lt;/p&gt;
-
-&lt;p&gt;As a caveat, the seat numbers do &lt;em&gt;not&lt;/em&gt; start at 1, so we have to take that into consideration.&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/05/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub binary-search(@list, @possible-rows, $lower-symbol) {
-    if @possible-rows.elems == 1 {
-        @possible-rows.head;
-    } else {
-        my ($first-item, @rest-of-list) := @list[0,1..*];
-        my $half-way-point = @possible-rows.elems div 2;
-        if $first-item eq $lower-symbol {
-            binary-search(@rest-of-list, @possible-rows[^$half-way-point], $lower-symbol);
-        } else {
-            binary-search(@rest-of-list, @possible-rows[$half-way-point..*], $lower-symbol);
-        }
-    }
-}
-
-sub find-seat($boarding-pass) {
-    my (@row-definition, @column-definition) := $boarding-pass.comb.rotor(7, :partial);
-    my $row = binary-search(@row-definition, (^128), 'F');
-    my $column = binary-search(@column-definition, (^8), 'L');
-    ($row * 8) + $column;
-}
-
-sub MAIN($file, Bool :$p2 = False) {
-    my @seats =  $file.IO.lines.map(&amp;amp;find-seat);
-    my $max-seat = @seats.max;
-    if $p2 {
-        my $min-seat = @seats.min;
-        my $all-seats = set ($min-seat..$max-seat);
-        my @missing-seats = ($all-seats ⊖ set @seats).keys; # [1]
-        say @missing-seats.head;
-    } else {
-        say $max-seat;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
-$ raku main.raku input.txt
-828
-
-# Part 2
-$ raku main.raku --p2 input.txt
-565
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;You’ll notice all we did was tweak our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; method a bit. We still find all the seat numbers, and if the user doesn’t specify &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p2&lt;/code&gt;, we print the maximum.&lt;/p&gt;
-
-&lt;p&gt;If the user &lt;em&gt;does&lt;/em&gt; specify &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p2&lt;/code&gt;, we also calculate our minimum seat number (since the seats don’t start at 1). We then find the set of &lt;em&gt;all&lt;/em&gt; seats (being the range from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$min-seat&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$max-seat&lt;/code&gt;). We then use our handy dandy &lt;a href=&quot;https://en.wikipedia.org/wiki/Symmetric_difference&quot;&gt;symmetric difference&lt;/a&gt; operator to find the difference between all possible seats, and the list of seats we scanned. The difference, of course, being our seat. We find it just in time before the flight attendants drag us out. Phew!&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;A set is a scalar instead of a collection in Raku (note the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$&lt;/code&gt; sigil instead of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@&lt;/code&gt; sigil), so we have to convert it to a list using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.keys&lt;/code&gt; method. Of course, there is only one thing in it, so we then call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.head&lt;/code&gt; to get that item.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;This exercise has me diving more and more into &lt;a href=&quot;https://en.wikipedia.org/wiki/Set_theory&quot;&gt;set theory&lt;/a&gt;. It’s awesome that Raku allows (and encourages) use of the Unicode operators found in math textbooks. Their reasoning for this is that it is easier to take an algorithm from paper to code when you are allowed to use the same notation in each place. Now to find a keyboard to be able to type these symbols!&lt;/p&gt;
-
-&lt;p&gt;So far we are 5 for 5 with pure functional solutions. 20% of the way there!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Binary search is a well-known algorithm for searching already sorted lists. I liken it to searching for a book at a book store. If the author’s last name starts with “S,” you will start somewhere on the right-hand side of the shelf, then narrow down your search from there. This is obviously more efficient than searching from the left-hand side of the bookshelf.</summary></entry></feed>
+&lt;p&gt;Nothing much to add to this one today. A short and sweet question with a short and sweet answer!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Well, our old pal set theory reared its head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!</summary></entry></feed>

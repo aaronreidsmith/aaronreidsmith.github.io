@@ -38,6 +38,8 @@
 
 
 
+  <meta property="article:modified_time" content="2020-12-14T18:46:00-06:00">
+
 
 
 
@@ -288,7 +290,7 @@
     <meta itemprop="headline" content="Advent of Code: Day 13">
     <meta itemprop="description" content="Today’s challenge was… interesting, to say the least. It may look short and sweet, but it is fairly complex and requires a fair bit of number theory for part two.">
     <meta itemprop="datePublished" content="2020-12-13T00:00:00-06:00">
-    
+    <meta itemprop="dateModified" content="2020-12-14T18:46:00-06:00">
 
     <div class="page__inner-wrap">
       
@@ -333,7 +335,7 @@
 
 <h3 id="part-1">Part 1</h3>
 
-<p>After <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-12/">yesterday’s fiasco</a>, our ferry was forced to make an emergency stop on a different island. Unfortunately, there are no ferries from this island to our destination island; once again, we will have to take a plane. To get to the airport, our only option is a bus. Bus IDs also correspond to how often they come. I.e., a bus with ID 7 will come at timestamps 0, 7, 14, etc.</p>
+<p>After <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-12/">yesterday’s fiasco</a>, our ferry is being forced to make an emergency stop on a different island. Unfortunately, there are no ferries from this island to our destination island; once again, we will have to take a plane. To get to the airport, our only option is a bus. Bus IDs also correspond to how often they come. I.e., a bus with ID 7 will come at timestamps 0, 7, 14, etc.</p>
 
 <p>We took a few notes (our input) on the bus schedule. Example:</p>
 
@@ -412,7 +414,7 @@
 19 - (939 % 19) = 19 - 8  = 11
 </code></pre></div></div>
 
-<p>So from this, it is obvious that bus 59 has the shortest time to next departure, so that is the best choice. At this point, we multiple 59 * 5 and get 295.</p>
+<p>So from this, it is obvious that bus 59 has the shortest time to next departure, so that is the best choice. At this point, we multiply 59 * 5 and get 295.</p>
 
 <p>I feel the code reflects this pretty well. The first three lines are just pulling the data in, removing the <code class="language-plaintext highlighter-rouge">x</code> buses, and converting things to integers. After that, for each bus ID, we do the calculations above, then filter it down to the minimum wait time. Finally, we flatten it into one list and multiply the values (via the <code class="language-plaintext highlighter-rouge">[*]</code> metaoperator). That’s it!</p>
 
@@ -604,7 +606,7 @@ $ raku main.raku --p2 input.txt
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-13T00:00:00-06:00">December 13, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-14">December 14, 2020</time></p>
 
 
       </footer>
@@ -629,7 +631,8 @@ $ raku main.raku --p2 input.txt
 ">Previous</a>
     
     
-      <a href="#" class="pagination--pager disabled">Next</a>
+      <a href="/blog/advent-of-code-14/" class="pagination--pager" title="Advent of Code: Day 14
+">Next</a>
     
   </nav>
 
@@ -643,6 +646,51 @@ $ raku main.raku --p2 input.txt
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-14/" rel="permalink">Advent of Code: Day 14
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-14T00:00:00-06:00">December 14, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today was much less math-heavy than yesterday, although we will dive into an algorithm that would make it faster. However, I did do this problem more imperat...</p>
+  </article>
+</div>
+
         
           
 
@@ -775,53 +823,6 @@ $ raku main.raku --p2 input.txt
 
 
     <p class="archive__item-excerpt" itemprop="description">Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me d...</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-09/" rel="permalink">Advent of Code: Day 9
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-09T00:00:00-06:00">December 9, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          5 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">Today we have a classic sliding window problem. But, instead of the traditional iterative approach, we take a recursive approach.
-
-</p>
   </article>
 </div>
 
