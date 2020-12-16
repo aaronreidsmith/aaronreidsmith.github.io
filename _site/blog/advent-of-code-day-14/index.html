@@ -23,7 +23,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
 <meta property="og:title" content="Advent of Code: Day 14">
-<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-14/">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-14/">
 
 
   <meta property="og:description" content="Today was much less math-heavy than yesterday, although we will dive into an algorithm that would make it faster. However, I did do this problem more imperatively than functionally; read on to see why!">
@@ -41,7 +41,7 @@
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-14/">
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-14/">
 
 
 
@@ -413,10 +413,9 @@ sub MAIN($file) {
   <li><code class="language-plaintext highlighter-rouge">extract-values</code> simply parse the memory address and value to be masked from the input line.</li>
 </ul>
 
-<p>in <code class="language-plaintext highlighter-rouge">MAIN</code> you can see how imperatively we did this. First, we define a mutable mask<super>*</super> and memory register, then start iterating through the lines. If we hit a mask, overwrite our current one, otherwise extract the values, apply the mask, and add it to our memory register. Finally, just sum all the masked values up!</p>
+<p>in <code class="language-plaintext highlighter-rouge">MAIN</code> you can see how imperatively we did this. First, we define a mutable mask<sup>*</sup> and memory register, then start iterating through the lines. If we hit a mask, overwrite our current one, otherwise extract the values, apply the mask, and add it to our memory register. Finally, just sum all the masked values up!</p>
 
-<super>*</super>
-<p>One thing about our input that was not super clear to me in the instructions is that we are given <em>multiple</em> masks that we have to apply to the next N values (until we hit the next mask).</p>
+<p><sup>*</sup>One thing about our input that was not super clear to me in the instructions is that we are given <em>multiple</em> masks that we have to apply to the next N values (until we hit the next mask).</p>
 
 <h5 id="specific-comments">Specific Comments</h5>
 
@@ -613,22 +612,23 @@ $ raku main.raku --p2 input.txt
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+14%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-14%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+14%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-14%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-14%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-14%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-14%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-14%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/advent-of-code-13/" class="pagination--pager" title="Advent of Code: Day 13
+      <a href="/blog/advent-of-code-day-13/" class="pagination--pager" title="Advent of Code: Day 13
 ">Previous</a>
     
     
-      <a href="#" class="pagination--pager disabled">Next</a>
+      <a href="/blog/advent-of-code-day-15/" class="pagination--pager" title="Advent of Code: Day 15
+">Next</a>
     
   </nav>
 
@@ -652,7 +652,52 @@ $ raku main.raku --p2 input.txt
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/blog/advent-of-code-13/" rel="permalink">Advent of Code: Day 13
+        <a href="/blog/advent-of-code-day-15/" rel="permalink">Advent of Code: Day 15
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-15T00:00:00-06:00">December 15, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          6 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Even with how short and sweet today’s solution is, I had to rewrite it between parts one and two after hitting the maximum recursion depth. So we’ve got one ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-13/" rel="permalink">Advent of Code: Day 13
 </a>
       
     </h2>
@@ -774,51 +819,6 @@ $ raku main.raku --p2 input.txt
 
 
     <p class="archive__item-excerpt" itemprop="description">I am giving myself half credit for today; the solution I came up with is in Raku, but it is an iterative solution. Additionally, this solution is slow. In fa...</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-10/" rel="permalink">Advent of Code: Day 10
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-10T00:00:00-06:00">December 10, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          4 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me d...</p>
   </article>
 </div>
 
