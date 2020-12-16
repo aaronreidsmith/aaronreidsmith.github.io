@@ -95,9 +95,9 @@ So, first we define 2 helper functions:
 - `apply-mask` takes a `mask` string and an integer, then converts it to binary and iteratively works through the strings to apply the mask to the integer, then it casts the string back to a base-10 integer.
 - `extract-values` simply parse the memory address and value to be masked from the input line.
 
-in `MAIN` you can see how imperatively we did this. First, we define a mutable mask<super>*</super> and memory register, then start iterating through the lines. If we hit a mask, overwrite our current one, otherwise extract the values, apply the mask, and add it to our memory register. Finally, just sum all the masked values up!
+in `MAIN` you can see how imperatively we did this. First, we define a mutable mask<sup>*</sup> and memory register, then start iterating through the lines. If we hit a mask, overwrite our current one, otherwise extract the values, apply the mask, and add it to our memory register. Finally, just sum all the masked values up!
 
-<super>*</super>One thing about our input that was not super clear to me in the instructions is that we are given _multiple_ masks that we have to apply to the next N values (until we hit the next mask).
+<sup>*</sup>One thing about our input that was not super clear to me in the instructions is that we are given _multiple_ masks that we have to apply to the next N values (until we hit the next mask).
 
 ##### Specific Comments
 

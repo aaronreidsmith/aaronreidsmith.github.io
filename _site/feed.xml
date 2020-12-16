@@ -1,4 +1,166 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-15T14:34:32-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 14</title><link href="http://localhost:4000/blog/advent-of-code-day-14/" rel="alternate" type="text/html" title="Advent of Code: Day 14" /><published>2020-12-14T00:00:00-06:00</published><updated>2020-12-14T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-14</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-14/">&lt;p&gt;Today was much less math-heavy than yesterday, although we will dive into an algorithm that would make it faster. However, I did do this problem more imperatively than functionally; read on to see why!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-15T16:54:09-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 15</title><link href="http://localhost:4000/blog/advent-of-code-day-15/" rel="alternate" type="text/html" title="Advent of Code: Day 15" /><published>2020-12-15T00:00:00-06:00</published><updated>2020-12-15T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-15</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-15/">&lt;p&gt;Even with how short and sweet today’s solution is, I had to rewrite it between parts one and two after hitting the maximum recursion depth. So we’ve got one functional, recursive solution and one imperative, iterative solution!&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;While we wait for our next flight, we decide to call the elves back at the North Pole. They’re playing a memory game that they want us to join.&lt;/p&gt;
+
+&lt;p&gt;In this game, the players take turns saying numbers. They begin by taking turns reading from a list of starting numbers (your puzzle input). Then, each turn consists of considering the most recently spoken number:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;If that was the first time the number has been spoken, the current player says &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Otherwise, the number had been spoken before; the current player announces how many turns apart the number is from when it was previously spoken.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here is an example with input &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0,3,6&lt;/code&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Turn 1: The 1st number spoken is a starting number, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Turn 2: The 2nd number spoken is a starting number, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Turn 3: The 3rd number spoken is a starting number, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;6&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Turn 4: Now, consider the last number spoken, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;6&lt;/code&gt;. Since that was the first time the number had been spoken, the 4th number spoken is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Turn 5: Next, again consider the last number spoken, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;. Since it had been spoken before, the next number to speak is the difference between the turn number when it was last spoken (the previous turn, 4) and the turn number of the time it was most recently spoken before then (turn 1). Thus, the 5th number spoken is 4 - 1, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Turn 6: The last number spoken, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3&lt;/code&gt; had also been spoken before, most recently on turns &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2&lt;/code&gt;. So, the 6th number spoken is 5 - 2, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Turn 7: Since 3 was just spoken twice in a row, and the last two turns are 1 turn apart, the 7th number spoken is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Turn 8: Since 1 is new, the 8th number spoken is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Turn 9: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt; was last spoken on turns 8 and 4, so the 9th number spoken is the difference between them, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;4&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Turn 10: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;4&lt;/code&gt; is new, so the 10th number spoken is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Given an input of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;11,18,0,20,1,7,16&lt;/code&gt;, what will be the 2020&lt;sup&gt;th&lt;/sup&gt; number?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/15/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub play-game(%numbers, $turn, $number, $target-turn) {
+    if $turn == $target-turn {
+        $number;
+    } else {
+        my $next-number = %numbers{$number}:exists ?? $turn - %numbers{$number} !! 0;        # [1]
+        play-game(%(|%numbers, |($number =&amp;gt; $turn)), $turn + 1, $next-number, $target-turn); # [2]
+    }
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my %initial = $file.IO.slurp.split(',').kv.map(-&amp;gt; $key, $value { $value =&amp;gt; $key + 1 } ).Hash;
+    say play-game(%initial, %initial.elems + 1, 0, 2020);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+639
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;So, in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; we first pull everything from our input into a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt; with the keys being the number that was said by the elves, and the value being the turn it was said on. Then we pass that to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;play-game&lt;/code&gt; with four parameters:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt; itself&lt;/li&gt;
+  &lt;li&gt;The turn we are starting on (in the case of our input, 8)&lt;/li&gt;
+  &lt;li&gt;The next number in the sequence (since our input is so small, we can hard-code this to 0)&lt;/li&gt;
+  &lt;li&gt;The number in the sequence we are hoping to find (2020)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;play-game&lt;/code&gt; will recursively do the following (until it hits turn 2020):&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;If we have seen this number find the difference between this turn, and the turn it was last said on, otherwise &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Update the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%numbers&lt;/code&gt; variable with the new number/turn pair&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;That’s it!&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:exists&lt;/code&gt; tag here is something called an &lt;a href=&quot;https://docs.raku.org/language/subscripts#index-entry-:exists_(subscript_adverb)&quot;&gt;adverb&lt;/a&gt; in Raku. It is the equivalent of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;key in dictionary&lt;/code&gt; in Python.&lt;/li&gt;
+  &lt;li&gt;There is some special syntax on this line for merging hashes without mutating the original hashes. The slip character (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt;) unpacks the two hashes into an outer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt; (denoted by the preceding &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%&lt;/code&gt; sigil) and gives precedence to the second &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt;. Here is what that means in simple terms:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;my %a = (a =&amp;gt; 1, b =&amp;gt; 2);  # {a =&amp;gt; 1, b =&amp;gt; 2} 
+my %b = (b =&amp;gt; 3, c =&amp;gt; 4);  # {b =&amp;gt; 3, c =&amp;gt; 4}
+my %c = %(|%a, |%b);       # {a =&amp;gt; 1, b =&amp;gt; 3, c =&amp;gt; 4}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;The elves are impressed with our memory skills, so they up the ante! What is the &lt;em&gt;30 millionth&lt;/em&gt; term in the sequence?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/15/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub play-game-recursive(%numbers, $turn, $number, $target-turn) {
+    if $turn == $target-turn {
+        $number;
+    } else {
+        my $next-turn = %numbers{$number}:exists ?? $turn - %numbers{$number} !! 0;
+        play-game-recursive(
+            %(|%numbers, |($number =&amp;gt; $turn)),
+            $turn + 1,
+            $next-turn,
+            $target-turn
+        );
+    }
+}
+
+sub play-game-iterative(%numbers is copy, $target-turn) {                                      # [1]
+    my $last-item = %numbers.pairs.sort({ $^a.value cmp $^b.value })[*-1];                     # [2]
+    for (%numbers.elems^..$target-turn) -&amp;gt; $turn {                                             # [3]
+        my $new-item = %numbers{$last-item}:exists ?? ($turn - 1) - %numbers{$last-item} !! 0;
+        %numbers{$last-item} = $turn - 1;
+        $last-item = $new-item;
+    }
+    $last-item;
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my %initial = $file.IO.slurp.split(',').kv.map(-&amp;gt; $key, $value { $value =&amp;gt; $key + 1 } ).Hash;
+    my $last-turn = $p2 ?? 30_000_000 !! 2020;                                                    # [4]
+    say play-game-iterative(%initial, $last-turn);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
+$ raku main.raku input.txt
+639
+
+# Part 2
+$ raku main.raku --p2 input.txt
+266
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;So the first thing you’ll notice is I refactored &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;play-game&lt;/code&gt; to be called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;play-game-recursive&lt;/code&gt;; this is not used anywhere, it was simply left in to show the progression of the code.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; does the same thing, but changes the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$last-turn&lt;/code&gt; value based on if it is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$p2&lt;/code&gt; or not, but then passes the input to an &lt;em&gt;iterative&lt;/em&gt; solution. The iterative solution basically just keeps the last-said number in memory and checks if it exists in our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%number&lt;/code&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt;. If so, it finds the difference between the last turn, and the last time it was said and that is our next number, otherwise it is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;. We then add that new number to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%numbers&lt;/code&gt; and keep going.&lt;/p&gt;
+
+&lt;p&gt;For 30 million iterations this solution is still pretty slow, but it works where the recursive solution just dies.&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is copy&lt;/code&gt; parameter tells the subroutine that it is receiving a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;copy&lt;/code&gt; of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%numbers&lt;/code&gt; and it is safe to mutate it.&lt;/li&gt;
+  &lt;li&gt;Since a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt; does not guarantee order, we need to implement a custom sort algorithm. In this case, we are sorting by the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;value&lt;/code&gt; of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Pair&lt;/code&gt; objects, which is the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;turn&lt;/code&gt; in our scenario. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$^a&lt;/code&gt; syntax is special here in that it assigns and uses a variable all at once. This is the equivalent of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.sort(-&amp;gt; $a, $b { $a.value cmp $b.value })&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;^..&lt;/code&gt; syntax means it is a range &lt;em&gt;exclusive&lt;/em&gt; of the bottom end but &lt;em&gt;inclusive&lt;/em&gt; of the top; the corresponding math notation is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(a, b]&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Raku (like many languages) allows us to put underscores in numeric literals to make them easier to read.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;This is obviously a time when recursion is not the best idea. It’s important to be able to distinguish what can be done recursively and what must be done iteratively, even if the recursive solution seems more “natural.”&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Even with how short and sweet today’s solution is, I had to rewrite it between parts one and two after hitting the maximum recursion depth. So we’ve got one functional, recursive solution and one imperative, iterative solution!</summary></entry><entry><title type="html">Advent of Code: Day 14</title><link href="http://localhost:4000/blog/advent-of-code-day-14/" rel="alternate" type="text/html" title="Advent of Code: Day 14" /><published>2020-12-14T00:00:00-06:00</published><updated>2020-12-14T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-14</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-14/">&lt;p&gt;Today was much less math-heavy than yesterday, although we will dive into an algorithm that would make it faster. However, I did do this problem more imperatively than functionally; read on to see why!&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -84,10 +246,9 @@ sub MAIN($file) {
   &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;extract-values&lt;/code&gt; simply parse the memory address and value to be masked from the input line.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; you can see how imperatively we did this. First, we define a mutable mask&lt;super&gt;*&lt;/super&gt; and memory register, then start iterating through the lines. If we hit a mask, overwrite our current one, otherwise extract the values, apply the mask, and add it to our memory register. Finally, just sum all the masked values up!&lt;/p&gt;
+&lt;p&gt;in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; you can see how imperatively we did this. First, we define a mutable mask&lt;sup&gt;*&lt;/sup&gt; and memory register, then start iterating through the lines. If we hit a mask, overwrite our current one, otherwise extract the values, apply the mask, and add it to our memory register. Finally, just sum all the masked values up!&lt;/p&gt;
 
-&lt;super&gt;*&lt;/super&gt;
-&lt;p&gt;One thing about our input that was not super clear to me in the instructions is that we are given &lt;em&gt;multiple&lt;/em&gt; masks that we have to apply to the next N values (until we hit the next mask).&lt;/p&gt;
+&lt;p&gt;&lt;sup&gt;*&lt;/sup&gt;One thing about our input that was not super clear to me in the instructions is that we are given &lt;em&gt;multiple&lt;/em&gt; masks that we have to apply to the next N values (until we hit the next mask).&lt;/p&gt;
 
 &lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
 
@@ -1853,128 +2014,4 @@ Part 2: 41559
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;While I am bummed that I failed in my goal to write functional Raku for all 25 days of this thing, I think it is important to note that it is best to use the right tool for the job. I think I could have struggled through it in Raku, but I don’t have the time, patience, or know-how to do that; especially when we’ve got another challenge coming tomorrow! I will continue to try to do the rest of the problems in functional Raku, but if I can’t do it, at least we’ve already bridged that gap!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Python" /><summary type="html">Well, today was our streak breaker. For the life of me, I could not get Raku to run in a timely manner. I ended up reverting to Python and using a more imperative approach. Nevertheless, I am sharing it here for anyone who cares!</summary></entry><entry><title type="html">Advent of Code: Day 6</title><link href="http://localhost:4000/blog/advent-of-code-day-06/" rel="alternate" type="text/html" title="Advent of Code: Day 6" /><published>2020-12-06T00:00:00-06:00</published><updated>2020-12-06T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-06</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-06/">&lt;p&gt;Well, our old pal &lt;a href=&quot;https://en.wikipedia.org/wiki/Set_theory&quot;&gt;set theory&lt;/a&gt; reared its head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;On &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-04/&quot;&gt;day four&lt;/a&gt; we helped out airport security with their passport scanner, and &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-05/&quot;&gt;yesterday&lt;/a&gt; we wrote a program to find our seat on the airplane after losing our boarding pass. Today we are about to land, and it’s time to fill out customs declaration form.&lt;/p&gt;
-
-&lt;p&gt;This form has 26 yes or no questions marked “A” through “Z.” We fill ours out quickly and notice the family next to us having some issues with theirs; they ask us for help. Pretty soon we have offered to help everyone on the plane, and we end up with a file that looks like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;abc
-
-a
-b
-c
-
-ab
-ac
-
-a
-a
-a
-a
-
-b
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Where each family is distinguished by a blank space, and each person’s answers are on their own line, and the presence of a letter means that person answered “yes.” Additionally, we only count a “yes” once per family. So the above could be interpreted as follows:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The first group contains one person who answered “yes” to 3 questions: a, b, and c&lt;/li&gt;
-  &lt;li&gt;The second group contains three people; combined, they answered “yes” to 3 questions: a, b, and c&lt;/li&gt;
-  &lt;li&gt;The third group contains two people; combined, they answered “yes” to 3 questions: a, b, and c&lt;/li&gt;
-  &lt;li&gt;The fourth group contains four people; combined, they answered “yes” to only 1 question, a&lt;/li&gt;
-  &lt;li&gt;The last group contains one person who answered “yes” to only 1 question, b&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The sum of these counts is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3 + 3 + 3 + 1 + 1 = 11&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Our job is to find the sum of distinct “yes” answers (one per question per family) for the entire plane.&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/06/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
-    say [+] $file.IO
-              .lines(:nl-in(&quot;\n\n&quot;))                        # [1]
-              .map(-&amp;gt; $group {
-                (set $group.subst(&quot;\n&quot;, '', :g).comb).elems # [2]
-              });
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-6809
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;This one is short and sweet due to the tools Raku gives us. First, we read the file in and split it into families (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:nl-in(&quot;\n\n&quot;)&lt;/code&gt;; see below for details). Then, for each family, we combine everyone’s answers into one line, convert it to a list, then convert it to a set (which removes duplicates). We then count the number of elements in each set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.elems&lt;/code&gt; and sum &lt;em&gt;all&lt;/em&gt; the sets using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[+]&lt;/code&gt; metaoperator.&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;By default &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.lines&lt;/code&gt; will split the input file on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\n&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\r\n&lt;/code&gt; newline characters. But Raku gives us the tools to tell it to split on whatever we want. In this case, we tell it to split on 2 newline characters, which delineate our families. Additionally, as opposed to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IO.slurp&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IO.lines&lt;/code&gt; is lazy, so it does not pull the whole file into memory; something to think about if we had a large file.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;subst&lt;/code&gt; is Raku’s string replacement method (not to be confused with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;substr&lt;/code&gt;, its substring method). What’s important here is the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:g&lt;/code&gt; flag we pass in, which say to replace all newlines in the string rather than just the first one.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;As soon as we finished processing everyone’s customs forms, we realize we misread the instructions! We don’t want to count where &lt;em&gt;anyone&lt;/em&gt; answered yes, we want to count where &lt;em&gt;everyone&lt;/em&gt; answered yes. We need to tweak our solution quickly before we land!&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/06/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub part-one($group) {
-    (set $group.subst(&quot;\n&quot;, '', :g).comb).elems;
-}
-
-sub part-two($group) {
-    [∩] $group.split(&quot;\n&quot;).map(-&amp;gt; $entry { set $entry.comb }); # [1]
-}
-
-sub MAIN($file, Bool :$p2 = False) {
-    say [+] $file.IO.lines(:nl-in(&quot;\n\n&quot;)).map($p2 ?? &amp;amp;part-two !! &amp;amp;part-one);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
-$ raku main.raku input.txt
-6809
-
-# Part 2
-$ raku main.raku --p2 input.txt
-3394
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;So the first obvious difference is we refactored our part one solution to its own subroutine, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;part-one&lt;/code&gt;, but the logic is the same. Then we added the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;part-two&lt;/code&gt; with the new logic.&lt;/p&gt;
-
-&lt;p&gt;In &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;part-two&lt;/code&gt;, rather than combine the whole family’s input, we split them into individual people &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.split(&quot;\n&quot;)&lt;/code&gt;, and then convert each person’s answers to a set. Finally, we use reduction metaoperator (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[&amp;lt;operator&amp;gt;]&lt;/code&gt;) to apply the &lt;a href=&quot;https://en.wikipedia.org/wiki/Intersection_(set_theory)&quot;&gt;set intersection&lt;/a&gt; operator to all the sets in the family.&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Once again, we use the Unicode operator (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;∩&lt;/code&gt;) as opposed to the ASCII operator (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(&amp;amp;)&lt;/code&gt;). You may have seen me use the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[+]&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[*]&lt;/code&gt; metaoperators, but this is a new one. The actual operator here is the bracket pair. Basically, when Raku sees the bracket pair, it just applies the operator inside it to all items in the list. So, in this case, it does something like the following:&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[∩] (Set(a b c), Set(b c d), Set(c d e)) == Set(a b c) ∩ Set(b c d) ∩ Set(c d e) == Set(c)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;Nothing much to add to this one today. A short and sweet question with a short and sweet answer!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Well, our old pal set theory reared its head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!</summary></entry></feed>
+&lt;p&gt;While I am bummed that I failed in my goal to write functional Raku for all 25 days of this thing, I think it is important to note that it is best to use the right tool for the job. I think I could have struggled through it in Raku, but I don’t have the time, patience, or know-how to do that; especially when we’ve got another challenge coming tomorrow! I will continue to try to do the rest of the problems in functional Raku, but if I can’t do it, at least we’ve already bridged that gap!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Python" /><summary type="html">Well, today was our streak breaker. For the life of me, I could not get Raku to run in a timely manner. I ended up reverting to Python and using a more imperative approach. Nevertheless, I am sharing it here for anyone who cares!</summary></entry></feed>

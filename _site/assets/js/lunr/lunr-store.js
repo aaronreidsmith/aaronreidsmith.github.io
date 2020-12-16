@@ -100,4 +100,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-14/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 15",
+        "excerpt":"Even with how short and sweet today’s solution is, I had to rewrite it between parts one and two after hitting the maximum recursion depth. So we’ve got one functional, recursive solution and one imperative, iterative solution! The Problem Part 1 While we wait for our next flight, we decide...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-15/",
+        "teaser": null
       }]
