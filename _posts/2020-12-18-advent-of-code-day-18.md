@@ -70,7 +70,7 @@ After finishing up part one, we reach the _advanced math_ section. In this secti
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/17/python/main.py)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/18/raku/main.raku)
 
 See below for explanation and any implementation-specific comments.
 
