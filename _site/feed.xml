@@ -1,4 +1,102 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-17T21:08:48-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 17</title><link href="http://localhost:4000/blog/advent-of-code-day-17/" rel="alternate" type="text/html" title="Advent of Code: Day 17" /><published>2020-12-17T00:00:00-06:00</published><updated>2020-12-17T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-17</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-17/">&lt;p&gt;Today was &lt;em&gt;almost exactly&lt;/em&gt; like &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-11/&quot;&gt;day 11&lt;/a&gt; except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python solution (with the same logic) to get it to finish in a reasonable amount of time. Because of the similarities between today’s problem and that one, I only wrote a Python solution today.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-18T09:17:50-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 18</title><link href="http://localhost:4000/blog/advent-of-code-day-18/" rel="alternate" type="text/html" title="Advent of Code: Day 18" /><published>2020-12-18T00:00:00-06:00</published><updated>2020-12-18T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-18</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-18/">&lt;p&gt;I like to hate on Raku quite a bit, but it was literally the &lt;em&gt;perfect&lt;/em&gt; language for today’s challenge. I guess the love-hate relationship continues!&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;While we’re sitting on our flight, the kid next to us asks if we can help with his math homework. Unfortunately, the rules of this math are different from what we are familiar with – parentheses have the same precedence, but everything else is evaluated from left to right (&lt;em&gt;suck it&lt;/em&gt;, PEMDAS). Here is an example:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1 + (2 * 3) + (4 * (5 + 6))
+1 +    6    + (4 * (5 + 6))
+     7      + (4 * (5 + 6))
+     7      + (4 *   11   )
+     7      +     44
+            51
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Luckily it seems like all of his math problems are only addition and multiplication. After evaluating all the expressions, what is the sum of their outputs?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/18/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use MONKEY-SEE-NO-EVAL; # [1]
+
+sub infix:&amp;lt;plus&amp;gt;(Int:D $a, Int:D $b) returns Int:D is equiv(&amp;amp;infix:&amp;lt;*&amp;gt;) { $a + $b } # [2][3]
+
+sub MAIN($file, Bool :$p2 = False) {
+   my @expressions = $file.IO.lines.map(*.trans(['+'] =&amp;gt; ['plus'])); # [4]
+   say @expressions.map(-&amp;gt; $expr { EVAL $expr }).sum;                # [5]
+}   
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+45840336521334
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;Basically what do here is define a new &lt;a href=&quot;https://docs.raku.org/language/operators#index-entry-infix_operator&quot;&gt;&lt;em&gt;infix operator&lt;/em&gt;&lt;/a&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt;. Infix means it goes between arguments, so it takes 2 integers and is written like this: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$a plus $b&lt;/code&gt;. We also define it with equivalent precedence to the existing multiplication operator, so the expressions will be evaluated left-to-right.&lt;/p&gt;
+
+&lt;p&gt;After we have done that, we read all the lines in and translate &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt; for each one. Finally, we evaluate each expression using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; and sum the results!&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; is a &lt;em&gt;very&lt;/em&gt; unsafe function and should only be used with caution. What it does is takes any valid string and attempts to evaluate it as Raku code. As you can imagine, this can be dangerous, so we have to manually allow the function using the &lt;a href=&quot;https://docs.raku.org/language/pragmas#index-entry-MONKEY-SEE-NO-EVAL__pragma&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MONKEY-SEE-NO-EVAL&lt;/code&gt; pragma&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;When defining this function, we don’t explicitly have to say what types it takes, but it does speed up calculating quite a bit. In this case we say it takes two &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int:D&lt;/code&gt; variables, meaning each one is a &lt;em&gt;specific&lt;/em&gt; integer and not an uninitialized &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; object. Likewise, it returns an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int:D&lt;/code&gt; object.&lt;/li&gt;
+  &lt;li&gt;We are able to set the function’s &lt;a href=&quot;https://docs.raku.org/language/functions#Precedence&quot;&gt;precedence&lt;/a&gt; in regard to other functions. The options are &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is looser&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is equiv&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is tighter&lt;/code&gt;. In this case, we set the new &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt; operator to have the same precedence as multiplication.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt; translates substrings from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;b&lt;/code&gt;. By default, the input length has to match the output length. This means substituting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt; would only replace the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p&lt;/code&gt;. To get around that we are able to use the brackets to say “substitute the &lt;em&gt;entire&lt;/em&gt; string.”&lt;/li&gt;
+  &lt;li&gt;After the substitution, we will end up with a string that looks like this (using the example from above): &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1 plus (2 * 3) plus (4 * (5 plus 6))&lt;/code&gt;. Since we have defined this as valid Raku code, we can safely call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; on it, which returns an integer for us to sum up later.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;After finishing up part one, we reach the &lt;em&gt;advanced math&lt;/em&gt; section. In this section addition now has &lt;em&gt;greater&lt;/em&gt; precedence than multiplication. Using the same input, what is the sum of the output numbers using advanced math?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/17/python/main.py&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use MONKEY-SEE-NO-EVAL;
+
+sub infix:&amp;lt;plus&amp;gt;(Int:D $a, Int:D $b) returns Int:D is equiv(&amp;amp;infix:&amp;lt;*&amp;gt;)  { $a + $b }
+sub infix:&amp;lt;mult&amp;gt;(Int:D $a, Int:D $b) returns Int:D is looser(&amp;amp;infix:&amp;lt;+&amp;gt;) { $a * $b }
+
+sub MAIN($file, Bool :$p2 = False) {
+   my @expressions = $file.IO.lines.map($p2 ?? *.trans(['*'] =&amp;gt; ['mult']) !! *.trans(['+'] =&amp;gt; ['plus'])); # [1]
+   say @expressions.map(-&amp;gt; $expr { EVAL $expr }).sum
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+45840336521334
+
+$ raku main.raku --p2 input.txt
+328920644404583
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;Again, all we have to do is define a new infix operator with precedence &lt;em&gt;looser&lt;/em&gt; than regular addition. If the user sends the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$p2&lt;/code&gt; flag, we substitute &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mult&lt;/code&gt;, otherwise we substitute &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt;. Regardless, we still &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; all expressions and sum the output.&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;This is where the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Whatever&lt;/code&gt; star gets ugly. On this line we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; to mean both &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Whatever&lt;/code&gt; &lt;em&gt;and&lt;/em&gt; a literal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; character to translate in our string.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;You can define infix operators in other languages (for example, operators in Scala are just functions, so you would just write &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;def plus&lt;/code&gt;), however Scala does not let you &lt;a href=&quot;https://docs.scala-lang.org/tour/operators.html&quot;&gt;define the precedence&lt;/a&gt;. That is what is so special about Raku and what makes this solution so sleek for what could be a very tough problem.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">I like to hate on Raku quite a bit, but it was literally the perfect language for today’s challenge. I guess the love-hate relationship continues!</summary></entry><entry><title type="html">Advent of Code: Day 17</title><link href="http://localhost:4000/blog/advent-of-code-day-17/" rel="alternate" type="text/html" title="Advent of Code: Day 17" /><published>2020-12-17T00:00:00-06:00</published><updated>2020-12-17T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-17</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-17/">&lt;p&gt;Today was &lt;em&gt;almost exactly&lt;/em&gt; like &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-11/&quot;&gt;day 11&lt;/a&gt; except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python solution (with the same logic) to get it to finish in a reasonable amount of time. Because of the similarities between today’s problem and that one, I only wrote a Python solution today.&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -65,7 +163,7 @@
 
 &lt;p&gt;This runs as such:&lt;/p&gt;
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ python main.py
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ python main.py input.txt
 137
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -1847,206 +1945,4 @@ $ raku main.raku --p2 input.txt
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;I’m realizing how &lt;em&gt;slow&lt;/em&gt; Raku is (both to write and to run). It’s disappointing because Perl (Raku’s older brother) is slow to write, but at least it is fast to run (as far as interpreted languages go). I guess there is a reason &lt;a href=&quot;https://github.com/github/linguist/pull/5104#issuecomment-739561686&quot;&gt;fewer than 200 people&lt;/a&gt; are using it on GitHub. Regardless, I am committed to finishing the challenge I set forward for myself (barring Day 7 *shakes fist*). See y’all for day 10!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today we have a classic sliding window problem. But, instead of the traditional iterative approach, we take a recursive approach.</summary></entry><entry><title type="html">Advent of Code: Day 8</title><link href="http://localhost:4000/blog/advent-of-code-day-08/" rel="alternate" type="text/html" title="Advent of Code: Day 8" /><published>2020-12-08T00:00:00-06:00</published><updated>2020-12-08T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-08</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-08/">&lt;p&gt;Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end!&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;We’re still traveling to our destination (see the past few blogs of the &lt;a href=&quot;https://www.adventofcode.com&quot;&gt;Advent of Code&lt;/a&gt; itself for more backstory).&lt;/p&gt;
-
-&lt;p&gt;We are on another flight, and the kid in the seat next to us is having an issue with his Game Boy. We are able to isolate the boot code, and it looks like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;nop +0
-acc +1
-jmp +4
-acc +3
-jmp -3
-acc -99
-acc +1
-jmp -4
-acc +6
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Where each instruction means the following:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nop&lt;/code&gt;: No operation, move to the next entry&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jmp&lt;/code&gt;: Jump to the entry specified by the number (+1 means next entry, -1 means previous entry, etc.)&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;acc&lt;/code&gt;: Increment an accumulator the specified amount of times, then go to the next entry&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The example instructions, as well as our input, create an infinite loop. Our task is to find the value of the accumulator immediately before any instruction is executed a second time.&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/08/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub accumulate(@instructions is copy, $pointer = 0, $accumulator = 0) { # [1]
-    if @instructions[$pointer]&amp;lt;visited&amp;gt; {
-        $accumulator;
-    } else {
-        @instructions[$pointer]&amp;lt;visited&amp;gt; = True;
-        given @instructions[$pointer]&amp;lt;operation&amp;gt; {
-            when 'acc' {
-                accumulate(
-                    @instructions,
-                    $pointer + 1,
-                    $accumulator + @instructions[$pointer]&amp;lt;value&amp;gt;
-                );
-            }
-            when 'jmp' {
-                accumulate(
-                    @instructions,
-                    $pointer + @instructions[$pointer]&amp;lt;value&amp;gt;,
-                    $accumulator
-                );
-            }
-            when 'nop' {
-                accumulate(@instructions, $pointer + 1, $accumulator);
-            }
-        }
-    }
-}
-
-
-sub MAIN($file) {
-    my @cells = $file.IO.lines.map(-&amp;gt; $line {
-        my ($operation, $value) = $line.split(' ');
-        { :$operation, value =&amp;gt; $value.Int, :!visited } # [2]
-    });
-    say accumulate(@cells);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-1600
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;The logic here is fairly simple. First, we split our input into a list of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt; objects that look like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{ operation =&amp;gt; 'jmp|acc|nop', value =&amp;gt; &amp;lt;value&amp;gt;, visited =&amp;gt; False }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We then recursively traverse this list of cells until we hit one that is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;visited =&amp;gt; True&lt;/code&gt;, and we return the accumulator at that point.&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;We mark the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@instructions&lt;/code&gt; variable as a copy so that we can manipulate it in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;accumulate&lt;/code&gt; subroutine without affecting the outer scope.&lt;/li&gt;
-  &lt;li&gt;We use two shorthands on this line. The first being &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:$operation&lt;/code&gt;, which is shorthand for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;operation =&amp;gt; $operation&lt;/code&gt;, and the second being &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:!visited&lt;/code&gt;, which is shorthand for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;visited =&amp;gt; False&lt;/code&gt;. I don’t really like mixing the paradigms, but IntelliJ was complaining about it, so what are you gonna do? 🤷🏻‍♂️&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;Now that we have a program to interpret the boot code, we find that there is a bug in the boot code itself. Either a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nop&lt;/code&gt; was switched for a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jmp&lt;/code&gt; or vice versa, in exactly one place in the code. Swapping the right code back to its original form will allow the boot code to terminate rather than running forever.&lt;/p&gt;
-
-&lt;p&gt;We need to find the value of the accumulator in the terminal solution.&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/08/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub accumulate(@instructions is copy, $pointer = 0, $accumulator = 0, $part-two = False) {
-    if $part-two &amp;amp;&amp;amp; $pointer == @instructions.elems {
-        ($accumulator, 'Terminal');
-    } elsif @instructions[$pointer]&amp;lt;visited&amp;gt; {
-        ($accumulator, 'Infinite');
-    } else {
-        @instructions[$pointer]&amp;lt;visited&amp;gt; = True;
-        given @instructions[$pointer]&amp;lt;operation&amp;gt; {
-            when 'acc' {
-                accumulate(
-                    @instructions,
-                    $pointer + 1,
-                    $accumulator + @instructions[$pointer]&amp;lt;value&amp;gt;,
-                    $part-two
-                );
-            }
-            when 'jmp' {
-                accumulate(
-                    @instructions,
-                    $pointer + @instructions[$pointer]&amp;lt;value&amp;gt;,
-                    $accumulator,
-                    $part-two
-                );
-            }
-            when 'nop' {
-                accumulate(@instructions, $pointer + 1, $accumulator, $part-two);
-            }
-        }
-    }
-}
-
-
-sub MAIN($file, Bool :$p2 = False) {
-    my @cells = $file.IO.lines.map(-&amp;gt; $line {
-        my ($operation, $value) = $line.split(' ');
-        { :$operation, value =&amp;gt; $value.Int, :!visited }
-    });
-    if $p2 {
-        my @fixed-instructions = gather {
-            for @cells.kv -&amp;gt; $index, %cell {
-                given %cell&amp;lt;operation&amp;gt;.Str {
-                    when /^[nop|jmp]$/ {                                               # [1]
-                        my @cells-copy = @cells.deepmap(-&amp;gt; $entry is copy { $entry }); # [2]
-                        my %cell-copy = %cell.deepmap(-&amp;gt; $entry is copy { $entry });
-                        when 'nop' {
-                            %cell-copy&amp;lt;operation&amp;gt; = 'jmp';
-                            @cells-copy[$index] = %cell-copy;
-                            take @cells-copy;
-                        }
-                        when 'jmp' {
-                            %cell-copy&amp;lt;operation&amp;gt; = 'nop';
-                            @cells-copy[$index] = %cell-copy;
-                            take @cells-copy;
-                        }
-                    }
-                }
-            }
-        };
-        say @fixed-instructions
-            .map(&amp;amp;accumulate.assuming(*, 0, 0, $p2))
-            .grep(-&amp;gt; @pair { @pair[1] eq 'Terminal' })
-            .head  # Gives us the first item in the above list
-            .head; # Gives us the number in the pair returned from `accumulate`
-    } else {
-        say accumulate(@cells).head;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Part 1
-$ raku main.raku input.txt
-1600
-
-# Part 2
-$ raku main.raku --p2 input.txt
-1543
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;The logic here is fairly straightforward (albeit brute force) as well. Basically, we find all combinations of our input with a single code point change (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@fixed-instructions&lt;/code&gt;), find &lt;em&gt;all&lt;/em&gt; solutions to those codes (infinite and terminal), filter down to the terminal solution and print the output.&lt;/p&gt;
-
-&lt;p&gt;The hard part here was copying &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@cells&lt;/code&gt; multiple times into &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@fixed-instructions&lt;/code&gt;. I ran into an issue where all of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@fixed-instructions&lt;/code&gt; was pointing to the same memory address, so after traversing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@fixed-instructions[0]&lt;/code&gt;, the rest of the inputs were tainted. This issue was fixed by the (awkward) &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.deepmaps&lt;/code&gt;. See #2 below for additional details.&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
-&lt;ol&gt;
-  &lt;li&gt;Interestingly &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;when 'nop' || 'jmp'&lt;/code&gt; does not work here. I suspect it has to do with the fact that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;when&lt;/code&gt; operates &lt;a href=&quot;https://docs.raku.org/language/control#index-entry-control_flow__given-given&quot;&gt;very eagerly&lt;/a&gt; and as soon as it finds a match, it skips the rest of the lines of input. Generally that happens in a code block, but I guess it can happen in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;when&lt;/code&gt; statement itself.&lt;/li&gt;
-  &lt;li&gt;I knew I needed a mutable copy of the original input here. Originally I tried &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@cells-copy = @cells&lt;/code&gt;, but that didn’t work. Eventually I stumbled upon &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.clone&lt;/code&gt;, which it seems &lt;a href=&quot;https://docs.raku.org/routine/clone&quot;&gt;&lt;em&gt;intentionally&lt;/em&gt; doesn’t work&lt;/a&gt; on &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@&lt;/code&gt;- or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%&lt;/code&gt;-sigiled variables. Finally, I &lt;a href=&quot;https://stackoverflow.com/a/38585401/10696164&quot;&gt;stumbled upon&lt;/a&gt; this awkward &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.deepcopy&lt;/code&gt; syntax which is not only incredibly ugly, but also incredibly slow. For reference, part one runs in 0.48 seconds on my machine and part two runs in 28.7 seconds.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;Today’s problem helped me get back on the functional Raku track after a &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-07/&quot;&gt;frustrating day 7&lt;/a&gt;. However, I am going to have to do more digging on copies of iterables in Raku, because a 60x performance decrease is not really acceptable for this kind of thing, especially when the input is relatively small (&amp;lt;1000 lines).&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end!</summary></entry></feed>
+&lt;p&gt;I’m realizing how &lt;em&gt;slow&lt;/em&gt; Raku is (both to write and to run). It’s disappointing because Perl (Raku’s older brother) is slow to write, but at least it is fast to run (as far as interpreted languages go). I guess there is a reason &lt;a href=&quot;https://github.com/github/linguist/pull/5104#issuecomment-739561686&quot;&gt;fewer than 200 people&lt;/a&gt; are using it on GitHub. Regardless, I am committed to finishing the challenge I set forward for myself (barring Day 7 *shakes fist*). See y’all for day 10!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Today we have a classic sliding window problem. But, instead of the traditional iterative approach, we take a recursive approach.</summary></entry></feed>

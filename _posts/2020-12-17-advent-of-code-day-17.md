@@ -74,7 +74,7 @@ if __name__ == '__main__':
 This runs as such:
 
 ```
-$ python main.py
+$ python main.py input.txt
 137
 ```
 
