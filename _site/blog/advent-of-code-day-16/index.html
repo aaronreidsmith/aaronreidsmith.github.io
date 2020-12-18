@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Advent of Code: Day 10 - Aaron Smith</title>
-<meta name="description" content="Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!">
+<!-- begin _includes/seo.html --><title>Advent of Code: Day 16 - Aaron Smith</title>
+<meta name="description" content="We got to explore some cool features of Raku today, even if it wasn’t 100% functional. 🙂 Read on to see what I am talking about!">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Advent of Code: Day 10">
-<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-10/">
+<meta property="og:title" content="Advent of Code: Day 16">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-16/">
 
 
-  <meta property="og:description" content="Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-12-10T00:00:00-06:00">
+  <meta property="og:description" content="We got to explore some cool features of Raku today, even if it wasn’t 100% functional. 🙂 Read on to see what I am talking about!">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-10/">
+
+  <meta property="article:published_time" content="2020-12-16T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-16/">
 
 
 
@@ -285,15 +285,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Advent of Code: Day 10">
-    <meta itemprop="description" content="Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!">
-    <meta itemprop="datePublished" content="2020-12-10T00:00:00-06:00">
+    <meta itemprop="headline" content="Advent of Code: Day 16">
+    <meta itemprop="description" content="We got to explore some cool features of Raku today, even if it wasn’t 100% functional. 🙂 Read on to see what I am talking about!">
+    <meta itemprop="datePublished" content="2020-12-16T00:00:00-06:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 10
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 16
 </h1>
           
 
@@ -302,7 +302,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-10T00:00:00-06:00">December 10, 2020</time>
+        <time datetime="2020-12-16T00:00:00-06:00">December 16, 2020</time>
       </span>
     
 
@@ -315,7 +315,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          4 minute read
+          6 minute read
         
       </span>
     
@@ -327,108 +327,203 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>Part two today <em>almost</em> forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!</p>
+        <p>We got to explore some cool features of Raku today, even if it wasn’t 100% functional. 🙂 Read on to see what I am talking about!</p>
 
 <h2 id="the-problem">The Problem</h2>
 
 <h3 id="part-1">Part 1</h3>
 
-<p>We are trying to plug our phone into the seat-back plug, but the problem is it puts out the wrong <em>joltage</em>. We have a handful of adaptors labeled by their output joltage (our input), and our device is rated for 3 jolts above the maximum adaptor joltage. Each adaptor can be plugged into an adaptor 1-, 2-, or 3-jolts below it (i.e., a 4-jolt adaptor can plug into a 1-, 2- or 3-jolt plug).</p>
+<p>Going through our itinerary for our re-routed leg, we realize we are going to end up on a train in a country where we don’t speak the language! Luckily, we were able to scan all the train tickets around us to give us input that looks something like the following:</p>
 
-<p>We are bored on this flight, so, treating the seat-back outlet as zero jolts, we want to find a solution that uses <em>every</em> adaptor we own. Once we have found the right sequence, we want to multiply the number of 1-jolt differences by the number of 3-jolt differences.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class: 1-3 or 5-7
+row: 6-11 or 33-44
+seat: 13-40 or 45-50
+
+your ticket:
+7,1,14
+
+nearby tickets:
+7,3,47
+40,4,50
+55,2,20
+38,6,12
+</code></pre></div></div>
+
+<p>Where each ticket column corresponds to <em>a</em> field in the first section, but we don’t know which one. Our first job is simply to find the <em>error rate</em> in the tickets. That is, find each ticket that is invalid (where one field is not in <em>any</em> of the valid ranges), and then find the sum of the invalid fields.</p>
 
 <h4 id="solution">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/10/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/16/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub find-differences(@joltage, $pointer = 0, @differences = ()) {
-    if $pointer == @joltage.elems - 1 {
-        @differences;
-    } else {
-        my $a = @joltage[$pointer];
-        my $b = @joltage[$pointer + 1];
-        find-differences(@joltage, $pointer + 1, (|@differences, $b - $a));
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub parse-input($file) {
+    my ($train-text, $my-ticket, $other-tickets) = $file.IO.lines(:nl-in("\n\n"));
+
+    # Turn train ranges into Junctions of Range objects
+    my @train-info = $train-text.lines.map(-&gt; $line {
+        my $range-text = $line.split(': ')[1];
+        my @ranges = $range-text.split(' or ').map(-&gt; $range { $range.split('-').map(*.Int).minmax }); # [1]
+        Junction.new(@ranges, type =&gt; 'any');                                                          # [2]
+    });
+
+    # Map the tickets into lists of integers
+    my @my-info = $my-ticket.lines[1].split(',').map(*.Int);
+    my @other-info = $other-tickets.lines[1..*].map(-&gt; $line { $line.split(',').map(*.Int) });
+
+    (@train-info, @my-info, @other-info)
+}
+
+sub find-invalid-rate(@train-info, @tickets) {
+    my @invalid = gather {
+        for @tickets -&gt; @ticket {
+            for @ticket -&gt; $field {
+                if $field ∈ any(@train-info) {
+                    next;                      # [3]
+                } else {
+                    take $field;
+                    last;                      # [4]
+                }
+            }
+        }
     }
+    @invalid.sum;
 }
 
 sub MAIN($file) {
-    my @adaptors = $file.IO.lines.map(*.Int).sort;
-    my $device-joltage = @adaptors.max + 3;
-    my @joltage-list = (0, |@adaptors, $device-joltage); # [1]
-    my @differences = find-differences(@joltage-list);
-    say @differences.grep(* == 1).elems * @differences.grep(* == 3).elems;
+    my (@train-info, @my-ticket, @other-tickets) := parse-input($file);
+    my @all-tickets = (@my-ticket, |@other-tickets);
+    say find-invalid-rate(@train-info, @all-tickets);
 }
 </code></pre></div></div>
 
 <p>This runs as such:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
-2176
+20091
 </code></pre></div></div>
 
 <h4 id="explanation">Explanation</h4>
 
-<p>The logic laid out in <code class="language-plaintext highlighter-rouge">MAIN</code> is pretty clear.</p>
+<p>I felt the parse step in and of itself was complex enough to warrant its own subroutine today, so you’ll see our first step is <code class="language-plaintext highlighter-rouge">parse-input</code>. This will return a list of valid ranges, a list representing our ticket, and a list of the scanned tickets nearby. We then take that data and pass it to <code class="language-plaintext highlighter-rouge">find-invalid-rate</code>, which will iterate through each ticket and checks if each field is in <em>any</em> valid range. Finally, it sums the invalid fields it finds.</p>
 
-<ol>
-  <li>We pull out all of our adaptors and sort them by output joltage</li>
-  <li>We find out device voltage (<code class="language-plaintext highlighter-rouge">@adaptors.max + 3</code>)</li>
-  <li>We make our final joltage list including the outlet (<code class="language-plaintext highlighter-rouge">0</code>) and our device</li>
-  <li>We find all the differences between each adaptor</li>
-  <li>We multiply the 1-joltage differences by the 3-joltage differences</li>
-</ol>
+<p>That’s it!</p>
 
 <h5 id="specific-comments">Specific Comments</h5>
 
 <ol>
-  <li>I’ve used this before, but I wanted to call it out as it is used in a few places in this solution. This is called a <a href="https://docs.raku.org/type/Slip"><code class="language-plaintext highlighter-rouge">Slip</code></a>, which basically unpacks a list into the outer list. So this is a way of prepending and appending items to a list at the same time.</li>
+  <li>Once we’ve parsed the input for train information we end up with a string like <code class="language-plaintext highlighter-rouge">100-150</code>, which we then turn into a list like <code class="language-plaintext highlighter-rouge">(100, 150)</code>. Raku has a special <code class="language-plaintext highlighter-rouge">minmax</code> method which will make a range based on the min and max values of a list. So <code class="language-plaintext highlighter-rouge">(100, 150).minmax</code> becomes <code class="language-plaintext highlighter-rouge">(100..150)</code>.</li>
+  <li>Each ticket field has 2 valid ranges, so we turn them into a <a href="https://docs.raku.org/type/Junction"><code class="language-plaintext highlighter-rouge">Junction</code></a> that will basically return true if a value is in <em>either</em> range.</li>
+  <li><code class="language-plaintext highlighter-rouge">next</code> is similar to <code class="language-plaintext highlighter-rouge">continue</code> in other languages.</li>
+  <li><code class="language-plaintext highlighter-rouge">last</code> is similar to <code class="language-plaintext highlighter-rouge">break</code> in other languages.</li>
 </ol>
 
 <h3 id="part-2">Part 2</h3>
 
-<p>Now that we have found the one solution that uses all adaptors, we want to find <em>all</em> possible solutions that will connect our device to the plug. Looking at our adaptors we realize there must be more than a <strong>trillion</strong> ways to arrange them, so we have to be smart about how we approach it.</p>
+<p>Now that we have found our invalid tickets, we need to disregard them entirely. Our next step is to take <em>only</em> the other tickets we scanned and determine which column corresponds to which ticket field (it will be the same column for each ticket). Once we have done that, we need to find the 6 fields starting with the word <code class="language-plaintext highlighter-rouge">departure</code> and find the product of their fields on <em>our</em> ticket.</p>
 
 <h4 id="solution-1">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/10/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/16/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use experimental :cached;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub parse-input($file) {
+    my ($train-text, $my-ticket, $other-tickets) = $file.IO.lines(:nl-in("\n\n"));
 
-sub find-differences(@joltage-list, $pointer = 0, @differences = ()) {
-    if $pointer == @joltage-list.elems - 1 {
-        @differences;
-    } else {
-        my $a = @joltage-list[$pointer];
-        my $b = @joltage-list[$pointer + 1];
-        find-differences(@joltage-list, $pointer + 1, (|@differences, $b - $a));
-    }
+    # Turn train ranges into Junctions of Range objects
+    my %train-info = $train-text.lines.map(-&gt; $line {
+        my ($range-name, $range-text) = $line.split(': ');
+        my @ranges = $range-text.split(' or ').map(-&gt; $range { $range.split('-').map(*.Int).minmax });
+        $range-name =&gt; Junction.new(@ranges, type =&gt; 'any');
+    }).Hash;
+
+    # Map the tickets into lists of integers
+    my @my-info = $my-ticket.lines[1].split(',').map(*.Int);
+    my @other-info = $other-tickets.lines[1..*].map(-&gt; $line { $line.split(',').map(*.Int) });
+
+    (%train-info, @my-info, @other-info)
 }
 
-sub find-paths($current-joltage, @joltage-list) is cached {   # [1]
-    given $current-joltage {
-        when * == @joltage-list.max { 1 }
-        when * ∉ @joltage-list      { 0 }                     # [2][3]
-        default {
-            find-paths($current-joltage + 1, @joltage-list) +
-            find-paths($current-joltage + 2, @joltage-list) + # [4]
-            find-paths($current-joltage + 3, @joltage-list);
+sub is-valid(@train-info, @ticket) {
+    so all(@ticket) ∈ any(@train-info); # [1]
+}
+
+sub find-invalid-field(@train-info, @ticket) {
+    for @ticket -&gt; $field {
+        if $field ∈ any(@train-info) {
+            next;
+        } else {
+            return $field;
         }
     }
 }
 
+sub find-invalid-rate(@train-info, @tickets) {
+    my @invalid = gather {
+        for @tickets -&gt; @ticket {
+            if !is-valid(@train-info, @ticket) {
+                take find-invalid-field(@train-info, @ticket);
+            }
+        }
+    }
+    @invalid.sum;
+}
+
+sub find-field-indices(%train-info, @fields) {
+    # Given the size of our input ranges, some of our fields may fit into more than one category,
+    # so we have to find all possible categories
+    my %possible-fields;
+    for @fields.kv -&gt; $index, @field {
+        for %train-info.kv -&gt; $name, $range {
+            if ?(all(@field) ∈ $range) {            # [2]
+                if %possible-fields{$name}:exists {
+                    %possible-fields{$name} = (|%possible-fields{$name}, $index);
+                } else {
+                    %possible-fields{$name} = ($index,);
+                }
+            }
+        }
+    }
+
+    my $number-of-fields = %possible-fields.elems;
+
+    # We assume at least one of the above fields fits into exactly one category, so we look for
+    # that item and then remove that index from the rest of the fields' categories and keep keep
+    # looping until we have $number-of-fields defined
+    my %final-fields;
+    while %final-fields.elems != $number-of-fields {
+        for %possible-fields.kv -&gt; $name, @possible-indices {
+            if @possible-indices.elems == 1 {
+                my $index = @possible-indices.head;
+                %final-fields{$name} = $index;
+                %possible-fields{$name}:delete;
+                for %possible-fields.kv -&gt; $name-to-update, @indices-to-update {
+                    %possible-fields{$name-to-update} = @indices-to-update.grep(* != $index);
+                }
+            }
+        }
+    }
+    %final-fields;
+}
+
 sub MAIN($file, Bool :$p2 = False) {
-    my @adaptors = $file.IO.lines.map(*.Int).sort;
-    my $device-joltage = @adaptors.max + 3;
-    my @joltage-list = (0, |@adaptors, $device-joltage);
+    my (%train-info, @my-ticket, @other-tickets) := parse-input($file);
+    my @all-tickets = (@my-ticket, |@other-tickets);
     if $p2 {
-        say find-paths(0, @joltage-list);
+        my @valid-tickets = @other-tickets.grep(&amp;is-valid.assuming(%train-info.values, *));
+        my @fields = [Z] @valid-tickets;
+        my %field-indices = find-field-indices(%train-info, @fields);
+        my @departure-fields = gather {
+            for %field-indices.kv -&gt; $name, $index {
+                if $name.starts-with('departure') {
+                    take @my-ticket[$index];
+                }
+            }
+        }
+        say [*] @departure-fields;
     } else {
-        my @differences = find-differences(@joltage-list);
-        say @differences.grep(* == 1).elems * @differences.grep(* == 3).elems;
+        say find-invalid-rate(%train-info.values, @all-tickets);
     }
 }
 </code></pre></div></div>
@@ -437,37 +532,29 @@ sub MAIN($file, Bool :$p2 = False) {
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
 $ raku main.raku input.txt
-2176
+20091
 
 # Part 2
 $ raku main.raku --p2 input.txt
-18512297918464
+2325343130651
 </code></pre></div></div>
 
 <h4 id="explanation-1">Explanation</h4>
 
-<p>There is a lot of fluff going on from part one that we can ignore. We generate the same <code class="language-plaintext highlighter-rouge">@joltage-list</code> and pass it to <code class="language-plaintext highlighter-rouge">find-paths</code> starting at <code class="language-plaintext highlighter-rouge">joltage = 0</code>. This subroutine does the following:</p>
+<p>I tried to make <code class="language-plaintext highlighter-rouge">MAIN</code> as clear as possible here. You’ll notice <code class="language-plaintext highlighter-rouge">train-info</code> is now <code class="language-plaintext highlighter-rouge">Hash</code> so that we can access each range’s name as well. If it is part two we first filter down valid tickets using the logic above, then we pivot that into rows of <em>fields</em> instead of rows of <em>tickets</em>, and we calculate the indices that correspond to each train ticket field. Finally, we take the six fields that start with <code class="language-plaintext highlighter-rouge">departure</code> and multiple them together!</p>
 
-<ol>
-  <li>If we have hit the max joltage (device joltage) mark this as a valid path (<code class="language-plaintext highlighter-rouge">1</code>)</li>
-  <li>If the joltage we are currently on is not in the set of adaptors, mark it as invalid (<code class="language-plaintext highlighter-rouge">0</code>)</li>
-  <li>Otherwise, recursively find the valid paths for any adaptors that could plug into this one (i.e. <code class="language-plaintext highlighter-rouge">n+1</code>, <code class="language-plaintext highlighter-rouge">n+2</code>, and <code class="language-plaintext highlighter-rouge">n+3</code>) and add them up</li>
-</ol>
-
-<p>This looks pretty brute-force, right? Well, that is where the <code class="language-plaintext highlighter-rouge">is cached</code> trait comes in. See #1 below for details!</p>
+<p>As far as implementation, we split out the logic from part one into <code class="language-plaintext highlighter-rouge">is-valid</code> and <code class="language-plaintext highlighter-rouge">find-invalid-field</code>, the former of which is used in part two. <code class="language-plaintext highlighter-rouge">find-field-indices</code> first finds all possible columns that correspond to a given range, then filters them down one-by-one until we have determined definitively which column corresponds to which ticket field.</p>
 
 <h5 id="specific-comments-1">Specific Comments</h5>
 
 <ol>
-  <li>Coming from a Python background, I am familiar with <a href="https://docs.python.org/3/library/functools.html#functools.cache"><code class="language-plaintext highlighter-rouge">functools.cache</code></a>, a decorator that basically builds a dictionary of input to output such that expensive functions are only calculated once. Basically, the first call would compute the value and store it in the cache and any subsequent calls to that functions with the same input would use the cached value instead; this optimization is called <a href="https://en.wikipedia.org/wiki/Memoization">memoization</a>. In Raku, this is an <a href="https://docs.raku.org/language/experimental#cached">experimental trait</a> called <code class="language-plaintext highlighter-rouge">cached</code> which can be applied to subroutines to achieve the same memoization goal. Basically, the reason this is not a brute-force approach is because we will only compute <code class="language-plaintext highlighter-rouge">find-paths</code> once for each input rather than the traditional re-computing that can happen in recursive functions.</li>
-  <li>This is the first time using this operator, so I want to call it out: <code class="language-plaintext highlighter-rouge">∉</code> is the “element not part of set” operator.</li>
-  <li>This function could be optimized by <em>only</em> looking at joltages in the input list, but instead we just look at everything from <code class="language-plaintext highlighter-rouge">0..N</code>. If it is not in the input list, we just mark it as an invalid path.</li>
-  <li>Because <code class="language-plaintext highlighter-rouge">find-paths($current-joltage + 1, @joltage-list)</code> will recursively call more <code class="language-plaintext highlighter-rouge">find-paths</code> functions, this line uses the cache, so the only operation really happening here is the addition.</li>
+  <li>This line is just a bunch of junctions, but I feel it reads very well. We are checking if <em>all</em> of the fields in this ticket match <em>any</em> of the pairs of ranges that we have parsed out. As an aside, <code class="language-plaintext highlighter-rouge">so</code> is the way to cast the junction of booleans to a single boolean.</li>
+  <li>This line is similar – we are checking if <em>all</em> of the values in this field are in the supplied range pair. <code class="language-plaintext highlighter-rouge">?</code> <em>also</em> casts the line to a boolean value.</li>
 </ol>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>A lot of my solutions for the Advent of Code so far have been recursive (and relatively slow). I am glad I found out about the <code class="language-plaintext highlighter-rouge">is cached</code> trait, and I am looking forward to applying it to more solutions in the future!</p>
+<p>Not super happy with the overall complexity of this solution – most subroutines use some form of a nested loop yielding O(n²) complexity. It works for our small data, but it certainly does not scale well. Regardless, we made it through and are almost ⅔ of the way done!</p>
 
         
       </section>
@@ -520,7 +607,7 @@ $ raku main.raku --p2 input.txt
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-10T00:00:00-06:00">December 10, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-16T00:00:00-06:00">December 16, 2020</time></p>
 
 
       </footer>
@@ -530,22 +617,22 @@ $ raku main.raku --p2 input.txt
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+10%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-10%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+16%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-16%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-10%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-16%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-10%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-16%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/advent-of-code-day-09/" class="pagination--pager" title="Advent of Code: Day 9
+      <a href="/blog/advent-of-code-day-15/" class="pagination--pager" title="Advent of Code: Day 15
 ">Previous</a>
     
     
-      <a href="/blog/advent-of-code-day-11/" class="pagination--pager" title="Advent of Code: Day 11
+      <a href="/blog/advent-of-code-day-17/" class="pagination--pager" title="Advent of Code: Day 17
 ">Next</a>
     
   </nav>
@@ -602,53 +689,6 @@ $ raku main.raku --p2 input.txt
 
 
     <p class="archive__item-excerpt" itemprop="description">Today was almost exactly like day 11 except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python sol...</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-16/" rel="permalink">Advent of Code: Day 16
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-16T00:00:00-06:00">December 16, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          6 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">We got to explore some cool features of Raku today, even if it wasn’t 100% functional. 🙂 Read on to see what I am talking about!
-
-</p>
   </article>
 </div>
 
@@ -739,6 +779,51 @@ $ raku main.raku --p2 input.txt
 
 
     <p class="archive__item-excerpt" itemprop="description">Today was much less math-heavy than yesterday, although we will dive into an algorithm that would make it faster. However, I did do this problem more imperat...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-13/" rel="permalink">Advent of Code: Day 13
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-13T00:00:00-06:00">December 13, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          8 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today’s challenge was… interesting, to say the least. It may look short and sweet, but it is fairly complex and requires a fair bit of number theory for part...</p>
   </article>
 </div>
 

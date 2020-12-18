@@ -106,4 +106,16 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-15/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 16",
+        "excerpt":"We got to explore some cool features of Raku today, even if it wasn’t 100% functional. 🙂 Read on to see what I am talking about! The Problem Part 1 Going through our itinerary for our re-routed leg, we realize we are going to end up on a train in...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-16/",
+        "teaser": null
+      },{
+        "title": "Advent of Code: Day 17",
+        "excerpt":"Today was almost exactly like day 11 except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python solution (with the same logic) to get it to finish in a reasonable amount of time. Because of the similarities...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-17/",
+        "teaser": null
       }]
