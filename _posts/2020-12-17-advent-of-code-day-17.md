@@ -4,7 +4,7 @@ categories:
   - Blog
 tags:
   - Advent of Code
-  - Raku
+  - Python
 ---
 
 Today was _almost exactly_ like [day 11](https://aaronreidsmith.github.io/blog/advent-of-code-day-11/) except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python solution (with the same logic) to get it to finish in a reasonable amount of time. Because of the similarities between today's problem and that one, I only wrote a Python solution today.
