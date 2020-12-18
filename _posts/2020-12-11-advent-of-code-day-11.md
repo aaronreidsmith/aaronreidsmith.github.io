@@ -5,6 +5,7 @@ categories:
 tags:
   - Advent of Code
   - Raku
+  - Python
 ---
 
 I am giving myself half credit for today; the solution I came up with _is_ in Raku, but it is an iterative solution. Additionally, this solution is _slow_. In fact, it was so slow that in between runs I was able to write a [Python solution](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/11/python/main.py) (with the same logic) that ran much faster.
