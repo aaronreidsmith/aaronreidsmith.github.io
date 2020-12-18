@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 90 - Aaron Smith</title>
-<meta name="description" content="Today was a busy day with both Advent of Code and the Perl Weekly Challenge. Luckily, the PWC was short and sweet this week, and a nice breather after the Advent of Code.">
+<!-- begin _includes/seo.html --><title>Advent of Code: Day 18 - Aaron Smith</title>
+<meta name="description" content="I like to hate on Raku quite a bit, but it was literally the perfect language for today’s challenge. I guess the love-hate relationship continues!">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Perl Weekly Challenge 90">
-<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-090/">
+<meta property="og:title" content="Advent of Code: Day 18">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-18/">
 
 
-  <meta property="og:description" content="Today was a busy day with both Advent of Code and the Perl Weekly Challenge. Luckily, the PWC was short and sweet this week, and a nice breather after the Advent of Code.">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-12-07T00:00:00-06:00">
+  <meta property="og:description" content="I like to hate on Raku quite a bit, but it was literally the perfect language for today’s challenge. I guess the love-hate relationship continues!">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-090/">
+
+  <meta property="article:published_time" content="2020-12-18T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-18/">
 
 
 
@@ -285,15 +285,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Perl Weekly Challenge 90">
-    <meta itemprop="description" content="Today was a busy day with both Advent of Code and the Perl Weekly Challenge. Luckily, the PWC was short and sweet this week, and a nice breather after the Advent of Code.">
-    <meta itemprop="datePublished" content="2020-12-07T00:00:00-06:00">
+    <meta itemprop="headline" content="Advent of Code: Day 18">
+    <meta itemprop="description" content="I like to hate on Raku quite a bit, but it was literally the perfect language for today’s challenge. I guess the love-hate relationship continues!">
+    <meta itemprop="datePublished" content="2020-12-18T00:00:00-06:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 90
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 18
 </h1>
           
 
@@ -302,7 +302,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-07T00:00:00-06:00">December 7, 2020</time>
+        <time datetime="2020-12-18T00:00:00-06:00">December 18, 2020</time>
       </span>
     
 
@@ -327,125 +327,105 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>Today was a busy day with both <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-07/">Advent of Code</a> and the Perl Weekly Challenge. Luckily, the PWC was short and sweet this week, and a nice breather after the Advent of Code.</p>
+        <p>I like to hate on Raku quite a bit, but it was literally the <em>perfect</em> language for today’s challenge. I guess the love-hate relationship continues!</p>
 
-<h2 id="task-1-dna-sequence">Task 1: DNA Sequence</h2>
+<h2 id="the-problem">The Problem</h2>
 
-<p>You are given DNA sequence, GTAAACCCCTTTTCATTTAGACAGATCGACTCCTTATCCATTCTCAGAGATGTGTTGCTGGTCGCCG.</p>
+<h3 id="part-1">Part 1</h3>
 
-<p>Write a script to print nucleotide count in the given DNA sequence. Also print the complementary sequence where Thymine (T) on one strand is always facing an adenine (A) and vice versa; guanine (G) is always facing a cytosine (C) and vice versa.</p>
+<p>While we’re sitting on our flight, the kid next to us asks if we can help with his math homework. Unfortunately, the rules of this math are different from what we are familiar with – parentheses have the same precedence, but everything else is evaluated from left to right (<em>suck it</em>, PEMDAS). Here is an example:</p>
 
-<h3 id="solution">Solution</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 + (2 * 3) + (4 * (5 + 6))
+1 +    6    + (4 * (5 + 6))
+     7      + (4 * (5 + 6))
+     7      + (4 *   11   )
+     7      +     44
+            51
+</code></pre></div></div>
 
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-090/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
+<p>Luckily it seems like all of his math problems are only addition and multiplication. After evaluating all the expressions, what is the sum of their outputs?</p>
+
+<h4 id="solution">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/18/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>subset ValidDna of Str where { $_ ~~ /^^[A|T|G|C]+$$/ }
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use MONKEY-SEE-NO-EVAL; # [1]
 
-sub MAIN($dna where $dna ~~ ValidDna, Bool :rc(:$reverse-complement) = False) { # [1]
-    say "Input stats:\n{$dna.comb.Bag.Hash}\n";                                 # [2]
+sub infix:&lt;plus&gt;(Int:D $a, Int:D $b) returns Int:D is equiv(&amp;infix:&lt;*&gt;) { $a + $b } # [2][3]
 
-    say "Complement:";
-    my $translated = $dna.trans('ATGC' =&gt; 'TACG');                              # [3]
-    if $reverse-complement {
-        say "5'-{$translated.flip}-3'";
-    } else {
-        say "3'-$translated-5'"
-    }
-}
+sub MAIN($file, Bool :$p2 = False) {
+   my @expressions = $file.IO.lines.map(*.trans(['+'] =&gt; ['plus'])); # [4]
+   say @expressions.map(-&gt; $expr { EVAL $expr }).sum;                # [5]
+}   
 </code></pre></div></div>
 
-<p>This program runs as such:</p>
+<p>This runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku GTAAACCCCTTTTCATTTAGACAGATCGACTCCTTATCCATTCTCAGAGATGTGTTGCTGGTCGCCG
-Input stats:
-A	14
-C	18
-G	13
-T	22
-
-Complement:
-3'-CATTTGGGGAAAAGTAAATCTGTCTAGCTGAGGAATAGGTAAGAGTCTCTACACAACGACCAGCGGC-5'
-
-$ raku ch-1.raku --reverse-complement GTAAACCCCTTTTCATTTAGACAGATCGACTCCTTATCCATTCTCAGAGATGTGTTGCTGGTCGCCG
-Input stats:
-A	14
-C	18
-G	13
-T	22
-
-Complement:
-5'-CGGCGACCAGCAACACATCTCTGAGAATGGATAAGGAGTCGATCTGTCTAAATGAAAAGGGGTTTAC-3'
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+45840336521334
 </code></pre></div></div>
 
-<h3 id="explanation">Explanation</h3>
+<h4 id="explanation">Explanation</h4>
 
-<p>Coming from a Biochemistry background, this one is rather simple. However, the question does not take into consideration that DNA has a <a href="https://en.wikipedia.org/wiki/Directionality_(molecular_biology)">direction</a>. Generally, if you are handed a string like this, you expect it to be read from 5’ to 3’ (5 prime to 3 prime). Because of the directionality, the opposite strand would be 3’ to 5’.</p>
+<p>Basically what do here is define a new <a href="https://docs.raku.org/language/operators#index-entry-infix_operator"><em>infix operator</em></a>, <code class="language-plaintext highlighter-rouge">plus</code>. Infix means it goes between arguments, so it takes 2 integers and is written like this: <code class="language-plaintext highlighter-rouge">$a plus $b</code>. We also define it with equivalent precedence to the existing multiplication operator, so the expressions will be evaluated left-to-right.</p>
 
-<p>So generally, when a question asks for the complementary strand, they want the <em>reverse</em> complement, so it is shown 5’ to 3’. This question did not specify, so I wrote an answer that handles both.</p>
+<p>After we have done that, we read all the lines in and translate <code class="language-plaintext highlighter-rouge">+</code> to <code class="language-plaintext highlighter-rouge">plus</code> for each one. Finally, we evaluate each expression using <code class="language-plaintext highlighter-rouge">EVAL</code> and sum the results!</p>
 
-<h4 id="specific-comments">Specific comments</h4>
+<h5 id="specific-comments">Specific Comments</h5>
 
 <ol>
-  <li>This syntax allows us to give aliases to our command line arguments. In this case, we accept either <code class="language-plaintext highlighter-rouge">--rc</code> or <code class="language-plaintext highlighter-rouge">--reverse-complement</code> and store it in a variable called <code class="language-plaintext highlighter-rouge">$reverse-complement</code>.</li>
-  <li>A <a href="https://docs.raku.org/type/Bag"><code class="language-plaintext highlighter-rouge">Bag</code></a> is a weighted collection. When passed the <code class="language-plaintext highlighter-rouge">List</code> produced by <code class="language-plaintext highlighter-rouge">.comb</code>, it generates a bag with the weight of each letter. We only convert it to a <code class="language-plaintext highlighter-rouge">Hash</code> for pretty printing.</li>
-  <li>Raku’s <code class="language-plaintext highlighter-rouge">trans</code> method is a single-pass method, meaning you won’t translate <code class="language-plaintext highlighter-rouge">A</code> to <code class="language-plaintext highlighter-rouge">T</code> and then accidentally translate it back to <code class="language-plaintext highlighter-rouge">A</code> with a second pass.</li>
+  <li><code class="language-plaintext highlighter-rouge">EVAL</code> is a <em>very</em> unsafe function and should only be used with caution. What it does is takes any valid string and attempts to evaluate it as Raku code. As you can imagine, this can be dangerous, so we have to manually allow the function using the <a href="https://docs.raku.org/language/pragmas#index-entry-MONKEY-SEE-NO-EVAL__pragma"><code class="language-plaintext highlighter-rouge">MONKEY-SEE-NO-EVAL</code> pragma</a>.</li>
+  <li>When defining this function, we don’t explicitly have to say what types it takes, but it does speed up calculating quite a bit. In this case we say it takes two <code class="language-plaintext highlighter-rouge">Int:D</code> variables, meaning each one is a <em>specific</em> integer and not an uninitialized <code class="language-plaintext highlighter-rouge">Int</code> object. Likewise, it returns an <code class="language-plaintext highlighter-rouge">Int:D</code> object.</li>
+  <li>We are able to set the function’s <a href="https://docs.raku.org/language/functions#Precedence">precedence</a> in regard to other functions. The options are <code class="language-plaintext highlighter-rouge">is looser</code>, <code class="language-plaintext highlighter-rouge">is equiv</code>, and <code class="language-plaintext highlighter-rouge">is tighter</code>. In this case, we set the new <code class="language-plaintext highlighter-rouge">plus</code> operator to have the same precedence as multiplication.</li>
+  <li><code class="language-plaintext highlighter-rouge">trans</code> translates substrings from <code class="language-plaintext highlighter-rouge">a</code> to <code class="language-plaintext highlighter-rouge">b</code>. By default, the input length has to match the output length. This means substituting <code class="language-plaintext highlighter-rouge">+</code> with <code class="language-plaintext highlighter-rouge">plus</code> would only replace the <code class="language-plaintext highlighter-rouge">+</code> with <code class="language-plaintext highlighter-rouge">p</code>. To get around that we are able to use the brackets to say “substitute the <em>entire</em> string.”</li>
+  <li>After the substitution, we will end up with a string that looks like this (using the example from above): <code class="language-plaintext highlighter-rouge">1 plus (2 * 3) plus (4 * (5 plus 6))</code>. Since we have defined this as valid Raku code, we can safely call <code class="language-plaintext highlighter-rouge">EVAL</code> on it, which returns an integer for us to sum up later.</li>
 </ol>
 
-<h2 id="task-2-ethiopian-multiplication">Task 2: Ethiopian Multiplication</h2>
+<h3 id="part-2">Part 2</h3>
 
-<p>You are given two positive numbers <code class="language-plaintext highlighter-rouge">$A</code> and <code class="language-plaintext highlighter-rouge">$B</code>.</p>
+<p>After finishing up part one, we reach the <em>advanced math</em> section. In this section addition now has <em>greater</em> precedence than multiplication. Using the same input, what is the sum of the output numbers using advanced math?</p>
 
-<p>Write a script to demonstrate <a href="https://threesixty360.wordpress.com/2009/06/09/ethiopian-multiplication/">Ethiopian Multiplication</a> using the given numbers.</p>
+<h4 id="solution-1">Solution</h4>
 
-<h3 id="solution-1">Solution</h3>
-
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-090/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/17/python/main.py">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>subset PositiveInt of Int where { $_ ~~ Int &amp;&amp; $_ &gt; 0 }
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use MONKEY-SEE-NO-EVAL;
 
-sub generate-pairs($a, $b) {
-    sprintf("%02d, %02d", $a, $b).put;
-    if $a == 1 {
-        (($a, $b),);
-    } else {
-        (($a, $b), |generate-pairs($a div 2, $b * 2));
-    }
-}
+sub infix:&lt;plus&gt;(Int:D $a, Int:D $b) returns Int:D is equiv(&amp;infix:&lt;*&gt;)  { $a + $b }
+sub infix:&lt;mult&gt;(Int:D $a, Int:D $b) returns Int:D is looser(&amp;infix:&lt;+&gt;) { $a * $b }
 
-sub MAIN(PositiveInt $A, PositiveInt $B) {
-    say "Input: A: $A, B: $B";
-    say "Divide A by 2 (ignoring remainders) until it is 1. Multiply B by 2 as we go:";
-    my @pairs = generate-pairs($A, $B);
-    say "Then, wherever A is odd, we add the Bs together:";
-    my @odd-bs = @pairs.grep(-&gt; @pair { !(@pair[0] %% 2) }).map(-&gt; @pair { @pair[1] });
-    say "{@odd-bs.join(' + ')} = {@odd-bs.sum}";
+sub MAIN($file, Bool :$p2 = False) {
+   my @expressions = $file.IO.lines.map($p2 ?? *.trans(['*'] =&gt; ['mult']) !! *.trans(['+'] =&gt; ['plus'])); # [1]
+   say @expressions.map(-&gt; $expr { EVAL $expr }).sum
 }
 </code></pre></div></div>
 
-<p>This program runs as such:</p>
+<p>This runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku 14 12
-Input: A=14, B=12
-Divide A by 2 (ignoring remainders) until it is 1. Multiply B by 2 as we go:
-14, 12
-07, 24
-03, 48
-01, 96
-Then, wherever A is odd, we add the Bs together:
-24 + 48 + 96 = 168
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+45840336521334
+
+$ raku main.raku --p2 input.txt
+328920644404583
 </code></pre></div></div>
 
-<h3 id="explanation-1">Explanation</h3>
+<h4 id="explanation-1">Explanation</h4>
 
-<p>This is a very straightforward solution; most of the mess in the code is from the messages printed out. Basically, we generate our pairs (and print them) using recursion, then filter them down to where <code class="language-plaintext highlighter-rouge">$A</code> is odd, and add up the <code class="language-plaintext highlighter-rouge">$B</code>s.</p>
+<p>Again, all we have to do is define a new infix operator with precedence <em>looser</em> than regular addition. If the user sends the <code class="language-plaintext highlighter-rouge">$p2</code> flag, we substitute <code class="language-plaintext highlighter-rouge">*</code> with <code class="language-plaintext highlighter-rouge">mult</code>, otherwise we substitute <code class="language-plaintext highlighter-rouge">+</code> with <code class="language-plaintext highlighter-rouge">*</code>. Regardless, we still <code class="language-plaintext highlighter-rouge">EVAL</code> all expressions and sum the output.</p>
+
+<h5 id="specific-comments-1">Specific Comments</h5>
+
+<ol>
+  <li>This is where the <code class="language-plaintext highlighter-rouge">Whatever</code> star gets ugly. On this line we use <code class="language-plaintext highlighter-rouge">*</code> to mean both <code class="language-plaintext highlighter-rouge">Whatever</code> <em>and</em> a literal <code class="language-plaintext highlighter-rouge">*</code> character to translate in our string.</li>
+</ol>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>This week was super easy, so not much to add! Jump over to my blog on <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-07/">day 7 of the Advent of Code</a> for something more challenging.</p>
+<p>You can define infix operators in other languages (for example, operators in Scala are just functions, so you would just write <code class="language-plaintext highlighter-rouge">def plus</code>), however Scala does not let you <a href="https://docs.scala-lang.org/tour/operators.html">define the precedence</a>. That is what is so special about Raku and what makes this solution so sleek for what could be a very tough problem.</p>
 
         
       </section>
@@ -466,7 +446,7 @@ Then, wherever A is odd, we add the Bs together:
     
       
       
-      <a href="/tags/#perl-weekly-challenge" class="page__taxonomy-item" rel="tag">Perl Weekly Challenge</a><span class="sep">, </span>
+      <a href="/tags/#advent-of-code" class="page__taxonomy-item" rel="tag">Advent of Code</a><span class="sep">, </span>
     
       
       
@@ -498,7 +478,7 @@ Then, wherever A is odd, we add the Bs together:
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-07T00:00:00-06:00">December 7, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-18T00:00:00-06:00">December 18, 2020</time></p>
 
 
       </footer>
@@ -508,23 +488,22 @@ Then, wherever A is odd, we add the Bs together:
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+90%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-090%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+18%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-18%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-090%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-18%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-090%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-18%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/advent-of-code-day-07/" class="pagination--pager" title="Advent of Code: Day 7
+      <a href="/blog/advent-of-code-day-17/" class="pagination--pager" title="Advent of Code: Day 17
 ">Previous</a>
     
     
-      <a href="/blog/advent-of-code-day-08/" class="pagination--pager" title="Advent of Code: Day 8
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -538,53 +517,6 @@ Then, wherever A is odd, we add the Bs together:
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-18/" rel="permalink">Advent of Code: Day 18
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-18T00:00:00-06:00">December 18, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          4 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">I like to hate on Raku quite a bit, but it was literally the perfect language for today’s challenge. I guess the love-hate relationship continues!
-
-</p>
-  </article>
-</div>
-
         
           
 
@@ -719,6 +651,51 @@ Then, wherever A is odd, we add the Bs together:
 
 
     <p class="archive__item-excerpt" itemprop="description">Even with how short and sweet today’s solution is, I had to rewrite it between parts one and two after hitting the maximum recursion depth. So we’ve got one ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-14/" rel="permalink">Advent of Code: Day 14
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-14T00:00:00-06:00">December 14, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today was much less math-heavy than yesterday, although we will dive into an algorithm that would make it faster. However, I did do this problem more imperat...</p>
   </article>
 </div>
 

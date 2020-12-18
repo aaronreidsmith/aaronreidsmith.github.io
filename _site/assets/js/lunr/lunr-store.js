@@ -118,4 +118,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-17/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 18",
+        "excerpt":"I like to hate on Raku quite a bit, but it was literally the perfect language for today’s challenge. I guess the love-hate relationship continues! The Problem Part 1 While we’re sitting on our flight, the kid next to us asks if we can help with his math homework. Unfortunately,...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-18/",
+        "teaser": null
       }]
