@@ -79,7 +79,7 @@ var store = [{
       },{
         "title": "Advent of Code: Day 11",
         "excerpt":"I am giving myself half credit for today; the solution I came up with is in Raku, but it is an iterative solution. Additionally, this solution is slow. In fact, it was so slow that in between runs I was able to write a Python solution (with the same logic)...","categories": ["Blog"],
-        "tags": ["Advent of Code","Raku"],
+        "tags": ["Advent of Code","Raku","Python"],
         "url": "http://localhost:4000/blog/advent-of-code-day-11/",
         "teaser": null
       },{
@@ -115,7 +115,7 @@ var store = [{
       },{
         "title": "Advent of Code: Day 17",
         "excerpt":"Today was almost exactly like day 11 except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python solution (with the same logic) to get it to finish in a reasonable amount of time. Because of the similarities...","categories": ["Blog"],
-        "tags": ["Advent of Code","Raku"],
+        "tags": ["Advent of Code","Python"],
         "url": "http://localhost:4000/blog/advent-of-code-day-17/",
         "teaser": null
       },{
@@ -123,5 +123,17 @@ var store = [{
         "excerpt":"I like to hate on Raku quite a bit, but it was literally the perfect language for today’s challenge. I guess the love-hate relationship continues! The Problem Part 1 While we’re sitting on our flight, the kid next to us asks if we can help with his math homework. Unfortunately,...","categories": ["Blog"],
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-18/",
+        "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 91",
+        "excerpt":"I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon! Task 1: Count Number You are given a positive number $N. Write a script to count number and display...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "http://localhost:4000/blog/perl-weekly-challenge-091/",
+        "teaser": null
+      },{
+        "title": "Advent of Code: Day 19",
+        "excerpt":"After I was singing Raku’s praises yesterday, it had to come back to bite me. Today’s solution is written in Python because I just couldn’t get it to work in Raku. It’s iterable handling is, in my opinion, a joke. Between Lists, Arrays, and Seqs (among others) and no discernible...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-19/",
         "teaser": null
       }]
