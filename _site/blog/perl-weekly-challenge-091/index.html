@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Advent of Code: Day 10 - Aaron Smith</title>
-<meta name="description" content="Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!">
+<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 91 - Aaron Smith</title>
+<meta name="description" content="I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Advent of Code: Day 10">
-<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-10/">
+<meta property="og:title" content="Perl Weekly Challenge 91">
+<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-091/">
 
 
-  <meta property="og:description" content="Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-12-10T00:00:00-06:00">
+  <meta property="og:description" content="I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-10/">
+
+  <meta property="article:published_time" content="2020-12-18T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-091/">
 
 
 
@@ -285,15 +285,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Advent of Code: Day 10">
-    <meta itemprop="description" content="Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!">
-    <meta itemprop="datePublished" content="2020-12-10T00:00:00-06:00">
+    <meta itemprop="headline" content="Perl Weekly Challenge 91">
+    <meta itemprop="description" content="I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!">
+    <meta itemprop="datePublished" content="2020-12-18T00:00:00-06:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 10
+          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 91
 </h1>
           
 
@@ -302,7 +302,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-10T00:00:00-06:00">December 10, 2020</time>
+        <time datetime="2020-12-18T00:00:00-06:00">December 18, 2020</time>
       </span>
     
 
@@ -315,7 +315,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          4 minute read
+          3 minute read
         
       </span>
     
@@ -327,147 +327,194 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>Part two today <em>almost</em> forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!</p>
+        <p>I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!</p>
 
-<h2 id="the-problem">The Problem</h2>
+<h2 id="task-1-count-number">Task 1: Count Number</h2>
 
-<h3 id="part-1">Part 1</h3>
+<p>You are given a positive number <code class="language-plaintext highlighter-rouge">$N</code>.</p>
 
-<p>We are trying to plug our phone into the seat-back plug, but the problem is it puts out the wrong <em>joltage</em>. We have a handful of adaptors labeled by their output joltage (our input), and our device is rated for 3 jolts above the maximum adaptor joltage. Each adaptor can be plugged into an adaptor 1-, 2-, or 3-jolts below it (i.e., a 4-jolt adaptor can plug into a 1-, 2- or 3-jolt plug).</p>
+<p>Write a script to count number and display as you read it.</p>
 
-<p>We are bored on this flight, so, treating the seat-back outlet as zero jolts, we want to find a solution that uses <em>every</em> adaptor we own. Once we have found the right sequence, we want to multiply the number of 1-jolt differences by the number of 3-jolt differences.</p>
+<h3 id="example-1">Example 1</h3>
 
-<h4 id="solution">Solution</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $N = 1122234  # ("two 1 three 2 one 3 one 4")
+Output: 21321314
+</code></pre></div></div>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/10/raku/main.raku">GitHub Link</a></p>
+<h3 id="example-2">Example 2</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $N = 2333445  # ("one 2 three 3 two 4 one 5")
+Output: 12332415
+</code></pre></div></div>
+
+<h3 id="example-3">Example 3</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $N = 12345  # ("one 1 one 2 one 3 one 4 one 5")
+Output: 1112131415
+</code></pre></div></div>
+
+<h3 id="solution">Solution</h3>
+
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-091/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub find-differences(@joltage, $pointer = 0, @differences = ()) {
-    if $pointer == @joltage.elems - 1 {
-        @differences;
-    } else {
-        my $a = @joltage[$pointer];
-        my $b = @joltage[$pointer + 1];
-        find-differences(@joltage, $pointer + 1, (|@differences, $b - $a));
-    }
-}
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge($N) {
+    my @digits = $N.comb.map(*.Int);
 
-sub MAIN($file) {
-    my @adaptors = $file.IO.lines.map(*.Int).sort;
-    my $device-joltage = @adaptors.max + 3;
-    my @joltage-list = (0, |@adaptors, $device-joltage); # [1]
-    my @differences = find-differences(@joltage-list);
-    say @differences.grep(* == 1).elems * @differences.grep(* == 3).elems;
-}
-</code></pre></div></div>
+    my ($current-num, $current-count);
+    my $first = True;
+    my @output;
+    for @digits.kv -&gt; $index, $digit {
+        # If this is the first round, just set our variables and continue
+        if $first {
+            $first = False;
+            $current-num = $digit;
+            $current-count = 1;
+            next;
+        }
 
-<p>This runs as such:</p>
+        # Otherwise, just keep track of our current digit/count
+        if $digit == $current-num {
+            $current-count += 1;
+        } else {
+            @output.push($current-count);
+            @output.push($current-num);
+            $current-num = $digit;
+            $current-count = 1;
+        }
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
-2176
-</code></pre></div></div>
-
-<h4 id="explanation">Explanation</h4>
-
-<p>The logic laid out in <code class="language-plaintext highlighter-rouge">MAIN</code> is pretty clear.</p>
-
-<ol>
-  <li>We pull out all of our adaptors and sort them by output joltage</li>
-  <li>We find out device voltage (<code class="language-plaintext highlighter-rouge">@adaptors.max + 3</code>)</li>
-  <li>We make our final joltage list including the outlet (<code class="language-plaintext highlighter-rouge">0</code>) and our device</li>
-  <li>We find all the differences between each adaptor</li>
-  <li>We multiply the 1-joltage differences by the 3-joltage differences</li>
-</ol>
-
-<h5 id="specific-comments">Specific Comments</h5>
-
-<ol>
-  <li>I’ve used this before, but I wanted to call it out as it is used in a few places in this solution. This is called a <a href="https://docs.raku.org/type/Slip"><code class="language-plaintext highlighter-rouge">Slip</code></a>, which basically unpacks a list into the outer list. So this is a way of prepending and appending items to a list at the same time.</li>
-</ol>
-
-<h3 id="part-2">Part 2</h3>
-
-<p>Now that we have found the one solution that uses all adaptors, we want to find <em>all</em> possible solutions that will connect our device to the plug. Looking at our adaptors we realize there must be more than a <strong>trillion</strong> ways to arrange them, so we have to be smart about how we approach it.</p>
-
-<h4 id="solution-1">Solution</h4>
-
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/10/raku/main.raku">GitHub Link</a></p>
-
-<p>See below for explanation and any implementation-specific comments.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use experimental :cached;
-
-sub find-differences(@joltage-list, $pointer = 0, @differences = ()) {
-    if $pointer == @joltage-list.elems - 1 {
-        @differences;
-    } else {
-        my $a = @joltage-list[$pointer];
-        my $b = @joltage-list[$pointer + 1];
-        find-differences(@joltage-list, $pointer + 1, (|@differences, $b - $a));
-    }
-}
-
-sub find-paths($current-joltage, @joltage-list) is cached {   # [1]
-    given $current-joltage {
-        when * == @joltage-list.max { 1 }
-        when * ∉ @joltage-list      { 0 }                     # [2][3]
-        default {
-            find-paths($current-joltage + 1, @joltage-list) +
-            find-paths($current-joltage + 2, @joltage-list) + # [4]
-            find-paths($current-joltage + 3, @joltage-list);
+        # We need this to push the last number on, or it will get lost
+        if $index == @digits.elems - 1 {
+            @output.push($current-count);
+            @output.push($current-num);
         }
     }
+
+    @output.join;
 }
 
-sub MAIN($file, Bool :$p2 = False) {
-    my @adaptors = $file.IO.lines.map(*.Int).sort;
-    my $device-joltage = @adaptors.max + 3;
-    my @joltage-list = (0, |@adaptors, $device-joltage);
-    if $p2 {
-        say find-paths(0, @joltage-list);
-    } else {
-        my @differences = find-differences(@joltage-list);
-        say @differences.grep(* == 1).elems * @differences.grep(* == 3).elems;
+multi sub MAIN($N where $N ~~ Int &amp;&amp; $N &gt; 0) {
+    say challenge($N);
+}
+
+multi sub MAIN(:$test) {
+    use Test;
+
+    my @tests = (
+        (1122234, 21321314),
+        (2333445, 12332415),
+        (12345, 1112131415)
+    );
+
+    for @tests -&gt; @test {
+        is(challenge(@test[0]), @test[1]);
     }
+
+    done-testing;
 }
 </code></pre></div></div>
 
-<p>This runs as such:</p>
+<p>This program runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
-$ raku main.raku input.txt
-2176
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku 1122234
+21321314
 
-# Part 2
-$ raku main.raku --p2 input.txt
-18512297918464
+$ raku ch-1.raku --test
+ok 1 - 
+ok 2 - 
+ok 3 - 
+1..3
 </code></pre></div></div>
 
-<h4 id="explanation-1">Explanation</h4>
+<h3 id="explanation">Explanation</h3>
 
-<p>There is a lot of fluff going on from part one that we can ignore. We generate the same <code class="language-plaintext highlighter-rouge">@joltage-list</code> and pass it to <code class="language-plaintext highlighter-rouge">find-paths</code> starting at <code class="language-plaintext highlighter-rouge">joltage = 0</code>. This subroutine does the following:</p>
+<p>You can see this week I started adding tests for my scripts (utilized by passing in the <code class="language-plaintext highlighter-rouge">--test</code> flag), so all the logic lives in <code class="language-plaintext highlighter-rouge">challenge</code>.</p>
 
-<ol>
-  <li>If we have hit the max joltage (device joltage) mark this as a valid path (<code class="language-plaintext highlighter-rouge">1</code>)</li>
-  <li>If the joltage we are currently on is not in the set of adaptors, mark it as invalid (<code class="language-plaintext highlighter-rouge">0</code>)</li>
-  <li>Otherwise, recursively find the valid paths for any adaptors that could plug into this one (i.e. <code class="language-plaintext highlighter-rouge">n+1</code>, <code class="language-plaintext highlighter-rouge">n+2</code>, and <code class="language-plaintext highlighter-rouge">n+3</code>) and add them up</li>
-</ol>
+<p>The logic is pretty easy –  as we iterate from left-to-right we keep track of the current digit and its count. If we encounter a new digit, we push the old <code class="language-plaintext highlighter-rouge">$current-digit</code> and old <code class="language-plaintext highlighter-rouge">$current-count</code> onto <code class="language-plaintext highlighter-rouge">@output</code> and reset our variables. The only special handling is around the first digit (when there is no <code class="language-plaintext highlighter-rouge">$current-digit</code>), and the last digit (since we need to store the last digit and count before exiting).</p>
 
-<p>This looks pretty brute-force, right? Well, that is where the <code class="language-plaintext highlighter-rouge">is cached</code> trait comes in. See #1 below for details!</p>
+<h2 id="task-2-jump-game">Task 2: Jump Game</h2>
 
-<h5 id="specific-comments-1">Specific Comments</h5>
+<p>You are given an array of positive numbers <code class="language-plaintext highlighter-rouge">@N</code>, where value at each index determines how far you are allowed to jump further.</p>
 
-<ol>
-  <li>Coming from a Python background, I am familiar with <a href="https://docs.python.org/3/library/functools.html#functools.cache"><code class="language-plaintext highlighter-rouge">functools.cache</code></a>, a decorator that basically builds a dictionary of input to output such that expensive functions are only calculated once. Basically, the first call would compute the value and store it in the cache and any subsequent calls to that functions with the same input would use the cached value instead; this optimization is called <a href="https://en.wikipedia.org/wiki/Memoization">memoization</a>. In Raku, this is an <a href="https://docs.raku.org/language/experimental#cached">experimental trait</a> called <code class="language-plaintext highlighter-rouge">cached</code> which can be applied to subroutines to achieve the same memoization goal. Basically, the reason this is not a brute-force approach is because we will only compute <code class="language-plaintext highlighter-rouge">find-paths</code> once for each input rather than the traditional re-computing that can happen in recursive functions.</li>
-  <li>This is the first time using this operator, so I want to call it out: <code class="language-plaintext highlighter-rouge">∉</code> is the “element not part of set” operator.</li>
-  <li>This function could be optimized by <em>only</em> looking at joltages in the input list, but instead we just look at everything from <code class="language-plaintext highlighter-rouge">0..N</code>. If it is not in the input list, we just mark it as an invalid path.</li>
-  <li>Because <code class="language-plaintext highlighter-rouge">find-paths($current-joltage + 1, @joltage-list)</code> will recursively call more <code class="language-plaintext highlighter-rouge">find-paths</code> functions, this line uses the cache, so the only operation really happening here is the addition.</li>
-</ol>
+<p>Write a script to decide if you can jump to the last index. Print 1 if you are able to reach the last index otherwise 0.</p>
+
+<h3 id="solution-1">Solution</h3>
+
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-091/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>subset PositiveInt of Int where { $_ &gt;= 0 }
+
+sub challenge(@N) {
+    my Int $pointer = 0;
+    my Bool $reached-the-end;
+
+    loop {
+        given $pointer {
+            when * &lt; @N.elems - 1  {
+                my $value = @N[$pointer];
+                if $value == 0 {
+                    $reached-the-end = False;
+                    last;
+                } else {
+                    $pointer += @N[$pointer]
+                }
+            }
+            when * == @N.elems - 1 {
+                $reached-the-end = True;
+                last;
+            }
+            when * &gt; @N.elems - 1  {
+                $reached-the-end = False;
+                last;
+            }
+        }
+    }
+
+    $reached-the-end.Int;
+}
+
+multi sub MAIN(*@N where all(@N) ~~ PositiveInt) {
+    say challenge(@N);
+}
+
+multi sub MAIN(:$test) {
+    use Test;
+
+    my @tests = (
+        ((1, 2, 1, 2), 1),
+        ((2, 1, 1, 0, 2), 0)
+    );
+
+    for @tests -&gt; @test {
+        is(challenge(@test[0]), @test[1]);
+    }
+
+    done-testing;
+}
+
+</code></pre></div></div>
+
+<p>This program runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku 1 2 1 2
+1
+
+$ raku ch-2.raku --test
+ok 1 - 
+ok 2 - 
+1..2
+</code></pre></div></div>
+
+<h3 id="explanation-1">Explanation</h3>
+
+<p>We set the <code class="language-plaintext highlighter-rouge">$pointer</code> to start at index 0 and enter an infinite loop. If we are not at the end we have to check if the current value is <code class="language-plaintext highlighter-rouge">0</code>. If it <em>is</em>, we have gone as far as we can and need to exit (<code class="language-plaintext highlighter-rouge">last</code>), otherwise keep going. If we are <em>at</em> at the end, exit and mark<code class="language-plaintext highlighter-rouge"> $reached-the-end</code> as <code class="language-plaintext highlighter-rouge">True</code>. If we have passed the end, exit and mark <code class="language-plaintext highlighter-rouge">$reached-the-end</code> as <code class="language-plaintext highlighter-rouge">False</code>. Since the problem asks for an integer output, we have to cast our boolean to an integer before returning.</p>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>A lot of my solutions for the Advent of Code so far have been recursive (and relatively slow). I am glad I found out about the <code class="language-plaintext highlighter-rouge">is cached</code> trait, and I am looking forward to applying it to more solutions in the future!</p>
+<p>Nothing ground breaking this week. However, we did get to explore one of the cooler features of Raku for Advent of Code day 18. <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-18/">Give it a read</a>!</p>
 
         
       </section>
@@ -488,7 +535,7 @@ $ raku main.raku --p2 input.txt
     
       
       
-      <a href="/tags/#advent-of-code" class="page__taxonomy-item" rel="tag">Advent of Code</a><span class="sep">, </span>
+      <a href="/tags/#perl-weekly-challenge" class="page__taxonomy-item" rel="tag">Perl Weekly Challenge</a><span class="sep">, </span>
     
       
       
@@ -520,7 +567,7 @@ $ raku main.raku --p2 input.txt
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-10T00:00:00-06:00">December 10, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-18T00:00:00-06:00">December 18, 2020</time></p>
 
 
       </footer>
@@ -530,22 +577,22 @@ $ raku main.raku --p2 input.txt
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+10%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-10%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+91%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-091%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-10%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-091%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-10%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-091%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/advent-of-code-day-09/" class="pagination--pager" title="Advent of Code: Day 9
+      <a href="/blog/advent-of-code-day-18/" class="pagination--pager" title="Advent of Code: Day 18
 ">Previous</a>
     
     
-      <a href="/blog/advent-of-code-day-11/" class="pagination--pager" title="Advent of Code: Day 11
+      <a href="/blog/advent-of-code-day-19/" class="pagination--pager" title="Advent of Code: Day 19
 ">Next</a>
     
   </nav>
@@ -617,51 +664,6 @@ $ raku main.raku --p2 input.txt
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/blog/perl-weekly-challenge-091/" rel="permalink">Perl Weekly Challenge 91
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-18T00:00:00-06:00">December 18, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          3 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty r...</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
         <a href="/blog/advent-of-code-day-18/" rel="permalink">Advent of Code: Day 18
 </a>
       
@@ -686,7 +688,7 @@ $ raku main.raku --p2 input.txt
       <span class="page__meta-readtime">
         <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
-          4 minute read
+          3 minute read
         
       </span>
     
@@ -741,6 +743,53 @@ $ raku main.raku --p2 input.txt
 
 
     <p class="archive__item-excerpt" itemprop="description">Today was almost exactly like day 11 except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python sol...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-16/" rel="permalink">Advent of Code: Day 16
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-16T00:00:00-06:00">December 16, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          6 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">We got to explore some cool features of Raku today, even if it wasn’t 100% functional. 🙂 Read on to see what I am talking about!
+
+</p>
   </article>
 </div>
 

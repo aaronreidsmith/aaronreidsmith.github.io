@@ -335,12 +335,12 @@
 
 <p>While we’re sitting on our flight, the kid next to us asks if we can help with his math homework. Unfortunately, the rules of this math are different from what we are familiar with – parentheses have the same precedence, but everything else is evaluated from left to right (<em>suck it</em>, PEMDAS). Here is an example:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 + (2 * 3) + (4 * (5 + 6))
-1 +    6    + (4 * (5 + 6))
-     7      + (4 * (5 + 6))
-     7      + (4 *   11   )
-     7      +     44
-            51
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 + 2 * 3 + 4 * 5 + 6
+  3   * 3 + 4 * 5 + 6
+      9   + 4 * 5 + 6
+         13   * 5 + 6
+             65   + 6
+                 71
 </code></pre></div></div>
 
 <p>Luckily it seems like all of his math problems are only addition and multiplication. After evaluating all the expressions, what is the sum of their outputs?</p>
@@ -380,7 +380,7 @@ sub MAIN($file, Bool :$p2 = False) {
   <li>When defining this function, we don’t explicitly have to say what types it takes, but it does speed up calculating quite a bit. In this case we say it takes two <code class="language-plaintext highlighter-rouge">Int:D</code> variables, meaning each one is a <em>specific</em> integer and not an uninitialized <code class="language-plaintext highlighter-rouge">Int</code> object. Likewise, it returns an <code class="language-plaintext highlighter-rouge">Int:D</code> object.</li>
   <li>We are able to set the function’s <a href="https://docs.raku.org/language/functions#Precedence">precedence</a> in regard to other functions. The options are <code class="language-plaintext highlighter-rouge">is looser</code>, <code class="language-plaintext highlighter-rouge">is equiv</code>, and <code class="language-plaintext highlighter-rouge">is tighter</code>. In this case, we set the new <code class="language-plaintext highlighter-rouge">plus</code> operator to have the same precedence as multiplication.</li>
   <li><code class="language-plaintext highlighter-rouge">trans</code> translates substrings from <code class="language-plaintext highlighter-rouge">a</code> to <code class="language-plaintext highlighter-rouge">b</code>. By default, the input length has to match the output length. This means substituting <code class="language-plaintext highlighter-rouge">+</code> with <code class="language-plaintext highlighter-rouge">plus</code> would only replace the <code class="language-plaintext highlighter-rouge">+</code> with <code class="language-plaintext highlighter-rouge">p</code>. To get around that we are able to use the brackets to say “substitute the <em>entire</em> string.”</li>
-  <li>After the substitution, we will end up with a string that looks like this (using the example from above): <code class="language-plaintext highlighter-rouge">1 plus (2 * 3) plus (4 * (5 plus 6))</code>. Since we have defined this as valid Raku code, we can safely call <code class="language-plaintext highlighter-rouge">EVAL</code> on it, which returns an integer for us to sum up later.</li>
+  <li>After the substitution, we will end up with a string that looks like this (using the example from above): <code class="language-plaintext highlighter-rouge">1 plus 2 * 3 plus 4 * 5 plus 6</code>. Since we have defined this as valid Raku code, we can safely call <code class="language-plaintext highlighter-rouge">EVAL</code> on it, which returns an integer for us to sum up later.</li>
 </ol>
 
 <h3 id="part-2">Part 2</h3>
@@ -389,7 +389,7 @@ sub MAIN($file, Bool :$p2 = False) {
 
 <h4 id="solution-1">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/17/python/main.py">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/18/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
@@ -503,7 +503,8 @@ $ raku main.raku --p2 input.txt
 ">Previous</a>
     
     
-      <a href="#" class="pagination--pager disabled">Next</a>
+      <a href="/blog/perl-weekly-challenge-091/" class="pagination--pager" title="Perl Weekly Challenge 91
+">Next</a>
     
   </nav>
 
@@ -517,6 +518,98 @@ $ raku main.raku --p2 input.txt
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-19/" rel="permalink">Advent of Code: Day 19
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-19T00:00:00-06:00">December 19, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">After  I was singing Raku’s praises yesterday, it had to come back to bite me.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-091/" rel="permalink">Perl Weekly Challenge 91
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-18T00:00:00-06:00">December 18, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty r...</p>
+  </article>
+</div>
+
         
           
 
@@ -606,96 +699,6 @@ $ raku main.raku --p2 input.txt
     <p class="archive__item-excerpt" itemprop="description">We got to explore some cool features of Raku today, even if it wasn’t 100% functional. 🙂 Read on to see what I am talking about!
 
 </p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-15/" rel="permalink">Advent of Code: Day 15
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-15T00:00:00-06:00">December 15, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          6 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">Even with how short and sweet today’s solution is, I had to rewrite it between parts one and two after hitting the maximum recursion depth. So we’ve got one ...</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-14/" rel="permalink">Advent of Code: Day 14
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-14T00:00:00-06:00">December 14, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          5 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">Today was much less math-heavy than yesterday, although we will dive into an algorithm that would make it faster. However, I did do this problem more imperat...</p>
   </article>
 </div>
 
