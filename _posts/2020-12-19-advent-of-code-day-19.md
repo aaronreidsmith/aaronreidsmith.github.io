@@ -4,7 +4,7 @@ categories:
   - Blog
 tags:
   - Advent of Code
-  - Raku
+  - Python
 ---
 
 After  I was singing Raku's praises yesterday, it had to come back to bite me.
