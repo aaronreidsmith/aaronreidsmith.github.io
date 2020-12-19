@@ -16,12 +16,12 @@ I like to hate on Raku quite a bit, but it was literally the _perfect_ language 
 While we're sitting on our flight, the kid next to us asks if we can help with his math homework. Unfortunately, the rules of this math are different from what we are familiar with -- parentheses have the same precedence, but everything else is evaluated from left to right (_suck it_, PEMDAS). Here is an example:
 
 ```
-1 + (2 * 3) + (4 * (5 + 6))
-1 +    6    + (4 * (5 + 6))
-     7      + (4 * (5 + 6))
-     7      + (4 *   11   )
-     7      +     44
-            51
+1 + 2 * 3 + 4 * 5 + 6
+  3   * 3 + 4 * 5 + 6
+      9   + 4 * 5 + 6
+         13   * 5 + 6
+             65   + 6
+                 71
 ```
 
 Luckily it seems like all of his math problems are only addition and multiplication. After evaluating all the expressions, what is the sum of their outputs?
@@ -62,7 +62,7 @@ After we have done that, we read all the lines in and translate `+` to `plus` fo
 2. When defining this function, we don't explicitly have to say what types it takes, but it does speed up calculating quite a bit. In this case we say it takes two `Int:D` variables, meaning each one is a _specific_ integer and not an uninitialized `Int` object. Likewise, it returns an `Int:D` object.
 3. We are able to set the function's [precedence](https://docs.raku.org/language/functions#Precedence) in regard to other functions. The options are `is looser`, `is equiv`, and `is tighter`. In this case, we set the new `plus` operator to have the same precedence as multiplication.
 4. `trans` translates substrings from `a` to `b`. By default, the input length has to match the output length. This means substituting `+` with `plus` would only replace the `+` with `p`. To get around that we are able to use the brackets to say "substitute the _entire_ string."
-5. After the substitution, we will end up with a string that looks like this (using the example from above): `1 plus (2 * 3) plus (4 * (5 plus 6))`. Since we have defined this as valid Raku code, we can safely call `EVAL` on it, which returns an integer for us to sum up later.
+5. After the substitution, we will end up with a string that looks like this (using the example from above): `1 plus 2 * 3 plus 4 * 5 plus 6`. Since we have defined this as valid Raku code, we can safely call `EVAL` on it, which returns an integer for us to sum up later.
 
 ### Part 2
 
