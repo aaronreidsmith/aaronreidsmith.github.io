@@ -133,7 +133,13 @@ var store = [{
       },{
         "title": "Advent of Code: Day 19",
         "excerpt":"After I was singing Raku’s praises yesterday, it had to come back to bite me. Today’s solution is written in Python because I just couldn’t get it to work in Raku. It’s iterable handling is, in my opinion, a joke. Between Lists, Arrays, and Seqs (among others) and no discernible...","categories": ["Blog"],
-        "tags": ["Advent of Code","Raku"],
+        "tags": ["Advent of Code","Python"],
         "url": "http://localhost:4000/blog/advent-of-code-day-19/",
+        "teaser": null
+      },{
+        "title": "Advent of Code: Day 20",
+        "excerpt":"Today was… not fun, to say the very least. It was a lot of tedium, and I am not super proud of my solution. Today involved a lot of matrix operations. I attempted to use Raku’s Math::Matrix, but found the features to be lacking; I don’t know what I expected...","categories": ["Blog"],
+        "tags": ["Advent of Code","Python"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-20/",
         "teaser": null
       }]

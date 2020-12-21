@@ -1,0 +1,1197 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Advent of Code: Day 20 - Aaron Smith</title>
+<meta name="description" content="Today was… not fun, to say the very least. It was a lot of tedium, and I am not super proud of my solution.">
+
+
+  <meta name="author" content="Aaron Smith">
+  
+  <meta property="article:author" content="Aaron Smith">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Aaron Smith">
+<meta property="og:title" content="Advent of Code: Day 20">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-20/">
+
+
+  <meta property="og:description" content="Today was… not fun, to say the very least. It was a lot of tedium, and I am not super proud of my solution.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-20T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-20/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Aaron Smith Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Aaron Smith Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/tags/">Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/assets/files/aaron_smith_resume.pdf">Resume</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/headshot-square.jpg" alt="Aaron Smith" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Aaron Smith</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Data Engineer specializing in streaming data at scale, especially on AWS</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Connect</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Austin, TX</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Advent of Code: Day 20">
+    <meta itemprop="description" content="Today was… not fun, to say the very least. It was a lot of tedium, and I am not super proud of my solution.">
+    <meta itemprop="datePublished" content="2020-12-20T00:00:00-06:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 20
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-20T00:00:00-06:00">December 20, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Today was… not fun, to say the very least. It was a lot of tedium, and I am not super proud of my solution.</p>
+
+<p>Today involved a lot of matrix operations. I attempted to use Raku’s <a href="https://github.com/lichtkind/Raku-Math-Matrix">Math::Matrix</a>, but found the features to be lacking; I don’t know what I expected from a package that hasn’t had a release in 2+ years. Instead, this solution was written using <a href="https://numpy.org/">NumPy</a>, a package which I am familiar with, but is not in my day-to-day rotation, so I am sure there is a better solution than mine out there.</p>
+
+<h2 id="the-problem">The Problem</h2>
+
+<h3 id="part-1">Part 1</h3>
+
+<p>The messages from <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-19/">yesterday</a> decode into a series of images that we need to reassemble back into a single image.</p>
+
+<p>Each of our inputs comes with an ID and the image itself. Here is an example of nine tiles of input:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Tile 2311:
+..##.#..#.
+##..#.....
+#...##..#.
+####.#...#
+##.##.###.
+##...#.###
+.#.#.#..##
+..#....#..
+###...#.#.
+..###..###
+
+Tile 1951:
+#.##...##.
+#.####...#
+.....#..##
+#...######
+.##.#....#
+.###.#####
+###.##.##.
+.###....#.
+..#.#..#.#
+#...##.#..
+
+Tile 1171:
+####...##.
+#..##.#..#
+##.#..#.#.
+.###.####.
+..###.####
+.##....##.
+.#...####.
+#.##.####.
+####..#...
+.....##...
+
+Tile 1427:
+###.##.#..
+.#..#.##..
+.#.##.#..#
+#.#.#.##.#
+....#...##
+...##..##.
+...#.#####
+.#.####.#.
+..#..###.#
+..##.#..#.
+
+Tile 1489:
+##.#.#....
+..##...#..
+.##..##...
+..#...#...
+#####...#.
+#..#.#.#.#
+...#.#.#..
+##.#...##.
+..##.##.##
+###.##.#..
+
+Tile 2473:
+#....####.
+#..#.##...
+#.##..#...
+######.#.#
+.#...#.#.#
+.#########
+.###.#..#.
+########.#
+##...##.#.
+..###.#.#.
+
+Tile 2971:
+..#.#....#
+#...###...
+#.#.###...
+##.##..#..
+.#####..##
+.#..####.#
+#..#.#..#.
+..####.###
+..#.#.###.
+...#.#.#.#
+
+Tile 2729:
+...#.#.#.#
+####.#....
+..#.#.....
+....#..#.#
+.##..##.#.
+.#.####...
+####.#.#..
+##.####...
+##..#.##..
+#.##...##.
+
+Tile 3079:
+#.#.#####.
+.#..######
+..#.......
+######....
+####.#..#.
+.#...#.##.
+#.#####.##
+..#.###...
+..#.......
+..#.###...
+</code></pre></div></div>
+
+<p>Unfortunately, it seems the camera was malfunctioning, so these images may be <strong>flipped</strong> or <strong>rotated</strong>. We can find the way these fit together by aligning the borders of adjacent tiles. Here are the above nine tiles flipped and rotated until they fit together:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#...##.#.. ..###..### #.#.#####.
+..#.#..#.# ###...#.#. .#..######
+.###....#. ..#....#.. ..#.......
+###.##.##. .#.#.#..## ######....
+.###.##### ##...#.### ####.#..#.
+.##.#....# ##.##.###. .#...#.##.
+#...###### ####.#...# #.#####.##
+.....#..## #...##..#. ..#.###...
+#.####...# ##..#..... ..#.......
+#.##...##. ..##.#..#. ..#.###...
+
+#.##...##. ..##.#..#. ..#.###...
+##..#.##.. ..#..###.# ##.##....#
+##.####... .#.####.#. ..#.###..#
+####.#.#.. ...#.##### ###.#..###
+.#.####... ...##..##. .######.##
+.##..##.#. ....#...## #.#.#.#...
+....#..#.# #.#.#.##.# #.###.###.
+..#.#..... .#.##.#..# #.###.##..
+####.#.... .#..#.##.. .######...
+...#.#.#.# ###.##.#.. .##...####
+
+...#.#.#.# ###.##.#.. .##...####
+..#.#.###. ..##.##.## #..#.##..#
+..####.### ##.#...##. .#.#..#.##
+#..#.#..#. ...#.#.#.. .####.###.
+.#..####.# #..#.#.#.# ####.###..
+.#####..## #####...#. .##....##.
+##.##..#.. ..#...#... .####...#.
+#.#.###... .##..##... .####.##.#
+#...###... ..##...#.. ...#..####
+..#.#....# ##.#.#.... ...##.....
+</code></pre></div></div>
+
+<p>With the corresponding tile IDs being:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1951    2311    3079
+2729    1427    2473
+2971    1489    1171
+</code></pre></div></div>
+
+<p>To confirm we put the image together correctly, we need to multiply the IDs of the four corners. In this case we get:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1951 * 3079 * 2971 * 1171 = 20899048083289
+</code></pre></div></div>
+
+<p>What is the product of the four corners in our real input?</p>
+
+<h4 id="solution">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/20/python/main.py">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+
+<span class="k">def</span> <span class="nf">orientations</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">rotation</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">new_tile</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">rot90</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">rotation</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">new_tile</span>                        <span class="c1"># [1]
+</span>        <span class="k">yield</span> <span class="n">np</span><span class="p">.</span><span class="n">flip</span><span class="p">(</span><span class="n">new_tile</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">tiles</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]).</span><span class="n">read</span><span class="p">().</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\n\n</span><span class="s">'</span><span class="p">):</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">block</span><span class="p">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="n">tile_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:]])</span> <span class="o">==</span> <span class="s">'#'</span>  <span class="c1"># [2]
+</span>        <span class="n">tiles</span><span class="p">[</span><span class="n">tile_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile</span>
+
+    <span class="n">grid_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tiles</span><span class="p">)))</span>
+
+    <span class="n">combined_tiles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">found_all_matches</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">for</span> <span class="n">start_tile_id</span> <span class="ow">in</span> <span class="n">tiles</span><span class="p">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">start_tile</span> <span class="ow">in</span> <span class="n">orientations</span><span class="p">(</span><span class="n">tiles</span><span class="p">[</span><span class="n">start_tile_id</span><span class="p">]):</span>
+            <span class="n">combined_tiles</span> <span class="o">=</span> <span class="p">[(</span><span class="n">start_tile_id</span><span class="p">,</span> <span class="n">start_tile</span><span class="p">)]</span>
+            <span class="n">used</span> <span class="o">=</span> <span class="p">{</span><span class="n">start_tile_id</span><span class="p">}</span>                            <span class="c1"># [3]
+</span>            <span class="n">found_all_matches</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tiles</span><span class="p">)):</span>
+                <span class="n">found_match</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">for</span> <span class="n">tile_num</span><span class="p">,</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">tiles</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">tile_num</span> <span class="ow">in</span> <span class="n">used</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+                    <span class="n">previous_horizontal</span> <span class="o">=</span> <span class="n">combined_tiles</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">grid_width</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">None</span>
+                    <span class="n">previous_vertical</span> <span class="o">=</span> <span class="n">combined_tiles</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">grid_width</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="o">//</span> <span class="n">grid_width</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">None</span>
+
+                    <span class="k">for</span> <span class="n">try_tile</span> <span class="ow">in</span> <span class="n">orientations</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">previous_horizontal</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="p">.</span><span class="nb">all</span><span class="p">(</span><span class="n">previous_horizontal</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">try_tile</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]):</span>
+                            <span class="k">continue</span>
+                        <span class="k">if</span> <span class="n">previous_vertical</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="p">.</span><span class="nb">all</span><span class="p">(</span><span class="n">previous_vertical</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">==</span> <span class="n">try_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]):</span>
+                            <span class="k">continue</span>
+
+                        <span class="n">combined_tiles</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">tile_num</span><span class="p">,</span> <span class="n">try_tile</span><span class="p">))</span>
+                        <span class="n">used</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tile_num</span><span class="p">)</span>
+                        <span class="n">found_match</span> <span class="o">=</span> <span class="bp">True</span>
+                        <span class="k">break</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">found_match</span><span class="p">:</span>
+                    <span class="n">found_all_matches</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="k">break</span>
+
+            <span class="k">if</span> <span class="n">found_all_matches</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">found_all_matches</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="n">tile_ids</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">combined_tiles</span><span class="p">]).</span><span class="n">reshape</span><span class="p">((</span><span class="n">grid_width</span><span class="p">,</span> <span class="n">grid_width</span><span class="p">))</span>  <span class="c1"># [4]
+</span>    <span class="n">corner_product</span> <span class="o">=</span> <span class="n">tile_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">corner_product</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python main.py input.txt
+23497974998093
+</code></pre></div></div>
+
+<h4 id="explanation">Explanation</h4>
+
+<p>First things first, you can see this is an absolute travesty from a time complexity standpoint. I count 5 nested for-loops, making this <em>O(n<sup>5</sup>)</em>, which falls squarely in the <a href="https://www.bigocheatsheet.com/">horrible category</a>. Regardless, it runs in under five seconds, so it’s not a huge deal. Just wanted to acknowledge that I <em>know</em> it is bad.</p>
+
+<p>The logic for this mess is as follows:</p>
+
+<ol>
+  <li>First, parse the input into a dictionary with the ID as the key, and a 2D NumPy array as the value
+    <ul>
+      <li>We translate <code class="language-plaintext highlighter-rouge">.</code> and <code class="language-plaintext highlighter-rouge">#</code> to <code class="language-plaintext highlighter-rouge">True</code> and <code class="language-plaintext highlighter-rouge">False</code> on the way in</li>
+    </ul>
+  </li>
+  <li>We start with a random tile and iterate through it’s orientations
+    <ul>
+      <li>3 rotations (plus the un-rotated version) as well as one flip for each rotation</li>
+      <li>For each rotation we look for the possible matches on all four edges</li>
+      <li>When we find one that fits, we store it in <code class="language-plaintext highlighter-rouge">combined_tiles</code> and keep looking</li>
+      <li>When we run into one that doesn’t fit, we start the whole process over</li>
+    </ul>
+  </li>
+  <li>Once we have put all the pieces in their place, we extract <em>just</em> the tile IDs into a grid (like in the example) and multiply the corners.</li>
+</ol>
+
+<p>If it’s stupid, but it works, it ain’t stupid 🤷🏻‍♂️</p>
+
+<h5 id="specific-comments">Specific Comments</h5>
+
+<ol>
+  <li>For anyone not familiar with the <code class="language-plaintext highlighter-rouge">yield</code> keyword, it is what’s known as a <code class="language-plaintext highlighter-rouge">generator</code> in Python (a lazy list in Raku). Basically, this iterable is only evaluated <em>when it is asked for</em>, so all that is stored in memory is how to generate the next term, not anything else. Additionally, generators return to the function <em>exactly</em> where they left off. So after yielding <code class="language-plaintext highlighter-rouge">new_tile</code> the next term will be the flipped version of <code class="language-plaintext highlighter-rouge">new_tile</code>. <a href="https://wiki.python.org/moin/Generators">Here is a link</a> for further reading.</li>
+  <li>NumPy is interesting, so when you have an array compared to a value, it compares each value in the array to that value, and puts it into a new array. This is our way of converting to <code class="language-plaintext highlighter-rouge">True</code> and <code class="language-plaintext highlighter-rouge">False</code> values.</li>
+  <li>
+    <p>This defines a <code class="language-plaintext highlighter-rouge">set</code> with a single item, <em>not</em> a dictionary. Python can be a little confusing on that front:</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">x</span> <span class="o">=</span> <span class="p">{}</span>               <span class="c1"># empty dict
+</span> <span class="n">x</span> <span class="o">=</span> <span class="p">{</span><span class="s">'foo'</span><span class="p">:</span> <span class="s">'bar'</span><span class="p">}</span>   <span class="c1"># dict with 1 item
+</span> <span class="n">x</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>            <span class="c1"># empty set
+</span> <span class="n">x</span> <span class="o">=</span> <span class="p">{</span><span class="s">'foo'</span><span class="p">}</span>          <span class="c1"># set with 1 item
+</span> <span class="n">x</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s">'foo'</span><span class="p">])</span>     <span class="c1"># also a set with 1 item (`set()` takes an iterable)
+</span></code></pre></div>    </div>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">reshape</code> allows us to convert a list of lists back into an <code class="language-plaintext highlighter-rouge">n x n</code> matrix.</li>
+</ol>
+
+<h3 id="part-2">Part 2</h3>
+
+<p>After putting the image together, we find that it is a picture of the ocean, and it is full of <strong>sea monsters</strong>. First things first, lets take of the borders used to align the pieces. The above example becomes this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.#.#..#. ##...#.# #..#####
+###....# .#....#. .#......
+##.##.## #.#.#..# #####...
+###.#### #...#.## ###.#..#
+##.#.... #.##.### #...#.##
+...##### ###.#... .#####.#
+....#..# ...##..# .#.###..
+.####... #..#.... .#......
+
+#..#.##. .#..###. #.##....
+#.####.. #.####.# .#.###..
+###.#.#. ..#.#### ##.#..##
+#.####.. ..##..## ######.#
+##..##.# ...#...# .#.#.#..
+...#..#. .#.#.##. .###.###
+.#.#.... #.##.#.. .###.##.
+###.#... #..#.##. ######..
+
+.#.#.### .##.##.# ..#.##..
+.####.## #.#...## #.#..#.#
+..#.#..# ..#.#.#. ####.###
+#..####. ..#.#.#. ###.###.
+#####..# ####...# ##....##
+#.##..#. .#...#.. ####...#
+.#.###.. ##..##.. ####.##.
+...###.. .##...#. ..#..###
+</code></pre></div></div>
+
+<p>And then we can remove the gaps to be left with a full grid:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.#.#..#.##...#.##..#####
+###....#.#....#..#......
+##.##.###.#.#..######...
+###.#####...#.#####.#..#
+##.#....#.##.####...#.##
+...########.#....#####.#
+....#..#...##..#.#.###..
+.####...#..#.....#......
+#..#.##..#..###.#.##....
+#.####..#.####.#.#.###..
+###.#.#...#.######.#..##
+#.####....##..########.#
+##..##.#...#...#.#.#.#..
+...#..#..#.#.##..###.###
+.#.#....#.##.#...###.##.
+###.#...#..#.##.######..
+.#.#.###.##.##.#..#.##..
+.####.###.#...###.#..#.#
+..#.#..#..#.#.#.####.###
+#..####...#.#.#.###.###.
+#####..#####...###....##
+#.##..#..#...#..####...#
+.#.###..##..##..####.##.
+...###...##...#...#..###
+</code></pre></div></div>
+
+<p>We need to find the sea monsters in the above image. They look like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                  # 
+#    ##    ##    ###
+ #  #  #  #  #  #   
+</code></pre></div></div>
+
+<p>When looking for a sea monster, the spaces can be either <code class="language-plaintext highlighter-rouge">#</code> or <code class="language-plaintext highlighter-rouge">.</code>, as long as those specific <code class="language-plaintext highlighter-rouge">#</code> symbols match. After rotating and flipping the grid, we find two sea monsters (marked as <code class="language-plaintext highlighter-rouge">O</code> characters):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.####...#####..#...###..
+#####..#..#.#.####..#.#.
+.#.#...#.###...#.##.O#..
+#.O.##.OO#.#.OO.##.OOO##
+..#O.#O#.O##O..O.#O##.##
+...#.#..##.##...#..#..##
+#.##.#..#.#..#..##.#.#..
+.###.##.....#...###.#...
+#.####.#.#....##.#..#.#.
+##...#..#....#..#...####
+..#.##...###..#.#####..#
+....#.##.#.#####....#...
+..##.##.###.....#.##..#.
+#...#...###..####....##.
+.#.##...#.##.#.#.###...#
+#.###.#..####...##..#...
+#.###...#.##...#.##O###.
+.O##.#OO.###OO##..OOO##.
+..O#.O..O..O.#O##O##.###
+#.#..##.########..#..##.
+#.#####..#.#...##..#....
+#....##..#.#########..##
+#...#.....#..##...###.##
+#..###....##.#...##.##.#
+</code></pre></div></div>
+
+<p>After identifying the sea monsters, we can calculate how rough the water is by counting the number of remaining <code class="language-plaintext highlighter-rouge">#</code> characters. In the above example it is <code class="language-plaintext highlighter-rouge">273</code>; what is the water roughness in our actual input?</p>
+
+<h4 id="solution-1">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/20/python/main.py">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+
+<span class="k">def</span> <span class="nf">orientations</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">rotation</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">new_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">rot90</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">rotation</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">new_matrix</span>
+        <span class="k">yield</span> <span class="n">np</span><span class="p">.</span><span class="n">flip</span><span class="p">(</span><span class="n">new_matrix</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">tiles</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]).</span><span class="n">read</span><span class="p">().</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\n\n</span><span class="s">'</span><span class="p">):</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">block</span><span class="p">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="n">tile_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:]])</span> <span class="o">==</span> <span class="s">'#'</span>
+        <span class="n">tiles</span><span class="p">[</span><span class="n">tile_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile</span>
+
+    <span class="n">grid_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tiles</span><span class="p">)))</span>
+
+    <span class="n">combined_tiles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">found_all_matches</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">for</span> <span class="n">start_tile_id</span> <span class="ow">in</span> <span class="n">tiles</span><span class="p">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">start_tile</span> <span class="ow">in</span> <span class="n">orientations</span><span class="p">(</span><span class="n">tiles</span><span class="p">[</span><span class="n">start_tile_id</span><span class="p">]):</span>
+            <span class="n">combined_tiles</span> <span class="o">=</span> <span class="p">[(</span><span class="n">start_tile_id</span><span class="p">,</span> <span class="n">start_tile</span><span class="p">)]</span>
+            <span class="n">used</span> <span class="o">=</span> <span class="p">{</span><span class="n">start_tile_id</span><span class="p">}</span>
+            <span class="n">found_all_matches</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tiles</span><span class="p">)):</span>
+                <span class="n">found_match</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">for</span> <span class="n">tile_num</span><span class="p">,</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">tiles</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">tile_num</span> <span class="ow">in</span> <span class="n">used</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+                    <span class="n">previous_horizontal</span> <span class="o">=</span> <span class="n">combined_tiles</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">grid_width</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">None</span>
+                    <span class="n">previous_vertical</span> <span class="o">=</span> <span class="n">combined_tiles</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">grid_width</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="o">//</span> <span class="n">grid_width</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">None</span>
+
+                    <span class="k">for</span> <span class="n">try_tile</span> <span class="ow">in</span> <span class="n">orientations</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">previous_horizontal</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="p">.</span><span class="nb">all</span><span class="p">(</span><span class="n">previous_horizontal</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">try_tile</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]):</span>
+                            <span class="k">continue</span>
+                        <span class="k">if</span> <span class="n">previous_vertical</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="p">.</span><span class="nb">all</span><span class="p">(</span><span class="n">previous_vertical</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">==</span> <span class="n">try_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]):</span>
+                            <span class="k">continue</span>
+
+                        <span class="n">combined_tiles</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">tile_num</span><span class="p">,</span> <span class="n">try_tile</span><span class="p">))</span>
+                        <span class="n">used</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tile_num</span><span class="p">)</span>
+                        <span class="n">found_match</span> <span class="o">=</span> <span class="bp">True</span>
+                        <span class="k">break</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">found_match</span><span class="p">:</span>
+                    <span class="n">found_all_matches</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="k">break</span>
+
+            <span class="k">if</span> <span class="n">found_all_matches</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">found_all_matches</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="n">final_grid_ids</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">combined_tiles</span><span class="p">]).</span><span class="n">reshape</span><span class="p">((</span><span class="n">grid_width</span><span class="p">,</span> <span class="n">grid_width</span><span class="p">))</span>
+    <span class="n">corner_product</span> <span class="o">=</span> <span class="n">final_grid_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">final_grid_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">final_grid_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">final_grid_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">f'Part 1: </span><span class="si">{</span><span class="n">corner_product</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+
+    <span class="n">tile_width</span> <span class="o">=</span> <span class="n">combined_tiles</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">].</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span>  <span class="c1"># Remove borders on each side
+</span>    <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tile_width</span> <span class="o">*</span> <span class="n">grid_width</span><span class="p">,</span> <span class="n">tile_width</span> <span class="o">*</span> <span class="n">grid_width</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">tile</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">combined_tiles</span><span class="p">):</span>
+        <span class="n">row</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">grid_width</span><span class="p">)</span>
+        <span class="n">grid</span><span class="p">[</span>
+            <span class="n">row</span> <span class="o">*</span> <span class="n">tile_width</span><span class="p">:</span><span class="n">row</span> <span class="o">*</span> <span class="n">tile_width</span> <span class="o">+</span> <span class="n">tile_width</span><span class="p">,</span>
+            <span class="n">column</span> <span class="o">*</span> <span class="n">tile_width</span><span class="p">:</span><span class="n">column</span> <span class="o">*</span> <span class="n">tile_width</span> <span class="o">+</span> <span class="n">tile_width</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">monster</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">'                  # '</span><span class="p">,</span>
+        <span class="s">'#    ##    ##    ###'</span><span class="p">,</span>
+        <span class="s">' #  #  #  #  #  #   '</span>
+    <span class="p">)</span>
+    <span class="n">monster</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">monster</span><span class="p">])</span> <span class="o">==</span> <span class="s">'#'</span>
+
+    <span class="n">water_roughness</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">for</span> <span class="n">orientation</span> <span class="ow">in</span> <span class="n">orientations</span><span class="p">(</span><span class="n">grid</span><span class="p">):</span>
+        <span class="n">num_monsters</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">grid</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">monster</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">grid</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">monster</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">grid_slice</span> <span class="o">=</span> <span class="n">orientation</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">monster</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">j</span><span class="p">:</span><span class="n">j</span> <span class="o">+</span> <span class="n">monster</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="n">np</span><span class="p">.</span><span class="nb">all</span><span class="p">((</span><span class="n">grid_slice</span> <span class="o">&amp;</span> <span class="n">monster</span><span class="p">)</span> <span class="o">==</span> <span class="n">monster</span><span class="p">):</span>
+                    <span class="n">num_monsters</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">num_monsters</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">water_roughness</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="o">-</span> <span class="n">num_monsters</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">monster</span><span class="p">)</span>
+            <span class="k">break</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">f'Part 2: </span><span class="si">{</span><span class="n">water_roughness</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python main.py input.txt
+Part 1: 20899048083289
+Part 2: 2256
+</code></pre></div></div>
+
+<h4 id="explanation-1">Explanation</h4>
+
+<p>Immediately where part one left off we apply the following logic:</p>
+
+<ol>
+  <li>First remove the border from each tile we just aligned</li>
+  <li>Start with an empty grid (<code class="language-plaintext highlighter-rouge">np.zeroes</code>) and build it up tile-by-tile so that we have an outer matrix full of smaller matrices</li>
+  <li>Define our monster as a NumPy matrix</li>
+  <li>Again, iterate through possible orientations (grid orientations this time) and generate slices the size of a monster</li>
+  <li>Check if the slice <em>is</em> a monster</li>
+  <li>If we found a monster, we must be in the right orientation</li>
+  <li>To find the water roughness we <code class="language-plaintext highlighter-rouge">sum</code> the whole grid (which will just count the <code class="language-plaintext highlighter-rouge">True</code> values), then subtract the number of those <code class="language-plaintext highlighter-rouge">True</code> values that are in a monster <code class="language-plaintext highlighter-rouge">num_monsters - np.sum(monster)</code></li>
+</ol>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>According to the <a href="https://www.youtube.com/watch?v=CFWuwNDOnIo">creator of Advent of Code</a>, weekend puzzles are intentionally harder because that is when people have time to do them. With that in mind, I am hoping the rest of the puzzles are easier than today! If I can’t have that, then I at least hope they are less tedious. 🙂 Just five more days!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#advent-of-code" class="page__taxonomy-item" rel="tag">Advent of Code</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#python" class="page__taxonomy-item" rel="tag">Python</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-20T00:00:00-06:00">December 20, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+20%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-20%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-20%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-20%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/advent-of-code-day-19/" class="pagination--pager" title="Advent of Code: Day 19
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-19/" rel="permalink">Advent of Code: Day 19
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-19T00:00:00-06:00">December 19, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">After  I was singing Raku’s praises yesterday, it had to come back to bite me.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-091/" rel="permalink">Perl Weekly Challenge 91
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-18T00:00:00-06:00">December 18, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty r...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-18/" rel="permalink">Advent of Code: Day 18
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-18T00:00:00-06:00">December 18, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I like to hate on Raku quite a bit, but it was literally the perfect language for today’s challenge. I guess the love-hate relationship continues!
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-17/" rel="permalink">Advent of Code: Day 17
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-17T00:00:00-06:00">December 17, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today was almost exactly like day 11 except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python sol...</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Connect:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+        
+      
+        
+          <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i> Stack Overflow</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Aaron Smith. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>
