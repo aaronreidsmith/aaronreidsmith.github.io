@@ -142,4 +142,10 @@ var store = [{
         "tags": ["Advent of Code","Python"],
         "url": "http://localhost:4000/blog/advent-of-code-day-20/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 21",
+        "excerpt":"I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python. The Problem Part 1 We are trying to buy some snacks for the last leg of our journey, but we don’t speak the local language. Luckily, the...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-21/",
+        "teaser": null
       }]

@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Advent of Code: Day 6 - Aaron Smith</title>
-<meta name="description" content="Well, our old pal set theory reared its head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!">
+<!-- begin _includes/seo.html --><title>Advent of Code: Day 21 - Aaron Smith</title>
+<meta name="description" content="I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Advent of Code: Day 6">
-<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-06/">
+<meta property="og:title" content="Advent of Code: Day 21">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-21/">
 
 
-  <meta property="og:description" content="Well, our old pal set theory reared its head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-12-06T00:00:00-06:00">
+  <meta property="og:description" content="I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-06/">
+
+  <meta property="article:published_time" content="2020-12-21T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-21/">
 
 
 
@@ -285,15 +285,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Advent of Code: Day 6">
-    <meta itemprop="description" content="Well, our old pal set theory reared its head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!">
-    <meta itemprop="datePublished" content="2020-12-06T00:00:00-06:00">
+    <meta itemprop="headline" content="Advent of Code: Day 21">
+    <meta itemprop="description" content="I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.">
+    <meta itemprop="datePublished" content="2020-12-21T00:00:00-06:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 6
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 21
 </h1>
           
 
@@ -302,7 +302,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-06T00:00:00-06:00">December 6, 2020</time>
+        <time datetime="2020-12-21T00:00:00-06:00">December 21, 2020</time>
       </span>
     
 
@@ -327,131 +327,180 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>Well, our old pal <a href="https://en.wikipedia.org/wiki/Set_theory">set theory</a> reared its head again today. I’m very happy with the middle ground I found between conciseness and readability with this challenge; only about 11 lines overall for both parts 1 and 2!</p>
+        <p>I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.</p>
 
 <h2 id="the-problem">The Problem</h2>
 
 <h3 id="part-1">Part 1</h3>
 
-<p>On <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-04/">day four</a> we helped out airport security with their passport scanner, and <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-05/">yesterday</a> we wrote a program to find our seat on the airplane after losing our boarding pass. Today we are about to land, and it’s time to fill out customs declaration form.</p>
+<p>We are trying to buy some snacks for the last leg of our journey, but we don’t speak the local language. Luckily, the allergen information is in English. We have a list of foods that looks like the following, where each line contains a list of ingredients in the foreign language followed by the allergens in English:</p>
 
-<p>This form has 26 yes or no questions marked “A” through “Z.” We fill ours out quickly and notice the family next to us having some issues with theirs; they ask us for help. Pretty soon we have offered to help everyone on the plane, and we end up with a file that looks like this:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>abc
-
-a
-b
-c
-
-ab
-ac
-
-a
-a
-a
-a
-
-b
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mxmxvkd kfcds sqjhc nhms (contains dairy, fish)
+trh fvjkl sbzzf mxmxvkd (contains dairy)
+sqjhc fvjkl (contains soy)
+sqjhc mxmxvkd sbzzf (contains fish)
 </code></pre></div></div>
 
-<p>Where each family is distinguished by a blank space, and each person’s answers are on their own line, and the presence of a letter means that person answered “yes.” Additionally, we only count a “yes” once per family. So the above could be interpreted as follows:</p>
-
-<ul>
-  <li>The first group contains one person who answered “yes” to 3 questions: a, b, and c</li>
-  <li>The second group contains three people; combined, they answered “yes” to 3 questions: a, b, and c</li>
-  <li>The third group contains two people; combined, they answered “yes” to 3 questions: a, b, and c</li>
-  <li>The fourth group contains four people; combined, they answered “yes” to only 1 question, a</li>
-  <li>The last group contains one person who answered “yes” to only 1 question, b</li>
-</ul>
-
-<p>The sum of these counts is <code class="language-plaintext highlighter-rouge">3 + 3 + 3 + 1 + 1 = 11</code>.</p>
-
-<p>Our job is to find the sum of distinct “yes” answers (one per question per family) for the entire plane.</p>
+<p>This list has a caveat to it – allergens are not always listed for each food. So we first have to figure out which ingredient <em>can’t</em> contain an allergen. In the above example it would be <code class="language-plaintext highlighter-rouge">kfcds</code>, <code class="language-plaintext highlighter-rouge">nhms</code>, <code class="language-plaintext highlighter-rouge">sbzzf</code>, and <code class="language-plaintext highlighter-rouge">trh</code>. We then want to count how many times those ingredients occur (in the above example it would be <code class="language-plaintext highlighter-rouge">5</code>). What is the count of non-allergen ingredients in the real input?</p>
 
 <h4 id="solution">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/06/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/21/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub MAIN($file) {
-    say [+] $file.IO
-              .lines(:nl-in("\n\n"))                        # [1]
-              .map(-&gt; $group {
-                (set $group.subst("\n", '', :g).comb).elems # [2]
-              });
+    my @rules = $file.IO.lines.map(-&gt; $line {
+        my ($ingredients-str, $allergens-str) = $line.split(' (contains ');
+        my @ingredients = $ingredients-str.split(' ');
+        my @allergens = $allergens-str.substr(0, *-1).split(', ');
+        { :@ingredients, :@allergens };
+    });
+    my $all-allergens = @rules.map(-&gt; %rule { |%rule&lt;allergens&gt; }).Set;
+
+    my %candidates = $all-allergens.keys.map(-&gt; $allergen {
+        $allergen =&gt; [∩] @rules.grep(*&lt;allergens&gt; ∋ $allergen).map(*&lt;ingredients&gt;); # [1]
+    });
+
+    my (%mapping, @mapped);
+    while %mapping.elems &lt; $all-allergens.elems {
+        for %candidates.kv -&gt; $allergen, $ingredients {
+            if $ingredients.keys.elems == 1 {
+                %mapping{$allergen} = $ingredients.keys.head;
+                @mapped.push(%mapping{$allergen});
+                %candidates{$allergen}:delete;
+            }
+            %candidates{$allergen} ∖= @mapped; # [2]
+        }
+    }
+
+    say @rules.map((*&lt;ingredients&gt; ∖ @mapped).elems).sum;
 }
 </code></pre></div></div>
 
 <p>This runs as such:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
-6809
+2061
 </code></pre></div></div>
 
 <h4 id="explanation">Explanation</h4>
 
-<p>This one is short and sweet due to the tools Raku gives us. First, we read the file in and split it into families (<code class="language-plaintext highlighter-rouge">:nl-in("\n\n")</code>; see below for details). Then, for each family, we combine everyone’s answers into one line, convert it to a list, then convert it to a set (which removes duplicates). We then count the number of elements in each set <code class="language-plaintext highlighter-rouge">.elems</code> and sum <em>all</em> the sets using the <code class="language-plaintext highlighter-rouge">[+]</code> metaoperator.</p>
+<p>We spend the first few lines getting our data into this structure (using the example data):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[
+  {allergens =&gt; [dairy fish], ingredients =&gt; [mxmxvkd kfcds sqjhc nhms]},
+  {allergens =&gt; [dairy], ingredients =&gt; [trh fvjkl sbzzf mxmxvkd]},
+  {allergens =&gt; [soy], ingredients =&gt; [sqjhc fvjkl]},
+  {allergens =&gt; [fish], ingredients =&gt; [sqjhc mxmxvkd sbzzf]}
+]
+</code></pre></div></div>
+
+<p>Which is, of course, a list of <code class="language-plaintext highlighter-rouge">Hash</code> objects containing the ingredient and allergen information. We then create a <code class="language-plaintext highlighter-rouge">Set</code> of all possible allergens (in this case <code class="language-plaintext highlighter-rouge">Set(dairy fish soy)</code>).</p>
+
+<p>Next, looking at the ingredients in comparison to the allergens set, we construct an object containing the allergens with their possible ingredients that looks like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{dairy =&gt; Set(mxmxvkd), fish =&gt; Set(mxmxvkd sqjhc), soy =&gt; Set(fvjkl sqjhc)}
+</code></pre></div></div>
+
+<p>After we have that, we loop through each candidate pair and see if the <code class="language-plaintext highlighter-rouge">Set</code> is exactly 1 item. If it is, we moved that pair to the <code class="language-plaintext highlighter-rouge">%mapping</code> <code class="language-plaintext highlighter-rouge">Hash</code> and the value to the <code class="language-plaintext highlighter-rouge">@mapped</code> list and remove the candidate from the other sets. Here is how it would look for each loop:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Start
+%mapping    = {}
+@mapped     = ()
+%candidates = {dairy =&gt; Set(mxmxvkd), fish =&gt; Set(mxmxvkd sqjhc), soy =&gt; Set(fvjkl sqjhc)}
+
+# Loop 1
+%mapping    = {dairy =&gt; mxmxvkd}
+@mapped     = (mxmxvkd)
+%candidates = {fish =&gt; Set(sqjhc), soy =&gt; Set(fvjkl sqjhc)}
+
+# Loop 2
+%mapping    = {dairy =&gt; mxmxvkd, fish =&gt; sqjhc}
+@mapped     = (mxmxvkd, sqjhc)
+%candidates = {soy =&gt; Set(fvjkl)}
+
+# Loop 3
+%mapping    = {dairy =&gt; mxmxvkd, fish =&gt; sqjhc, soy =&gt; fvjkl}
+@mapped     = (mxmxvkd, sqjhc, fvjkl)
+%candidates = {}
+</code></pre></div></div>
+
+<p>Finally, for each food we take the set disjunction <code class="language-plaintext highlighter-rouge">∖</code> of the ingredients list and the known allergens (leaving the non-allergens), then sum the counts!</p>
 
 <h5 id="specific-comments">Specific Comments</h5>
 
 <ol>
-  <li>By default <code class="language-plaintext highlighter-rouge">.lines</code> will split the input file on the <code class="language-plaintext highlighter-rouge">\n</code> and <code class="language-plaintext highlighter-rouge">\r\n</code> newline characters. But Raku gives us the tools to tell it to split on whatever we want. In this case, we tell it to split on 2 newline characters, which delineate our families. Additionally, as opposed to <code class="language-plaintext highlighter-rouge">IO.slurp</code>, <code class="language-plaintext highlighter-rouge">IO.lines</code> is lazy, so it does not pull the whole file into memory; something to think about if we had a large file.</li>
-  <li><code class="language-plaintext highlighter-rouge">subst</code> is Raku’s string replacement method (not to be confused with <code class="language-plaintext highlighter-rouge">substr</code>, its substring method). What’s important here is the <code class="language-plaintext highlighter-rouge">:g</code> flag we pass in, which say to replace all newlines in the string rather than just the first one.</li>
+  <li>A few set operators in this line: <code class="language-plaintext highlighter-rouge">∋</code> is the reverse of the other operator I use of (<code class="language-plaintext highlighter-rouge">∈</code>). The latter reads <code class="language-plaintext highlighter-rouge">x is an element of y</code>, while the former reads <code class="language-plaintext highlighter-rouge">set y contains element x</code>. When I use the <code class="language-plaintext highlighter-rouge">Whatever</code> star, I like it to be on the left, so that is the reason for using it here. Additionally, we use the set intersection reduction operator (<code class="language-plaintext highlighter-rouge">[∩]</code>) which finds the overlapping regions of the input allergen lists and converts them to a single set.</li>
+  <li>This is also a new one, it is the set difference operator, aka the <a href="https://en.wikipedia.org/wiki/Complement_(set_theory)#Relative_complement">relative complement</a> operator. It’s used to remove the already-mapped elements from the candidate sets.</li>
 </ol>
 
 <h3 id="part-2">Part 2</h3>
 
-<p>As soon as we finished processing everyone’s customs forms, we realize we misread the instructions! We don’t want to count where <em>anyone</em> answered yes, we want to count where <em>everyone</em> answered yes. We need to tweak our solution quickly before we land!</p>
+<p>Now that we have isolated the safe ingredients, we should have enough information to generate a list of dangerous ingredients. We need to generate a comma-separated list order alphabetically <em>by allergen</em> name. For the above example it would look like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mxmxvkd,sqjhc,fvjkl
+</code></pre></div></div>
+
+<p>What is the allergen list for our real input?</p>
 
 <h4 id="solution-1">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/06/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/21/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub part-one($group) {
-    (set $group.subst("\n", '', :g).comb).elems;
-}
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub MAIN($file, Bool :$p2 = False) {
+    my @rules = $file.IO.lines.map(-&gt; $line {
+        my ($ingredients-str, $allergens-str) = $line.split(' (contains ');
+        my @ingredients = $ingredients-str.split(' ');
+        my @allergens = $allergens-str.substr(0, *-1).split(', ');
+        { :@ingredients, :@allergens };
+    });
+    my $all-allergens = @rules.map(-&gt; %rule { |%rule&lt;allergens&gt; }).Set;
 
-sub part-two($group) {
-    [∩] $group.split("\n").map(-&gt; $entry { set $entry.comb }); # [1]
-}
+    my %candidates = $all-allergens.keys.map(-&gt; $allergen {
+        $allergen =&gt; [∩] @rules.grep(*&lt;allergens&gt; ∋ $allergen).map(*&lt;ingredients&gt;);
+    });
 
-sub MAIN($file, Bool :$p2 = False) {
-    say [+] $file.IO.lines(:nl-in("\n\n")).map($p2 ?? &amp;part-two !! &amp;part-one);
+    my (%mapping, @mapped);
+    while %mapping.elems &lt; $all-allergens.elems {
+        for %candidates.kv -&gt; $allergen, $ingredients {
+            if $ingredients.keys.elems == 1 {
+                %mapping{$allergen} = $ingredients.keys.head;
+                @mapped.push(%mapping{$allergen});
+                %candidates{$allergen}:delete;
+            }
+            %candidates{$allergen} ∖= @mapped;
+        }
+    }
+
+    if $p2 {
+        say %mapping.sort.map(*.value).join(',');
+    } else {
+        say @rules.map((*&lt;ingredients&gt; ∖ @mapped).elems).sum;
+    }
 }
 </code></pre></div></div>
 
 <p>This runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
-$ raku main.raku input.txt
-6809
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+2061
 
-# Part 2
 $ raku main.raku --p2 input.txt
-3394
+cdqvp,dglm,zhqjs,rbpg,xvtrfz,tgmzqjz,mfqgx,rffqhl
 </code></pre></div></div>
 
 <h4 id="explanation-1">Explanation</h4>
 
-<p>So the first obvious difference is we refactored our part one solution to its own subroutine, <code class="language-plaintext highlighter-rouge">part-one</code>, but the logic is the same. Then we added the <code class="language-plaintext highlighter-rouge">part-two</code> with the new logic.</p>
+<p>We basically already did this for part one, so all that changes is the last section.</p>
 
-<p>In <code class="language-plaintext highlighter-rouge">part-two</code>, rather than combine the whole family’s input, we split them into individual people <code class="language-plaintext highlighter-rouge">.split("\n")</code>, and then convert each person’s answers to a set. Finally, we use reduction metaoperator (<code class="language-plaintext highlighter-rouge">[&lt;operator&gt;]</code>) to apply the <a href="https://en.wikipedia.org/wiki/Intersection_(set_theory)">set intersection</a> operator to all the sets in the family.</p>
-
-<h5 id="specific-comments-1">Specific Comments</h5>
-
-<ol>
-  <li>Once again, we use the Unicode operator (<code class="language-plaintext highlighter-rouge">∩</code>) as opposed to the ASCII operator (<code class="language-plaintext highlighter-rouge">(&amp;)</code>). You may have seen me use the <code class="language-plaintext highlighter-rouge">[+]</code> or <code class="language-plaintext highlighter-rouge">[*]</code> metaoperators, but this is a new one. The actual operator here is the bracket pair. Basically, when Raku sees the bracket pair, it just applies the operator inside it to all items in the list. So, in this case, it does something like the following:</li>
-</ol>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[∩] (Set(a b c), Set(b c d), Set(c d e)) == Set(a b c) ∩ Set(b c d) ∩ Set(c d e) == Set(c)
-</code></pre></div></div>
+<p>We have our <code class="language-plaintext highlighter-rouge">%mapping</code> hash which we then sort (by default it uses the key, which is our allergen), then we extract just the values, and finally join them into a comma-separated list.</p>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>Nothing much to add to this one today. A short and sweet question with a short and sweet answer!</p>
+<p>Well, at least the creator of AoC is true to his word that weekday puzzles are easier. 🙂 This was a fun little one and puts us at 84% of the way there!</p>
 
         
       </section>
@@ -504,7 +553,7 @@ $ raku main.raku --p2 input.txt
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-06T00:00:00-06:00">December 6, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-21T00:00:00-06:00">December 21, 2020</time></p>
 
 
       </footer>
@@ -514,23 +563,22 @@ $ raku main.raku --p2 input.txt
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+6%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-06%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+21%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-21%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-06%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-21%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-06%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-21%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/advent-of-code-day-05/" class="pagination--pager" title="Advent of Code: Day 5
+      <a href="/blog/advent-of-code-day-20/" class="pagination--pager" title="Advent of Code: Day 20
 ">Previous</a>
     
     
-      <a href="/blog/advent-of-code-day-07/" class="pagination--pager" title="Advent of Code: Day 7
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -544,53 +592,6 @@ $ raku main.raku --p2 input.txt
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-21/" rel="permalink">Advent of Code: Day 21
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-21T00:00:00-06:00">December 21, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          4 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.
-
-</p>
-  </article>
-</div>
-
         
           
 
@@ -727,6 +728,53 @@ $ raku main.raku --p2 input.txt
 
 
     <p class="archive__item-excerpt" itemprop="description">I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty r...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-18/" rel="permalink">Advent of Code: Day 18
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-18T00:00:00-06:00">December 18, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I like to hate on Raku quite a bit, but it was literally the perfect language for today’s challenge. I guess the love-hate relationship continues!
+
+</p>
   </article>
 </div>
 
