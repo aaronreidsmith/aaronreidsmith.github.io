@@ -101,6 +101,10 @@
 <lastmod>2020-12-21T00:00:00-06:00</lastmod>
 </url>
 <url>
+<loc>http://localhost:4000/blog/advent-of-code-day-22/</loc>
+<lastmod>2020-12-23T00:00:00-06:00</lastmod>
+</url>
+<url>
 <loc>http://localhost:4000/about/</loc>
 </url>
 <url>
@@ -126,6 +130,9 @@
 </url>
 <url>
 <loc>http://localhost:4000/page5/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/page6/</loc>
 </url>
 <url>
 <loc>http://localhost:4000/assets/files/aaron_smith_resume.pdf</loc>
