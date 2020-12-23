@@ -148,4 +148,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-21/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 22",
+        "excerpt":"I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my git history that the code itself was written on the 22nd. I solved the first half of the problem in Raku and then tried to write...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku","Python"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-22/",
+        "teaser": null
       }]
