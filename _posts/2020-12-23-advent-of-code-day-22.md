@@ -10,7 +10,7 @@ tags:
 
 I am posting day 22's blog a day late due to an outage at work that took precedence. However, you can see from my [git history](https://github.com/aaronreidsmith/advent-of-code/commit/0f0559fb30044848b0985e732497dc6674798158) that the code itself was written on the 22nd.
 
-I solved the first half of the problem in Raku and then _tried_ to write the second half in Raku but got stuck, so this is the first problem where each half was solved. in a different language.
+I solved the first half of the problem in Raku and then _tried_ to write the second half in Raku but got stuck, so this is the first problem where each half was solved in a different language.
 
 ## The Problem
 
