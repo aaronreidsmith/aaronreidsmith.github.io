@@ -160,4 +160,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-23/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 24",
+        "excerpt":"Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days 11 and 17, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh. The Problem Part...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-24/",
+        "teaser": null
       }]
