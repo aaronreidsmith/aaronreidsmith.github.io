@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Advent of Code: Day 21 - Aaron Smith</title>
-<meta name="description" content="I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.">
+<!-- begin _includes/seo.html --><title>Advent of Code: Day 23 - Aaron Smith</title>
+<meta name="description" content="This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Advent of Code: Day 21">
-<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-21/">
+<meta property="og:title" content="Advent of Code: Day 23">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-23/">
 
 
-  <meta property="og:description" content="I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-12-21T00:00:00-06:00">
+  <meta property="og:description" content="This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-21/">
+
+  <meta property="article:published_time" content="2020-12-23T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-23/">
 
 
 
@@ -285,15 +285,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Advent of Code: Day 21">
-    <meta itemprop="description" content="I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.">
-    <meta itemprop="datePublished" content="2020-12-21T00:00:00-06:00">
+    <meta itemprop="headline" content="Advent of Code: Day 23">
+    <meta itemprop="description" content="This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!">
+    <meta itemprop="datePublished" content="2020-12-23T00:00:00-06:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 21
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 23
 </h1>
           
 
@@ -302,7 +302,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-21T00:00:00-06:00">December 21, 2020</time>
+        <time datetime="2020-12-23T00:00:00-06:00">December 23, 2020</time>
       </span>
     
 
@@ -315,7 +315,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          4 minute read
+          6 minute read
         
       </span>
     
@@ -327,180 +327,277 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.</p>
+        <p>This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!</p>
 
 <h2 id="the-problem">The Problem</h2>
 
 <h3 id="part-1">Part 1</h3>
 
-<p>We are trying to buy some snacks for the last leg of our journey, but we don’t speak the local language. Luckily, the allergen information is in English. We have a list of foods that looks like the following, where each line contains a list of ingredients in the foreign language followed by the allergens in English:</p>
+<p>After <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-22/">yesterday’s game of War</a>, the crab challenges <em>us</em> to a game! In this game there are 10 labeled cups placed clockwise in a circle (our input). The first cup in our list is our “current cup,” and the crab is going to make <strong>100 moves</strong>. Here is how each move works:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mxmxvkd kfcds sqjhc nhms (contains dairy, fish)
-trh fvjkl sbzzf mxmxvkd (contains dairy)
-sqjhc fvjkl (contains soy)
-sqjhc mxmxvkd sbzzf (contains fish)
+<ul>
+  <li>The crab picks up the three cups that are immediately clockwise of the current cup. They are removed from the circle; cup spacing is adjusted as necessary to maintain the circle.</li>
+  <li>The crab selects a destination cup: the cup with a label equal to the current cup’s label minus one. If this would select one of the cups that was just picked up, the crab will keep subtracting one until it finds a cup that wasn’t just picked up. If at any point in this process the value goes below the lowest value on any cup’s label, it wraps around to the highest value on any cup’s label instead.</li>
+  <li>The crab places the cups it just picked up so that they are immediately clockwise of the destination cup. They keep the same order as when they were picked up.</li>
+  <li>The crab selects a new current cup: the cup which is immediately clockwise of the current cup.</li>
+</ul>
+
+<p>Here is an example of 10 moves with the input <code class="language-plaintext highlighter-rouge">389125467</code>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-- move 1 --
+cups: (3) 8  9  1  2  5  4  6  7 
+pick up: 8, 9, 1
+destination: 2
+
+-- move 2 --
+cups:  3 (2) 8  9  1  5  4  6  7 
+pick up: 8, 9, 1
+destination: 7
+
+-- move 3 --
+cups:  3  2 (5) 4  6  7  8  9  1 
+pick up: 4, 6, 7
+destination: 3
+
+-- move 4 --
+cups:  7  2  5 (8) 9  1  3  4  6 
+pick up: 9, 1, 3
+destination: 7
+
+-- move 5 --
+cups:  3  2  5  8 (4) 6  7  9  1 
+pick up: 6, 7, 9
+destination: 3
+
+-- move 6 --
+cups:  9  2  5  8  4 (1) 3  6  7 
+pick up: 3, 6, 7
+destination: 9
+
+-- move 7 --
+cups:  7  2  5  8  4  1 (9) 3  6 
+pick up: 3, 6, 7
+destination: 8
+
+-- move 8 --
+cups:  8  3  6  7  4  1  9 (2) 5 
+pick up: 5, 8, 3
+destination: 1
+
+-- move 9 --
+cups:  7  4  1  5  8  3  9  2 (6)
+pick up: 7, 4, 1
+destination: 5
+
+-- move 10 --
+cups: (5) 7  4  1  8  3  9  2  6 
+pick up: 7, 4, 1
+destination: 3
+
+-- final --
+cups:  5 (8) 3  7  4  1  9  2  6 
 </code></pre></div></div>
 
-<p>This list has a caveat to it – allergens are not always listed for each food. So we first have to figure out which ingredient <em>can’t</em> contain an allergen. In the above example it would be <code class="language-plaintext highlighter-rouge">kfcds</code>, <code class="language-plaintext highlighter-rouge">nhms</code>, <code class="language-plaintext highlighter-rouge">sbzzf</code>, and <code class="language-plaintext highlighter-rouge">trh</code>. We then want to count how many times those ingredients occur (in the above example it would be <code class="language-plaintext highlighter-rouge">5</code>). What is the count of non-allergen ingredients in the real input?</p>
+<p>After the crab is done, what order will the cups be in? Starting after the cup labeled 1, collect the other cups’ labels clockwise into a single string with no extra characters; each number except <code class="language-plaintext highlighter-rouge">1</code> should appear exactly once. In the above example, after 10 moves, the cups clockwise from <code class="language-plaintext highlighter-rouge">1</code> are labeled <code class="language-plaintext highlighter-rouge">9</code>, <code class="language-plaintext highlighter-rouge">2</code>, <code class="language-plaintext highlighter-rouge">6</code>, <code class="language-plaintext highlighter-rouge">5</code>, and so on, producing <code class="language-plaintext highlighter-rouge">92658374</code>.</p>
+
+<p>What is the answer after 100 moves with an input of <code class="language-plaintext highlighter-rouge">712643589</code>?</p>
 
 <h4 id="solution">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/21/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/23/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub MAIN($file) {
-    my @rules = $file.IO.lines.map(-&gt; $line {
-        my ($ingredients-str, $allergens-str) = $line.split(' (contains ');
-        my @ingredients = $ingredients-str.split(' ');
-        my @allergens = $allergens-str.substr(0, *-1).split(', ');
-        { :@ingredients, :@allergens };
-    });
-    my $all-allergens = @rules.map(-&gt; %rule { |%rule&lt;allergens&gt; }).Set;
-
-    my %candidates = $all-allergens.keys.map(-&gt; $allergen {
-        $allergen =&gt; [∩] @rules.grep(*&lt;allergens&gt; ∋ $allergen).map(*&lt;ingredients&gt;); # [1]
-    });
-
-    my (%mapping, @mapped);
-    while %mapping.elems &lt; $all-allergens.elems {
-        for %candidates.kv -&gt; $allergen, $ingredients {
-            if $ingredients.keys.elems == 1 {
-                %mapping{$allergen} = $ingredients.keys.head;
-                @mapped.push(%mapping{$allergen});
-                %candidates{$allergen}:delete;
-            }
-            %candidates{$allergen} ∖= @mapped; # [2]
+    my @ring;
+    my ($current, $previous);
+    for $file.IO.slurp.comb -&gt; $number {
+        $current //= $number.Int;            # [1]
+        with $previous {                     # [2]
+            @ring[$previous] = $number.Int;
         }
+        $previous = $number.Int;
+    }
+    @ring[$previous] = $current;
+
+    for (^100) {
+        my $pointer = $current;
+        my %grabbed = %(
+            0 =&gt; True,
+            |(1 .. 3).map({
+                $pointer = @ring[$pointer]; # [3]
+                $pointer =&gt; True;
+            }).Hash
+        );
+
+        my $destination = $current - 1;
+        while %grabbed{$destination}:exists {
+            $destination = ($destination - 1) % 10;
+        }
+
+        (@ring[$current], @ring[$pointer], @ring[$destination]) = (@ring[$pointer], @ring[$destination], @ring[$current]);
+
+        $current = @ring[$current];
     }
 
-    say @rules.map((*&lt;ingredients&gt; ∖ @mapped).elems).sum;
+    $current = 1;
+    my $output;
+    while (($current = @ring[$current]) != 1) {
+        $output ~= $current;                    # [4]
+    }
+    say $output;
 }
 </code></pre></div></div>
 
 <p>This runs as such:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
-2061
+29385746
 </code></pre></div></div>
 
 <h4 id="explanation">Explanation</h4>
 
-<p>We spend the first few lines getting our data into this structure (using the example data):</p>
+<p>We use a circularly-linked-list (stored in a list of integers) for this.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[
-  {allergens =&gt; [dairy fish], ingredients =&gt; [mxmxvkd kfcds sqjhc nhms]},
-  {allergens =&gt; [dairy], ingredients =&gt; [trh fvjkl sbzzf mxmxvkd]},
-  {allergens =&gt; [soy], ingredients =&gt; [sqjhc fvjkl]},
-  {allergens =&gt; [fish], ingredients =&gt; [sqjhc mxmxvkd sbzzf]}
-]
-</code></pre></div></div>
-
-<p>Which is, of course, a list of <code class="language-plaintext highlighter-rouge">Hash</code> objects containing the ingredient and allergen information. We then create a <code class="language-plaintext highlighter-rouge">Set</code> of all possible allergens (in this case <code class="language-plaintext highlighter-rouge">Set(dairy fish soy)</code>).</p>
-
-<p>Next, looking at the ingredients in comparison to the allergens set, we construct an object containing the allergens with their possible ingredients that looks like this:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{dairy =&gt; Set(mxmxvkd), fish =&gt; Set(mxmxvkd sqjhc), soy =&gt; Set(fvjkl sqjhc)}
-</code></pre></div></div>
-
-<p>After we have that, we loop through each candidate pair and see if the <code class="language-plaintext highlighter-rouge">Set</code> is exactly 1 item. If it is, we moved that pair to the <code class="language-plaintext highlighter-rouge">%mapping</code> <code class="language-plaintext highlighter-rouge">Hash</code> and the value to the <code class="language-plaintext highlighter-rouge">@mapped</code> list and remove the candidate from the other sets. Here is how it would look for each loop:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Start
-%mapping    = {}
-@mapped     = ()
-%candidates = {dairy =&gt; Set(mxmxvkd), fish =&gt; Set(mxmxvkd sqjhc), soy =&gt; Set(fvjkl sqjhc)}
-
-# Loop 1
-%mapping    = {dairy =&gt; mxmxvkd}
-@mapped     = (mxmxvkd)
-%candidates = {fish =&gt; Set(sqjhc), soy =&gt; Set(fvjkl sqjhc)}
-
-# Loop 2
-%mapping    = {dairy =&gt; mxmxvkd, fish =&gt; sqjhc}
-@mapped     = (mxmxvkd, sqjhc)
-%candidates = {soy =&gt; Set(fvjkl)}
-
-# Loop 3
-%mapping    = {dairy =&gt; mxmxvkd, fish =&gt; sqjhc, soy =&gt; fvjkl}
-@mapped     = (mxmxvkd, sqjhc, fvjkl)
-%candidates = {}
-</code></pre></div></div>
-
-<p>Finally, for each food we take the set disjunction <code class="language-plaintext highlighter-rouge">∖</code> of the ingredients list and the known allergens (leaving the non-allergens), then sum the counts!</p>
+<p>Once we have parsed our input, we created the linked list by keeping track of our <em>current</em> and <em>previous</em> cups. Then, for 100 iterations, we “grab” 3 cups (plus 0, which is an empty artifact of the way we fill our list), find the next destination cup by decrementing until we find one in the remaining cups, then swapping all the pointers to insert the three “grabbed” cups. For part one, this is a fairly quick process (~0.36s).</p>
 
 <h5 id="specific-comments">Specific Comments</h5>
 
 <ol>
-  <li>A few set operators in this line: <code class="language-plaintext highlighter-rouge">∋</code> is the reverse of the other operator I use of (<code class="language-plaintext highlighter-rouge">∈</code>). The latter reads <code class="language-plaintext highlighter-rouge">x is an element of y</code>, while the former reads <code class="language-plaintext highlighter-rouge">set y contains element x</code>. When I use the <code class="language-plaintext highlighter-rouge">Whatever</code> star, I like it to be on the left, so that is the reason for using it here. Additionally, we use the set intersection reduction operator (<code class="language-plaintext highlighter-rouge">[∩]</code>) which finds the overlapping regions of the input allergen lists and converts them to a single set.</li>
-  <li>This is also a new one, it is the set difference operator, aka the <a href="https://en.wikipedia.org/wiki/Complement_(set_theory)#Relative_complement">relative complement</a> operator. It’s used to remove the already-mapped elements from the candidate sets.</li>
+  <li>The <code class="language-plaintext highlighter-rouge">//</code> operator returns the left-hand-side if it is defined, otherwise the right-hand side. In combination with the <code class="language-plaintext highlighter-rouge">=</code> operator, it is the same as <code class="language-plaintext highlighter-rouge">$current = $current.defined ?? $current !! $number</code>.</li>
+  <li>The <code class="language-plaintext highlighter-rouge">with</code> operator only enters the block if the variable is defined. This is the same as <code class="language-plaintext highlighter-rouge">if $previous.defined {...}</code>.</li>
+  <li>I hate that we update an outside variable in a map statement. Makes me cringe, but I wrote it, so guess I can’t complain too much.</li>
+  <li><code class="language-plaintext highlighter-rouge">~</code> is Raku’s concatenate operator. So we are taking the <code class="language-plaintext highlighter-rouge">$output</code> variable, concatenating <code class="language-plaintext highlighter-rouge">$current</code> and reassigning to <code class="language-plaintext highlighter-rouge">$output</code>.</li>
 </ol>
 
 <h3 id="part-2">Part 2</h3>
 
-<p>Now that we have isolated the safe ingredients, we should have enough information to generate a list of dangerous ingredients. We need to generate a comma-separated list order alphabetically <em>by allergen</em> name. For the above example it would look like this:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mxmxvkd,sqjhc,fvjkl
-</code></pre></div></div>
-
-<p>What is the allergen list for our real input?</p>
+<p>The crab adds almost <em>a million</em> more cups to the game. After the 9 initial ones, we add 999,991 more labeled 10 to 1,000,000. Once he has done that, he hides 2 stars in the cups that will end up in the two spots immediately following the cup labeled <code class="language-plaintext highlighter-rouge">1</code> after <em>10 million</em> rounds. What is the product of those two cup labels?</p>
 
 <h4 id="solution-1">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/21/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/23/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub MAIN($file, Bool :$p2 = False) {
-    my @rules = $file.IO.lines.map(-&gt; $line {
-        my ($ingredients-str, $allergens-str) = $line.split(' (contains ');
-        my @ingredients = $ingredients-str.split(' ');
-        my @allergens = $allergens-str.substr(0, *-1).split(', ');
-        { :@ingredients, :@allergens };
-    });
-    my $all-allergens = @rules.map(-&gt; %rule { |%rule&lt;allergens&gt; }).Set;
-
-    my %candidates = $all-allergens.keys.map(-&gt; $allergen {
-        $allergen =&gt; [∩] @rules.grep(*&lt;allergens&gt; ∋ $allergen).map(*&lt;ingredients&gt;);
-    });
-
-    my (%mapping, @mapped);
-    while %mapping.elems &lt; $all-allergens.elems {
-        for %candidates.kv -&gt; $allergen, $ingredients {
-            if $ingredients.keys.elems == 1 {
-                %mapping{$allergen} = $ingredients.keys.head;
-                @mapped.push(%mapping{$allergen});
-                %candidates{$allergen}:delete;
-            }
-            %candidates{$allergen} ∖= @mapped;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub part1($file) {
+    my @ring;
+    my ($current, $previous);
+    for $file.IO.slurp.comb -&gt; $number {
+        $current //= $number.Int;
+        with $previous {
+            @ring[$previous] = $number.Int;
         }
+        $previous = $number.Int;
+    }
+    @ring[$previous] = $current;
+
+    for (^100) {
+        my $pointer = $current;
+        my %grabbed = %(
+            0 =&gt; True,
+            |(1 .. 3).map({
+                $pointer = @ring[$pointer];
+                $pointer =&gt; True;
+            }).Hash
+        );
+
+        my $destination = $current - 1;
+        while %grabbed{$destination}:exists {
+            $destination = ($destination - 1) % 10;
+        }
+
+        (@ring[$current], @ring[$pointer], @ring[$destination]) = (@ring[$pointer], @ring[$destination], @ring[$current]);
+
+        $current = @ring[$current];
     }
 
-    if $p2 {
-        say %mapping.sort.map(*.value).join(',');
-    } else {
-        say @rules.map((*&lt;ingredients&gt; ∖ @mapped).elems).sum;
+    $current = 1;
+    my $output;
+    while (($current = @ring[$current]) != 1) {
+        $output ~= $current;
     }
+    say $output;
+}
+
+sub part2($file) {
+    my @ring;
+    my ($current, $previous);
+    for $file.IO.slurp.comb -&gt; $number {
+        $current //= $number.Int;
+        with $previous {
+            @ring[$previous] = $number.Int;
+        }
+        $previous = $number.Int;
+    }
+
+    for (10..1_000_000) -&gt; $i {
+        @ring[$previous] = $i;
+        $previous = $i;
+    }
+    @ring[$previous] = $current;
+
+    for (^10_000_000) {
+        my $pointer = $current;
+        my %grabbed = %(
+            0 =&gt; True,
+            |(1 .. 3).map({
+                $pointer = @ring[$pointer];
+                $pointer =&gt; True;
+            }).Hash
+        );
+
+        my $destination = $current - 1;
+        while %grabbed{$destination}:exists {
+            $destination = ($destination - 1) % 1_000_001;
+        }
+
+        my $old             = @ring[$current];
+        @ring[$current]     = @ring[$pointer];
+        @ring[$pointer]     = @ring[$destination];
+        @ring[$destination] = $old;
+
+        $current = @ring[$current];
+    }
+
+    say @ring[1] * @ring[@ring[1]];
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    $p2 ?? part2($file) !! part1($file);
 }
 </code></pre></div></div>
 
 <p>This runs as such:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
-2061
+29385746
 
 $ raku main.raku --p2 input.txt
-cdqvp,dglm,zhqjs,rbpg,xvtrfz,tgmzqjz,mfqgx,rffqhl
+712643589
 </code></pre></div></div>
 
 <h4 id="explanation-1">Explanation</h4>
 
-<p>We basically already did this for part one, so all that changes is the last section.</p>
+<p>As you can see, rather than try to retrofit the code today, I just wrote two functions that are <em>almost</em> exactly the same. The differences are as follows:</p>
 
-<p>We have our <code class="language-plaintext highlighter-rouge">%mapping</code> hash which we then sort (by default it uses the key, which is our allergen), then we extract just the values, and finally join them into a comma-separated list.</p>
+<ol>
+  <li>Part 2 adds the extra cups</li>
+  <li>Part 2 has more iterations</li>
+  <li>Part 2 needs a different modulo to find if a cup is in the valid range</li>
+  <li>Part 2 reassigns the pointers in order rather than all at once
+    <ul>
+      <li>Shifting that much data in one step really hurt Raku</li>
+    </ul>
+  </li>
+  <li>We output the product of 2 numbers instead of just the order of the cups</li>
+</ol>
+
+<p>There is not too much to dive into with this one since it is the same problem with bigger numbers. It’s ugly, and I hate it. And, in contrast to part one, it is slow as all get out; it finishes in 351.32s (almost 6 minutes), which makes it 979 times slower than part one. Yikes.</p>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>Well, at least the creator of AoC is true to his word that weekday puzzles are easier. 🙂 This was a fun little one and puts us at 84% of the way there!</p>
+<p>I am burnt out on this, but I am planning on finishing the week out. I enjoy most of the puzzles, but the blogging is starting to wear on me. 😅 2 more days; we got this!</p>
 
         
       </section>
@@ -553,7 +650,7 @@ cdqvp,dglm,zhqjs,rbpg,xvtrfz,tgmzqjz,mfqgx,rffqhl
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-21T00:00:00-06:00">December 21, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-23T00:00:00-06:00">December 23, 2020</time></p>
 
 
       </footer>
@@ -563,23 +660,22 @@ cdqvp,dglm,zhqjs,rbpg,xvtrfz,tgmzqjz,mfqgx,rffqhl
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+21%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-21%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+23%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-23%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-21%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-23%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-21%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-23%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/advent-of-code-day-20/" class="pagination--pager" title="Advent of Code: Day 20
+      <a href="/blog/advent-of-code-day-22/" class="pagination--pager" title="Advent of Code: Day 22
 ">Previous</a>
     
     
-      <a href="/blog/advent-of-code-day-22/" class="pagination--pager" title="Advent of Code: Day 22
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -593,53 +689,6 @@ cdqvp,dglm,zhqjs,rbpg,xvtrfz,tgmzqjz,mfqgx,rffqhl
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-23/" rel="permalink">Advent of Code: Day 23
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-23T00:00:00-06:00">December 23, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          6 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!
-
-</p>
-  </article>
-</div>
-
         
           
 
@@ -682,6 +731,53 @@ cdqvp,dglm,zhqjs,rbpg,xvtrfz,tgmzqjz,mfqgx,rffqhl
 
 
     <p class="archive__item-excerpt" itemprop="description">I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my git history that the code itself was writte...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-21/" rel="permalink">Advent of Code: Day 21
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-21T00:00:00-06:00">December 21, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.
+
+</p>
   </article>
 </div>
 

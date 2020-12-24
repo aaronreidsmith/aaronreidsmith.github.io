@@ -154,4 +154,10 @@ var store = [{
         "tags": ["Advent of Code","Raku","Python"],
         "url": "http://localhost:4000/blog/advent-of-code-day-22/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 23",
+        "excerpt":"This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy! The Problem Part 1 After yesterday’s game of War, the crab challenges us to a game! In this game there are 10 labeled cups placed...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-23/",
+        "teaser": null
       }]
