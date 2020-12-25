@@ -166,4 +166,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-24/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Day 25",
+        "excerpt":"Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out! The Problem Part 1 We finally get to the front desk of the resort, and they tell us that the system is down, and we will be unable to check in. Luckily,...","categories": ["Blog"],
+        "tags": ["Advent of Code","Raku"],
+        "url": "http://localhost:4000/blog/advent-of-code-day-25/",
+        "teaser": null
       }]

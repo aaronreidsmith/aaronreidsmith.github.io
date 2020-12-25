@@ -109,8 +109,8 @@ Once we reach our desired tile, we check if it is in our `$flipped` set. If so, 
 ##### Specific Comments
 
 1. Sets can only contain scalars in Raku (i.e., `Set.new((1, 2, 3))` yields `Set(1, 2, 3)`), so we can't just add the `q` and `r` values to the set as-is. My workaround is to convert them to a string with the format `q:r` so we are able to store them in a set, but still retrieve them easily later.
-2.  `⊖` is the [symmetric difference](https://en.wikipedia.org/wiki/Symmetric_difference) operator, which removes elements that are present in both sets. In conjunction with the `=` operator, it reassigns to `$flipped`
-3. `∪` is the [set union](https://en.wikipedia.org/wiki/Union_(set_theory)), which returns all the items in both sets cast to a new set. In conjunction with the `=` operator, it reassigns to `$flipped`
+2.  `⊖` is the [symmetric difference](https://en.wikipedia.org/wiki/Symmetric_difference) operator, which removes elements that are present in both sets. In conjunction with the `=` operator, it reassigns to `$flipped`.
+3. `∪` is the [set union](https://en.wikipedia.org/wiki/Union_(set_theory)), which returns all the items in both sets cast to a new set. In conjunction with the `=` operator, it reassigns to `$flipped`.
 
 ### Part 2
 
@@ -220,7 +220,7 @@ All that was added was the `if $p2 {...}` block, as well as a helper function (`
 4. For each tile in our area we check if it is black (`$tile ∈ $flipped`).
     - If so, we check if it has either `0` or `>2` black neighbors. If so, it goes in the `$unflipped-this-round` set.
     - If it is a white tile, we check if it has exactly `2` black neighbors. If so, it goes in the `$flipped-this-round` set.
-5. We update `$flipped` by unioning it with `$flipped-this-round` and removing the `$unflipped-this-round` elements via symmetric set difference
+5. We update `$flipped` by unioning it with `$flipped-this-round` and removing the `$unflipped-this-round` elements via symmetric set difference.
 
 After 100 round, just like part one, we count our black tiles via `$flipped.elems`!
 
