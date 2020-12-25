@@ -427,8 +427,8 @@ wseweeenwnesenwwwswnew
 
 <ol>
   <li>Sets can only contain scalars in Raku (i.e., <code class="language-plaintext highlighter-rouge">Set.new((1, 2, 3))</code> yields <code class="language-plaintext highlighter-rouge">Set(1, 2, 3)</code>), so we can’t just add the <code class="language-plaintext highlighter-rouge">q</code> and <code class="language-plaintext highlighter-rouge">r</code> values to the set as-is. My workaround is to convert them to a string with the format <code class="language-plaintext highlighter-rouge">q:r</code> so we are able to store them in a set, but still retrieve them easily later.</li>
-  <li><code class="language-plaintext highlighter-rouge">⊖</code> is the <a href="https://en.wikipedia.org/wiki/Symmetric_difference">symmetric difference</a> operator, which removes elements that are present in both sets. In conjunction with the <code class="language-plaintext highlighter-rouge">=</code> operator, it reassigns to <code class="language-plaintext highlighter-rouge">$flipped</code></li>
-  <li><code class="language-plaintext highlighter-rouge">∪</code> is the <a href="https://en.wikipedia.org/wiki/Union_(set_theory)">set union</a>, which returns all the items in both sets cast to a new set. In conjunction with the <code class="language-plaintext highlighter-rouge">=</code> operator, it reassigns to <code class="language-plaintext highlighter-rouge">$flipped</code></li>
+  <li><code class="language-plaintext highlighter-rouge">⊖</code> is the <a href="https://en.wikipedia.org/wiki/Symmetric_difference">symmetric difference</a> operator, which removes elements that are present in both sets. In conjunction with the <code class="language-plaintext highlighter-rouge">=</code> operator, it reassigns to <code class="language-plaintext highlighter-rouge">$flipped</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">∪</code> is the <a href="https://en.wikipedia.org/wiki/Union_(set_theory)">set union</a>, which returns all the items in both sets cast to a new set. In conjunction with the <code class="language-plaintext highlighter-rouge">=</code> operator, it reassigns to <code class="language-plaintext highlighter-rouge">$flipped</code>.</li>
 </ol>
 
 <h3 id="part-2">Part 2</h3>
@@ -543,7 +543,7 @@ $ raku main.raku --p2 input.txt
       <li>If it is a white tile, we check if it has exactly <code class="language-plaintext highlighter-rouge">2</code> black neighbors. If so, it goes in the <code class="language-plaintext highlighter-rouge">$flipped-this-round</code> set.</li>
     </ul>
   </li>
-  <li>We update <code class="language-plaintext highlighter-rouge">$flipped</code> by unioning it with <code class="language-plaintext highlighter-rouge">$flipped-this-round</code> and removing the <code class="language-plaintext highlighter-rouge">$unflipped-this-round</code> elements via symmetric set difference</li>
+  <li>We update <code class="language-plaintext highlighter-rouge">$flipped</code> by unioning it with <code class="language-plaintext highlighter-rouge">$flipped-this-round</code> and removing the <code class="language-plaintext highlighter-rouge">$unflipped-this-round</code> elements via symmetric set difference.</li>
 </ol>
 
 <p>After 100 round, just like part one, we count our black tiles via <code class="language-plaintext highlighter-rouge">$flipped.elems</code>!</p>
@@ -635,7 +635,8 @@ $ raku main.raku --p2 input.txt
 ">Previous</a>
     
     
-      <a href="#" class="pagination--pager disabled">Next</a>
+      <a href="/blog/advent-of-code-day-25/" class="pagination--pager" title="Advent of Code: Day 25
+">Next</a>
     
   </nav>
 
@@ -649,6 +650,53 @@ $ raku main.raku --p2 input.txt
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-25/" rel="permalink">Advent of Code: Day 25
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-25T00:00:00-06:00">December 25, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!
+
+</p>
+  </article>
+</div>
+
         
           
 
@@ -783,53 +831,6 @@ $ raku main.raku --p2 input.txt
 
 
     <p class="archive__item-excerpt" itemprop="description">I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.
-
-</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-20/" rel="permalink">Advent of Code: Day 20
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-20T00:00:00-06:00">December 20, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          9 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">Today was… not fun, to say the very least. It was a lot of tedium, and I am not super proud of my solution.
 
 </p>
   </article>

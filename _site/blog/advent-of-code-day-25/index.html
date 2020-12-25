@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Advent of Code: Day 10 - Aaron Smith</title>
-<meta name="description" content="Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!">
+<!-- begin _includes/seo.html --><title>Advent of Code: Day 25 - Aaron Smith</title>
+<meta name="description" content="Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Advent of Code: Day 10">
-<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-10/">
+<meta property="og:title" content="Advent of Code: Day 25">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-25/">
 
 
-  <meta property="og:description" content="Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-12-10T00:00:00-06:00">
+  <meta property="og:description" content="Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-10/">
+
+  <meta property="article:published_time" content="2020-12-25T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-25/">
 
 
 
@@ -285,15 +285,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Advent of Code: Day 10">
-    <meta itemprop="description" content="Part two today almost forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!">
-    <meta itemprop="datePublished" content="2020-12-10T00:00:00-06:00">
+    <meta itemprop="headline" content="Advent of Code: Day 25">
+    <meta itemprop="description" content="Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!">
+    <meta itemprop="datePublished" content="2020-12-25T00:00:00-06:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 10
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 25
 </h1>
           
 
@@ -302,7 +302,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-10T00:00:00-06:00">December 10, 2020</time>
+        <time datetime="2020-12-25T00:00:00-06:00">December 25, 2020</time>
       </span>
     
 
@@ -327,147 +327,141 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>Part two today <em>almost</em> forced me to use an iterative approach that would require a mutable array. However, I stumbled on a great feature of Raku that let me do it recursively without mutability. See below for details!</p>
+        <p>Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!</p>
 
 <h2 id="the-problem">The Problem</h2>
 
 <h3 id="part-1">Part 1</h3>
 
-<p>We are trying to plug our phone into the seat-back plug, but the problem is it puts out the wrong <em>joltage</em>. We have a handful of adaptors labeled by their output joltage (our input), and our device is rated for 3 jolts above the maximum adaptor joltage. Each adaptor can be plugged into an adaptor 1-, 2-, or 3-jolts below it (i.e., a 4-jolt adaptor can plug into a 1-, 2- or 3-jolt plug).</p>
+<p>We finally get to the front desk of the resort, and they tell us that the system is down, and we will be unable to check in. Luckily, they created all the room keys this morning, so we <em>will</em> be able to go to our room, and just formally check in later. We are on the 25th floor, and the elevator is broken. 🙃</p>
 
-<p>We are bored on this flight, so, treating the seat-back outlet as zero jolts, we want to find a solution that uses <em>every</em> adaptor we own. Once we have found the right sequence, we want to multiply the number of 1-jolt differences by the number of 3-jolt differences.</p>
+<p>We make it to our room and scan the key and get the disheartening red light from the door. Luckily, there is a number to call IT on the card, and we give them a ring. They say we can either go down to the front desk to get it reset or reverse engineer the cryptographic handshake between the card and the door. Obviously we will take the latter choice.</p>
+
+<p>We’re able to obtain the <em>public keys</em> of both the door and the card (our input). To find the cryptographic handshake we must take the subject number (a constant; <code class="language-plaintext highlighter-rouge">7</code>) and transform it according to the following rules:</p>
+
+<ol>
+  <li>Start with a value of <code class="language-plaintext highlighter-rouge">1</code></li>
+  <li>Set the value equal to itself times the subject number (<code class="language-plaintext highlighter-rouge">7</code>)</li>
+  <li>Set the value equal to the remainder after dividing by <code class="language-plaintext highlighter-rouge">20201227</code></li>
+  <li>Continue until the value equals the device’s public key</li>
+  <li>For the above steps, count how many loops it took; this is the secret <strong>loop size</strong></li>
+</ol>
+
+<p>Once we have found the secret loop size for one of the devices, we can take the loop size and apply the same transformation as above using the public key from <em>the other device</em> as our subject number, which yields the handshake key. Let’s look at an example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Card Public Key: 5764801
+Door Public Key: 17807724
+
+--- Finding the loop size for the card ---
+# Loop 1
+value = 1 * 7        = 7
+value = 7 % 20201227 = 7
+
+# Loop 2
+value = 7 * 7         = 49
+value = 49 % 20201227 = 49
+
+# Loop 3
+value = 49 * 7         = 343
+value = 343 % 20201227 = 343
+
+# Loop 4
+value = 343 * 7         = 2401
+value = 2401 % 20201227 = 2401
+
+# Loop 5
+value = 2401 * 7         = 16807
+value = 16807 % 20201227 = 16807
+
+# Loop 6
+value = 16807 * 7         = 117649
+value = 117649 % 20201227 = 117649
+
+# Loop 7
+value = 117649 * 7        = 823543
+value = 823543 % 20201227 = 823543
+
+# Loop 8
+value = 823543 * 7         = 5764801
+value = 5764801 % 20201227 = 5764801 &lt;-- The card's public key
+
+--- Applying the loop size to the door ---
+# Loop 1
+value = 1 * 17807724        = 17807724
+value = 17807724 % 20201227 = 17807724
+
+# Loop 2
+value = 17807724 * 17807724        = 317115034060176
+value = 317115034060176 % 20201227 = 10847306
+
+# Loop 3
+value = 10847306 * 17807724        = 193165831391544
+value = 193165831391544 % 20201227 = 1914476
+
+# Loop 4
+value = 1914476 * 17807724        = 34092460212624
+value = 34092460212624 % 20201227 = 874663
+
+# Loop 5
+value = 874663 * 17807724         = 15575757297012
+value = 15575757297012 % 20201227 = 5243202
+
+# Loop 6
+value = 5243202 * 17807724        = 93369494092248
+value = 93369494092248 % 20201227 = 8733831
+
+# Loop 7
+value = 8733831 * 17807724         = 155529651910644
+value = 155529651910644 % 20201227 = 1213104
+
+# Loop 8
+value = 1213104 * 17807724        = 21602621215296
+value = 21602621215296 % 20201227 = 14897079       &lt;-- Cryptographic Handshake
+</code></pre></div></div>
+
+<p>I will not display it, but if we had found the door’s loop size and then used the card’s public key as the subject number, we would have come to the same cryptographic handshake; this is how the door, and the card know they are a match.</p>
+
+<p>With our <em>real</em> card and door public keys, what is the cryptographic handshake between them?</p>
 
 <h4 id="solution">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/10/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/25/raku/main.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub find-differences(@joltage, $pointer = 0, @differences = ()) {
-    if $pointer == @joltage.elems - 1 {
-        @differences;
-    } else {
-        my $a = @joltage[$pointer];
-        my $b = @joltage[$pointer + 1];
-        find-differences(@joltage, $pointer + 1, (|@differences, $b - $a));
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub MAIN($file) {
+    my ($card-key, $door-key) = $file.IO.lines.map(*.Int);
+    my $handshake = 1;
+    my $target = 1;
+    while $target != $door-key {
+        $target = ($target * 7) % 20201227;
+        $handshake = ($handshake * $card-key) % 20201227;
     }
-}
-
-sub MAIN($file) {
-    my @adaptors = $file.IO.lines.map(*.Int).sort;
-    my $device-joltage = @adaptors.max + 3;
-    my @joltage-list = (0, |@adaptors, $device-joltage); # [1]
-    my @differences = find-differences(@joltage-list);
-    say @differences.grep(* == 1).elems * @differences.grep(* == 3).elems;
+    say $handshake;
 }
 </code></pre></div></div>
 
 <p>This runs as such:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
-2176
+18293391
 </code></pre></div></div>
 
 <h4 id="explanation">Explanation</h4>
 
-<p>The logic laid out in <code class="language-plaintext highlighter-rouge">MAIN</code> is pretty clear.</p>
-
-<ol>
-  <li>We pull out all of our adaptors and sort them by output joltage</li>
-  <li>We find out device voltage (<code class="language-plaintext highlighter-rouge">@adaptors.max + 3</code>)</li>
-  <li>We make our final joltage list including the outlet (<code class="language-plaintext highlighter-rouge">0</code>) and our device</li>
-  <li>We find all the differences between each adaptor</li>
-  <li>We multiply the 1-joltage differences by the 3-joltage differences</li>
-</ol>
-
-<h5 id="specific-comments">Specific Comments</h5>
-
-<ol>
-  <li>I’ve used this before, but I wanted to call it out as it is used in a few places in this solution. This is called a <a href="https://docs.raku.org/type/Slip"><code class="language-plaintext highlighter-rouge">Slip</code></a>, which basically unpacks a list into the outer list. So this is a way of prepending and appending items to a list at the same time.</li>
-</ol>
+<p>Rather than keep track of the loop size, we just do the above 2 loops in parallel until <code class="language-plaintext highlighter-rouge">$target</code> matches <code class="language-plaintext highlighter-rouge">$door-key</code>. Rather than do the two steps outline above, we are able to do the multiplication and remainder division (<a href="https://en.wikipedia.org/wiki/Modulo_operation">modulo</a>) in one step. Finally, all we have to do is say the handshake!</p>
 
 <h3 id="part-2">Part 2</h3>
 
-<p>Now that we have found the one solution that uses all adaptors, we want to find <em>all</em> possible solutions that will connect our device to the plug. Looking at our adaptors we realize there must be more than a <strong>trillion</strong> ways to arrange them, so we have to be smart about how we approach it.</p>
-
-<h4 id="solution-1">Solution</h4>
-
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/10/raku/main.raku">GitHub Link</a></p>
-
-<p>See below for explanation and any implementation-specific comments.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use experimental :cached;
-
-sub find-differences(@joltage-list, $pointer = 0, @differences = ()) {
-    if $pointer == @joltage-list.elems - 1 {
-        @differences;
-    } else {
-        my $a = @joltage-list[$pointer];
-        my $b = @joltage-list[$pointer + 1];
-        find-differences(@joltage-list, $pointer + 1, (|@differences, $b - $a));
-    }
-}
-
-sub find-paths($current-joltage, @joltage-list) is cached {   # [1]
-    given $current-joltage {
-        when * == @joltage-list.max { 1 }
-        when * ∉ @joltage-list      { 0 }                     # [2][3]
-        default {
-            find-paths($current-joltage + 1, @joltage-list) +
-            find-paths($current-joltage + 2, @joltage-list) + # [4]
-            find-paths($current-joltage + 3, @joltage-list);
-        }
-    }
-}
-
-sub MAIN($file, Bool :$p2 = False) {
-    my @adaptors = $file.IO.lines.map(*.Int).sort;
-    my $device-joltage = @adaptors.max + 3;
-    my @joltage-list = (0, |@adaptors, $device-joltage);
-    if $p2 {
-        say find-paths(0, @joltage-list);
-    } else {
-        my @differences = find-differences(@joltage-list);
-        say @differences.grep(* == 1).elems * @differences.grep(* == 3).elems;
-    }
-}
-</code></pre></div></div>
-
-<p>This runs as such:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
-$ raku main.raku input.txt
-2176
-
-# Part 2
-$ raku main.raku --p2 input.txt
-18512297918464
-</code></pre></div></div>
-
-<h4 id="explanation-1">Explanation</h4>
-
-<p>There is a lot of fluff going on from part one that we can ignore. We generate the same <code class="language-plaintext highlighter-rouge">@joltage-list</code> and pass it to <code class="language-plaintext highlighter-rouge">find-paths</code> starting at <code class="language-plaintext highlighter-rouge">joltage = 0</code>. This subroutine does the following:</p>
-
-<ol>
-  <li>If we have hit the max joltage (device joltage) mark this as a valid path (<code class="language-plaintext highlighter-rouge">1</code>)</li>
-  <li>If the joltage we are currently on is not in the set of adaptors, mark it as invalid (<code class="language-plaintext highlighter-rouge">0</code>)</li>
-  <li>Otherwise, recursively find the valid paths for any adaptors that could plug into this one (i.e. <code class="language-plaintext highlighter-rouge">n+1</code>, <code class="language-plaintext highlighter-rouge">n+2</code>, and <code class="language-plaintext highlighter-rouge">n+3</code>) and add them up</li>
-</ol>
-
-<p>This looks pretty brute-force, right? Well, that is where the <code class="language-plaintext highlighter-rouge">is cached</code> trait comes in. See #1 below for details!</p>
-
-<h5 id="specific-comments-1">Specific Comments</h5>
-
-<ol>
-  <li>Coming from a Python background, I am familiar with <a href="https://docs.python.org/3/library/functools.html#functools.cache"><code class="language-plaintext highlighter-rouge">functools.cache</code></a>, a decorator that basically builds a dictionary of input to output such that expensive functions are only calculated once. Basically, the first call would compute the value and store it in the cache and any subsequent calls to that functions with the same input would use the cached value instead; this optimization is called <a href="https://en.wikipedia.org/wiki/Memoization">memoization</a>. In Raku, this is an <a href="https://docs.raku.org/language/experimental#cached">experimental trait</a> called <code class="language-plaintext highlighter-rouge">cached</code> which can be applied to subroutines to achieve the same memoization goal. Basically, the reason this is not a brute-force approach is because we will only compute <code class="language-plaintext highlighter-rouge">find-paths</code> once for each input rather than the traditional re-computing that can happen in recursive functions.</li>
-  <li>This is the first time using this operator, so I want to call it out: <code class="language-plaintext highlighter-rouge">∉</code> is the “element not part of set” operator.</li>
-  <li>This function could be optimized by <em>only</em> looking at joltages in the input list, but instead we just look at everything from <code class="language-plaintext highlighter-rouge">0..N</code>. If it is not in the input list, we just mark it as an invalid path.</li>
-  <li>Because <code class="language-plaintext highlighter-rouge">find-paths($current-joltage + 1, @joltage-list)</code> will recursively call more <code class="language-plaintext highlighter-rouge">find-paths</code> functions, this line uses the cache, so the only operation really happening here is the addition.</li>
-</ol>
+<p>2020 has been a tough year and everyone needs a break. Day 25 part 2 is a freebie. 🙂</p>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>A lot of my solutions for the Advent of Code so far have been recursive (and relatively slow). I am glad I found out about the <code class="language-plaintext highlighter-rouge">is cached</code> trait, and I am looking forward to applying it to more solutions in the future!</p>
+<p>I had my ups and downs with this challenge. Obviously I did not fulfill my goal of solving everything in functional Raku; in fact, I wasn’t even able to solve everything in Raku. However, I learned a lot about the language, I learned a few new algorithms, and I had fun! This whole thing was a lot of fun, and I want to thank <a href="https://github.com/topaz">Eric</a> for doing it for the past 6 years (even though this was my first time participating).</p>
+
+<p>Next year I will have a one-and-a-half-year-old, so no promises I will be able to blog every day (it was hard enough this year), but I will do my best to participate, and I may blog for problems I find particularly clever.</p>
+
+<p>With that, I would like to wish everyone a very merry Christmas and a happy New Year!</p>
 
         
       </section>
@@ -520,7 +514,7 @@ $ raku main.raku --p2 input.txt
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-10T00:00:00-06:00">December 10, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-25T00:00:00-06:00">December 25, 2020</time></p>
 
 
       </footer>
@@ -530,23 +524,22 @@ $ raku main.raku --p2 input.txt
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+10%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-10%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+25%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-25%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-10%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-25%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-10%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-25%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/advent-of-code-day-09/" class="pagination--pager" title="Advent of Code: Day 9
+      <a href="/blog/advent-of-code-day-24/" class="pagination--pager" title="Advent of Code: Day 24
 ">Previous</a>
     
     
-      <a href="/blog/advent-of-code-day-11/" class="pagination--pager" title="Advent of Code: Day 11
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -560,53 +553,6 @@ $ raku main.raku --p2 input.txt
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-day-25/" rel="permalink">Advent of Code: Day 25
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-25T00:00:00-06:00">December 25, 2020</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          4 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!
-
-</p>
-  </article>
-</div>
-
         
           
 
@@ -741,6 +687,53 @@ $ raku main.raku --p2 input.txt
 
 
     <p class="archive__item-excerpt" itemprop="description">I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my git history that the code itself was writte...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-21/" rel="permalink">Advent of Code: Day 21
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-21T00:00:00-06:00">December 21, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.
+
+</p>
   </article>
 </div>
 
