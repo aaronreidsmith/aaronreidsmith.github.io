@@ -1,4 +1,233 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-25T10:13:27-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Day 25</title><link href="http://localhost:4000/blog/advent-of-code-day-25/" rel="alternate" type="text/html" title="Advent of Code: Day 25" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-25</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-25/">&lt;p&gt;Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-25T16:17:39-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 92</title><link href="http://localhost:4000/blog/perl-weekly-challenge-092/" rel="alternate" type="text/html" title="Perl Weekly Challenge 92" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-092</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-092/">&lt;p&gt;It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-25/&quot;&gt;finishing up AoC&lt;/a&gt;!&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-isomorphic-strings&quot;&gt;Task 1: Isomorphic Strings&lt;/h2&gt;
+
+&lt;p&gt;You are given two strings &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$A&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$B&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to check if the given strings are &lt;a href=&quot;https://www.educative.io/edpresso/how-to-check-if-two-strings-are-isomorphic&quot;&gt;isomorphic&lt;/a&gt;. Print &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; if they are otherwise &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $A = &quot;abc&quot;; $B = &quot;xyz&quot;
+Output: 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $A = &quot;abb&quot;; $B = &quot;xyy&quot;
+Output: 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-3&quot;&gt;Example 3&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $A = &quot;sum&quot;; $B = &quot;add&quot;
+Output: 0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-092/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use MONKEY-TYPING;  # [1]
+
+augment class Seq {
+    method OrderedSet {
+        my @set;
+        for self -&amp;gt; $item {
+            next if $item ∈ @set;
+            @set.push($item);
+        }
+        @set;
+    }
+}
+
+sub challenge(Str $A, Str $B) returns Int {
+    my $a-chars = $A.comb.OrderedSet.join;
+    my $b-chars = $B.comb.OrderedSet.join;
+    ($A.trans($a-chars =&amp;gt; $b-chars) eq $B).Int;
+}
+
+multi sub MAIN(Str $A, Str $B) {
+    say challenge($A, $B);
+}
+
+multi sub MAIN(Bool :$test) {
+    use Test;
+
+    my @tests = (
+        ('abc', 'xyz', 1),
+        ('abb', 'xyy', 1),
+        ('sum', 'add', 0)
+    );
+
+    for @tests -&amp;gt; @test {
+        is(challenge(@test[0], @test[1]), @test[2]);
+    }
+
+    done-testing;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku abc xyz
+1
+
+$ raku ch-1.raku --test
+ok 1 - 
+ok 2 - 
+ok 3 - 
+1..3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;Once again, most the logic lives in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt;. Basically, I wanted to take advantage of something we used &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-090&quot;&gt;a couple weeks ago&lt;/a&gt;, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt; subroutine. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt; takes two strings and &lt;em&gt;translates&lt;/em&gt; the given input using the map. If I were to hardcode it for the example, this is basically what I am trying to check:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;'abc'.trans('abc' =&amp;gt; 'xyz') eq 'xyz'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To do this we need to remove duplicates (so we need a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&lt;/code&gt;), but we also need to preserve order (so something like an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OrderedSet&lt;/code&gt;). Unfortunately, such a thing doesn’t exist in Raku… so we have to create it!&lt;/p&gt;
+
+&lt;p&gt;I am doing something which is &lt;em&gt;technically&lt;/em&gt; &lt;a href=&quot;https://docs.raku.org/syntax/augment&quot;&gt;frowned upon&lt;/a&gt; by using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;augment&lt;/code&gt; keyword, but it is a fairly normal pattern in Scala, so I just went with it. Basically, we just &lt;a href=&quot;https://en.wikipedia.org/wiki/Monkey_patch&quot;&gt;monkey patch&lt;/a&gt; an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OrderedSet&lt;/code&gt; method onto the existing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Seq&lt;/code&gt; builtin. In Scala, we would do this via an implicit class; here is an example:&lt;/p&gt;
+
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;implicit&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ExtendedString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;excited&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;$str!!!&quot;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;s&quot;&gt;&quot;Hello world&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;excited&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Hello world!!!&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I feel Raku makes this much clearer via the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;augment&lt;/code&gt; keyword. It says we are &lt;em&gt;augmenting&lt;/em&gt; the class &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Seq&lt;/code&gt; and then we define the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OrderedSet&lt;/code&gt; method. The method itself does not &lt;em&gt;technically&lt;/em&gt; return a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&lt;/code&gt;, but it returns a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;List&lt;/code&gt; that maintains order and removes duplicates – all we need.&lt;/p&gt;
+
+&lt;p&gt;Once we have both the left and right strings converted to ordered sets, we convert them &lt;em&gt;back&lt;/em&gt; into strings to use in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt; method as shown above&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;If we want to use the “frowned upon” pragma of monkey patching, we have to manually turn it on using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;use MONKEY-TYPING&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-insert-interval&quot;&gt;Task 2: Insert Interval&lt;/h2&gt;
+
+&lt;p&gt;You are given a set of sorted non-overlapping intervals and a new interval.&lt;/p&gt;
+
+&lt;p&gt;Write a script to merge the new interval to the given set of intervals.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1-1&quot;&gt;Example 1&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input $S = (1,4), (8,10); $N = (2,6)
+Output: (1,6), (8,10)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-2-1&quot;&gt;Example 2&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input $S = (1,2), (3,7), (8,10); $N = (5,8)
+Output: (1,2), (3,10)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-3-1&quot;&gt;Example 3&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input $S = (1,5), (7,9); $N = (10,11)
+Output: (1,5), (7,9), (10,11)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-092/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset MultiRange of Str where { $_ ~~ /^[&amp;lt;digit&amp;gt;+'-'&amp;lt;digit&amp;gt;+',']+[&amp;lt;digit&amp;gt;+'-'&amp;lt;digit&amp;gt;+]$/ }
+subset Range of Str where { $_ ~~ /^&amp;lt;digit&amp;gt;+'-'&amp;lt;digit&amp;gt;+$/ }
+
+sub challenge(@S, $N) {
+    my @combined = (|@S, $N).sort({ $^a.min cmp $^b.min });
+    my @final = (@combined.head,);
+    OUT: for @combined[1..*] -&amp;gt; $new-range {           # [1]
+        my ($min, $max) = $new-range.minmax;
+        IN: for @final.kv -&amp;gt; $index, $range {
+            next IN if $min ∈ $range &amp;amp;&amp;amp; $max ∈ $range; # [2]
+            if $min ∈ $range {
+                @final[$index] = ($range.min..$max);
+                next OUT;
+            } elsif $max ∈ $range {
+                @final[$index] = ($min..$range.max);
+                next OUT;
+            } elsif $index == @final.end {
+                @final.push($new-range);
+            }
+        }
+    }
+    @final.map(-&amp;gt; $range { &quot;({$range.min},{$range.max})&quot; }).join(', ');
+}
+
+multi sub MAIN(MultiRange :$S, Range :$N) {
+    my @s = $S.split(',').map(*.split('-').map(*.Int).minmax);
+    my $n = $N.split('-').map(*.Int).minmax;
+    say challenge(@s, $n);
+}
+
+multi sub MAIN(Bool :$test) {
+    use Test;
+
+    my @tests = (
+        ((1..4), (8..10), (2..6), '(1,6), (8,10)'),
+        ((1..2), (3..7), (8..10), (5..8), '(1,2), (3,10)'),
+        ((1..5), (7..9), (10..11), '(1,5), (7,9), (10,11)')
+    );
+
+    for @tests -&amp;gt; @test {
+        my @S = @test[0..^*-2];
+        my $N = @test[*-2];
+        my $answer = @test[*-1];
+        is(challenge(@S, $N), $answer);
+    }
+
+    done-testing;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku -S=1-4,8-10 -N=2-6
+(1,6), (8,10)
+
+$ raku ch-2.raku --test
+ok 1 - 
+ok 2 - 
+ok 3 - 
+1..3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; has a little validation and parsing. It validates that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;S&lt;/code&gt; contains &lt;em&gt;at least&lt;/em&gt; two ranges (defined as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X-Y&lt;/code&gt;) via the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MultiRange&lt;/code&gt; subset, and that we get exactly one range in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; (via the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Range&lt;/code&gt; subset). It then parses those ranges into actual &lt;a href=&quot;https://docs.raku.org/type/Range&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Range&lt;/code&gt;&lt;/a&gt; objects to give to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; subroutine.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; first puts all the ranges in order &lt;em&gt;by their minimum element&lt;/em&gt; and creates an output list called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@final&lt;/code&gt; that contains the minimum range of the input ranges. We then iterate through the remaining ranges. For each one, we check the following conditions:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;If it is &lt;em&gt;wholly contained&lt;/em&gt; by an existing range, skip it.&lt;/li&gt;
+  &lt;li&gt;If the &lt;em&gt;minimum&lt;/em&gt; item in our new range is contained in any existing range, extend the existing range up to the new maximum.&lt;/li&gt;
+  &lt;li&gt;If the &lt;em&gt;maximum&lt;/em&gt; item in our new range is contained in any existing range, extend the existing range down to the new minimum.&lt;/li&gt;
+  &lt;li&gt;If we have exhausted all the overlap checks, this must be a totally distinct range and just add it to the end.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Finally, once we have our ranges, we need to convert them to the output format defined, so we do that and return.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;This is a Raku feature called &lt;a href=&quot;https://docs.raku.org/type/Label&quot;&gt;Labels&lt;/a&gt;, where we can add a label to our &lt;a href=&quot;https://docs.raku.org/type/Supply&quot;&gt;Supply&lt;/a&gt; objects (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;for&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;do&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gather&lt;/code&gt;, etc). It allows us to name our loops and use the features outline in #2.&lt;/li&gt;
+  &lt;li&gt;With labels in place, if we want to break both an inner and an outer loop, we can do that in one statement (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;last OUT&lt;/code&gt;), or if we want to go to the next outer loop without finishing our inner loop, we can do that as well (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;next OUT&lt;/code&gt;). This makes the code faster and more readable, in my opinion.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;Some fun little challenges that nicely complement Advent of Code. Now to start enjoying Christmas with my family! Merry Christmas everyone!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as finishing up AoC!</summary></entry><entry><title type="html">Advent of Code: Day 25</title><link href="http://localhost:4000/blog/advent-of-code-day-25/" rel="alternate" type="text/html" title="Advent of Code: Day 25" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-25</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-25/">&lt;p&gt;Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -362,277 +591,7 @@ $ raku main.raku --p2 input.txt
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;I had fun with this one! Maybe it helps that I am actually off for the holidays and don’t have to rush through it before or after work. Looking forward to crossing the finish line tomorrow!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days 11 and 17, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.</summary></entry><entry><title type="html">Advent of Code: Day 23</title><link href="http://localhost:4000/blog/advent-of-code-day-23/" rel="alternate" type="text/html" title="Advent of Code: Day 23" /><published>2020-12-23T00:00:00-06:00</published><updated>2020-12-23T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-23</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-23/">&lt;p&gt;This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;After &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-22/&quot;&gt;yesterday’s game of War&lt;/a&gt;, the crab challenges &lt;em&gt;us&lt;/em&gt; to a game! In this game there are 10 labeled cups placed clockwise in a circle (our input). The first cup in our list is our “current cup,” and the crab is going to make &lt;strong&gt;100 moves&lt;/strong&gt;. Here is how each move works:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The crab picks up the three cups that are immediately clockwise of the current cup. They are removed from the circle; cup spacing is adjusted as necessary to maintain the circle.&lt;/li&gt;
-  &lt;li&gt;The crab selects a destination cup: the cup with a label equal to the current cup’s label minus one. If this would select one of the cups that was just picked up, the crab will keep subtracting one until it finds a cup that wasn’t just picked up. If at any point in this process the value goes below the lowest value on any cup’s label, it wraps around to the highest value on any cup’s label instead.&lt;/li&gt;
-  &lt;li&gt;The crab places the cups it just picked up so that they are immediately clockwise of the destination cup. They keep the same order as when they were picked up.&lt;/li&gt;
-  &lt;li&gt;The crab selects a new current cup: the cup which is immediately clockwise of the current cup.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Here is an example of 10 moves with the input &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;389125467&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-- move 1 --
-cups: (3) 8  9  1  2  5  4  6  7 
-pick up: 8, 9, 1
-destination: 2
-
--- move 2 --
-cups:  3 (2) 8  9  1  5  4  6  7 
-pick up: 8, 9, 1
-destination: 7
-
--- move 3 --
-cups:  3  2 (5) 4  6  7  8  9  1 
-pick up: 4, 6, 7
-destination: 3
-
--- move 4 --
-cups:  7  2  5 (8) 9  1  3  4  6 
-pick up: 9, 1, 3
-destination: 7
-
--- move 5 --
-cups:  3  2  5  8 (4) 6  7  9  1 
-pick up: 6, 7, 9
-destination: 3
-
--- move 6 --
-cups:  9  2  5  8  4 (1) 3  6  7 
-pick up: 3, 6, 7
-destination: 9
-
--- move 7 --
-cups:  7  2  5  8  4  1 (9) 3  6 
-pick up: 3, 6, 7
-destination: 8
-
--- move 8 --
-cups:  8  3  6  7  4  1  9 (2) 5 
-pick up: 5, 8, 3
-destination: 1
-
--- move 9 --
-cups:  7  4  1  5  8  3  9  2 (6)
-pick up: 7, 4, 1
-destination: 5
-
--- move 10 --
-cups: (5) 7  4  1  8  3  9  2  6 
-pick up: 7, 4, 1
-destination: 3
-
--- final --
-cups:  5 (8) 3  7  4  1  9  2  6 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;After the crab is done, what order will the cups be in? Starting after the cup labeled 1, collect the other cups’ labels clockwise into a single string with no extra characters; each number except &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; should appear exactly once. In the above example, after 10 moves, the cups clockwise from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; are labeled &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;9&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;6&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5&lt;/code&gt;, and so on, producing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;92658374&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;What is the answer after 100 moves with an input of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;712643589&lt;/code&gt;?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/23/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
-    my @ring;
-    my ($current, $previous);
-    for $file.IO.slurp.comb -&amp;gt; $number {
-        $current //= $number.Int;            # [1]
-        with $previous {                     # [2]
-            @ring[$previous] = $number.Int;
-        }
-        $previous = $number.Int;
-    }
-    @ring[$previous] = $current;
-
-    for (^100) {
-        my $pointer = $current;
-        my %grabbed = %(
-            0 =&amp;gt; True,
-            |(1 .. 3).map({
-                $pointer = @ring[$pointer]; # [3]
-                $pointer =&amp;gt; True;
-            }).Hash
-        );
-
-        my $destination = $current - 1;
-        while %grabbed{$destination}:exists {
-            $destination = ($destination - 1) % 10;
-        }
-
-        (@ring[$current], @ring[$pointer], @ring[$destination]) = (@ring[$pointer], @ring[$destination], @ring[$current]);
-
-        $current = @ring[$current];
-    }
-
-    $current = 1;
-    my $output;
-    while (($current = @ring[$current]) != 1) {
-        $output ~= $current;                    # [4]
-    }
-    say $output;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-29385746
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;We use a circularly-linked-list (stored in a list of integers) for this.&lt;/p&gt;
-
-&lt;p&gt;Once we have parsed our input, we created the linked list by keeping track of our &lt;em&gt;current&lt;/em&gt; and &lt;em&gt;previous&lt;/em&gt; cups. Then, for 100 iterations, we “grab” 3 cups (plus 0, which is an empty artifact of the way we fill our list), find the next destination cup by decrementing until we find one in the remaining cups, then swapping all the pointers to insert the three “grabbed” cups. For part one, this is a fairly quick process (~0.36s).&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;//&lt;/code&gt; operator returns the left-hand-side if it is defined, otherwise the right-hand side. In combination with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;=&lt;/code&gt; operator, it is the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$current = $current.defined ?? $current !! $number&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;with&lt;/code&gt; operator only enters the block if the variable is defined. This is the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if $previous.defined {...}&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;I hate that we update an outside variable in a map statement. Makes me cringe, but I wrote it, so guess I can’t complain too much.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~&lt;/code&gt; is Raku’s concatenate operator. So we are taking the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$output&lt;/code&gt; variable, concatenating &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$current&lt;/code&gt; and reassigning to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$output&lt;/code&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;The crab adds almost &lt;em&gt;a million&lt;/em&gt; more cups to the game. After the 9 initial ones, we add 999,991 more labeled 10 to 1,000,000. Once he has done that, he hides 2 stars in the cups that will end up in the two spots immediately following the cup labeled &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; after &lt;em&gt;10 million&lt;/em&gt; rounds. What is the product of those two cup labels?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/23/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub part1($file) {
-    my @ring;
-    my ($current, $previous);
-    for $file.IO.slurp.comb -&amp;gt; $number {
-        $current //= $number.Int;
-        with $previous {
-            @ring[$previous] = $number.Int;
-        }
-        $previous = $number.Int;
-    }
-    @ring[$previous] = $current;
-
-    for (^100) {
-        my $pointer = $current;
-        my %grabbed = %(
-            0 =&amp;gt; True,
-            |(1 .. 3).map({
-                $pointer = @ring[$pointer];
-                $pointer =&amp;gt; True;
-            }).Hash
-        );
-
-        my $destination = $current - 1;
-        while %grabbed{$destination}:exists {
-            $destination = ($destination - 1) % 10;
-        }
-
-        (@ring[$current], @ring[$pointer], @ring[$destination]) = (@ring[$pointer], @ring[$destination], @ring[$current]);
-
-        $current = @ring[$current];
-    }
-
-    $current = 1;
-    my $output;
-    while (($current = @ring[$current]) != 1) {
-        $output ~= $current;
-    }
-    say $output;
-}
-
-sub part2($file) {
-    my @ring;
-    my ($current, $previous);
-    for $file.IO.slurp.comb -&amp;gt; $number {
-        $current //= $number.Int;
-        with $previous {
-            @ring[$previous] = $number.Int;
-        }
-        $previous = $number.Int;
-    }
-
-    for (10..1_000_000) -&amp;gt; $i {
-        @ring[$previous] = $i;
-        $previous = $i;
-    }
-    @ring[$previous] = $current;
-
-    for (^10_000_000) {
-        my $pointer = $current;
-        my %grabbed = %(
-            0 =&amp;gt; True,
-            |(1 .. 3).map({
-                $pointer = @ring[$pointer];
-                $pointer =&amp;gt; True;
-            }).Hash
-        );
-
-        my $destination = $current - 1;
-        while %grabbed{$destination}:exists {
-            $destination = ($destination - 1) % 1_000_001;
-        }
-
-        my $old             = @ring[$current];
-        @ring[$current]     = @ring[$pointer];
-        @ring[$pointer]     = @ring[$destination];
-        @ring[$destination] = $old;
-
-        $current = @ring[$current];
-    }
-
-    say @ring[1] * @ring[@ring[1]];
-}
-
-sub MAIN($file, Bool :$p2 = False) {
-    $p2 ?? part2($file) !! part1($file);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-29385746
-
-$ raku main.raku --p2 input.txt
-712643589
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;As you can see, rather than try to retrofit the code today, I just wrote two functions that are &lt;em&gt;almost&lt;/em&gt; exactly the same. The differences are as follows:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Part 2 adds the extra cups&lt;/li&gt;
-  &lt;li&gt;Part 2 has more iterations&lt;/li&gt;
-  &lt;li&gt;Part 2 needs a different modulo to find if a cup is in the valid range&lt;/li&gt;
-  &lt;li&gt;Part 2 reassigns the pointers in order rather than all at once
-    &lt;ul&gt;
-      &lt;li&gt;Shifting that much data in one step really hurt Raku&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;We output the product of 2 numbers instead of just the order of the cups&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;There is not too much to dive into with this one since it is the same problem with bigger numbers. It’s ugly, and I hate it. And, in contrast to part one, it is slow as all get out; it finishes in 351.32s (almost 6 minutes), which makes it 979 times slower than part one. Yikes.&lt;/p&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;I am burnt out on this, but I am planning on finishing the week out. I enjoy most of the puzzles, but the blogging is starting to wear on me. 😅 2 more days; we got this!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!</summary></entry><entry><title type="html">Advent of Code: Day 22</title><link href="http://localhost:4000/blog/advent-of-code-day-22/" rel="alternate" type="text/html" title="Advent of Code: Day 22" /><published>2020-12-23T00:00:00-06:00</published><updated>2020-12-23T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-22</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-22/">&lt;p&gt;I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my &lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/commit/0f0559fb30044848b0985e732497dc6674798158&quot;&gt;git history&lt;/a&gt; that the code itself was written on the 22nd.&lt;/p&gt;
+&lt;p&gt;I had fun with this one! Maybe it helps that I am actually off for the holidays and don’t have to rush through it before or after work. Looking forward to crossing the finish line tomorrow!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days 11 and 17, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.</summary></entry><entry><title type="html">Advent of Code: Day 22</title><link href="http://localhost:4000/blog/advent-of-code-day-22/" rel="alternate" type="text/html" title="Advent of Code: Day 22" /><published>2020-12-23T00:00:00-06:00</published><updated>2020-12-23T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-22</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-22/">&lt;p&gt;I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my &lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/commit/0f0559fb30044848b0985e732497dc6674798158&quot;&gt;git history&lt;/a&gt; that the code itself was written on the 22nd.&lt;/p&gt;
 
 &lt;p&gt;I solved the first half of the problem in Raku and then &lt;em&gt;tried&lt;/em&gt; to write the second half in Raku but got stuck, so this is the first problem where each half was solved in a different language.&lt;/p&gt;
 
@@ -1174,7 +1133,277 @@ Player 2's deck: 7, 5, 6, 2, 4, 1, 10, 8, 9, 3
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;I wrote part one at 6am and wrote part two around 10pm yesterday. I probably could have gotten it working in Raku, but I was hoping to do a puzzle a day for the duration of AoC, so I had to do what I had to do. Hopefully I will get back on track today and finish out the week (and the month) strong!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><category term="Python" /><summary type="html">I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my git history that the code itself was written on the 22nd.</summary></entry><entry><title type="html">Advent of Code: Day 21</title><link href="http://localhost:4000/blog/advent-of-code-day-21/" rel="alternate" type="text/html" title="Advent of Code: Day 21" /><published>2020-12-21T00:00:00-06:00</published><updated>2020-12-21T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-21</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-21/">&lt;p&gt;I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.&lt;/p&gt;
+&lt;p&gt;I wrote part one at 6am and wrote part two around 10pm yesterday. I probably could have gotten it working in Raku, but I was hoping to do a puzzle a day for the duration of AoC, so I had to do what I had to do. Hopefully I will get back on track today and finish out the week (and the month) strong!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><category term="Python" /><summary type="html">I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my git history that the code itself was written on the 22nd.</summary></entry><entry><title type="html">Advent of Code: Day 23</title><link href="http://localhost:4000/blog/advent-of-code-day-23/" rel="alternate" type="text/html" title="Advent of Code: Day 23" /><published>2020-12-23T00:00:00-06:00</published><updated>2020-12-23T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-23</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-23/">&lt;p&gt;This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;After &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-22/&quot;&gt;yesterday’s game of War&lt;/a&gt;, the crab challenges &lt;em&gt;us&lt;/em&gt; to a game! In this game there are 10 labeled cups placed clockwise in a circle (our input). The first cup in our list is our “current cup,” and the crab is going to make &lt;strong&gt;100 moves&lt;/strong&gt;. Here is how each move works:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The crab picks up the three cups that are immediately clockwise of the current cup. They are removed from the circle; cup spacing is adjusted as necessary to maintain the circle.&lt;/li&gt;
+  &lt;li&gt;The crab selects a destination cup: the cup with a label equal to the current cup’s label minus one. If this would select one of the cups that was just picked up, the crab will keep subtracting one until it finds a cup that wasn’t just picked up. If at any point in this process the value goes below the lowest value on any cup’s label, it wraps around to the highest value on any cup’s label instead.&lt;/li&gt;
+  &lt;li&gt;The crab places the cups it just picked up so that they are immediately clockwise of the destination cup. They keep the same order as when they were picked up.&lt;/li&gt;
+  &lt;li&gt;The crab selects a new current cup: the cup which is immediately clockwise of the current cup.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here is an example of 10 moves with the input &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;389125467&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-- move 1 --
+cups: (3) 8  9  1  2  5  4  6  7 
+pick up: 8, 9, 1
+destination: 2
+
+-- move 2 --
+cups:  3 (2) 8  9  1  5  4  6  7 
+pick up: 8, 9, 1
+destination: 7
+
+-- move 3 --
+cups:  3  2 (5) 4  6  7  8  9  1 
+pick up: 4, 6, 7
+destination: 3
+
+-- move 4 --
+cups:  7  2  5 (8) 9  1  3  4  6 
+pick up: 9, 1, 3
+destination: 7
+
+-- move 5 --
+cups:  3  2  5  8 (4) 6  7  9  1 
+pick up: 6, 7, 9
+destination: 3
+
+-- move 6 --
+cups:  9  2  5  8  4 (1) 3  6  7 
+pick up: 3, 6, 7
+destination: 9
+
+-- move 7 --
+cups:  7  2  5  8  4  1 (9) 3  6 
+pick up: 3, 6, 7
+destination: 8
+
+-- move 8 --
+cups:  8  3  6  7  4  1  9 (2) 5 
+pick up: 5, 8, 3
+destination: 1
+
+-- move 9 --
+cups:  7  4  1  5  8  3  9  2 (6)
+pick up: 7, 4, 1
+destination: 5
+
+-- move 10 --
+cups: (5) 7  4  1  8  3  9  2  6 
+pick up: 7, 4, 1
+destination: 3
+
+-- final --
+cups:  5 (8) 3  7  4  1  9  2  6 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;After the crab is done, what order will the cups be in? Starting after the cup labeled 1, collect the other cups’ labels clockwise into a single string with no extra characters; each number except &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; should appear exactly once. In the above example, after 10 moves, the cups clockwise from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; are labeled &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;9&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;6&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5&lt;/code&gt;, and so on, producing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;92658374&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;What is the answer after 100 moves with an input of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;712643589&lt;/code&gt;?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/23/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
+    my @ring;
+    my ($current, $previous);
+    for $file.IO.slurp.comb -&amp;gt; $number {
+        $current //= $number.Int;            # [1]
+        with $previous {                     # [2]
+            @ring[$previous] = $number.Int;
+        }
+        $previous = $number.Int;
+    }
+    @ring[$previous] = $current;
+
+    for (^100) {
+        my $pointer = $current;
+        my %grabbed = %(
+            0 =&amp;gt; True,
+            |(1 .. 3).map({
+                $pointer = @ring[$pointer]; # [3]
+                $pointer =&amp;gt; True;
+            }).Hash
+        );
+
+        my $destination = $current - 1;
+        while %grabbed{$destination}:exists {
+            $destination = ($destination - 1) % 10;
+        }
+
+        (@ring[$current], @ring[$pointer], @ring[$destination]) = (@ring[$pointer], @ring[$destination], @ring[$current]);
+
+        $current = @ring[$current];
+    }
+
+    $current = 1;
+    my $output;
+    while (($current = @ring[$current]) != 1) {
+        $output ~= $current;                    # [4]
+    }
+    say $output;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+29385746
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;We use a circularly-linked-list (stored in a list of integers) for this.&lt;/p&gt;
+
+&lt;p&gt;Once we have parsed our input, we created the linked list by keeping track of our &lt;em&gt;current&lt;/em&gt; and &lt;em&gt;previous&lt;/em&gt; cups. Then, for 100 iterations, we “grab” 3 cups (plus 0, which is an empty artifact of the way we fill our list), find the next destination cup by decrementing until we find one in the remaining cups, then swapping all the pointers to insert the three “grabbed” cups. For part one, this is a fairly quick process (~0.36s).&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;//&lt;/code&gt; operator returns the left-hand-side if it is defined, otherwise the right-hand side. In combination with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;=&lt;/code&gt; operator, it is the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$current = $current.defined ?? $current !! $number&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;with&lt;/code&gt; operator only enters the block if the variable is defined. This is the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if $previous.defined {...}&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;I hate that we update an outside variable in a map statement. Makes me cringe, but I wrote it, so guess I can’t complain too much.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~&lt;/code&gt; is Raku’s concatenate operator. So we are taking the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$output&lt;/code&gt; variable, concatenating &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$current&lt;/code&gt; and reassigning to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$output&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;The crab adds almost &lt;em&gt;a million&lt;/em&gt; more cups to the game. After the 9 initial ones, we add 999,991 more labeled 10 to 1,000,000. Once he has done that, he hides 2 stars in the cups that will end up in the two spots immediately following the cup labeled &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; after &lt;em&gt;10 million&lt;/em&gt; rounds. What is the product of those two cup labels?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/23/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub part1($file) {
+    my @ring;
+    my ($current, $previous);
+    for $file.IO.slurp.comb -&amp;gt; $number {
+        $current //= $number.Int;
+        with $previous {
+            @ring[$previous] = $number.Int;
+        }
+        $previous = $number.Int;
+    }
+    @ring[$previous] = $current;
+
+    for (^100) {
+        my $pointer = $current;
+        my %grabbed = %(
+            0 =&amp;gt; True,
+            |(1 .. 3).map({
+                $pointer = @ring[$pointer];
+                $pointer =&amp;gt; True;
+            }).Hash
+        );
+
+        my $destination = $current - 1;
+        while %grabbed{$destination}:exists {
+            $destination = ($destination - 1) % 10;
+        }
+
+        (@ring[$current], @ring[$pointer], @ring[$destination]) = (@ring[$pointer], @ring[$destination], @ring[$current]);
+
+        $current = @ring[$current];
+    }
+
+    $current = 1;
+    my $output;
+    while (($current = @ring[$current]) != 1) {
+        $output ~= $current;
+    }
+    say $output;
+}
+
+sub part2($file) {
+    my @ring;
+    my ($current, $previous);
+    for $file.IO.slurp.comb -&amp;gt; $number {
+        $current //= $number.Int;
+        with $previous {
+            @ring[$previous] = $number.Int;
+        }
+        $previous = $number.Int;
+    }
+
+    for (10..1_000_000) -&amp;gt; $i {
+        @ring[$previous] = $i;
+        $previous = $i;
+    }
+    @ring[$previous] = $current;
+
+    for (^10_000_000) {
+        my $pointer = $current;
+        my %grabbed = %(
+            0 =&amp;gt; True,
+            |(1 .. 3).map({
+                $pointer = @ring[$pointer];
+                $pointer =&amp;gt; True;
+            }).Hash
+        );
+
+        my $destination = $current - 1;
+        while %grabbed{$destination}:exists {
+            $destination = ($destination - 1) % 1_000_001;
+        }
+
+        my $old             = @ring[$current];
+        @ring[$current]     = @ring[$pointer];
+        @ring[$pointer]     = @ring[$destination];
+        @ring[$destination] = $old;
+
+        $current = @ring[$current];
+    }
+
+    say @ring[1] * @ring[@ring[1]];
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    $p2 ?? part2($file) !! part1($file);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+29385746
+
+$ raku main.raku --p2 input.txt
+712643589
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;As you can see, rather than try to retrofit the code today, I just wrote two functions that are &lt;em&gt;almost&lt;/em&gt; exactly the same. The differences are as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Part 2 adds the extra cups&lt;/li&gt;
+  &lt;li&gt;Part 2 has more iterations&lt;/li&gt;
+  &lt;li&gt;Part 2 needs a different modulo to find if a cup is in the valid range&lt;/li&gt;
+  &lt;li&gt;Part 2 reassigns the pointers in order rather than all at once
+    &lt;ul&gt;
+      &lt;li&gt;Shifting that much data in one step really hurt Raku&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;We output the product of 2 numbers instead of just the order of the cups&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;There is not too much to dive into with this one since it is the same problem with bigger numbers. It’s ugly, and I hate it. And, in contrast to part one, it is slow as all get out; it finishes in 351.32s (almost 6 minutes), which makes it 979 times slower than part one. Yikes.&lt;/p&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I am burnt out on this, but I am planning on finishing the week out. I enjoy most of the puzzles, but the blogging is starting to wear on me. 😅 2 more days; we got this!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!</summary></entry><entry><title type="html">Advent of Code: Day 21</title><link href="http://localhost:4000/blog/advent-of-code-day-21/" rel="alternate" type="text/html" title="Advent of Code: Day 21" /><published>2020-12-21T00:00:00-06:00</published><updated>2020-12-21T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-21</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-21/">&lt;p&gt;I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -2076,7 +2305,105 @@ Part 2: 350
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;This whole process is wearing on me, especially given the choice to do it using functional Raku (which obviously hasn’t worked out), but we are almost done! Less than a week to go!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Python" /><summary type="html">After I was singing Raku’s praises yesterday, it had to come back to bite me.</summary></entry><entry><title type="html">Perl Weekly Challenge 91</title><link href="http://localhost:4000/blog/perl-weekly-challenge-091/" rel="alternate" type="text/html" title="Perl Weekly Challenge 91" /><published>2020-12-18T00:00:00-06:00</published><updated>2020-12-18T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-091</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-091/">&lt;p&gt;I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!&lt;/p&gt;
+&lt;p&gt;This whole process is wearing on me, especially given the choice to do it using functional Raku (which obviously hasn’t worked out), but we are almost done! Less than a week to go!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Python" /><summary type="html">After I was singing Raku’s praises yesterday, it had to come back to bite me.</summary></entry><entry><title type="html">Advent of Code: Day 18</title><link href="http://localhost:4000/blog/advent-of-code-day-18/" rel="alternate" type="text/html" title="Advent of Code: Day 18" /><published>2020-12-18T00:00:00-06:00</published><updated>2020-12-18T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-18</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-18/">&lt;p&gt;I like to hate on Raku quite a bit, but it was literally the &lt;em&gt;perfect&lt;/em&gt; language for today’s challenge. I guess the love-hate relationship continues!&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;While we’re sitting on our flight, the kid next to us asks if we can help with his math homework. Unfortunately, the rules of this math are different from what we are familiar with – parentheses have the same precedence, but everything else is evaluated from left to right (&lt;em&gt;suck it&lt;/em&gt;, PEMDAS). Here is an example:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1 + 2 * 3 + 4 * 5 + 6
+  3   * 3 + 4 * 5 + 6
+      9   + 4 * 5 + 6
+         13   * 5 + 6
+             65   + 6
+                 71
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Luckily it seems like all of his math problems are only addition and multiplication. After evaluating all the expressions, what is the sum of their outputs?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/18/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use MONKEY-SEE-NO-EVAL; # [1]
+
+sub infix:&amp;lt;plus&amp;gt;(Int:D $a, Int:D $b) returns Int:D is equiv(&amp;amp;infix:&amp;lt;*&amp;gt;) { $a + $b } # [2][3]
+
+sub MAIN($file, Bool :$p2 = False) {
+   my @expressions = $file.IO.lines.map(*.trans(['+'] =&amp;gt; ['plus'])); # [4]
+   say @expressions.map(-&amp;gt; $expr { EVAL $expr }).sum;                # [5]
+}   
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+45840336521334
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;Basically what do here is define a new &lt;a href=&quot;https://docs.raku.org/language/operators#index-entry-infix_operator&quot;&gt;&lt;em&gt;infix operator&lt;/em&gt;&lt;/a&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt;. Infix means it goes between arguments, so it takes 2 integers and is written like this: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$a plus $b&lt;/code&gt;. We also define it with equivalent precedence to the existing multiplication operator, so the expressions will be evaluated left-to-right.&lt;/p&gt;
+
+&lt;p&gt;After we have done that, we read all the lines in and translate &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt; for each one. Finally, we evaluate each expression using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; and sum the results!&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; is a &lt;em&gt;very&lt;/em&gt; unsafe function and should only be used with caution. What it does is takes any valid string and attempts to evaluate it as Raku code. As you can imagine, this can be dangerous, so we have to manually allow the function using the &lt;a href=&quot;https://docs.raku.org/language/pragmas#index-entry-MONKEY-SEE-NO-EVAL__pragma&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MONKEY-SEE-NO-EVAL&lt;/code&gt; pragma&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;When defining this function, we don’t explicitly have to say what types it takes, but it does speed up calculating quite a bit. In this case we say it takes two &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int:D&lt;/code&gt; variables, meaning each one is a &lt;em&gt;specific&lt;/em&gt; integer and not an uninitialized &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; object. Likewise, it returns an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int:D&lt;/code&gt; object.&lt;/li&gt;
+  &lt;li&gt;We are able to set the function’s &lt;a href=&quot;https://docs.raku.org/language/functions#Precedence&quot;&gt;precedence&lt;/a&gt; in regard to other functions. The options are &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is looser&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is equiv&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is tighter&lt;/code&gt;. In this case, we set the new &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt; operator to have the same precedence as multiplication.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt; translates substrings from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;b&lt;/code&gt;. By default, the input length has to match the output length. This means substituting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt; would only replace the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p&lt;/code&gt;. To get around that we are able to use the brackets to say “substitute the &lt;em&gt;entire&lt;/em&gt; string.”&lt;/li&gt;
+  &lt;li&gt;After the substitution, we will end up with a string that looks like this (using the example from above): &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1 plus 2 * 3 plus 4 * 5 plus 6&lt;/code&gt;. Since we have defined this as valid Raku code, we can safely call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; on it, which returns an integer for us to sum up later.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;After finishing up part one, we reach the &lt;em&gt;advanced math&lt;/em&gt; section. In this section addition now has &lt;em&gt;greater&lt;/em&gt; precedence than multiplication. Using the same input, what is the sum of the output numbers using advanced math?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/18/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use MONKEY-SEE-NO-EVAL;
+
+sub infix:&amp;lt;plus&amp;gt;(Int:D $a, Int:D $b) returns Int:D is equiv(&amp;amp;infix:&amp;lt;*&amp;gt;)  { $a + $b }
+sub infix:&amp;lt;mult&amp;gt;(Int:D $a, Int:D $b) returns Int:D is looser(&amp;amp;infix:&amp;lt;+&amp;gt;) { $a * $b }
+
+sub MAIN($file, Bool :$p2 = False) {
+   my @expressions = $file.IO.lines.map($p2 ?? *.trans(['*'] =&amp;gt; ['mult']) !! *.trans(['+'] =&amp;gt; ['plus'])); # [1]
+   say @expressions.map(-&amp;gt; $expr { EVAL $expr }).sum
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+45840336521334
+
+$ raku main.raku --p2 input.txt
+328920644404583
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;Again, all we have to do is define a new infix operator with precedence &lt;em&gt;looser&lt;/em&gt; than regular addition. If the user sends the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$p2&lt;/code&gt; flag, we substitute &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mult&lt;/code&gt;, otherwise we substitute &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt;. Regardless, we still &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; all expressions and sum the output.&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;This is where the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Whatever&lt;/code&gt; star gets ugly. On this line we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; to mean both &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Whatever&lt;/code&gt; &lt;em&gt;and&lt;/em&gt; a literal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; character to translate in our string.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;You can define infix operators in other languages (for example, operators in Scala are just functions, so you would just write &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;def plus&lt;/code&gt;), however Scala does not let you &lt;a href=&quot;https://docs.scala-lang.org/tour/operators.html&quot;&gt;define the precedence&lt;/a&gt;. That is what is so special about Raku and what makes this solution so sleek for what could be a very tough problem.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">I like to hate on Raku quite a bit, but it was literally the perfect language for today’s challenge. I guess the love-hate relationship continues!</summary></entry><entry><title type="html">Perl Weekly Challenge 91</title><link href="http://localhost:4000/blog/perl-weekly-challenge-091/" rel="alternate" type="text/html" title="Perl Weekly Challenge 91" /><published>2020-12-18T00:00:00-06:00</published><updated>2020-12-18T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-091</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-091/">&lt;p&gt;I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-count-number&quot;&gt;Task 1: Count Number&lt;/h2&gt;
 
@@ -2243,7 +2570,6 @@ multi sub MAIN(:$test) {
 
     done-testing;
 }
-
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;This program runs as such:&lt;/p&gt;
@@ -2263,276 +2589,4 @@ ok 2 -
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Nothing ground breaking this week. However, we did get to explore one of the cooler features of Raku for Advent of Code day 18. &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-18/&quot;&gt;Give it a read&lt;/a&gt;!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!</summary></entry><entry><title type="html">Advent of Code: Day 18</title><link href="http://localhost:4000/blog/advent-of-code-day-18/" rel="alternate" type="text/html" title="Advent of Code: Day 18" /><published>2020-12-18T00:00:00-06:00</published><updated>2020-12-18T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-18</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-18/">&lt;p&gt;I like to hate on Raku quite a bit, but it was literally the &lt;em&gt;perfect&lt;/em&gt; language for today’s challenge. I guess the love-hate relationship continues!&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;While we’re sitting on our flight, the kid next to us asks if we can help with his math homework. Unfortunately, the rules of this math are different from what we are familiar with – parentheses have the same precedence, but everything else is evaluated from left to right (&lt;em&gt;suck it&lt;/em&gt;, PEMDAS). Here is an example:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1 + 2 * 3 + 4 * 5 + 6
-  3   * 3 + 4 * 5 + 6
-      9   + 4 * 5 + 6
-         13   * 5 + 6
-             65   + 6
-                 71
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Luckily it seems like all of his math problems are only addition and multiplication. After evaluating all the expressions, what is the sum of their outputs?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/18/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use MONKEY-SEE-NO-EVAL; # [1]
-
-sub infix:&amp;lt;plus&amp;gt;(Int:D $a, Int:D $b) returns Int:D is equiv(&amp;amp;infix:&amp;lt;*&amp;gt;) { $a + $b } # [2][3]
-
-sub MAIN($file, Bool :$p2 = False) {
-   my @expressions = $file.IO.lines.map(*.trans(['+'] =&amp;gt; ['plus'])); # [4]
-   say @expressions.map(-&amp;gt; $expr { EVAL $expr }).sum;                # [5]
-}   
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-45840336521334
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;Basically what do here is define a new &lt;a href=&quot;https://docs.raku.org/language/operators#index-entry-infix_operator&quot;&gt;&lt;em&gt;infix operator&lt;/em&gt;&lt;/a&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt;. Infix means it goes between arguments, so it takes 2 integers and is written like this: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$a plus $b&lt;/code&gt;. We also define it with equivalent precedence to the existing multiplication operator, so the expressions will be evaluated left-to-right.&lt;/p&gt;
-
-&lt;p&gt;After we have done that, we read all the lines in and translate &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt; for each one. Finally, we evaluate each expression using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; and sum the results!&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; is a &lt;em&gt;very&lt;/em&gt; unsafe function and should only be used with caution. What it does is takes any valid string and attempts to evaluate it as Raku code. As you can imagine, this can be dangerous, so we have to manually allow the function using the &lt;a href=&quot;https://docs.raku.org/language/pragmas#index-entry-MONKEY-SEE-NO-EVAL__pragma&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MONKEY-SEE-NO-EVAL&lt;/code&gt; pragma&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;When defining this function, we don’t explicitly have to say what types it takes, but it does speed up calculating quite a bit. In this case we say it takes two &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int:D&lt;/code&gt; variables, meaning each one is a &lt;em&gt;specific&lt;/em&gt; integer and not an uninitialized &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; object. Likewise, it returns an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int:D&lt;/code&gt; object.&lt;/li&gt;
-  &lt;li&gt;We are able to set the function’s &lt;a href=&quot;https://docs.raku.org/language/functions#Precedence&quot;&gt;precedence&lt;/a&gt; in regard to other functions. The options are &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is looser&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is equiv&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is tighter&lt;/code&gt;. In this case, we set the new &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt; operator to have the same precedence as multiplication.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt; translates substrings from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;b&lt;/code&gt;. By default, the input length has to match the output length. This means substituting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt; would only replace the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p&lt;/code&gt;. To get around that we are able to use the brackets to say “substitute the &lt;em&gt;entire&lt;/em&gt; string.”&lt;/li&gt;
-  &lt;li&gt;After the substitution, we will end up with a string that looks like this (using the example from above): &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1 plus 2 * 3 plus 4 * 5 plus 6&lt;/code&gt;. Since we have defined this as valid Raku code, we can safely call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; on it, which returns an integer for us to sum up later.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;After finishing up part one, we reach the &lt;em&gt;advanced math&lt;/em&gt; section. In this section addition now has &lt;em&gt;greater&lt;/em&gt; precedence than multiplication. Using the same input, what is the sum of the output numbers using advanced math?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/18/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use MONKEY-SEE-NO-EVAL;
-
-sub infix:&amp;lt;plus&amp;gt;(Int:D $a, Int:D $b) returns Int:D is equiv(&amp;amp;infix:&amp;lt;*&amp;gt;)  { $a + $b }
-sub infix:&amp;lt;mult&amp;gt;(Int:D $a, Int:D $b) returns Int:D is looser(&amp;amp;infix:&amp;lt;+&amp;gt;) { $a * $b }
-
-sub MAIN($file, Bool :$p2 = False) {
-   my @expressions = $file.IO.lines.map($p2 ?? *.trans(['*'] =&amp;gt; ['mult']) !! *.trans(['+'] =&amp;gt; ['plus'])); # [1]
-   say @expressions.map(-&amp;gt; $expr { EVAL $expr }).sum
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-45840336521334
-
-$ raku main.raku --p2 input.txt
-328920644404583
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;Again, all we have to do is define a new infix operator with precedence &lt;em&gt;looser&lt;/em&gt; than regular addition. If the user sends the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$p2&lt;/code&gt; flag, we substitute &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mult&lt;/code&gt;, otherwise we substitute &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt;. Regardless, we still &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; all expressions and sum the output.&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;This is where the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Whatever&lt;/code&gt; star gets ugly. On this line we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; to mean both &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Whatever&lt;/code&gt; &lt;em&gt;and&lt;/em&gt; a literal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; character to translate in our string.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;You can define infix operators in other languages (for example, operators in Scala are just functions, so you would just write &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;def plus&lt;/code&gt;), however Scala does not let you &lt;a href=&quot;https://docs.scala-lang.org/tour/operators.html&quot;&gt;define the precedence&lt;/a&gt;. That is what is so special about Raku and what makes this solution so sleek for what could be a very tough problem.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">I like to hate on Raku quite a bit, but it was literally the perfect language for today’s challenge. I guess the love-hate relationship continues!</summary></entry><entry><title type="html">Advent of Code: Day 17</title><link href="http://localhost:4000/blog/advent-of-code-day-17/" rel="alternate" type="text/html" title="Advent of Code: Day 17" /><published>2020-12-17T00:00:00-06:00</published><updated>2020-12-17T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-17</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-17/">&lt;p&gt;Today was &lt;em&gt;almost exactly&lt;/em&gt; like &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-11/&quot;&gt;day 11&lt;/a&gt; except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python solution (with the same logic) to get it to finish in a reasonable amount of time. Because of the similarities between today’s problem and that one, I only wrote a Python solution today.&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;The elves back at the North Pole call us about a mysterious phenomenon they are witnessing called Conway Cubes occurring in a pocket dimension.&lt;/p&gt;
-
-&lt;p&gt;The pocket dimension consists of an infinite 3D grid. At each &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(x, y, z)&lt;/code&gt; coordinate there exists a cube in an active (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#&lt;/code&gt;) or inactive (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.&lt;/code&gt;) state. Every cycle in the phenomenon all the cubes &lt;em&gt;simultaneously&lt;/em&gt; look at their 26 neighbors (9 above, 9 below, 8 in-plane) and they change based on the following rules:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;If a cube is &lt;strong&gt;active&lt;/strong&gt; and &lt;strong&gt;exactly 2 or 3&lt;/strong&gt; of its neighbors are also &lt;strong&gt;active&lt;/strong&gt;, the cube remains active. Otherwise, the cube becomes &lt;strong&gt;inactive&lt;/strong&gt;.&lt;/li&gt;
-  &lt;li&gt;If a cube is &lt;strong&gt;inactive&lt;/strong&gt; but &lt;strong&gt;exactly 3&lt;/strong&gt; of its neighbors are active, the cube becomes &lt;strong&gt;active&lt;/strong&gt;. Otherwise, the cube remains &lt;strong&gt;inactive&lt;/strong&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Our input is a 2D grid where the top-left position corresponding to coordinate &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(0,0,0)&lt;/code&gt; with some active and some inactive cubes. After 6 cycles of the pattern listed above, how many cubes in the space are &lt;strong&gt;active&lt;/strong&gt;?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/17/python/main.py&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;collections&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultdict&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;itertools&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;neighbors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;coordinates&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;diff&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;repeat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;coordinates&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# [1]
-&lt;/span&gt;        &lt;span class=&quot;k&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;tuple&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;coordinate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;diff&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;coordinate&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;coordinates&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;conway_cubes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;initial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultdict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'.'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# [2]
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;initial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;active&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultdict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# [3]
-&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;neighbor&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-                &lt;span class=&quot;c1&quot;&gt;# We count active cubes with active neighbors so we can
-&lt;/span&gt;                &lt;span class=&quot;c1&quot;&gt;# activate/deactivate following as necessary in the next loop
-&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;active&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;neighbor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;neighbor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;active_neighbors&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;active&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;#&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;active_neighbors&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;.&quot;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;.&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;active_neighbors&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;#&quot;&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;#&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;initial&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;readlines&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conway_cubes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;initial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ python main.py input.txt
-137
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;The logic here is pretty simple:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;We have an infinite grid called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;space&lt;/code&gt; and we set our initial values in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(x, y, 0)&lt;/code&gt; plane.&lt;/li&gt;
-  &lt;li&gt;For 6 cycles we iterate through the cubes focusing first on &lt;em&gt;active&lt;/em&gt; cubes (since the rules apply to active neighbors).&lt;/li&gt;
-  &lt;li&gt;Within each cycle we do a second loop to look at our neighbors
-    &lt;ul&gt;
-      &lt;li&gt;If a cube is active and fewer than 2 or greater than 3 neighbors are inactive, it becomes inactive.&lt;/li&gt;
-      &lt;li&gt;If a cube is inactive and exactly 3 neighbors are active, it becomes active.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;After 6 cycles of this, we simply sum up the active cubes.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;product&lt;/code&gt; is a Python 3.8+ function that is basically the equivalent of Raku’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt; operator. In this case, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;repeat&lt;/code&gt; param means to use the same input &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;repeat&lt;/code&gt; times. So if &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;repeat=3&lt;/code&gt;, in this case, it would be the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[-1, 0, 1] X [-1, 0, 1] X [-1, 0, 1]&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;A &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;defaultdict&lt;/code&gt; is a great data structure for an infinite grid. Basically, the key to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;space&lt;/code&gt; will be a tuple of coordinates, and the value will either be a period or a hash. Since it is a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;defaultdict&lt;/code&gt;, if we reference a key that does not exist, it creates it and fills it in with the default value (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;'.'&lt;/code&gt;).&lt;/li&gt;
-  &lt;li&gt;We also use a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;defaultdict&lt;/code&gt; to track our active cubes, with the default being an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;int&lt;/code&gt;. This will create new items with the default being &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt; (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;defaultdict&lt;/code&gt; accepts a &lt;em&gt;function&lt;/em&gt;, not a &lt;em&gt;value&lt;/em&gt;, which is why we can’t just specify &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;).&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;Turns out the pocket dimension is actually &lt;em&gt;four dimensional&lt;/em&gt;. Our input now represents the plane &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(x, y, 0, 0)&lt;/code&gt;. How many cubes are active after 6 cycles in 4D?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/17/python/main.py&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;collections&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultdict&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;itertools&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;neighbors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;coordinates&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;diff&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;repeat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;coordinates&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;tuple&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;coordinate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;diff&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;coordinate&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;coordinates&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;conway_cubes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;initial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dimensions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultdict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'.'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;padding&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dimensions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;initial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;padding&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;active&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultdict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;neighbor&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-                &lt;span class=&quot;c1&quot;&gt;# We count active cubes with active neighbors so we can
-&lt;/span&gt;                &lt;span class=&quot;c1&quot;&gt;# activate/deactivate following as necessary in the next loop
-&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;active&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;neighbor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;neighbor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;active_neighbors&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;active&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;#&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;active_neighbors&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;.&quot;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;.&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;active_neighbors&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cube&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;#&quot;&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;#&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;initial&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;readlines&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f'Part 1: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conway_cubes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;initial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dimensions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f'Part 2: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conway_cubes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;initial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dimensions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ python main.py input.txt
-Part 1: 237
-Part 2: 2448
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;The changes here are so small, you may not even notice them:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conway_cubes&lt;/code&gt; now accepts a dimension argument&lt;/li&gt;
-  &lt;li&gt;We have a dynamic &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;padding&lt;/code&gt; variable that adds either 1 or 2 zeros to the supplied &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(x, y)&lt;/code&gt; coordinates (rather than hard-coding as we did in part one).&lt;/li&gt;
-  &lt;li&gt;We run both parts (CLIs are much easier in Raku, so I don’t bother in Python)&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;That’s it!&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;p&gt;No specific comments to add because the code barely changed. Luckily the code was generalized enough to handle the new dimension.&lt;/p&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;I didn’t write a Raku solution, but I wonder how fast (or slow) if I wrote one with the same logic. Maybe I will go back and compare one of these days!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Python" /><summary type="html">Today was almost exactly like day 11 except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python solution (with the same logic) to get it to finish in a reasonable amount of time. Because of the similarities between today’s problem and that one, I only wrote a Python solution today.</summary></entry></feed>
+&lt;p&gt;Nothing ground breaking this week. However, we did get to explore one of the cooler features of Raku for Advent of Code day 18. &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-18/&quot;&gt;Give it a read&lt;/a&gt;!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!</summary></entry></feed>
