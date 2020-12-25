@@ -172,4 +172,10 @@ var store = [{
         "tags": ["Advent of Code","Raku"],
         "url": "http://localhost:4000/blog/advent-of-code-day-25/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 92",
+        "excerpt":"It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as finishing up AoC! Task 1: Isomorphic Strings You are given two strings $A and $B. Write a script to check if the given strings are isomorphic. Print...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "http://localhost:4000/blog/perl-weekly-challenge-092/",
+        "teaser": null
       }]
