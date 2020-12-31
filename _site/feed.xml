@@ -1,4 +1,542 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-25T16:17:39-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 92</title><link href="http://localhost:4000/blog/perl-weekly-challenge-092/" rel="alternate" type="text/html" title="Perl Weekly Challenge 92" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-092</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-092/">&lt;p&gt;It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-25/&quot;&gt;finishing up AoC&lt;/a&gt;!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-30T18:26:11-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 93</title><link href="http://localhost:4000/blog/perl-weekly-challenge-093/" rel="alternate" type="text/html" title="Perl Weekly Challenge 93" /><published>2020-12-30T00:00:00-06:00</published><updated>2020-12-30T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-093</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-093/">&lt;p&gt;I was &lt;em&gt;going&lt;/em&gt; to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-max-points&quot;&gt;Task 1: Max Points&lt;/h2&gt;
+
+&lt;p&gt;You are given set of co-ordinates &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to count maximum points on a straight line when given co-ordinates plotted on 2-d plane.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;|
+|     x
+|   x
+| x
++ _ _ _ _
+
+Input: (1,1), (2,2), (3,3)
+Output: 3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;|
+|
+| x       x
+|   x
+| x   x
++ _ _ _ _ _
+
+Input: (1,1), (2,2), (3,1), (1,3), (5,3)
+Output: 3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-093/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;h4 id=&quot;first-attempt&quot;&gt;First Attempt&lt;/h4&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(@pairs) {
+    my %lines;
+    my $already-compared = Set.new;
+
+    for @pairs -&amp;gt; @pair {
+        my @pairs-to-compare = @pairs.grep(* ne @pair);
+
+        for @pairs-to-compare -&amp;gt; @other-pair {
+            my ($x1, $y1) = @pair;
+            my ($x2, $y2) = @other-pair;
+
+            next if &quot;$x1,$y1:$x2,$y2&quot; ∈ $already-compared || &quot;$x2,$y2:$x1,$y1&quot; ∈ $already-compared; # [1]
+
+            my $numerator = $y2 - $y1;
+            my $denominator = $x2 - $x1;
+
+            # Find the slope
+            my $m = $denominator == 0 ?? 'undefined' !! $numerator / $denominator;
+
+            # If it is a vertical line, use the x-intercept for uniqueness
+            my $b = $m eq 'undefined' ?? @pair[1] !! @pair[1] - ($m * @pair[0]);
+
+            # Slope and y-intercept (or x-intercept) are unique, so this is all we need
+            %lines{&quot;$m:$b&quot;}++;                                                           # [2]
+
+            $already-compared ∪= &quot;$x1,$y1:$x2,$y2&quot;;
+        }
+    }
+    %lines.max(-&amp;gt; $entry { $entry.value }).value;
+}
+
+multi sub MAIN(*@N where all(@N) ~~ Int &amp;amp;&amp;amp; @N.elems %% 2) { # [3]
+    my @pairs = @N.map(-&amp;gt; $x, $y { ($x, $y) });
+    say challenge(@pairs);
+}
+
+multi sub MAIN(Bool :$test) {
+    use Test;
+
+    my @tests = (
+        (((1, 1), (2, 2), (3, 3)), 3),
+        (((1, 1), (2, 2), (3, 1), (1, 3), (5, 3)), 3),
+        (((1, 1), (2, 1), (3, 1), (4, 1)), 4)
+    );
+
+    for @tests -&amp;gt; (@pairs, $expected) {
+        is(challenge(@pairs), $expected);
+    }
+
+    done-testing;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 1 1 2 2 3 3
+3
+
+$ raku ch-1.raku --test
+ok 1 - 
+ok 2 - 
+not ok 3 - 
+1..3
+# Failed test at /home/asmith/perlweeklychallenge-club/challenge-093/aaronreidsmith/raku/ch-1.raku line 47
+# expected: '4'
+#      got: '6'
+# You failed 1 test of 3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;corrected-solution&quot;&gt;Corrected Solution&lt;/h4&gt;
+
+&lt;p&gt;As you can see, the above solution fails for my added test case. We will explore this below, but here is the corrected version (with an additional test case):&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Point {
+    has $.x;
+    has $.y;
+
+    multi method new($x, $y) { # [4]
+        self.bless(:$x, :$y);
+    }
+}
+
+class Line {
+    has $.slope;
+    has $.x-intercept;
+    has $.y-intercept;
+    has Set $.points is rw;
+}
+
+sub challenge(@points) {
+    my %lines;
+    for @points.kv -&amp;gt; $index, $point {
+        for @points[$index+1..*] -&amp;gt; $other-point {
+            my $numerator = $other-point.y - $point.y;
+            my $denominator = $other-point.x - $point.x;
+
+            my $slope = $denominator == 0 ?? 'undefined' !! $numerator / $denominator;
+
+            my $y-intercept;
+            if $slope eq 'undefined' {
+                $y-intercept = $point.y == 0 ?? 0 !! 'undefined';
+            } else {
+                $y-intercept = $point.y - ($slope * $point.x);
+            }
+
+            my $x-intercept;
+            if $slope eq 'undefined' {
+                $x-intercept = $point.x;
+            } elsif $slope == 0 {
+                $x-intercept = 'undefined'
+            } else {
+                $x-intercept = -$y-intercept / $slope;
+            }
+
+            my $points = Set.new(&quot;{$point.x},{$point.y}&quot;, &quot;{$other-point.x},{$other-point.y}&quot;);
+
+            my $key = &quot;$slope,$x-intercept,$y-intercept&quot;; # [5]
+            
+            if %lines{$key}:exists {
+                %lines{$key}.points ∪= $points;
+            } else {
+                %lines{$key} = Line.new(:$slope, :$x-intercept, :$y-intercept, :$points);
+            }
+        }
+    }
+    %lines.max({ $_.value.points.elems }).value.points.elems;
+}
+
+multi sub MAIN(*@N where all(@N) ~~ Int &amp;amp;&amp;amp; @N.elems %% 2) {
+    my @pairs = @N.map(-&amp;gt; $x, $y { Point.new($x, $y) });
+    say challenge(@pairs);
+}
+
+multi sub MAIN(Bool :$test) {
+    use Test;
+
+    my @tests = (
+        ((Point.new(1, 1), Point.new(2, 2), Point.new(3, 3)), 3),
+        ((Point.new(1, 1), Point.new(2, 2), Point.new(3, 1), Point.new(1, 3), Point.new(5, 3)), 3),
+        ((Point.new(1, 1), Point.new(2, 1), Point.new(3, 1), Point.new(4, 1)), 4),
+        ((Point.new(1, 1), Point.new(1, 2), Point.new(2, 1), Point.new(3, 1), Point.new(4, 1)), 4)
+    );
+
+    for @tests -&amp;gt; (@points, $expected) {
+        is(challenge(@points), $expected);
+    }
+
+    done-testing;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 1 1 2 2 3 3
+3
+
+$ raku ch-1.raku --test
+ok 1 - 
+ok 2 - 
+ok 3 - 
+ok 4 -
+1..4
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;For both of these there is some logic in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; that I will explain once. Basically, we expect the user to pass us one or more integers, and they have to pass us an &lt;em&gt;even&lt;/em&gt; number of integers so that we can split it into pairs. We then pass this to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; subroutine.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;First Attempt&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The logic here is as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;For each point, compare it to each other point.&lt;/li&gt;
+  &lt;li&gt;During the comparison calculate both the slope and (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$m&lt;/code&gt;) and the y-intercept (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$b&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;Store the slope/y-intercept combo in a Hash called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%lines&lt;/code&gt;.
+    &lt;ul&gt;
+      &lt;li&gt;Increment if it exists, otherwise, set to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Comparing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 1) &amp;lt;-&amp;gt; (2, 2)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(2, 2) &amp;lt;-&amp;gt; (1, 1)&lt;/code&gt; is the same thing, so we store that in a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&lt;/code&gt; to save ourselves a few cycles.&lt;/li&gt;
+  &lt;li&gt;Finally, find the maximum entry by value and return it.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;This logic breaks down in the case of a horizontal line (see test number 3). The reason it breaks down is because the pairs are evaluated like this:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(2, 1)&lt;/code&gt; – m = 0, b = 1. New line – set to 1&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(3, 1)&lt;/code&gt; – m = 0, b = 1. Existing line – increment to 2&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(4, 1)&lt;/code&gt; – m = 0, b = 1. Existing line – increment to 3&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(2, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 1)&lt;/code&gt; – Same as number 1 – skip&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(2, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(3, 1)&lt;/code&gt; – m = 0, b = 1. Existing line – increment to 4&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(2, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(4, 1)&lt;/code&gt; – m = 0, b = 1. Existing line – increment to 5&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(3, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 1)&lt;/code&gt; – Same as number 2 – skip&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(3, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(2, 1)&lt;/code&gt; – Same as number 5 – skip&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(3, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(4, 1)&lt;/code&gt; – m - 0, b = 1. Existing line – increment to 6&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;As you can see, even with four points, we generate an answer of six. My first though was to just take the minimum of the number of points and the longest run we found, which would yield four. However, if we had any points &lt;em&gt;not&lt;/em&gt; on the line (look at test 4 the corrected solution), then it would yield the wrong answer as well.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Corrected Solution&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The logic here is similar, but accounts for the above situation. First, you will notice I added a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Point&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Line&lt;/code&gt; class, to make things a little easier. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Line&lt;/code&gt; class also contains a set of points along that line that we can use to de-duplicate if necessary. Once those are defined, the logic is as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Compare each point to each &lt;em&gt;subsequent&lt;/em&gt; point.
+    &lt;ul&gt;
+      &lt;li&gt;There is no need to look at past points, as it results in the “skips” shown above&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;During each comparison we calculate the slope, x-intercept and y-intercept.
+    &lt;ul&gt;
+      &lt;li&gt;The reason for this is because if we have an undefined slope (vertical line), we need to know where along the x-axis it falls.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Once we have the above calculated, we create a joint key of all 3 to use in a Hash.&lt;/li&gt;
+  &lt;li&gt;Using the above key, we look up our string in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%lines&lt;/code&gt; Hash. If it exists, we add the points used to find it to the points contained in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Line&lt;/code&gt; object (since it is a set, it will de-duplicate itself automatically). Otherwise, we create a new &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Line&lt;/code&gt; object and store it with the key from #3.&lt;/li&gt;
+  &lt;li&gt;Finally, we find the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Line&lt;/code&gt; with the most &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Point&lt;/code&gt;s and return the number of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Point&lt;/code&gt;s.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;We need to use a string here or else the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&lt;/code&gt; will erroneously combine some of our points. Sets flatten their arguments in Raku, which makes it tricky to store nested items. This has been my go-to solution.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt; objects behave kind of like default dicts in Python in that if you use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;++&lt;/code&gt; on a key that does not exist, it will create the key and increment it to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Raku has an operator specifically for “divisible by.” In other languages, you might see &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x % 2 == 0&lt;/code&gt; to check if something is divisible by 2, but in Raku you can say &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$x %% 2&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Raku, like some other languages, allows us to define multiple constructors. The default one is created for us and takes named arguments. This one takes positional arguments and passes them to the default constructor via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;self.bless&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Similar to #1, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt; objects always use string keys. So if we need some kind of compound key, we need to cast it to a string as seen here.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-sum-path&quot;&gt;Task 2: Sum Path&lt;/h2&gt;
+
+&lt;p&gt;You are given binary tree containing numbers &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0-9&lt;/code&gt; only.&lt;/p&gt;
+
+&lt;p&gt;Write a script to sum all possible paths from root to leaf.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1-1&quot;&gt;Example 1&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input:
+     1
+    /
+   2
+  / \
+ 3   4
+
+Output: 13
+as sum two paths (1-&amp;gt;2-&amp;gt;3) and (1-&amp;gt;2-&amp;gt;4)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-2-1&quot;&gt;Example 2&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input:
+     1
+    / \
+   2   3
+  /   / \
+ 4   5   6
+
+Output: 26
+as sum three paths (1-&amp;gt;2-&amp;gt;4), (1-&amp;gt;3-&amp;gt;5) and (1-&amp;gt;3-&amp;gt;6)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-093/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset NodeValue of Str where { $_ ~~ /^&amp;lt;digit&amp;gt;$/ || $_ eq 'Nil' } # [1]
+
+class Node {
+    has Node $.left  is rw = Nil; # [2]
+    has Node $.right is rw = Nil;
+    has Int $.value        = 0;
+}
+
+sub build-tree(@array, $root is copy = Nil, Int $i = 0) {
+    if $i &amp;lt; @array.elems &amp;amp;&amp;amp; @array[$i] ne 'Nil' {
+        $root       = Node.new(value =&amp;gt; @array[$i].Int);
+        $root.left  = build-tree(@array, $root.left, 2 * $i + 1);
+        $root.right = build-tree(@array, $root.right, 2 * $i + 2);
+    }
+    $root;
+}
+
+sub challenge(Node $root, @path is copy = ()) {
+    my $path-sum = 0;
+    with $root {
+        @path.push($root.value);
+
+        if !$root.left.defined &amp;amp;&amp;amp; !$root.right.defined {
+            $path-sum = @path.sum;
+        } else {
+            $path-sum += challenge($root.left, @path);
+            $path-sum += challenge($root.right, @path);
+        }
+    }
+    $path-sum;
+}
+
+multi sub MAIN(*@N where all(@N) ~~ NodeValue) {
+    my $root = build-tree(@N);
+    say challenge($root);
+}
+
+multi sub MAIN(Bool :$test) {
+    use Test;
+
+    my @tests = (
+        (build-tree(('1', '2', 'Nil', '3', '4')), 13),
+        (build-tree(('1', '2', '3', '4', 'Nil', '5', '6')), 26),
+        (build-tree(('2', '7', '5', '2', '6', 'Nil', '9', 'Nil', '5', '11', '4', 'Nil')), 77)
+    );
+
+    for @tests -&amp;gt; ($tree, $expected) {
+        is(challenge($tree), $expected);
+    }
+
+    done-testing;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 1 2 Nil 3 4
+13
+
+$ raku ch-2.raku 1 2 3 4 Nil 5 6
+26
+
+$ raku ch-2.raku --test
+ok 1 - 
+ok 2 - 
+ok 3 - 
+1..3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;The hardest part of this, for me, was giving the user some kind of command line interface to be able to define their own trees (something that wasn’t explicitly part of the problem). We basically just use the &lt;a href=&quot;https://www.geeksforgeeks.org/binary-tree-array-implementation/&quot;&gt;array implementation&lt;/a&gt; of a binary tree where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@array[0]&lt;/code&gt; is the root, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@array[1]&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@array[2]&lt;/code&gt; are the second row, etc. Anything that is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Nil&lt;/code&gt; is recognized as an empty node (i.e., an &lt;a href=&quot;http://www.opendatastructures.org/versions/edition-0.1d/ods-java/node37.html&quot;&gt;unbalanced tree&lt;/a&gt;). So, for example, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1 2 Nil 3 4&lt;/code&gt; represents the first example shown above.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; does some validation to make sure everything is either a number or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Nil&lt;/code&gt; and then let’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build-tree&lt;/code&gt; convert the array into an actual tree (by creating &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Node&lt;/code&gt; objects). Once we have a tree, we give it to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; which implements the following logic:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;If the node is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Nil&lt;/code&gt; return 0.
+    &lt;ul&gt;
+      &lt;li&gt;Technically unnecessary since we check if we are at a terminal node before recursing, but doesn’t hurt to have.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Push the current node’s value into our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@path&lt;/code&gt; list.&lt;/li&gt;
+  &lt;li&gt;If we are at a leaf node (no &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;left&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;right&lt;/code&gt;), then calculate the sum of the path and return.&lt;/li&gt;
+  &lt;li&gt;Otherwise, recurse both left and right ith the existing path and add it to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$path-sum&lt;/code&gt; variable.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;This line ensures that, even though we are expecting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Str&lt;/code&gt; types, that all of them are either digits or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;'Nil'&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;By default, class attributes are read only, so by defining them as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is rw&lt;/code&gt; (read/write), we say that they are mutable. Additionally, we assign these attributes default values.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;This challenge is a good case study in test-driven development! Be sure to write edge-case tests to make sure everything is behaving as expected. In the case of part one, it was &lt;em&gt;not&lt;/em&gt; behaving as expected and required a re-write.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I was going to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.</summary></entry><entry><title type="html">Advent of Code: Day 25</title><link href="http://localhost:4000/blog/advent-of-code-day-25/" rel="alternate" type="text/html" title="Advent of Code: Day 25" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-25</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-25/">&lt;p&gt;Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;We finally get to the front desk of the resort, and they tell us that the system is down, and we will be unable to check in. Luckily, they created all the room keys this morning, so we &lt;em&gt;will&lt;/em&gt; be able to go to our room, and just formally check in later. We are on the 25th floor, and the elevator is broken. 🙃&lt;/p&gt;
+
+&lt;p&gt;We make it to our room and scan the key and get the disheartening red light from the door. Luckily, there is a number to call IT on the card, and we give them a ring. They say we can either go down to the front desk to get it reset or reverse engineer the cryptographic handshake between the card and the door. Obviously we will take the latter choice.&lt;/p&gt;
+
+&lt;p&gt;We’re able to obtain the &lt;em&gt;public keys&lt;/em&gt; of both the door and the card (our input). To find the cryptographic handshake we must take the subject number (a constant; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;) and transform it according to the following rules:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Start with a value of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Set the value equal to itself times the subject number (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;Set the value equal to the remainder after dividing by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;20201227&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Continue until the value equals the device’s public key&lt;/li&gt;
+  &lt;li&gt;For the above steps, count how many loops it took; this is the secret &lt;strong&gt;loop size&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Once we have found the secret loop size for one of the devices, we can take the loop size and apply the same transformation as above using the public key from &lt;em&gt;the other device&lt;/em&gt; as our subject number, which yields the handshake key. Let’s look at an example:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Card Public Key: 5764801
+Door Public Key: 17807724
+
+--- Finding the loop size for the card ---
+# Loop 1
+value = 1 * 7        = 7
+value = 7 % 20201227 = 7
+
+# Loop 2
+value = 7 * 7         = 49
+value = 49 % 20201227 = 49
+
+# Loop 3
+value = 49 * 7         = 343
+value = 343 % 20201227 = 343
+
+# Loop 4
+value = 343 * 7         = 2401
+value = 2401 % 20201227 = 2401
+
+# Loop 5
+value = 2401 * 7         = 16807
+value = 16807 % 20201227 = 16807
+
+# Loop 6
+value = 16807 * 7         = 117649
+value = 117649 % 20201227 = 117649
+
+# Loop 7
+value = 117649 * 7        = 823543
+value = 823543 % 20201227 = 823543
+
+# Loop 8
+value = 823543 * 7         = 5764801
+value = 5764801 % 20201227 = 5764801 &amp;lt;-- The card's public key
+
+--- Applying the loop size to the door ---
+# Loop 1
+value = 1 * 17807724        = 17807724
+value = 17807724 % 20201227 = 17807724
+
+# Loop 2
+value = 17807724 * 17807724        = 317115034060176
+value = 317115034060176 % 20201227 = 10847306
+
+# Loop 3
+value = 10847306 * 17807724        = 193165831391544
+value = 193165831391544 % 20201227 = 1914476
+
+# Loop 4
+value = 1914476 * 17807724        = 34092460212624
+value = 34092460212624 % 20201227 = 874663
+
+# Loop 5
+value = 874663 * 17807724         = 15575757297012
+value = 15575757297012 % 20201227 = 5243202
+
+# Loop 6
+value = 5243202 * 17807724        = 93369494092248
+value = 93369494092248 % 20201227 = 8733831
+
+# Loop 7
+value = 8733831 * 17807724         = 155529651910644
+value = 155529651910644 % 20201227 = 1213104
+
+# Loop 8
+value = 1213104 * 17807724        = 21602621215296
+value = 21602621215296 % 20201227 = 14897079       &amp;lt;-- Cryptographic Handshake
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I will not display it, but if we had found the door’s loop size and then used the card’s public key as the subject number, we would have come to the same cryptographic handshake; this is how the door, and the card know they are a match.&lt;/p&gt;
+
+&lt;p&gt;With our &lt;em&gt;real&lt;/em&gt; card and door public keys, what is the cryptographic handshake between them?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/25/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
+    my ($card-key, $door-key) = $file.IO.lines.map(*.Int);
+    my $handshake = 1;
+    my $target = 1;
+    while $target != $door-key {
+        $target = ($target * 7) % 20201227;
+        $handshake = ($handshake * $card-key) % 20201227;
+    }
+    say $handshake;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+18293391
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;Rather than keep track of the loop size, we just do the above 2 loops in parallel until &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$target&lt;/code&gt; matches &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$door-key&lt;/code&gt;. Rather than do the two steps outline above, we are able to do the multiplication and remainder division (&lt;a href=&quot;https://en.wikipedia.org/wiki/Modulo_operation&quot;&gt;modulo&lt;/a&gt;) in one step. Finally, all we have to do is say the handshake!&lt;/p&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;2020 has been a tough year and everyone needs a break. Day 25 part 2 is a freebie. 🙂&lt;/p&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I had my ups and downs with this challenge. Obviously I did not fulfill my goal of solving everything in functional Raku; in fact, I wasn’t even able to solve everything in Raku. However, I learned a lot about the language, I learned a few new algorithms, and I had fun! This whole thing was a lot of fun, and I want to thank &lt;a href=&quot;https://github.com/topaz&quot;&gt;Eric&lt;/a&gt; for doing it for the past 6 years (even though this was my first time participating).&lt;/p&gt;
+
+&lt;p&gt;Next year I will have a one-and-a-half-year-old, so no promises I will be able to blog every day (it was hard enough this year), but I will do my best to participate, and I may blog for problems I find particularly clever.&lt;/p&gt;
+
+&lt;p&gt;With that, I would like to wish everyone a very merry Christmas and a happy New Year!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!</summary></entry><entry><title type="html">Perl Weekly Challenge 92</title><link href="http://localhost:4000/blog/perl-weekly-challenge-092/" rel="alternate" type="text/html" title="Perl Weekly Challenge 92" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-092</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-092/">&lt;p&gt;It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-25/&quot;&gt;finishing up AoC&lt;/a&gt;!&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-isomorphic-strings&quot;&gt;Task 1: Isomorphic Strings&lt;/h2&gt;
 
@@ -227,141 +765,7 @@ ok 3 -
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Some fun little challenges that nicely complement Advent of Code. Now to start enjoying Christmas with my family! Merry Christmas everyone!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as finishing up AoC!</summary></entry><entry><title type="html">Advent of Code: Day 25</title><link href="http://localhost:4000/blog/advent-of-code-day-25/" rel="alternate" type="text/html" title="Advent of Code: Day 25" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-25</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-25/">&lt;p&gt;Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;We finally get to the front desk of the resort, and they tell us that the system is down, and we will be unable to check in. Luckily, they created all the room keys this morning, so we &lt;em&gt;will&lt;/em&gt; be able to go to our room, and just formally check in later. We are on the 25th floor, and the elevator is broken. 🙃&lt;/p&gt;
-
-&lt;p&gt;We make it to our room and scan the key and get the disheartening red light from the door. Luckily, there is a number to call IT on the card, and we give them a ring. They say we can either go down to the front desk to get it reset or reverse engineer the cryptographic handshake between the card and the door. Obviously we will take the latter choice.&lt;/p&gt;
-
-&lt;p&gt;We’re able to obtain the &lt;em&gt;public keys&lt;/em&gt; of both the door and the card (our input). To find the cryptographic handshake we must take the subject number (a constant; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;) and transform it according to the following rules:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Start with a value of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Set the value equal to itself times the subject number (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;)&lt;/li&gt;
-  &lt;li&gt;Set the value equal to the remainder after dividing by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;20201227&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Continue until the value equals the device’s public key&lt;/li&gt;
-  &lt;li&gt;For the above steps, count how many loops it took; this is the secret &lt;strong&gt;loop size&lt;/strong&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Once we have found the secret loop size for one of the devices, we can take the loop size and apply the same transformation as above using the public key from &lt;em&gt;the other device&lt;/em&gt; as our subject number, which yields the handshake key. Let’s look at an example:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Card Public Key: 5764801
-Door Public Key: 17807724
-
---- Finding the loop size for the card ---
-# Loop 1
-value = 1 * 7        = 7
-value = 7 % 20201227 = 7
-
-# Loop 2
-value = 7 * 7         = 49
-value = 49 % 20201227 = 49
-
-# Loop 3
-value = 49 * 7         = 343
-value = 343 % 20201227 = 343
-
-# Loop 4
-value = 343 * 7         = 2401
-value = 2401 % 20201227 = 2401
-
-# Loop 5
-value = 2401 * 7         = 16807
-value = 16807 % 20201227 = 16807
-
-# Loop 6
-value = 16807 * 7         = 117649
-value = 117649 % 20201227 = 117649
-
-# Loop 7
-value = 117649 * 7        = 823543
-value = 823543 % 20201227 = 823543
-
-# Loop 8
-value = 823543 * 7         = 5764801
-value = 5764801 % 20201227 = 5764801 &amp;lt;-- The card's public key
-
---- Applying the loop size to the door ---
-# Loop 1
-value = 1 * 17807724        = 17807724
-value = 17807724 % 20201227 = 17807724
-
-# Loop 2
-value = 17807724 * 17807724        = 317115034060176
-value = 317115034060176 % 20201227 = 10847306
-
-# Loop 3
-value = 10847306 * 17807724        = 193165831391544
-value = 193165831391544 % 20201227 = 1914476
-
-# Loop 4
-value = 1914476 * 17807724        = 34092460212624
-value = 34092460212624 % 20201227 = 874663
-
-# Loop 5
-value = 874663 * 17807724         = 15575757297012
-value = 15575757297012 % 20201227 = 5243202
-
-# Loop 6
-value = 5243202 * 17807724        = 93369494092248
-value = 93369494092248 % 20201227 = 8733831
-
-# Loop 7
-value = 8733831 * 17807724         = 155529651910644
-value = 155529651910644 % 20201227 = 1213104
-
-# Loop 8
-value = 1213104 * 17807724        = 21602621215296
-value = 21602621215296 % 20201227 = 14897079       &amp;lt;-- Cryptographic Handshake
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;I will not display it, but if we had found the door’s loop size and then used the card’s public key as the subject number, we would have come to the same cryptographic handshake; this is how the door, and the card know they are a match.&lt;/p&gt;
-
-&lt;p&gt;With our &lt;em&gt;real&lt;/em&gt; card and door public keys, what is the cryptographic handshake between them?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/25/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
-    my ($card-key, $door-key) = $file.IO.lines.map(*.Int);
-    my $handshake = 1;
-    my $target = 1;
-    while $target != $door-key {
-        $target = ($target * 7) % 20201227;
-        $handshake = ($handshake * $card-key) % 20201227;
-    }
-    say $handshake;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-18293391
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;Rather than keep track of the loop size, we just do the above 2 loops in parallel until &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$target&lt;/code&gt; matches &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$door-key&lt;/code&gt;. Rather than do the two steps outline above, we are able to do the multiplication and remainder division (&lt;a href=&quot;https://en.wikipedia.org/wiki/Modulo_operation&quot;&gt;modulo&lt;/a&gt;) in one step. Finally, all we have to do is say the handshake!&lt;/p&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;2020 has been a tough year and everyone needs a break. Day 25 part 2 is a freebie. 🙂&lt;/p&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;I had my ups and downs with this challenge. Obviously I did not fulfill my goal of solving everything in functional Raku; in fact, I wasn’t even able to solve everything in Raku. However, I learned a lot about the language, I learned a few new algorithms, and I had fun! This whole thing was a lot of fun, and I want to thank &lt;a href=&quot;https://github.com/topaz&quot;&gt;Eric&lt;/a&gt; for doing it for the past 6 years (even though this was my first time participating).&lt;/p&gt;
-
-&lt;p&gt;Next year I will have a one-and-a-half-year-old, so no promises I will be able to blog every day (it was hard enough this year), but I will do my best to participate, and I may blog for problems I find particularly clever.&lt;/p&gt;
-
-&lt;p&gt;With that, I would like to wish everyone a very merry Christmas and a happy New Year!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!</summary></entry><entry><title type="html">Advent of Code: Day 24</title><link href="http://localhost:4000/blog/advent-of-code-day-24/" rel="alternate" type="text/html" title="Advent of Code: Day 24" /><published>2020-12-24T00:00:00-06:00</published><updated>2020-12-24T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-24</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-24/">&lt;p&gt;Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-11/&quot;&gt;11&lt;/a&gt; and &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-17/&quot;&gt;17&lt;/a&gt;, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.&lt;/p&gt;
+&lt;p&gt;Some fun little challenges that nicely complement Advent of Code. Now to start enjoying Christmas with my family! Merry Christmas everyone!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as finishing up AoC!</summary></entry><entry><title type="html">Advent of Code: Day 24</title><link href="http://localhost:4000/blog/advent-of-code-day-24/" rel="alternate" type="text/html" title="Advent of Code: Day 24" /><published>2020-12-24T00:00:00-06:00</published><updated>2020-12-24T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-24</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-24/">&lt;p&gt;Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-11/&quot;&gt;11&lt;/a&gt; and &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-17/&quot;&gt;17&lt;/a&gt;, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -2305,105 +2709,7 @@ Part 2: 350
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;This whole process is wearing on me, especially given the choice to do it using functional Raku (which obviously hasn’t worked out), but we are almost done! Less than a week to go!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Python" /><summary type="html">After I was singing Raku’s praises yesterday, it had to come back to bite me.</summary></entry><entry><title type="html">Advent of Code: Day 18</title><link href="http://localhost:4000/blog/advent-of-code-day-18/" rel="alternate" type="text/html" title="Advent of Code: Day 18" /><published>2020-12-18T00:00:00-06:00</published><updated>2020-12-18T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-18</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-18/">&lt;p&gt;I like to hate on Raku quite a bit, but it was literally the &lt;em&gt;perfect&lt;/em&gt; language for today’s challenge. I guess the love-hate relationship continues!&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;While we’re sitting on our flight, the kid next to us asks if we can help with his math homework. Unfortunately, the rules of this math are different from what we are familiar with – parentheses have the same precedence, but everything else is evaluated from left to right (&lt;em&gt;suck it&lt;/em&gt;, PEMDAS). Here is an example:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1 + 2 * 3 + 4 * 5 + 6
-  3   * 3 + 4 * 5 + 6
-      9   + 4 * 5 + 6
-         13   * 5 + 6
-             65   + 6
-                 71
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Luckily it seems like all of his math problems are only addition and multiplication. After evaluating all the expressions, what is the sum of their outputs?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/18/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use MONKEY-SEE-NO-EVAL; # [1]
-
-sub infix:&amp;lt;plus&amp;gt;(Int:D $a, Int:D $b) returns Int:D is equiv(&amp;amp;infix:&amp;lt;*&amp;gt;) { $a + $b } # [2][3]
-
-sub MAIN($file, Bool :$p2 = False) {
-   my @expressions = $file.IO.lines.map(*.trans(['+'] =&amp;gt; ['plus'])); # [4]
-   say @expressions.map(-&amp;gt; $expr { EVAL $expr }).sum;                # [5]
-}   
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-45840336521334
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;Basically what do here is define a new &lt;a href=&quot;https://docs.raku.org/language/operators#index-entry-infix_operator&quot;&gt;&lt;em&gt;infix operator&lt;/em&gt;&lt;/a&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt;. Infix means it goes between arguments, so it takes 2 integers and is written like this: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$a plus $b&lt;/code&gt;. We also define it with equivalent precedence to the existing multiplication operator, so the expressions will be evaluated left-to-right.&lt;/p&gt;
-
-&lt;p&gt;After we have done that, we read all the lines in and translate &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt; for each one. Finally, we evaluate each expression using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; and sum the results!&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; is a &lt;em&gt;very&lt;/em&gt; unsafe function and should only be used with caution. What it does is takes any valid string and attempts to evaluate it as Raku code. As you can imagine, this can be dangerous, so we have to manually allow the function using the &lt;a href=&quot;https://docs.raku.org/language/pragmas#index-entry-MONKEY-SEE-NO-EVAL__pragma&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MONKEY-SEE-NO-EVAL&lt;/code&gt; pragma&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;When defining this function, we don’t explicitly have to say what types it takes, but it does speed up calculating quite a bit. In this case we say it takes two &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int:D&lt;/code&gt; variables, meaning each one is a &lt;em&gt;specific&lt;/em&gt; integer and not an uninitialized &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; object. Likewise, it returns an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int:D&lt;/code&gt; object.&lt;/li&gt;
-  &lt;li&gt;We are able to set the function’s &lt;a href=&quot;https://docs.raku.org/language/functions#Precedence&quot;&gt;precedence&lt;/a&gt; in regard to other functions. The options are &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is looser&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is equiv&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is tighter&lt;/code&gt;. In this case, we set the new &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt; operator to have the same precedence as multiplication.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt; translates substrings from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;b&lt;/code&gt;. By default, the input length has to match the output length. This means substituting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plus&lt;/code&gt; would only replace the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p&lt;/code&gt;. To get around that we are able to use the brackets to say “substitute the &lt;em&gt;entire&lt;/em&gt; string.”&lt;/li&gt;
-  &lt;li&gt;After the substitution, we will end up with a string that looks like this (using the example from above): &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1 plus 2 * 3 plus 4 * 5 plus 6&lt;/code&gt;. Since we have defined this as valid Raku code, we can safely call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; on it, which returns an integer for us to sum up later.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;After finishing up part one, we reach the &lt;em&gt;advanced math&lt;/em&gt; section. In this section addition now has &lt;em&gt;greater&lt;/em&gt; precedence than multiplication. Using the same input, what is the sum of the output numbers using advanced math?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/18/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use MONKEY-SEE-NO-EVAL;
-
-sub infix:&amp;lt;plus&amp;gt;(Int:D $a, Int:D $b) returns Int:D is equiv(&amp;amp;infix:&amp;lt;*&amp;gt;)  { $a + $b }
-sub infix:&amp;lt;mult&amp;gt;(Int:D $a, Int:D $b) returns Int:D is looser(&amp;amp;infix:&amp;lt;+&amp;gt;) { $a * $b }
-
-sub MAIN($file, Bool :$p2 = False) {
-   my @expressions = $file.IO.lines.map($p2 ?? *.trans(['*'] =&amp;gt; ['mult']) !! *.trans(['+'] =&amp;gt; ['plus'])); # [1]
-   say @expressions.map(-&amp;gt; $expr { EVAL $expr }).sum
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-45840336521334
-
-$ raku main.raku --p2 input.txt
-328920644404583
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;Again, all we have to do is define a new infix operator with precedence &lt;em&gt;looser&lt;/em&gt; than regular addition. If the user sends the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$p2&lt;/code&gt; flag, we substitute &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mult&lt;/code&gt;, otherwise we substitute &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt;. Regardless, we still &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EVAL&lt;/code&gt; all expressions and sum the output.&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;This is where the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Whatever&lt;/code&gt; star gets ugly. On this line we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; to mean both &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Whatever&lt;/code&gt; &lt;em&gt;and&lt;/em&gt; a literal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; character to translate in our string.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;You can define infix operators in other languages (for example, operators in Scala are just functions, so you would just write &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;def plus&lt;/code&gt;), however Scala does not let you &lt;a href=&quot;https://docs.scala-lang.org/tour/operators.html&quot;&gt;define the precedence&lt;/a&gt;. That is what is so special about Raku and what makes this solution so sleek for what could be a very tough problem.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">I like to hate on Raku quite a bit, but it was literally the perfect language for today’s challenge. I guess the love-hate relationship continues!</summary></entry><entry><title type="html">Perl Weekly Challenge 91</title><link href="http://localhost:4000/blog/perl-weekly-challenge-091/" rel="alternate" type="text/html" title="Perl Weekly Challenge 91" /><published>2020-12-18T00:00:00-06:00</published><updated>2020-12-18T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-091</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-091/">&lt;p&gt;I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!&lt;/p&gt;
+&lt;p&gt;This whole process is wearing on me, especially given the choice to do it using functional Raku (which obviously hasn’t worked out), but we are almost done! Less than a week to go!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Python" /><summary type="html">After I was singing Raku’s praises yesterday, it had to come back to bite me.</summary></entry><entry><title type="html">Perl Weekly Challenge 91</title><link href="http://localhost:4000/blog/perl-weekly-challenge-091/" rel="alternate" type="text/html" title="Perl Weekly Challenge 91" /><published>2020-12-18T00:00:00-06:00</published><updated>2020-12-18T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-091</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-091/">&lt;p&gt;I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-count-number&quot;&gt;Task 1: Count Number&lt;/h2&gt;
 

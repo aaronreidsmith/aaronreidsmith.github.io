@@ -1,0 +1,1091 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 93 - Aaron Smith</title>
+<meta name="description" content="I was going to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.">
+
+
+  <meta name="author" content="Aaron Smith">
+  
+  <meta property="article:author" content="Aaron Smith">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Aaron Smith">
+<meta property="og:title" content="Perl Weekly Challenge 93">
+<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-093/">
+
+
+  <meta property="og:description" content="I was going to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-30T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-093/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Aaron Smith Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Aaron Smith Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/tags/">Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/assets/files/aaron_smith_resume.pdf">Resume</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/headshot-square.jpg" alt="Aaron Smith" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Aaron Smith</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Data Engineer specializing in streaming data at scale, especially on AWS</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Connect</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Austin, TX</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Perl Weekly Challenge 93">
+    <meta itemprop="description" content="I was going to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.">
+    <meta itemprop="datePublished" content="2020-12-30T00:00:00-06:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 93
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-30T00:00:00-06:00">December 30, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          10 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>I was <em>going</em> to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.</p>
+
+<h2 id="task-1-max-points">Task 1: Max Points</h2>
+
+<p>You are given set of co-ordinates <code class="language-plaintext highlighter-rouge">@N</code>.</p>
+
+<p>Write a script to count maximum points on a straight line when given co-ordinates plotted on 2-d plane.</p>
+
+<h3 id="example-1">Example 1</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>|
+|     x
+|   x
+| x
++ _ _ _ _
+
+Input: (1,1), (2,2), (3,3)
+Output: 3
+</code></pre></div></div>
+
+<h3 id="example-2">Example 2</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>|
+|
+| x       x
+|   x
+| x   x
++ _ _ _ _ _
+
+Input: (1,1), (2,2), (3,1), (1,3), (5,3)
+Output: 3
+</code></pre></div></div>
+
+<h3 id="solution">Solution</h3>
+
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-093/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<h4 id="first-attempt">First Attempt</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(@pairs) {
+    my %lines;
+    my $already-compared = Set.new;
+
+    for @pairs -&gt; @pair {
+        my @pairs-to-compare = @pairs.grep(* ne @pair);
+
+        for @pairs-to-compare -&gt; @other-pair {
+            my ($x1, $y1) = @pair;
+            my ($x2, $y2) = @other-pair;
+
+            next if "$x1,$y1:$x2,$y2" ∈ $already-compared || "$x2,$y2:$x1,$y1" ∈ $already-compared; # [1]
+
+            my $numerator = $y2 - $y1;
+            my $denominator = $x2 - $x1;
+
+            # Find the slope
+            my $m = $denominator == 0 ?? 'undefined' !! $numerator / $denominator;
+
+            # If it is a vertical line, use the x-intercept for uniqueness
+            my $b = $m eq 'undefined' ?? @pair[1] !! @pair[1] - ($m * @pair[0]);
+
+            # Slope and y-intercept (or x-intercept) are unique, so this is all we need
+            %lines{"$m:$b"}++;                                                           # [2]
+
+            $already-compared ∪= "$x1,$y1:$x2,$y2";
+        }
+    }
+    %lines.max(-&gt; $entry { $entry.value }).value;
+}
+
+multi sub MAIN(*@N where all(@N) ~~ Int &amp;&amp; @N.elems %% 2) { # [3]
+    my @pairs = @N.map(-&gt; $x, $y { ($x, $y) });
+    say challenge(@pairs);
+}
+
+multi sub MAIN(Bool :$test) {
+    use Test;
+
+    my @tests = (
+        (((1, 1), (2, 2), (3, 3)), 3),
+        (((1, 1), (2, 2), (3, 1), (1, 3), (5, 3)), 3),
+        (((1, 1), (2, 1), (3, 1), (4, 1)), 4)
+    );
+
+    for @tests -&gt; (@pairs, $expected) {
+        is(challenge(@pairs), $expected);
+    }
+
+    done-testing;
+}
+</code></pre></div></div>
+
+<p>This program runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku 1 1 2 2 3 3
+3
+
+$ raku ch-1.raku --test
+ok 1 - 
+ok 2 - 
+not ok 3 - 
+1..3
+# Failed test at /home/asmith/perlweeklychallenge-club/challenge-093/aaronreidsmith/raku/ch-1.raku line 47
+# expected: '4'
+#      got: '6'
+# You failed 1 test of 3
+</code></pre></div></div>
+
+<h4 id="corrected-solution">Corrected Solution</h4>
+
+<p>As you can see, the above solution fails for my added test case. We will explore this below, but here is the corrected version (with an additional test case):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Point {
+    has $.x;
+    has $.y;
+
+    multi method new($x, $y) { # [4]
+        self.bless(:$x, :$y);
+    }
+}
+
+class Line {
+    has $.slope;
+    has $.x-intercept;
+    has $.y-intercept;
+    has Set $.points is rw;
+}
+
+sub challenge(@points) {
+    my %lines;
+    for @points.kv -&gt; $index, $point {
+        for @points[$index+1..*] -&gt; $other-point {
+            my $numerator = $other-point.y - $point.y;
+            my $denominator = $other-point.x - $point.x;
+
+            my $slope = $denominator == 0 ?? 'undefined' !! $numerator / $denominator;
+
+            my $y-intercept;
+            if $slope eq 'undefined' {
+                $y-intercept = $point.y == 0 ?? 0 !! 'undefined';
+            } else {
+                $y-intercept = $point.y - ($slope * $point.x);
+            }
+
+            my $x-intercept;
+            if $slope eq 'undefined' {
+                $x-intercept = $point.x;
+            } elsif $slope == 0 {
+                $x-intercept = 'undefined'
+            } else {
+                $x-intercept = -$y-intercept / $slope;
+            }
+
+            my $points = Set.new("{$point.x},{$point.y}", "{$other-point.x},{$other-point.y}");
+
+            my $key = "$slope,$x-intercept,$y-intercept"; # [5]
+            
+            if %lines{$key}:exists {
+                %lines{$key}.points ∪= $points;
+            } else {
+                %lines{$key} = Line.new(:$slope, :$x-intercept, :$y-intercept, :$points);
+            }
+        }
+    }
+    %lines.max({ $_.value.points.elems }).value.points.elems;
+}
+
+multi sub MAIN(*@N where all(@N) ~~ Int &amp;&amp; @N.elems %% 2) {
+    my @pairs = @N.map(-&gt; $x, $y { Point.new($x, $y) });
+    say challenge(@pairs);
+}
+
+multi sub MAIN(Bool :$test) {
+    use Test;
+
+    my @tests = (
+        ((Point.new(1, 1), Point.new(2, 2), Point.new(3, 3)), 3),
+        ((Point.new(1, 1), Point.new(2, 2), Point.new(3, 1), Point.new(1, 3), Point.new(5, 3)), 3),
+        ((Point.new(1, 1), Point.new(2, 1), Point.new(3, 1), Point.new(4, 1)), 4),
+        ((Point.new(1, 1), Point.new(1, 2), Point.new(2, 1), Point.new(3, 1), Point.new(4, 1)), 4)
+    );
+
+    for @tests -&gt; (@points, $expected) {
+        is(challenge(@points), $expected);
+    }
+
+    done-testing;
+}
+</code></pre></div></div>
+
+<p>This program runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku 1 1 2 2 3 3
+3
+
+$ raku ch-1.raku --test
+ok 1 - 
+ok 2 - 
+ok 3 - 
+ok 4 -
+1..4
+</code></pre></div></div>
+
+<h3 id="explanation">Explanation</h3>
+
+<p>For both of these there is some logic in <code class="language-plaintext highlighter-rouge">MAIN</code> that I will explain once. Basically, we expect the user to pass us one or more integers, and they have to pass us an <em>even</em> number of integers so that we can split it into pairs. We then pass this to the <code class="language-plaintext highlighter-rouge">challenge</code> subroutine.</p>
+
+<p><strong>First Attempt</strong></p>
+
+<p>The logic here is as follows:</p>
+
+<ol>
+  <li>For each point, compare it to each other point.</li>
+  <li>During the comparison calculate both the slope and (<code class="language-plaintext highlighter-rouge">$m</code>) and the y-intercept (<code class="language-plaintext highlighter-rouge">$b</code>)</li>
+  <li>Store the slope/y-intercept combo in a Hash called <code class="language-plaintext highlighter-rouge">%lines</code>.
+    <ul>
+      <li>Increment if it exists, otherwise, set to <code class="language-plaintext highlighter-rouge">1</code>.</li>
+    </ul>
+  </li>
+  <li>Comparing <code class="language-plaintext highlighter-rouge">(1, 1) &lt;-&gt; (2, 2)</code> and <code class="language-plaintext highlighter-rouge">(2, 2) &lt;-&gt; (1, 1)</code> is the same thing, so we store that in a <code class="language-plaintext highlighter-rouge">Set</code> to save ourselves a few cycles.</li>
+  <li>Finally, find the maximum entry by value and return it.</li>
+</ol>
+
+<p>This logic breaks down in the case of a horizontal line (see test number 3). The reason it breaks down is because the pairs are evaluated like this:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">(1, 1)</code> and <code class="language-plaintext highlighter-rouge">(2, 1)</code> – m = 0, b = 1. New line – set to 1</li>
+  <li><code class="language-plaintext highlighter-rouge">(1, 1)</code> and <code class="language-plaintext highlighter-rouge">(3, 1)</code> – m = 0, b = 1. Existing line – increment to 2</li>
+  <li><code class="language-plaintext highlighter-rouge">(1, 1)</code> and <code class="language-plaintext highlighter-rouge">(4, 1)</code> – m = 0, b = 1. Existing line – increment to 3</li>
+  <li><code class="language-plaintext highlighter-rouge">(2, 1)</code> and <code class="language-plaintext highlighter-rouge">(1, 1)</code> – Same as number 1 – skip</li>
+  <li><code class="language-plaintext highlighter-rouge">(2, 1)</code> and <code class="language-plaintext highlighter-rouge">(3, 1)</code> – m = 0, b = 1. Existing line – increment to 4</li>
+  <li><code class="language-plaintext highlighter-rouge">(2, 1)</code> and <code class="language-plaintext highlighter-rouge">(4, 1)</code> – m = 0, b = 1. Existing line – increment to 5</li>
+  <li><code class="language-plaintext highlighter-rouge">(3, 1)</code> and <code class="language-plaintext highlighter-rouge">(1, 1)</code> – Same as number 2 – skip</li>
+  <li><code class="language-plaintext highlighter-rouge">(3, 1)</code> and <code class="language-plaintext highlighter-rouge">(2, 1)</code> – Same as number 5 – skip</li>
+  <li><code class="language-plaintext highlighter-rouge">(3, 1)</code> and <code class="language-plaintext highlighter-rouge">(4, 1)</code> – m - 0, b = 1. Existing line – increment to 6</li>
+</ol>
+
+<p>As you can see, even with four points, we generate an answer of six. My first though was to just take the minimum of the number of points and the longest run we found, which would yield four. However, if we had any points <em>not</em> on the line (look at test 4 the corrected solution), then it would yield the wrong answer as well.</p>
+
+<p><strong>Corrected Solution</strong></p>
+
+<p>The logic here is similar, but accounts for the above situation. First, you will notice I added a <code class="language-plaintext highlighter-rouge">Point</code> and <code class="language-plaintext highlighter-rouge">Line</code> class, to make things a little easier. The <code class="language-plaintext highlighter-rouge">Line</code> class also contains a set of points along that line that we can use to de-duplicate if necessary. Once those are defined, the logic is as follows:</p>
+
+<ol>
+  <li>Compare each point to each <em>subsequent</em> point.
+    <ul>
+      <li>There is no need to look at past points, as it results in the “skips” shown above</li>
+    </ul>
+  </li>
+  <li>During each comparison we calculate the slope, x-intercept and y-intercept.
+    <ul>
+      <li>The reason for this is because if we have an undefined slope (vertical line), we need to know where along the x-axis it falls.</li>
+    </ul>
+  </li>
+  <li>Once we have the above calculated, we create a joint key of all 3 to use in a Hash.</li>
+  <li>Using the above key, we look up our string in the <code class="language-plaintext highlighter-rouge">%lines</code> Hash. If it exists, we add the points used to find it to the points contained in the <code class="language-plaintext highlighter-rouge">Line</code> object (since it is a set, it will de-duplicate itself automatically). Otherwise, we create a new <code class="language-plaintext highlighter-rouge">Line</code> object and store it with the key from #3.</li>
+  <li>Finally, we find the <code class="language-plaintext highlighter-rouge">Line</code> with the most <code class="language-plaintext highlighter-rouge">Point</code>s and return the number of <code class="language-plaintext highlighter-rouge">Point</code>s.</li>
+</ol>
+
+<h4 id="specific-comments">Specific Comments</h4>
+
+<ol>
+  <li>We need to use a string here or else the <code class="language-plaintext highlighter-rouge">Set</code> will erroneously combine some of our points. Sets flatten their arguments in Raku, which makes it tricky to store nested items. This has been my go-to solution.</li>
+  <li><code class="language-plaintext highlighter-rouge">Hash</code> objects behave kind of like default dicts in Python in that if you use <code class="language-plaintext highlighter-rouge">++</code> on a key that does not exist, it will create the key and increment it to <code class="language-plaintext highlighter-rouge">1</code>.</li>
+  <li>Raku has an operator specifically for “divisible by.” In other languages, you might see <code class="language-plaintext highlighter-rouge">x % 2 == 0</code> to check if something is divisible by 2, but in Raku you can say <code class="language-plaintext highlighter-rouge">$x %% 2</code>.</li>
+  <li>Raku, like some other languages, allows us to define multiple constructors. The default one is created for us and takes named arguments. This one takes positional arguments and passes them to the default constructor via <code class="language-plaintext highlighter-rouge">self.bless</code>.</li>
+  <li>Similar to #1, <code class="language-plaintext highlighter-rouge">Hash</code> objects always use string keys. So if we need some kind of compound key, we need to cast it to a string as seen here.</li>
+</ol>
+
+<h2 id="task-2-sum-path">Task 2: Sum Path</h2>
+
+<p>You are given binary tree containing numbers <code class="language-plaintext highlighter-rouge">0-9</code> only.</p>
+
+<p>Write a script to sum all possible paths from root to leaf.</p>
+
+<h3 id="example-1-1">Example 1</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input:
+     1
+    /
+   2
+  / \
+ 3   4
+
+Output: 13
+as sum two paths (1-&gt;2-&gt;3) and (1-&gt;2-&gt;4)
+</code></pre></div></div>
+
+<h3 id="example-2-1">Example 2</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input:
+     1
+    / \
+   2   3
+  /   / \
+ 4   5   6
+
+Output: 26
+as sum three paths (1-&gt;2-&gt;4), (1-&gt;3-&gt;5) and (1-&gt;3-&gt;6)
+</code></pre></div></div>
+
+<h3 id="solution-1">Solution</h3>
+
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-093/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>subset NodeValue of Str where { $_ ~~ /^&lt;digit&gt;$/ || $_ eq 'Nil' } # [1]
+
+class Node {
+    has Node $.left  is rw = Nil; # [2]
+    has Node $.right is rw = Nil;
+    has Int $.value        = 0;
+}
+
+sub build-tree(@array, $root is copy = Nil, Int $i = 0) {
+    if $i &lt; @array.elems &amp;&amp; @array[$i] ne 'Nil' {
+        $root       = Node.new(value =&gt; @array[$i].Int);
+        $root.left  = build-tree(@array, $root.left, 2 * $i + 1);
+        $root.right = build-tree(@array, $root.right, 2 * $i + 2);
+    }
+    $root;
+}
+
+sub challenge(Node $root, @path is copy = ()) {
+    my $path-sum = 0;
+    with $root {
+        @path.push($root.value);
+
+        if !$root.left.defined &amp;&amp; !$root.right.defined {
+            $path-sum = @path.sum;
+        } else {
+            $path-sum += challenge($root.left, @path);
+            $path-sum += challenge($root.right, @path);
+        }
+    }
+    $path-sum;
+}
+
+multi sub MAIN(*@N where all(@N) ~~ NodeValue) {
+    my $root = build-tree(@N);
+    say challenge($root);
+}
+
+multi sub MAIN(Bool :$test) {
+    use Test;
+
+    my @tests = (
+        (build-tree(('1', '2', 'Nil', '3', '4')), 13),
+        (build-tree(('1', '2', '3', '4', 'Nil', '5', '6')), 26),
+        (build-tree(('2', '7', '5', '2', '6', 'Nil', '9', 'Nil', '5', '11', '4', 'Nil')), 77)
+    );
+
+    for @tests -&gt; ($tree, $expected) {
+        is(challenge($tree), $expected);
+    }
+
+    done-testing;
+}
+</code></pre></div></div>
+
+<p>This program runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku 1 2 Nil 3 4
+13
+
+$ raku ch-2.raku 1 2 3 4 Nil 5 6
+26
+
+$ raku ch-2.raku --test
+ok 1 - 
+ok 2 - 
+ok 3 - 
+1..3
+</code></pre></div></div>
+
+<h3 id="explanation-1">Explanation</h3>
+
+<p>The hardest part of this, for me, was giving the user some kind of command line interface to be able to define their own trees (something that wasn’t explicitly part of the problem). We basically just use the <a href="https://www.geeksforgeeks.org/binary-tree-array-implementation/">array implementation</a> of a binary tree where <code class="language-plaintext highlighter-rouge">@array[0]</code> is the root, <code class="language-plaintext highlighter-rouge">@array[1]</code> and <code class="language-plaintext highlighter-rouge">@array[2]</code> are the second row, etc. Anything that is <code class="language-plaintext highlighter-rouge">Nil</code> is recognized as an empty node (i.e., an <a href="http://www.opendatastructures.org/versions/edition-0.1d/ods-java/node37.html">unbalanced tree</a>). So, for example, <code class="language-plaintext highlighter-rouge">1 2 Nil 3 4</code> represents the first example shown above.</p>
+
+<p><code class="language-plaintext highlighter-rouge">MAIN</code> does some validation to make sure everything is either a number or <code class="language-plaintext highlighter-rouge">Nil</code> and then let’s <code class="language-plaintext highlighter-rouge">build-tree</code> convert the array into an actual tree (by creating <code class="language-plaintext highlighter-rouge">Node</code> objects). Once we have a tree, we give it to <code class="language-plaintext highlighter-rouge">challenge</code> which implements the following logic:</p>
+
+<ol>
+  <li>If the node is <code class="language-plaintext highlighter-rouge">Nil</code> return 0.
+    <ul>
+      <li>Technically unnecessary since we check if we are at a terminal node before recursing, but doesn’t hurt to have.</li>
+    </ul>
+  </li>
+  <li>Push the current node’s value into our <code class="language-plaintext highlighter-rouge">@path</code> list.</li>
+  <li>If we are at a leaf node (no <code class="language-plaintext highlighter-rouge">left</code> or <code class="language-plaintext highlighter-rouge">right</code>), then calculate the sum of the path and return.</li>
+  <li>Otherwise, recurse both left and right ith the existing path and add it to the <code class="language-plaintext highlighter-rouge">$path-sum</code> variable.</li>
+</ol>
+
+<h4 id="specific-comments-1">Specific Comments</h4>
+
+<ol>
+  <li>This line ensures that, even though we are expecting <code class="language-plaintext highlighter-rouge">Str</code> types, that all of them are either digits or <code class="language-plaintext highlighter-rouge">'Nil'</code>.</li>
+  <li>By default, class attributes are read only, so by defining them as <code class="language-plaintext highlighter-rouge">is rw</code> (read/write), we say that they are mutable. Additionally, we assign these attributes default values.</li>
+</ol>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>This challenge is a good case study in test-driven development! Be sure to write edge-case tests to make sure everything is behaving as expected. In the case of part one, it was <em>not</em> behaving as expected and required a re-write.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#perl-weekly-challenge" class="page__taxonomy-item" rel="tag">Perl Weekly Challenge</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#raku" class="page__taxonomy-item" rel="tag">Raku</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-30T00:00:00-06:00">December 30, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+93%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-093%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-093%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-093%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/perl-weekly-challenge-092/" class="pagination--pager" title="Perl Weekly Challenge 92
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-092/" rel="permalink">Perl Weekly Challenge 92
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-25T00:00:00-06:00">December 25, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as finishing up AoC!
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-25/" rel="permalink">Advent of Code: Day 25
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-25T00:00:00-06:00">December 25, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-24/" rel="permalink">Advent of Code: Day 24
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-24T00:00:00-06:00">December 24, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days 11 and 17, but with a fun twist. I also so...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-23/" rel="permalink">Advent of Code: Day 23
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-23T00:00:00-06:00">December 23, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          6 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!
+
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Connect:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+        
+      
+        
+          <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i> Stack Overflow</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Aaron Smith. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

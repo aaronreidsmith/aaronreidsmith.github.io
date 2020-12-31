@@ -178,4 +178,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "http://localhost:4000/blog/perl-weekly-challenge-092/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 93",
+        "excerpt":"I was going to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "http://localhost:4000/blog/perl-weekly-challenge-093/",
+        "teaser": null
       }]
