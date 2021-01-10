@@ -184,4 +184,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "http://localhost:4000/blog/perl-weekly-challenge-093/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 94",
+        "excerpt":"The second challenge was a lot like last weeks second challenge, so I went a step further and implemented multiple tree traversals. I won’t include the tests this week, but feel free to click the GitHub links to see the test cases. Task 1: Group Anagrams You are given an...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "http://localhost:4000/blog/perl-weekly-challenge-094/",
+        "teaser": null
       }]
