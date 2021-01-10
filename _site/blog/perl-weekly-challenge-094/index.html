@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 91 - Aaron Smith</title>
-<meta name="description" content="I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!">
+<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 94 - Aaron Smith</title>
+<meta name="description" content="The second challenge was a lot like last weeks second challenge, so I went a step further and implemented multiple tree traversals. I won’t include the tests this week, but feel free to click the GitHub links to see the test cases.">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Perl Weekly Challenge 91">
-<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-091/">
+<meta property="og:title" content="Perl Weekly Challenge 94">
+<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-094/">
 
 
-  <meta property="og:description" content="I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-12-18T00:00:00-06:00">
+  <meta property="og:description" content="The second challenge was a lot like last weeks second challenge, so I went a step further and implemented multiple tree traversals. I won’t include the tests this week, but feel free to click the GitHub links to see the test cases.">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-091/">
+
+  <meta property="article:published_time" content="2021-01-10T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-094/">
 
 
 
@@ -285,15 +285,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Perl Weekly Challenge 91">
-    <meta itemprop="description" content="I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!">
-    <meta itemprop="datePublished" content="2020-12-18T00:00:00-06:00">
+    <meta itemprop="headline" content="Perl Weekly Challenge 94">
+    <meta itemprop="description" content="The second challenge was a lot like last weeks second challenge, so I went a step further and implemented multiple tree traversals. I won’t include the tests this week, but feel free to click the GitHub links to see the test cases.">
+    <meta itemprop="datePublished" content="2021-01-10T00:00:00-06:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 91
+          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 94
 </h1>
           
 
@@ -302,7 +302,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-18T00:00:00-06:00">December 18, 2020</time>
+        <time datetime="2021-01-10T00:00:00-06:00">January 10, 2021</time>
       </span>
     
 
@@ -315,7 +315,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          3 minute read
+          4 minute read
         
       </span>
     
@@ -327,193 +327,181 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!</p>
+        <p>The second challenge was a lot like last weeks second challenge, so I went a step further and implemented multiple tree traversals. I won’t include the tests this week, but feel free to click the GitHub links to see the test cases.</p>
 
-<h2 id="task-1-count-number">Task 1: Count Number</h2>
+<h2 id="task-1-group-anagrams">Task 1: Group Anagrams</h2>
 
-<p>You are given a positive number <code class="language-plaintext highlighter-rouge">$N</code>.</p>
+<p>You are given an array of strings <code class="language-plaintext highlighter-rouge">@S</code>.</p>
 
-<p>Write a script to count number and display as you read it.</p>
+<p>Write a script to group <code class="language-plaintext highlighter-rouge">Anagrams</code> together in any random order.</p>
+
+<blockquote>
+  <p>An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.</p>
+</blockquote>
 
 <h3 id="example-1">Example 1</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $N = 1122234  # ("two 1 three 2 one 3 one 4")
-Output: 21321314
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Input: ("opt", "bat", "saw", "tab", "pot", "top", "was")
+Output: [ ("bat", "tab"),
+          ("saw", "was"),
+          ("top", "pot", "opt") ]
 </code></pre></div></div>
 
 <h3 id="example-2">Example 2</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $N = 2333445  # ("one 2 three 3 two 4 one 5")
-Output: 12332415
-</code></pre></div></div>
-
-<h3 id="example-3">Example 3</h3>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $N = 12345  # ("one 1 one 2 one 3 one 4 one 5")
-Output: 1112131415
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Input: ("x")
+Output: [ ("x") ]
 </code></pre></div></div>
 
 <h3 id="solution">Solution</h3>
 
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-091/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-094/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge($N) {
-    my @digits = $N.comb.map(*.Int);
-
-    my ($current-num, $current-count);
-    my $first = True;
-    my @output;
-    for @digits.kv -&gt; $index, $digit {
-        # If this is the first round, just set our variables and continue
-        if $first {
-            $first = False;
-            $current-num = $digit;
-            $current-count = 1;
-            next;
-        }
-
-        # Otherwise, just keep track of our current digit/count
-        if $digit == $current-num {
-            $current-count += 1;
-        } else {
-            @output.push($current-count);
-            @output.push($current-num);
-            $current-num = $digit;
-            $current-count = 1;
-        }
-
-        # We need this to push the last number on, or it will get lost
-        if $index == @digits.elems - 1 {
-            @output.push($current-count);
-            @output.push($current-num);
-        }
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(@S) {
+    my $output = Set.new;
+    for @S -&gt; $word {
+        my @permutations = $word.comb.permutations.map(*.join); # [1]
+        $output ∪= (@S ∩ @permutations).keys.sort.join(',');    # [2]
     }
-
-    @output.join;
+    $output.keys.map(*.split(',')).sort
 }
-
-multi sub MAIN($N where $N ~~ Int &amp;&amp; $N &gt; 0) {
-    say challenge($N);
-}
-
-multi sub MAIN(:$test) {
-    use Test;
-
-    my @tests = (
-        (1122234, 21321314),
-        (2333445, 12332415),
-        (12345, 1112131415)
-    );
-
-    for @tests -&gt; @test {
-        is(challenge(@test[0]), @test[1]);
-    }
-
-    done-testing;
+sub MAIN(*@S where all(@S) ~~ /^&lt;alpha&gt;+$/) { # [3]
+    say challenge(@S);
 }
 </code></pre></div></div>
 
 <p>This program runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku 1122234
-21321314
-
-$ raku ch-1.raku --test
-ok 1 - 
-ok 2 - 
-ok 3 - 
-1..3
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku opt bat saw tab pot top was
+((bat tab) (opt pot top) (saw was))
 </code></pre></div></div>
 
 <h3 id="explanation">Explanation</h3>
 
-<p>You can see this week I started adding tests for my scripts (utilized by passing in the <code class="language-plaintext highlighter-rouge">--test</code> flag), so all the logic lives in <code class="language-plaintext highlighter-rouge">challenge</code>.</p>
+<p>This solution utilizes a cool Raku subroutine called <code class="language-plaintext highlighter-rouge">permutations</code>, which finds all the permutations of a given list. It only works for list smaller than 20 elements, so that is a caveat here. The logic is as follows:</p>
 
-<p>The logic is pretty easy –  as we iterate from left-to-right we keep track of the current digit and its count. If we encounter a new digit, we push the old <code class="language-plaintext highlighter-rouge">$current-digit</code> and old <code class="language-plaintext highlighter-rouge">$current-count</code> onto <code class="language-plaintext highlighter-rouge">@output</code> and reset our variables. The only special handling is around the first digit (when there is no <code class="language-plaintext highlighter-rouge">$current-digit</code>), and the last digit (since we need to store the last digit and count before exiting).</p>
+<ol>
+  <li>For each inout word, find all the permutations.</li>
+  <li>Find the <em>union</em> of the input words with the permutations of our current word to find permutations in the input list.</li>
+  <li>Add the above union to a set, so we don’t store duplicates.</li>
+  <li>Return the set as a list of lists in alphabetical order (the problem says random order, but I alphabetized for determinism in my tests).</li>
+</ol>
 
-<h2 id="task-2-jump-game">Task 2: Jump Game</h2>
+<h4 id="specific-comments">Specific Comments</h4>
 
-<p>You are given an array of positive numbers <code class="language-plaintext highlighter-rouge">@N</code>, where value at each index determines how far you are allowed to jump further.</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">permutations</code> only works on a list, so we have to cast our word to a list via <code class="language-plaintext highlighter-rouge">comb</code>, then back to a string via <code class="language-plaintext highlighter-rouge">join</code>.</li>
+  <li>Sets only work on scalars, so since we have a <em>list</em> of words, we have to join it into a string separated by a comma.</li>
+  <li>The challenge doesn’t say to only accept letters, but I felt it was implied.</li>
+</ol>
 
-<p>Write a script to decide if you can jump to the last index. Print 1 if you are able to reach the last index otherwise 0.</p>
+<h2 id="task-2-binary-tree-to-linked-list">Task 2: Binary Tree to Linked List</h2>
+
+<p>You are given a binary tree.</p>
+
+<p>Write a script to represent the given binary tree as an object and flatten it to a linked list object. Finally, print the linked list object.</p>
+
+<h3 id="example">Example</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input:
+
+    1
+   / \
+  2   3
+ / \
+4   5
+   / \
+  6   7
+
+Output:
+
+1 -&gt; 2 -&gt; 4 -&gt; 5 -&gt; 6 -&gt; 7 -&gt; 3
+</code></pre></div></div>
 
 <h3 id="solution-1">Solution</h3>
 
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-091/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-094/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>subset PositiveInt of Int where { $_ &gt;= 0 }
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>subset NodeValue of Str where { $_ ~~ /^&lt;digit&gt;$/ || $_ eq 'Nil' }
 
-sub challenge(@N) {
-    my Int $pointer = 0;
-    my Bool $reached-the-end;
+class Node {
+    has Node $.left  is rw = Nil;
+    has Node $.right is rw = Nil;
+    has Int $.value        = 0;
+}
 
-    loop {
-        given $pointer {
-            when * &lt; @N.elems - 1  {
-                my $value = @N[$pointer];
-                if $value == 0 {
-                    $reached-the-end = False;
-                    last;
-                } else {
-                    $pointer += @N[$pointer]
-                }
-            }
-            when * == @N.elems - 1 {
-                $reached-the-end = True;
-                last;
-            }
-            when * &gt; @N.elems - 1  {
-                $reached-the-end = False;
-                last;
-            }
+enum Traversal &lt;Preorder Inorder Postorder&gt;;
+
+sub build-tree(@array, $root is copy = Nil, Int $i = 0) {
+    if $i &lt; @array.elems &amp;&amp; @array[$i] ne 'Nil' {
+        $root       = Node.new(value =&gt; @array[$i].Int);
+        $root.left  = build-tree(@array, $root.left, 2 * $i + 1);
+        $root.right = build-tree(@array, $root.right, 2 * $i + 2);
+    }
+    $root;
+}
+
+sub challenge(Node $root, Traversal $traversal) {
+    with $root {
+        given $traversal {
+            when Preorder  { ($root.value, |challenge($root.left, $traversal), |challenge($root.right, $traversal)) }
+            when Inorder   { (|challenge($root.left, $traversal), $root.value, |challenge($root.right, $traversal)) }
+            when Postorder { (|challenge($root.left, $traversal), |challenge($root.right, $traversal), $root.value) }
         }
     }
-
-    $reached-the-end.Int;
 }
 
-multi sub MAIN(*@N where all(@N) ~~ PositiveInt) {
-    say challenge(@N);
+sub challenge-wrapper(Node $root, Traversal $traversal = Preorder) {
+    challenge($root, $traversal).join(' -&gt; ');
 }
 
-multi sub MAIN(:$test) {
-    use Test;
-
-    my @tests = (
-        ((1, 2, 1, 2), 1),
-        ((2, 1, 1, 0, 2), 0)
-    );
-
-    for @tests -&gt; @test {
-        is(challenge(@test[0]), @test[1]);
+sub MAIN(Str :$traversal = 'preorder', *@N where all(@N) ~~ NodeValue) {
+    my $root = build-tree(@N);
+    given $traversal.lc {
+        when 'preorder'  { say challenge-wrapper($root, Preorder) }
+        when 'inorder'   { say challenge-wrapper($root, Inorder) }
+        when 'postorder' { say challenge-wrapper($root, Postorder) }
+        default          { die "Traversal must be one of: (preorder, inorder, postorder), not $traversal" }
     }
-
-    done-testing;
 }
 </code></pre></div></div>
 
 <p>This program runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku 1 2 1 2
-1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku 1 2 3 4 5 Nil Nil Nil Nil 6 7
+1 -&gt; 2 -&gt; 4 -&gt; 5 -&gt; 6 -&gt; 7 -&gt; 3
 
-$ raku ch-2.raku --test
-ok 1 - 
-ok 2 - 
-1..2
+# Same as above with traversal explicitly stated
+$ raku ch-2.raku --traversal=preorder 1 2 3 4 5 Nil Nil Nil Nil 6 7
+1 -&gt; 2 -&gt; 4 -&gt; 5 -&gt; 6 -&gt; 7 -&gt; 3
+
+$ raku ch-2.raku --traversal=inorder 1 2 3 4 5 Nil Nil Nil Nil 6 7
+4 -&gt; 2 -&gt; 6 -&gt; 5 -&gt; 7 -&gt; 1 -&gt; 3
+
+$ raku ch-2.raku --traversal=postorder 1 2 3 4 5 Nil Nil Nil Nil 6 7
+4 -&gt; 6 -&gt; 7 -&gt; 5 -&gt; 2 -&gt; 3 -&gt; 1
 </code></pre></div></div>
 
 <h3 id="explanation-1">Explanation</h3>
 
-<p>We set the <code class="language-plaintext highlighter-rouge">$pointer</code> to start at index 0 and enter an infinite loop. If we are not at the end we have to check if the current value is <code class="language-plaintext highlighter-rouge">0</code>. If it <em>is</em>, we have gone as far as we can and need to exit (<code class="language-plaintext highlighter-rouge">last</code>), otherwise keep going. If we are <em>at</em> at the end, exit and mark<code class="language-plaintext highlighter-rouge"> $reached-the-end</code> as <code class="language-plaintext highlighter-rouge">True</code>. If we have passed the end, exit and mark <code class="language-plaintext highlighter-rouge">$reached-the-end</code> as <code class="language-plaintext highlighter-rouge">False</code>. Since the problem asks for an integer output, we have to cast our boolean to an integer before returning.</p>
+<p>The bulk of this code is the same as <a href="https://aaronreidsmith.github.io/blog/perl-weekly-challenge-093/#solution-1">last week’s</a>, with the overlapping code being used to build a tree from command line arguments. Since the challenge code itself is only a line or two, I added the ability to pick which type of <a href="https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/">tree traversal</a> you want (with the default being <code class="language-plaintext highlighter-rouge">preorder</code>, as shown in the example).</p>
+
+<p>Basically, we just have a subroutine that takes a <code class="language-plaintext highlighter-rouge">Node</code>, and depending on what traversal type is chosen, will build up an array like one of the following (where <code class="language-plaintext highlighter-rouge">Left</code> and <code class="language-plaintext highlighter-rouge">Right</code> can themselves be a tree and will be expanded recursively):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Preorder  -&gt; (Root, Left, Right)
+Inorder   -&gt; (Left, Root, Right)
+Postorder -&gt; (Left, Right, Root)
+</code></pre></div></div>
+
+<p>We then have a simple wrapper to “stringify” the list with arrows between the elements.</p>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>Nothing ground breaking this week. However, we did get to explore one of the cooler features of Raku for Advent of Code day 18. <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-18/">Give it a read</a>!</p>
+<p>Hoping for something a little less copy/paste next week, but regardless, this was a fun start to the new year!</p>
 
         
       </section>
@@ -566,7 +554,7 @@ ok 2 -
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-18T00:00:00-06:00">December 18, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-01-10T00:00:00-06:00">January 10, 2021</time></p>
 
 
       </footer>
@@ -576,23 +564,22 @@ ok 2 -
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+91%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-091%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+94%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-094%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-091%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-094%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-091%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-094%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/advent-of-code-day-18/" class="pagination--pager" title="Advent of Code: Day 18
+      <a href="/blog/perl-weekly-challenge-093/" class="pagination--pager" title="Perl Weekly Challenge 93
 ">Previous</a>
     
     
-      <a href="/blog/advent-of-code-day-19/" class="pagination--pager" title="Advent of Code: Day 19
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -606,51 +593,6 @@ ok 2 -
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/perl-weekly-challenge-094/" rel="permalink">Perl Weekly Challenge 94
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2021-01-10T00:00:00-06:00">January 10, 2021</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          4 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">The second challenge was a lot like last weeks second challenge, so I went a step further and implemented multiple tree traversals. I won’t include the tests...</p>
-  </article>
-</div>
-
         
           
 
@@ -787,6 +729,51 @@ ok 2 -
     <p class="archive__item-excerpt" itemprop="description">Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!
 
 </p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/advent-of-code-day-24/" rel="permalink">Advent of Code: Day 24
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-24T00:00:00-06:00">December 24, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days 11 and 17, but with a fun twist. I also so...</p>
   </article>
 </div>
 

@@ -1,4 +1,178 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-30T18:26:11-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 93</title><link href="http://localhost:4000/blog/perl-weekly-challenge-093/" rel="alternate" type="text/html" title="Perl Weekly Challenge 93" /><published>2020-12-30T00:00:00-06:00</published><updated>2020-12-30T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-093</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-093/">&lt;p&gt;I was &lt;em&gt;going&lt;/em&gt; to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-01-10T11:26:27-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 94</title><link href="http://localhost:4000/blog/perl-weekly-challenge-094/" rel="alternate" type="text/html" title="Perl Weekly Challenge 94" /><published>2021-01-10T00:00:00-06:00</published><updated>2021-01-10T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-094</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-094/">&lt;p&gt;The second challenge was a lot like last weeks second challenge, so I went a step further and implemented multiple tree traversals. I won’t include the tests this week, but feel free to click the GitHub links to see the test cases.&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-group-anagrams&quot;&gt;Task 1: Group Anagrams&lt;/h2&gt;
+
+&lt;p&gt;You are given an array of strings &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@S&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to group &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Anagrams&lt;/code&gt; together in any random order.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; Input: (&quot;opt&quot;, &quot;bat&quot;, &quot;saw&quot;, &quot;tab&quot;, &quot;pot&quot;, &quot;top&quot;, &quot;was&quot;)
+Output: [ (&quot;bat&quot;, &quot;tab&quot;),
+          (&quot;saw&quot;, &quot;was&quot;),
+          (&quot;top&quot;, &quot;pot&quot;, &quot;opt&quot;) ]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; Input: (&quot;x&quot;)
+Output: [ (&quot;x&quot;) ]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-094/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(@S) {
+    my $output = Set.new;
+    for @S -&amp;gt; $word {
+        my @permutations = $word.comb.permutations.map(*.join); # [1]
+        $output ∪= (@S ∩ @permutations).keys.sort.join(',');    # [2]
+    }
+    $output.keys.map(*.split(',')).sort
+}
+sub MAIN(*@S where all(@S) ~~ /^&amp;lt;alpha&amp;gt;+$/) { # [3]
+    say challenge(@S);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku opt bat saw tab pot top was
+((bat tab) (opt pot top) (saw was))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;This solution utilizes a cool Raku subroutine called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;permutations&lt;/code&gt;, which finds all the permutations of a given list. It only works for list smaller than 20 elements, so that is a caveat here. The logic is as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;For each inout word, find all the permutations.&lt;/li&gt;
+  &lt;li&gt;Find the &lt;em&gt;union&lt;/em&gt; of the input words with the permutations of our current word to find permutations in the input list.&lt;/li&gt;
+  &lt;li&gt;Add the above union to a set, so we don’t store duplicates.&lt;/li&gt;
+  &lt;li&gt;Return the set as a list of lists in alphabetical order (the problem says random order, but I alphabetized for determinism in my tests).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;permutations&lt;/code&gt; only works on a list, so we have to cast our word to a list via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;comb&lt;/code&gt;, then back to a string via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;join&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Sets only work on scalars, so since we have a &lt;em&gt;list&lt;/em&gt; of words, we have to join it into a string separated by a comma.&lt;/li&gt;
+  &lt;li&gt;The challenge doesn’t say to only accept letters, but I felt it was implied.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-binary-tree-to-linked-list&quot;&gt;Task 2: Binary Tree to Linked List&lt;/h2&gt;
+
+&lt;p&gt;You are given a binary tree.&lt;/p&gt;
+
+&lt;p&gt;Write a script to represent the given binary tree as an object and flatten it to a linked list object. Finally, print the linked list object.&lt;/p&gt;
+
+&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input:
+
+    1
+   / \
+  2   3
+ / \
+4   5
+   / \
+  6   7
+
+Output:
+
+1 -&amp;gt; 2 -&amp;gt; 4 -&amp;gt; 5 -&amp;gt; 6 -&amp;gt; 7 -&amp;gt; 3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-094/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset NodeValue of Str where { $_ ~~ /^&amp;lt;digit&amp;gt;$/ || $_ eq 'Nil' }
+
+class Node {
+    has Node $.left  is rw = Nil;
+    has Node $.right is rw = Nil;
+    has Int $.value        = 0;
+}
+
+enum Traversal &amp;lt;Preorder Inorder Postorder&amp;gt;;
+
+sub build-tree(@array, $root is copy = Nil, Int $i = 0) {
+    if $i &amp;lt; @array.elems &amp;amp;&amp;amp; @array[$i] ne 'Nil' {
+        $root       = Node.new(value =&amp;gt; @array[$i].Int);
+        $root.left  = build-tree(@array, $root.left, 2 * $i + 1);
+        $root.right = build-tree(@array, $root.right, 2 * $i + 2);
+    }
+    $root;
+}
+
+sub challenge(Node $root, Traversal $traversal) {
+    with $root {
+        given $traversal {
+            when Preorder  { ($root.value, |challenge($root.left, $traversal), |challenge($root.right, $traversal)) }
+            when Inorder   { (|challenge($root.left, $traversal), $root.value, |challenge($root.right, $traversal)) }
+            when Postorder { (|challenge($root.left, $traversal), |challenge($root.right, $traversal), $root.value) }
+        }
+    }
+}
+
+sub challenge-wrapper(Node $root, Traversal $traversal = Preorder) {
+    challenge($root, $traversal).join(' -&amp;gt; ');
+}
+
+sub MAIN(Str :$traversal = 'preorder', *@N where all(@N) ~~ NodeValue) {
+    my $root = build-tree(@N);
+    given $traversal.lc {
+        when 'preorder'  { say challenge-wrapper($root, Preorder) }
+        when 'inorder'   { say challenge-wrapper($root, Inorder) }
+        when 'postorder' { say challenge-wrapper($root, Postorder) }
+        default          { die &quot;Traversal must be one of: (preorder, inorder, postorder), not $traversal&quot; }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 1 2 3 4 5 Nil Nil Nil Nil 6 7
+1 -&amp;gt; 2 -&amp;gt; 4 -&amp;gt; 5 -&amp;gt; 6 -&amp;gt; 7 -&amp;gt; 3
+
+# Same as above with traversal explicitly stated
+$ raku ch-2.raku --traversal=preorder 1 2 3 4 5 Nil Nil Nil Nil 6 7
+1 -&amp;gt; 2 -&amp;gt; 4 -&amp;gt; 5 -&amp;gt; 6 -&amp;gt; 7 -&amp;gt; 3
+
+$ raku ch-2.raku --traversal=inorder 1 2 3 4 5 Nil Nil Nil Nil 6 7
+4 -&amp;gt; 2 -&amp;gt; 6 -&amp;gt; 5 -&amp;gt; 7 -&amp;gt; 1 -&amp;gt; 3
+
+$ raku ch-2.raku --traversal=postorder 1 2 3 4 5 Nil Nil Nil Nil 6 7
+4 -&amp;gt; 6 -&amp;gt; 7 -&amp;gt; 5 -&amp;gt; 2 -&amp;gt; 3 -&amp;gt; 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;The bulk of this code is the same as &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-093/#solution-1&quot;&gt;last week’s&lt;/a&gt;, with the overlapping code being used to build a tree from command line arguments. Since the challenge code itself is only a line or two, I added the ability to pick which type of &lt;a href=&quot;https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/&quot;&gt;tree traversal&lt;/a&gt; you want (with the default being &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;preorder&lt;/code&gt;, as shown in the example).&lt;/p&gt;
+
+&lt;p&gt;Basically, we just have a subroutine that takes a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Node&lt;/code&gt;, and depending on what traversal type is chosen, will build up an array like one of the following (where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Left&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Right&lt;/code&gt; can themselves be a tree and will be expanded recursively):&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Preorder  -&amp;gt; (Root, Left, Right)
+Inorder   -&amp;gt; (Left, Root, Right)
+Postorder -&amp;gt; (Left, Right, Root)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We then have a simple wrapper to “stringify” the list with arrows between the elements.&lt;/p&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;Hoping for something a little less copy/paste next week, but regardless, this was a fun start to the new year!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">The second challenge was a lot like last weeks second challenge, so I went a step further and implemented multiple tree traversals. I won’t include the tests this week, but feel free to click the GitHub links to see the test cases.</summary></entry><entry><title type="html">Perl Weekly Challenge 93</title><link href="http://localhost:4000/blog/perl-weekly-challenge-093/" rel="alternate" type="text/html" title="Perl Weekly Challenge 93" /><published>2020-12-30T00:00:00-06:00</published><updated>2020-12-30T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-093</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-093/">&lt;p&gt;I was &lt;em&gt;going&lt;/em&gt; to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-max-points&quot;&gt;Task 1: Max Points&lt;/h2&gt;
 
@@ -995,7 +1169,277 @@ $ raku main.raku --p2 input.txt
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;I had fun with this one! Maybe it helps that I am actually off for the holidays and don’t have to rush through it before or after work. Looking forward to crossing the finish line tomorrow!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days 11 and 17, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.</summary></entry><entry><title type="html">Advent of Code: Day 22</title><link href="http://localhost:4000/blog/advent-of-code-day-22/" rel="alternate" type="text/html" title="Advent of Code: Day 22" /><published>2020-12-23T00:00:00-06:00</published><updated>2020-12-23T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-22</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-22/">&lt;p&gt;I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my &lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/commit/0f0559fb30044848b0985e732497dc6674798158&quot;&gt;git history&lt;/a&gt; that the code itself was written on the 22nd.&lt;/p&gt;
+&lt;p&gt;I had fun with this one! Maybe it helps that I am actually off for the holidays and don’t have to rush through it before or after work. Looking forward to crossing the finish line tomorrow!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days 11 and 17, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.</summary></entry><entry><title type="html">Advent of Code: Day 23</title><link href="http://localhost:4000/blog/advent-of-code-day-23/" rel="alternate" type="text/html" title="Advent of Code: Day 23" /><published>2020-12-23T00:00:00-06:00</published><updated>2020-12-23T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-23</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-23/">&lt;p&gt;This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;After &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-22/&quot;&gt;yesterday’s game of War&lt;/a&gt;, the crab challenges &lt;em&gt;us&lt;/em&gt; to a game! In this game there are 10 labeled cups placed clockwise in a circle (our input). The first cup in our list is our “current cup,” and the crab is going to make &lt;strong&gt;100 moves&lt;/strong&gt;. Here is how each move works:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The crab picks up the three cups that are immediately clockwise of the current cup. They are removed from the circle; cup spacing is adjusted as necessary to maintain the circle.&lt;/li&gt;
+  &lt;li&gt;The crab selects a destination cup: the cup with a label equal to the current cup’s label minus one. If this would select one of the cups that was just picked up, the crab will keep subtracting one until it finds a cup that wasn’t just picked up. If at any point in this process the value goes below the lowest value on any cup’s label, it wraps around to the highest value on any cup’s label instead.&lt;/li&gt;
+  &lt;li&gt;The crab places the cups it just picked up so that they are immediately clockwise of the destination cup. They keep the same order as when they were picked up.&lt;/li&gt;
+  &lt;li&gt;The crab selects a new current cup: the cup which is immediately clockwise of the current cup.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here is an example of 10 moves with the input &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;389125467&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-- move 1 --
+cups: (3) 8  9  1  2  5  4  6  7 
+pick up: 8, 9, 1
+destination: 2
+
+-- move 2 --
+cups:  3 (2) 8  9  1  5  4  6  7 
+pick up: 8, 9, 1
+destination: 7
+
+-- move 3 --
+cups:  3  2 (5) 4  6  7  8  9  1 
+pick up: 4, 6, 7
+destination: 3
+
+-- move 4 --
+cups:  7  2  5 (8) 9  1  3  4  6 
+pick up: 9, 1, 3
+destination: 7
+
+-- move 5 --
+cups:  3  2  5  8 (4) 6  7  9  1 
+pick up: 6, 7, 9
+destination: 3
+
+-- move 6 --
+cups:  9  2  5  8  4 (1) 3  6  7 
+pick up: 3, 6, 7
+destination: 9
+
+-- move 7 --
+cups:  7  2  5  8  4  1 (9) 3  6 
+pick up: 3, 6, 7
+destination: 8
+
+-- move 8 --
+cups:  8  3  6  7  4  1  9 (2) 5 
+pick up: 5, 8, 3
+destination: 1
+
+-- move 9 --
+cups:  7  4  1  5  8  3  9  2 (6)
+pick up: 7, 4, 1
+destination: 5
+
+-- move 10 --
+cups: (5) 7  4  1  8  3  9  2  6 
+pick up: 7, 4, 1
+destination: 3
+
+-- final --
+cups:  5 (8) 3  7  4  1  9  2  6 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;After the crab is done, what order will the cups be in? Starting after the cup labeled 1, collect the other cups’ labels clockwise into a single string with no extra characters; each number except &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; should appear exactly once. In the above example, after 10 moves, the cups clockwise from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; are labeled &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;9&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;6&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5&lt;/code&gt;, and so on, producing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;92658374&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;What is the answer after 100 moves with an input of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;712643589&lt;/code&gt;?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/23/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
+    my @ring;
+    my ($current, $previous);
+    for $file.IO.slurp.comb -&amp;gt; $number {
+        $current //= $number.Int;            # [1]
+        with $previous {                     # [2]
+            @ring[$previous] = $number.Int;
+        }
+        $previous = $number.Int;
+    }
+    @ring[$previous] = $current;
+
+    for (^100) {
+        my $pointer = $current;
+        my %grabbed = %(
+            0 =&amp;gt; True,
+            |(1 .. 3).map({
+                $pointer = @ring[$pointer]; # [3]
+                $pointer =&amp;gt; True;
+            }).Hash
+        );
+
+        my $destination = $current - 1;
+        while %grabbed{$destination}:exists {
+            $destination = ($destination - 1) % 10;
+        }
+
+        (@ring[$current], @ring[$pointer], @ring[$destination]) = (@ring[$pointer], @ring[$destination], @ring[$current]);
+
+        $current = @ring[$current];
+    }
+
+    $current = 1;
+    my $output;
+    while (($current = @ring[$current]) != 1) {
+        $output ~= $current;                    # [4]
+    }
+    say $output;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+29385746
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;We use a circularly-linked-list (stored in a list of integers) for this.&lt;/p&gt;
+
+&lt;p&gt;Once we have parsed our input, we created the linked list by keeping track of our &lt;em&gt;current&lt;/em&gt; and &lt;em&gt;previous&lt;/em&gt; cups. Then, for 100 iterations, we “grab” 3 cups (plus 0, which is an empty artifact of the way we fill our list), find the next destination cup by decrementing until we find one in the remaining cups, then swapping all the pointers to insert the three “grabbed” cups. For part one, this is a fairly quick process (~0.36s).&lt;/p&gt;
+
+&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;//&lt;/code&gt; operator returns the left-hand-side if it is defined, otherwise the right-hand side. In combination with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;=&lt;/code&gt; operator, it is the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$current = $current.defined ?? $current !! $number&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;with&lt;/code&gt; operator only enters the block if the variable is defined. This is the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if $previous.defined {...}&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;I hate that we update an outside variable in a map statement. Makes me cringe, but I wrote it, so guess I can’t complain too much.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~&lt;/code&gt; is Raku’s concatenate operator. So we are taking the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$output&lt;/code&gt; variable, concatenating &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$current&lt;/code&gt; and reassigning to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$output&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;The crab adds almost &lt;em&gt;a million&lt;/em&gt; more cups to the game. After the 9 initial ones, we add 999,991 more labeled 10 to 1,000,000. Once he has done that, he hides 2 stars in the cups that will end up in the two spots immediately following the cup labeled &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; after &lt;em&gt;10 million&lt;/em&gt; rounds. What is the product of those two cup labels?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/23/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub part1($file) {
+    my @ring;
+    my ($current, $previous);
+    for $file.IO.slurp.comb -&amp;gt; $number {
+        $current //= $number.Int;
+        with $previous {
+            @ring[$previous] = $number.Int;
+        }
+        $previous = $number.Int;
+    }
+    @ring[$previous] = $current;
+
+    for (^100) {
+        my $pointer = $current;
+        my %grabbed = %(
+            0 =&amp;gt; True,
+            |(1 .. 3).map({
+                $pointer = @ring[$pointer];
+                $pointer =&amp;gt; True;
+            }).Hash
+        );
+
+        my $destination = $current - 1;
+        while %grabbed{$destination}:exists {
+            $destination = ($destination - 1) % 10;
+        }
+
+        (@ring[$current], @ring[$pointer], @ring[$destination]) = (@ring[$pointer], @ring[$destination], @ring[$current]);
+
+        $current = @ring[$current];
+    }
+
+    $current = 1;
+    my $output;
+    while (($current = @ring[$current]) != 1) {
+        $output ~= $current;
+    }
+    say $output;
+}
+
+sub part2($file) {
+    my @ring;
+    my ($current, $previous);
+    for $file.IO.slurp.comb -&amp;gt; $number {
+        $current //= $number.Int;
+        with $previous {
+            @ring[$previous] = $number.Int;
+        }
+        $previous = $number.Int;
+    }
+
+    for (10..1_000_000) -&amp;gt; $i {
+        @ring[$previous] = $i;
+        $previous = $i;
+    }
+    @ring[$previous] = $current;
+
+    for (^10_000_000) {
+        my $pointer = $current;
+        my %grabbed = %(
+            0 =&amp;gt; True,
+            |(1 .. 3).map({
+                $pointer = @ring[$pointer];
+                $pointer =&amp;gt; True;
+            }).Hash
+        );
+
+        my $destination = $current - 1;
+        while %grabbed{$destination}:exists {
+            $destination = ($destination - 1) % 1_000_001;
+        }
+
+        my $old             = @ring[$current];
+        @ring[$current]     = @ring[$pointer];
+        @ring[$pointer]     = @ring[$destination];
+        @ring[$destination] = $old;
+
+        $current = @ring[$current];
+    }
+
+    say @ring[1] * @ring[@ring[1]];
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    $p2 ?? part2($file) !! part1($file);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+29385746
+
+$ raku main.raku --p2 input.txt
+712643589
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;As you can see, rather than try to retrofit the code today, I just wrote two functions that are &lt;em&gt;almost&lt;/em&gt; exactly the same. The differences are as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Part 2 adds the extra cups&lt;/li&gt;
+  &lt;li&gt;Part 2 has more iterations&lt;/li&gt;
+  &lt;li&gt;Part 2 needs a different modulo to find if a cup is in the valid range&lt;/li&gt;
+  &lt;li&gt;Part 2 reassigns the pointers in order rather than all at once
+    &lt;ul&gt;
+      &lt;li&gt;Shifting that much data in one step really hurt Raku&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;We output the product of 2 numbers instead of just the order of the cups&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;There is not too much to dive into with this one since it is the same problem with bigger numbers. It’s ugly, and I hate it. And, in contrast to part one, it is slow as all get out; it finishes in 351.32s (almost 6 minutes), which makes it 979 times slower than part one. Yikes.&lt;/p&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I am burnt out on this, but I am planning on finishing the week out. I enjoy most of the puzzles, but the blogging is starting to wear on me. 😅 2 more days; we got this!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!</summary></entry><entry><title type="html">Advent of Code: Day 22</title><link href="http://localhost:4000/blog/advent-of-code-day-22/" rel="alternate" type="text/html" title="Advent of Code: Day 22" /><published>2020-12-23T00:00:00-06:00</published><updated>2020-12-23T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-22</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-22/">&lt;p&gt;I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my &lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/commit/0f0559fb30044848b0985e732497dc6674798158&quot;&gt;git history&lt;/a&gt; that the code itself was written on the 22nd.&lt;/p&gt;
 
 &lt;p&gt;I solved the first half of the problem in Raku and then &lt;em&gt;tried&lt;/em&gt; to write the second half in Raku but got stuck, so this is the first problem where each half was solved in a different language.&lt;/p&gt;
 
@@ -1537,277 +1981,7 @@ Player 2's deck: 7, 5, 6, 2, 4, 1, 10, 8, 9, 3
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;I wrote part one at 6am and wrote part two around 10pm yesterday. I probably could have gotten it working in Raku, but I was hoping to do a puzzle a day for the duration of AoC, so I had to do what I had to do. Hopefully I will get back on track today and finish out the week (and the month) strong!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><category term="Python" /><summary type="html">I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my git history that the code itself was written on the 22nd.</summary></entry><entry><title type="html">Advent of Code: Day 23</title><link href="http://localhost:4000/blog/advent-of-code-day-23/" rel="alternate" type="text/html" title="Advent of Code: Day 23" /><published>2020-12-23T00:00:00-06:00</published><updated>2020-12-23T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-23</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-23/">&lt;p&gt;This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;After &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-22/&quot;&gt;yesterday’s game of War&lt;/a&gt;, the crab challenges &lt;em&gt;us&lt;/em&gt; to a game! In this game there are 10 labeled cups placed clockwise in a circle (our input). The first cup in our list is our “current cup,” and the crab is going to make &lt;strong&gt;100 moves&lt;/strong&gt;. Here is how each move works:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The crab picks up the three cups that are immediately clockwise of the current cup. They are removed from the circle; cup spacing is adjusted as necessary to maintain the circle.&lt;/li&gt;
-  &lt;li&gt;The crab selects a destination cup: the cup with a label equal to the current cup’s label minus one. If this would select one of the cups that was just picked up, the crab will keep subtracting one until it finds a cup that wasn’t just picked up. If at any point in this process the value goes below the lowest value on any cup’s label, it wraps around to the highest value on any cup’s label instead.&lt;/li&gt;
-  &lt;li&gt;The crab places the cups it just picked up so that they are immediately clockwise of the destination cup. They keep the same order as when they were picked up.&lt;/li&gt;
-  &lt;li&gt;The crab selects a new current cup: the cup which is immediately clockwise of the current cup.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Here is an example of 10 moves with the input &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;389125467&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-- move 1 --
-cups: (3) 8  9  1  2  5  4  6  7 
-pick up: 8, 9, 1
-destination: 2
-
--- move 2 --
-cups:  3 (2) 8  9  1  5  4  6  7 
-pick up: 8, 9, 1
-destination: 7
-
--- move 3 --
-cups:  3  2 (5) 4  6  7  8  9  1 
-pick up: 4, 6, 7
-destination: 3
-
--- move 4 --
-cups:  7  2  5 (8) 9  1  3  4  6 
-pick up: 9, 1, 3
-destination: 7
-
--- move 5 --
-cups:  3  2  5  8 (4) 6  7  9  1 
-pick up: 6, 7, 9
-destination: 3
-
--- move 6 --
-cups:  9  2  5  8  4 (1) 3  6  7 
-pick up: 3, 6, 7
-destination: 9
-
--- move 7 --
-cups:  7  2  5  8  4  1 (9) 3  6 
-pick up: 3, 6, 7
-destination: 8
-
--- move 8 --
-cups:  8  3  6  7  4  1  9 (2) 5 
-pick up: 5, 8, 3
-destination: 1
-
--- move 9 --
-cups:  7  4  1  5  8  3  9  2 (6)
-pick up: 7, 4, 1
-destination: 5
-
--- move 10 --
-cups: (5) 7  4  1  8  3  9  2  6 
-pick up: 7, 4, 1
-destination: 3
-
--- final --
-cups:  5 (8) 3  7  4  1  9  2  6 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;After the crab is done, what order will the cups be in? Starting after the cup labeled 1, collect the other cups’ labels clockwise into a single string with no extra characters; each number except &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; should appear exactly once. In the above example, after 10 moves, the cups clockwise from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; are labeled &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;9&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;6&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5&lt;/code&gt;, and so on, producing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;92658374&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;What is the answer after 100 moves with an input of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;712643589&lt;/code&gt;?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/23/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
-    my @ring;
-    my ($current, $previous);
-    for $file.IO.slurp.comb -&amp;gt; $number {
-        $current //= $number.Int;            # [1]
-        with $previous {                     # [2]
-            @ring[$previous] = $number.Int;
-        }
-        $previous = $number.Int;
-    }
-    @ring[$previous] = $current;
-
-    for (^100) {
-        my $pointer = $current;
-        my %grabbed = %(
-            0 =&amp;gt; True,
-            |(1 .. 3).map({
-                $pointer = @ring[$pointer]; # [3]
-                $pointer =&amp;gt; True;
-            }).Hash
-        );
-
-        my $destination = $current - 1;
-        while %grabbed{$destination}:exists {
-            $destination = ($destination - 1) % 10;
-        }
-
-        (@ring[$current], @ring[$pointer], @ring[$destination]) = (@ring[$pointer], @ring[$destination], @ring[$current]);
-
-        $current = @ring[$current];
-    }
-
-    $current = 1;
-    my $output;
-    while (($current = @ring[$current]) != 1) {
-        $output ~= $current;                    # [4]
-    }
-    say $output;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-29385746
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;We use a circularly-linked-list (stored in a list of integers) for this.&lt;/p&gt;
-
-&lt;p&gt;Once we have parsed our input, we created the linked list by keeping track of our &lt;em&gt;current&lt;/em&gt; and &lt;em&gt;previous&lt;/em&gt; cups. Then, for 100 iterations, we “grab” 3 cups (plus 0, which is an empty artifact of the way we fill our list), find the next destination cup by decrementing until we find one in the remaining cups, then swapping all the pointers to insert the three “grabbed” cups. For part one, this is a fairly quick process (~0.36s).&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;//&lt;/code&gt; operator returns the left-hand-side if it is defined, otherwise the right-hand side. In combination with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;=&lt;/code&gt; operator, it is the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$current = $current.defined ?? $current !! $number&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;with&lt;/code&gt; operator only enters the block if the variable is defined. This is the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if $previous.defined {...}&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;I hate that we update an outside variable in a map statement. Makes me cringe, but I wrote it, so guess I can’t complain too much.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~&lt;/code&gt; is Raku’s concatenate operator. So we are taking the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$output&lt;/code&gt; variable, concatenating &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$current&lt;/code&gt; and reassigning to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$output&lt;/code&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;The crab adds almost &lt;em&gt;a million&lt;/em&gt; more cups to the game. After the 9 initial ones, we add 999,991 more labeled 10 to 1,000,000. Once he has done that, he hides 2 stars in the cups that will end up in the two spots immediately following the cup labeled &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; after &lt;em&gt;10 million&lt;/em&gt; rounds. What is the product of those two cup labels?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/23/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub part1($file) {
-    my @ring;
-    my ($current, $previous);
-    for $file.IO.slurp.comb -&amp;gt; $number {
-        $current //= $number.Int;
-        with $previous {
-            @ring[$previous] = $number.Int;
-        }
-        $previous = $number.Int;
-    }
-    @ring[$previous] = $current;
-
-    for (^100) {
-        my $pointer = $current;
-        my %grabbed = %(
-            0 =&amp;gt; True,
-            |(1 .. 3).map({
-                $pointer = @ring[$pointer];
-                $pointer =&amp;gt; True;
-            }).Hash
-        );
-
-        my $destination = $current - 1;
-        while %grabbed{$destination}:exists {
-            $destination = ($destination - 1) % 10;
-        }
-
-        (@ring[$current], @ring[$pointer], @ring[$destination]) = (@ring[$pointer], @ring[$destination], @ring[$current]);
-
-        $current = @ring[$current];
-    }
-
-    $current = 1;
-    my $output;
-    while (($current = @ring[$current]) != 1) {
-        $output ~= $current;
-    }
-    say $output;
-}
-
-sub part2($file) {
-    my @ring;
-    my ($current, $previous);
-    for $file.IO.slurp.comb -&amp;gt; $number {
-        $current //= $number.Int;
-        with $previous {
-            @ring[$previous] = $number.Int;
-        }
-        $previous = $number.Int;
-    }
-
-    for (10..1_000_000) -&amp;gt; $i {
-        @ring[$previous] = $i;
-        $previous = $i;
-    }
-    @ring[$previous] = $current;
-
-    for (^10_000_000) {
-        my $pointer = $current;
-        my %grabbed = %(
-            0 =&amp;gt; True,
-            |(1 .. 3).map({
-                $pointer = @ring[$pointer];
-                $pointer =&amp;gt; True;
-            }).Hash
-        );
-
-        my $destination = $current - 1;
-        while %grabbed{$destination}:exists {
-            $destination = ($destination - 1) % 1_000_001;
-        }
-
-        my $old             = @ring[$current];
-        @ring[$current]     = @ring[$pointer];
-        @ring[$pointer]     = @ring[$destination];
-        @ring[$destination] = $old;
-
-        $current = @ring[$current];
-    }
-
-    say @ring[1] * @ring[@ring[1]];
-}
-
-sub MAIN($file, Bool :$p2 = False) {
-    $p2 ?? part2($file) !! part1($file);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-29385746
-
-$ raku main.raku --p2 input.txt
-712643589
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;As you can see, rather than try to retrofit the code today, I just wrote two functions that are &lt;em&gt;almost&lt;/em&gt; exactly the same. The differences are as follows:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Part 2 adds the extra cups&lt;/li&gt;
-  &lt;li&gt;Part 2 has more iterations&lt;/li&gt;
-  &lt;li&gt;Part 2 needs a different modulo to find if a cup is in the valid range&lt;/li&gt;
-  &lt;li&gt;Part 2 reassigns the pointers in order rather than all at once
-    &lt;ul&gt;
-      &lt;li&gt;Shifting that much data in one step really hurt Raku&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;We output the product of 2 numbers instead of just the order of the cups&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;There is not too much to dive into with this one since it is the same problem with bigger numbers. It’s ugly, and I hate it. And, in contrast to part one, it is slow as all get out; it finishes in 351.32s (almost 6 minutes), which makes it 979 times slower than part one. Yikes.&lt;/p&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;I am burnt out on this, but I am planning on finishing the week out. I enjoy most of the puzzles, but the blogging is starting to wear on me. 😅 2 more days; we got this!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!</summary></entry><entry><title type="html">Advent of Code: Day 21</title><link href="http://localhost:4000/blog/advent-of-code-day-21/" rel="alternate" type="text/html" title="Advent of Code: Day 21" /><published>2020-12-21T00:00:00-06:00</published><updated>2020-12-21T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-21</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-21/">&lt;p&gt;I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.&lt;/p&gt;
+&lt;p&gt;I wrote part one at 6am and wrote part two around 10pm yesterday. I probably could have gotten it working in Raku, but I was hoping to do a puzzle a day for the duration of AoC, so I had to do what I had to do. Hopefully I will get back on track today and finish out the week (and the month) strong!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><category term="Python" /><summary type="html">I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my git history that the code itself was written on the 22nd.</summary></entry><entry><title type="html">Advent of Code: Day 21</title><link href="http://localhost:4000/blog/advent-of-code-day-21/" rel="alternate" type="text/html" title="Advent of Code: Day 21" /><published>2020-12-21T00:00:00-06:00</published><updated>2020-12-21T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-21</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-21/">&lt;p&gt;I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -2709,190 +2883,4 @@ Part 2: 350
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;This whole process is wearing on me, especially given the choice to do it using functional Raku (which obviously hasn’t worked out), but we are almost done! Less than a week to go!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Python" /><summary type="html">After I was singing Raku’s praises yesterday, it had to come back to bite me.</summary></entry><entry><title type="html">Perl Weekly Challenge 91</title><link href="http://localhost:4000/blog/perl-weekly-challenge-091/" rel="alternate" type="text/html" title="Perl Weekly Challenge 91" /><published>2020-12-18T00:00:00-06:00</published><updated>2020-12-18T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-091</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-091/">&lt;p&gt;I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!&lt;/p&gt;
-
-&lt;h2 id=&quot;task-1-count-number&quot;&gt;Task 1: Count Number&lt;/h2&gt;
-
-&lt;p&gt;You are given a positive number &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Write a script to count number and display as you read it.&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $N = 1122234  # (&quot;two 1 three 2 one 3 one 4&quot;)
-Output: 21321314
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $N = 2333445  # (&quot;one 2 three 3 two 4 one 5&quot;)
-Output: 12332415
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-3&quot;&gt;Example 3&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $N = 12345  # (&quot;one 1 one 2 one 3 one 4 one 5&quot;)
-Output: 1112131415
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-091/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge($N) {
-    my @digits = $N.comb.map(*.Int);
-
-    my ($current-num, $current-count);
-    my $first = True;
-    my @output;
-    for @digits.kv -&amp;gt; $index, $digit {
-        # If this is the first round, just set our variables and continue
-        if $first {
-            $first = False;
-            $current-num = $digit;
-            $current-count = 1;
-            next;
-        }
-
-        # Otherwise, just keep track of our current digit/count
-        if $digit == $current-num {
-            $current-count += 1;
-        } else {
-            @output.push($current-count);
-            @output.push($current-num);
-            $current-num = $digit;
-            $current-count = 1;
-        }
-
-        # We need this to push the last number on, or it will get lost
-        if $index == @digits.elems - 1 {
-            @output.push($current-count);
-            @output.push($current-num);
-        }
-    }
-
-    @output.join;
-}
-
-multi sub MAIN($N where $N ~~ Int &amp;amp;&amp;amp; $N &amp;gt; 0) {
-    say challenge($N);
-}
-
-multi sub MAIN(:$test) {
-    use Test;
-
-    my @tests = (
-        (1122234, 21321314),
-        (2333445, 12332415),
-        (12345, 1112131415)
-    );
-
-    for @tests -&amp;gt; @test {
-        is(challenge(@test[0]), @test[1]);
-    }
-
-    done-testing;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 1122234
-21321314
-
-$ raku ch-1.raku --test
-ok 1 - 
-ok 2 - 
-ok 3 - 
-1..3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;You can see this week I started adding tests for my scripts (utilized by passing in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--test&lt;/code&gt; flag), so all the logic lives in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;The logic is pretty easy –  as we iterate from left-to-right we keep track of the current digit and its count. If we encounter a new digit, we push the old &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$current-digit&lt;/code&gt; and old &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$current-count&lt;/code&gt; onto &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@output&lt;/code&gt; and reset our variables. The only special handling is around the first digit (when there is no &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$current-digit&lt;/code&gt;), and the last digit (since we need to store the last digit and count before exiting).&lt;/p&gt;
-
-&lt;h2 id=&quot;task-2-jump-game&quot;&gt;Task 2: Jump Game&lt;/h2&gt;
-
-&lt;p&gt;You are given an array of positive numbers &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N&lt;/code&gt;, where value at each index determines how far you are allowed to jump further.&lt;/p&gt;
-
-&lt;p&gt;Write a script to decide if you can jump to the last index. Print 1 if you are able to reach the last index otherwise 0.&lt;/p&gt;
-
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-091/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset PositiveInt of Int where { $_ &amp;gt;= 0 }
-
-sub challenge(@N) {
-    my Int $pointer = 0;
-    my Bool $reached-the-end;
-
-    loop {
-        given $pointer {
-            when * &amp;lt; @N.elems - 1  {
-                my $value = @N[$pointer];
-                if $value == 0 {
-                    $reached-the-end = False;
-                    last;
-                } else {
-                    $pointer += @N[$pointer]
-                }
-            }
-            when * == @N.elems - 1 {
-                $reached-the-end = True;
-                last;
-            }
-            when * &amp;gt; @N.elems - 1  {
-                $reached-the-end = False;
-                last;
-            }
-        }
-    }
-
-    $reached-the-end.Int;
-}
-
-multi sub MAIN(*@N where all(@N) ~~ PositiveInt) {
-    say challenge(@N);
-}
-
-multi sub MAIN(:$test) {
-    use Test;
-
-    my @tests = (
-        ((1, 2, 1, 2), 1),
-        ((2, 1, 1, 0, 2), 0)
-    );
-
-    for @tests -&amp;gt; @test {
-        is(challenge(@test[0]), @test[1]);
-    }
-
-    done-testing;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 1 2 1 2
-1
-
-$ raku ch-2.raku --test
-ok 1 - 
-ok 2 - 
-1..2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;We set the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$pointer&lt;/code&gt; to start at index 0 and enter an infinite loop. If we are not at the end we have to check if the current value is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;. If it &lt;em&gt;is&lt;/em&gt;, we have gone as far as we can and need to exit (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;last&lt;/code&gt;), otherwise keep going. If we are &lt;em&gt;at&lt;/em&gt; at the end, exit and mark&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt; $reached-the-end&lt;/code&gt; as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt;. If we have passed the end, exit and mark &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$reached-the-end&lt;/code&gt; as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;False&lt;/code&gt;. Since the problem asks for an integer output, we have to cast our boolean to an integer before returning.&lt;/p&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;Nothing ground breaking this week. However, we did get to explore one of the cooler features of Raku for Advent of Code day 18. &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-18/&quot;&gt;Give it a read&lt;/a&gt;!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I finally got some time between my day job and Advent of Code to tackle this week’s Perl Weekly Challenge. Pretty easy stuff this week; hope the difficulty ramps up soon!</summary></entry></feed>
+&lt;p&gt;This whole process is wearing on me, especially given the choice to do it using functional Raku (which obviously hasn’t worked out), but we are almost done! Less than a week to go!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Python" /><summary type="html">After I was singing Raku’s praises yesterday, it had to come back to bite me.</summary></entry></feed>
