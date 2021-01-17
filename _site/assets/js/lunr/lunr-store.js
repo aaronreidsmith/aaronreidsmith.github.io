@@ -190,4 +190,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "http://localhost:4000/blog/perl-weekly-challenge-094/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 95",
+        "excerpt":"Two pretty simple challenges this week! I tried ot focus on strongly typed subroutines and methods to shake things up. Task 1: Palindrome Number You are given a number $N. Write a script to figure out if the given number is a palindrome. Print 1 if true otherwise 0. Example...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "http://localhost:4000/blog/perl-weekly-chellanege-095/",
+        "teaser": null
       }]
