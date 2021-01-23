@@ -9,25 +9,24 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Aaron Smith</title>
-<meta name="description" content="Personal website and blog of Aaron Smith">
+<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 96 - Aaron Smith</title>
+<meta name="description" content="I admittedly took a shortcut for part two this week, but it allowed me to introduce modules here (I don’t believe I have used them before in a blog), so I think it makes up for it. 🙂">
 
 
   <meta name="author" content="Aaron Smith">
   
+  <meta property="article:author" content="Aaron Smith">
+  
 
 
-<meta property="og:type" content="website">
+<meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Aaron Smith">
-<meta property="og:url" content="http://localhost:4000/">
+<meta property="og:title" content="Perl Weekly Challenge 96">
+<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-096/">
 
 
-  <meta property="og:description" content="Personal website and blog of Aaron Smith">
-
-
-
+  <meta property="og:description" content="I admittedly took a shortcut for part two this week, but it allowed me to introduce modules here (I don’t believe I have used them before in a blog), so I think it makes up for it. 🙂">
 
 
 
@@ -35,13 +34,16 @@
 
 
 
+  <meta property="article:published_time" content="2021-01-22T00:00:00-06:00">
 
 
-<link rel="canonical" href="http://localhost:4000/">
 
 
 
-  <link rel="next" href="http://localhost:4000/page2/">
+
+<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-096/">
+
+
 
 
 <script type="application/ld+json">
@@ -101,7 +103,7 @@
 
   </head>
 
-  <body class="layout--home">
+  <body class="layout--single wide">
     <nav class="skip-links">
   <h2 class="screen-reader-text">Skip links</h2>
   <ul>
@@ -282,33 +284,18 @@
 
 
 
-  <div class="archive">
-    
-      <h1 id="page-title" class="page__title"></h1>
-    
-    
-
-<h3 class="archive__subtitle">Recent posts</h3>
-
-
-
-
-<div class="entries-list">
-  
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Perl Weekly Challenge 96">
+    <meta itemprop="description" content="I admittedly took a shortcut for part two this week, but it allowed me to introduce modules here (I don’t believe I have used them before in a blog), so I think it makes up for it. 🙂">
+    <meta itemprop="datePublished" content="2021-01-22T00:00:00-06:00">
     
 
-
-
-<div class="list__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
+    <div class="page__inner-wrap">
       
-        <a href="/blog/perl-weekly-challenge-096/" rel="permalink">Perl Weekly Challenge 96
-</a>
-      
-    </h2>
-    
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 96
+</h1>
+          
 
   <p class="page__meta">
     
@@ -335,16 +322,227 @@
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">I admittedly took a shortcut for part two this week, but it allowed me to introduce modules here (I don’t believe I have used them before in a blog), so I th...</p>
-  </article>
-</div>
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>I admittedly took a shortcut for part two this week, but it allowed me to introduce modules here (I don’t <em>believe</em> I have used them before in a blog), so I think it makes up for it. 🙂</p>
+
+<h2 id="task-1-reverse-words">Task 1: Reverse Words</h2>
+
+<p>You are given a string <code class="language-plaintext highlighter-rouge">$S</code>.</p>
+
+<p>Write a script to reverse the order of words in the given string. The string may contain leading/trailing spaces. The string may have more than one space between words in the string. Print the result without leading/trailing spaces and there should be only one space between words.</p>
+
+<h3 id="example-1">Example 1</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $S = "The Weekly Challenge"
+Output: "Challenge Weekly The"
+</code></pre></div></div>
+
+<h3 id="example-2">Example 2</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $S = "    Perl and   Raku are  part of the same family  "
+Output: "family same the of part are Raku and Perl"
+</code></pre></div></div>
+
+<h3 id="solution">Solution</h3>
+
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-096/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(Str $S) returns Str {
+    $S.trim.words.reverse.join(' ');
+}
+
+sub MAIN(Str $S) {
+    say challenge($S);
+}
+</code></pre></div></div>
+
+<p>This program runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku 'The Weekly Challenge'
+Challenge Weekly The
+</code></pre></div></div>
+
+<h3 id="explanation">Explanation</h3>
+
+<p>Pretty easy one-liner here. Here is the logic:</p>
+
+<ol>
+  <li>Take the string and <code class="language-plaintext highlighter-rouge">trim</code> whitespace of the beginning and the end.</li>
+  <li>Split it into individual words using the handy <code class="language-plaintext highlighter-rouge">words</code> method (the equivalent of <code class="language-plaintext highlighter-rouge">split(/&lt;space&gt;+/)</code>).</li>
+  <li>Reverse the list generated from Step 2</li>
+  <li>Re-join the list into a space-separated string using <code class="language-plaintext highlighter-rouge">.join(' ')</code>.</li>
+</ol>
+
+<h2 id="task-2-edit-distance">Task 2: Edit Distance</h2>
+
+<p>You are given two strings <code class="language-plaintext highlighter-rouge">$S1</code> and <code class="language-plaintext highlighter-rouge">$S2</code>.</p>
+
+<p>Write a script to find out the minimum operations required to convert <code class="language-plaintext highlighter-rouge">$S1</code> into <code class="language-plaintext highlighter-rouge">$S2</code>. The operations can be “insert,” “remove,” or “replace” a character. Check out <a href="https://en.wikipedia.org/wiki/Edit_distance">Wikipedia page</a> for more information.</p>
+
+<h3 id="example-1-1">Example 1</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $S1 = "kitten"; $S2 = "sitting"
+Output: 3
+
+Explanation:
+Operation 1: replace 'k' with 's'
+Operation 2: replace 'e' with 'i'
+Operation 3: insert 'g' at the end
+</code></pre></div></div>
+
+<h3 id="example-2-1">Example 2</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $S1 = "sunday"; $S2 = "monday"
+Output: 2
+
+Explanation:
+Operation 1: replace 's' with 'm'
+Operation 2: replace 'u' with 'o'
+</code></pre></div></div>
+
+<h3 id="solution-1">Solution</h3>
+
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-096/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Text::Levenshtein; # imports `distance` # [1]
+
+sub challenge(Str $S1, Str $S2) returns Int {
+    distance($S1.lc, $S2.lc).head; # [2][3]
+}
+
+sub MAIN(Str $S1, Str $S2) {
+    say challenge($S1, $S2);
+}
+</code></pre></div></div>
+
+<p>This program runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku kitten sitting
+3
+</code></pre></div></div>
+
+<h3 id="explanation-1">Explanation</h3>
+
+<p>This was definitely a cop-out. Edit distance is also known as <a href="https://en.wikipedia.org/wiki/Levenshtein_distance"><em>Levenshtein Distance</em></a>; when an algorithm has someone’s name attached to it, it is usually better to find an existing implementation. 😅 With that being said, if anyone <em>is</em> interested in the Raku implementation of the algorithm, <a href="https://github.com/thundergnat/Text-Levenshtein/blob/master/lib/Text/Levenshtein.pm6#L3-L28">here is the source code for <code class="language-plaintext highlighter-rouge">Text::Levenshtein</code></a>.</p>
+
+<p>In case it is not obvious, we simply pass the input strings to <code class="language-plaintext highlighter-rouge">distance</code> and let it do the work.</p>
+
+<h4 id="specific-comments">Specific Comments</h4>
+
+<ol>
+  <li>I encourage anyone reading this to read the <a href="https://docs.raku.org/language/modules">Raku documentation on modules</a>. Basically, <code class="language-plaintext highlighter-rouge">use</code> is one of several keywords to import modules, and is probably the most common you will see in the wild. You can import specific elements, if the author allows it, or you can write it as we did here and get the default imports.</li>
+  <li><code class="language-plaintext highlighter-rouge">distance</code> will treat uppercase and lowercase letters differently, which I did not want, so we explicitly cast everything to lowercase (<code class="language-plaintext highlighter-rouge">.lc</code>) before passing them to <code class="language-plaintext highlighter-rouge">distance</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">distance</code> will accept a variable number of arguments and compare the 2nd to Nth arguments to the first one, returning an array of Levenshtein distances. Since we only have two arguments, we need to extract the first (and only) distance in the array using <code class="language-plaintext highlighter-rouge">head</code>.</li>
+</ol>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>In my day-to-day I always encourage folks to use modules where possible. In puzzles like these, I usually prefer to write my own implementation, even if it is less efficient. But it was a long week, so I took the lazy way out. 😉 See y’all next week!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
 
   
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
     
+      
+      
+      <a href="/tags/#perl-weekly-challenge" class="page__taxonomy-item" rel="tag">Perl Weekly Challenge</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#raku" class="page__taxonomy-item" rel="tag">Raku</a>
+    
+    </span>
+  </p>
 
 
 
-<div class="list__item">
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-01-22T00:00:00-06:00">January 22, 2021</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+96%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-096%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-096%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-096%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/perl-weekly-chellanege-095/" class="pagination--pager" title="Perl Weekly Challenge 95
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
@@ -359,7 +557,7 @@
     
       
       <span class="page__meta-date">
-        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
         <time datetime="2021-01-16T00:00:00-06:00">January 16, 2021</time>
       </span>
     
@@ -371,7 +569,7 @@
       
 
       <span class="page__meta-readtime">
-        <i class="far fa-clock" aria-hidden="true"></i>
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
           5 minute read
         
@@ -386,12 +584,12 @@
   </article>
 </div>
 
-  
-    
+        
+          
 
 
 
-<div class="list__item">
+<div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
@@ -406,7 +604,7 @@
     
       
       <span class="page__meta-date">
-        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
         <time datetime="2021-01-10T00:00:00-06:00">January 10, 2021</time>
       </span>
     
@@ -418,7 +616,7 @@
       
 
       <span class="page__meta-readtime">
-        <i class="far fa-clock" aria-hidden="true"></i>
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
           4 minute read
         
@@ -431,12 +629,12 @@
   </article>
 </div>
 
-  
-    
+        
+          
 
 
 
-<div class="list__item">
+<div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
@@ -451,7 +649,7 @@
     
       
       <span class="page__meta-date">
-        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
         <time datetime="2020-12-30T00:00:00-06:00">December 30, 2020</time>
       </span>
     
@@ -463,7 +661,7 @@
       
 
       <span class="page__meta-readtime">
-        <i class="far fa-clock" aria-hidden="true"></i>
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
           10 minute read
         
@@ -476,12 +674,12 @@
   </article>
 </div>
 
-  
-    
+        
+          
 
 
 
-<div class="list__item">
+<div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
@@ -496,7 +694,7 @@
     
       
       <span class="page__meta-date">
-        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
         <time datetime="2020-12-25T00:00:00-06:00">December 25, 2020</time>
       </span>
     
@@ -508,7 +706,7 @@
       
 
       <span class="page__meta-readtime">
-        <i class="far fa-clock" aria-hidden="true"></i>
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
           5 minute read
         
@@ -523,66 +721,13 @@
   </article>
 </div>
 
+        
+      </div>
+    </div>
+  
   
 </div>
 
-
-<nav class="pagination">
-  
-  <ul>
-    
-    
-    <li><a href="#" class="disabled"><span aria-hidden="true">Previous</span></a></li>
-    
-
-    
-    
-      <li><a href="#" class="disabled current">1</a></li>
-    
-
-    
-    
-
-    
-    
-    
-
-    
-      
-        
-        
-        
-        <li><a href="/page2/">2</a></li>
-      
-    
-      
-        
-        
-        
-        <li><a href="/page3/">3</a></li>
-      
-    
-
-    
-    
-      <li><a href="#" class="disabled">&hellip;</a></li>
-    
-
-    
-      <li><a href="/page7/">7</a></li>
-    
-
-    
-    
-      <li><a href="/page2/">Next</a></li>
-    
-  </ul>
-</nav>
-
-
-
-  </div>
-</div>
     </div>
 
     
