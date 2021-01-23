@@ -56,7 +56,7 @@ Challenge Weekly The
 
 Pretty easy one-liner here. Here is the logic:
 
-1. Take the string and `trim` whitespace of the beginning and the end.
+1. Take the string and `trim` whitespace off of the beginning and the end.
 2. Split it into individual words using the handy `words` method (the equivalent of `split(/<space>+/)`).
 3. Reverse the list generated from Step 2
 4. Re-join the list into a space-separated string using `.join(' ')`.
