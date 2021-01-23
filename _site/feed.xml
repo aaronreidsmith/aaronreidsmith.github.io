@@ -1,4 +1,122 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-01-16T19:32:06-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 95</title><link href="http://localhost:4000/blog/perl-weekly-chellanege-095/" rel="alternate" type="text/html" title="Perl Weekly Challenge 95" /><published>2021-01-16T00:00:00-06:00</published><updated>2021-01-16T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-chellanege-095</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-chellanege-095/">&lt;p&gt;Two pretty simple challenges this week! I tried ot focus on strongly typed subroutines and methods to shake things up.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-01-22T20:28:40-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 96</title><link href="http://localhost:4000/blog/perl-weekly-challenge-096/" rel="alternate" type="text/html" title="Perl Weekly Challenge 96" /><published>2021-01-22T00:00:00-06:00</published><updated>2021-01-22T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-096</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-096/">&lt;p&gt;I admittedly took a shortcut for part two this week, but it allowed me to introduce modules here (I don’t &lt;em&gt;believe&lt;/em&gt; I have used them before in a blog), so I think it makes up for it. 🙂&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-reverse-words&quot;&gt;Task 1: Reverse Words&lt;/h2&gt;
+
+&lt;p&gt;You are given a string &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to reverse the order of words in the given string. The string may contain leading/trailing spaces. The string may have more than one space between words in the string. Print the result without leading/trailing spaces and there should be only one space between words.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $S = &quot;The Weekly Challenge&quot;
+Output: &quot;Challenge Weekly The&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $S = &quot;    Perl and   Raku are  part of the same family  &quot;
+Output: &quot;family same the of part are Raku and Perl&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-096/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Str $S) returns Str {
+    $S.trim.words.reverse.join(' ');
+}
+
+sub MAIN(Str $S) {
+    say challenge($S);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 'The Weekly Challenge'
+Challenge Weekly The
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;Pretty easy one-liner here. Here is the logic:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Take the string and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trim&lt;/code&gt; whitespace of the beginning and the end.&lt;/li&gt;
+  &lt;li&gt;Split it into individual words using the handy &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;words&lt;/code&gt; method (the equivalent of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;split(/&amp;lt;space&amp;gt;+/)&lt;/code&gt;).&lt;/li&gt;
+  &lt;li&gt;Reverse the list generated from Step 2&lt;/li&gt;
+  &lt;li&gt;Re-join the list into a space-separated string using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.join(' ')&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-edit-distance&quot;&gt;Task 2: Edit Distance&lt;/h2&gt;
+
+&lt;p&gt;You are given two strings &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S2&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to find out the minimum operations required to convert &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S1&lt;/code&gt; into &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S2&lt;/code&gt;. The operations can be “insert,” “remove,” or “replace” a character. Check out &lt;a href=&quot;https://en.wikipedia.org/wiki/Edit_distance&quot;&gt;Wikipedia page&lt;/a&gt; for more information.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1-1&quot;&gt;Example 1&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $S1 = &quot;kitten&quot;; $S2 = &quot;sitting&quot;
+Output: 3
+
+Explanation:
+Operation 1: replace 'k' with 's'
+Operation 2: replace 'e' with 'i'
+Operation 3: insert 'g' at the end
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-2-1&quot;&gt;Example 2&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $S1 = &quot;sunday&quot;; $S2 = &quot;monday&quot;
+Output: 2
+
+Explanation:
+Operation 1: replace 's' with 'm'
+Operation 2: replace 'u' with 'o'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-096/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use Text::Levenshtein; # imports `distance` # [1]
+
+sub challenge(Str $S1, Str $S2) returns Int {
+    distance($S1.lc, $S2.lc).head; # [2][3]
+}
+
+sub MAIN(Str $S1, Str $S2) {
+    say challenge($S1, $S2);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku kitten sitting
+3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;This was definitely a cop-out. Edit distance is also known as &lt;a href=&quot;https://en.wikipedia.org/wiki/Levenshtein_distance&quot;&gt;&lt;em&gt;Levenshtein Distance&lt;/em&gt;&lt;/a&gt;; when an algorithm has someone’s name attached to it, it is usually better to find an existing implementation. 😅 With that being said, if anyone &lt;em&gt;is&lt;/em&gt; interested in the Raku implementation of the algorithm, &lt;a href=&quot;https://github.com/thundergnat/Text-Levenshtein/blob/master/lib/Text/Levenshtein.pm6#L3-L28&quot;&gt;here is the source code for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Text::Levenshtein&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In case it is not obvious, we simply pass the input strings to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;distance&lt;/code&gt; and let it do the work.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;I encourage anyone reading this to read the &lt;a href=&quot;https://docs.raku.org/language/modules&quot;&gt;Raku documentation on modules&lt;/a&gt;. Basically, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;use&lt;/code&gt; is one of several keywords to import modules, and is probably the most common you will see in the wild. You can import specific elements, if the author allows it, or you can write it as we did here and get the default imports.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;distance&lt;/code&gt; will treat uppercase and lowercase letters differently, which I did not want, so we explicitly cast everything to lowercase (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.lc&lt;/code&gt;) before passing them to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;distance&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;distance&lt;/code&gt; will accept a variable number of arguments and compare the 2nd to Nth arguments to the first one, returning an array of Levenshtein distances. Since we only have two arguments, we need to extract the first (and only) distance in the array using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;head&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;In my day-to-day I always encourage folks to use modules where possible. In puzzles like these, I usually prefer to write my own implementation, even if it is less efficient. But it was a long week, so I took the lazy way out. 😉 See y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I admittedly took a shortcut for part two this week, but it allowed me to introduce modules here (I don’t believe I have used them before in a blog), so I think it makes up for it. 🙂</summary></entry><entry><title type="html">Perl Weekly Challenge 95</title><link href="http://localhost:4000/blog/perl-weekly-chellanege-095/" rel="alternate" type="text/html" title="Perl Weekly Challenge 95" /><published>2021-01-16T00:00:00-06:00</published><updated>2021-01-16T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-chellanege-095</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-chellanege-095/">&lt;p&gt;Two pretty simple challenges this week! I tried ot focus on strongly typed subroutines and methods to shake things up.&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-palindrome-number&quot;&gt;Task 1: Palindrome Number&lt;/h2&gt;
 
@@ -763,7 +881,141 @@ ok 3 -
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;This challenge is a good case study in test-driven development! Be sure to write edge-case tests to make sure everything is behaving as expected. In the case of part one, it was &lt;em&gt;not&lt;/em&gt; behaving as expected and required a re-write.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I was going to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.</summary></entry><entry><title type="html">Perl Weekly Challenge 92</title><link href="http://localhost:4000/blog/perl-weekly-challenge-092/" rel="alternate" type="text/html" title="Perl Weekly Challenge 92" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-092</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-092/">&lt;p&gt;It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-25/&quot;&gt;finishing up AoC&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;This challenge is a good case study in test-driven development! Be sure to write edge-case tests to make sure everything is behaving as expected. In the case of part one, it was &lt;em&gt;not&lt;/em&gt; behaving as expected and required a re-write.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I was going to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.</summary></entry><entry><title type="html">Advent of Code: Day 25</title><link href="http://localhost:4000/blog/advent-of-code-day-25/" rel="alternate" type="text/html" title="Advent of Code: Day 25" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-25</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-25/">&lt;p&gt;Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;We finally get to the front desk of the resort, and they tell us that the system is down, and we will be unable to check in. Luckily, they created all the room keys this morning, so we &lt;em&gt;will&lt;/em&gt; be able to go to our room, and just formally check in later. We are on the 25th floor, and the elevator is broken. 🙃&lt;/p&gt;
+
+&lt;p&gt;We make it to our room and scan the key and get the disheartening red light from the door. Luckily, there is a number to call IT on the card, and we give them a ring. They say we can either go down to the front desk to get it reset or reverse engineer the cryptographic handshake between the card and the door. Obviously we will take the latter choice.&lt;/p&gt;
+
+&lt;p&gt;We’re able to obtain the &lt;em&gt;public keys&lt;/em&gt; of both the door and the card (our input). To find the cryptographic handshake we must take the subject number (a constant; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;) and transform it according to the following rules:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Start with a value of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Set the value equal to itself times the subject number (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;Set the value equal to the remainder after dividing by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;20201227&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Continue until the value equals the device’s public key&lt;/li&gt;
+  &lt;li&gt;For the above steps, count how many loops it took; this is the secret &lt;strong&gt;loop size&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Once we have found the secret loop size for one of the devices, we can take the loop size and apply the same transformation as above using the public key from &lt;em&gt;the other device&lt;/em&gt; as our subject number, which yields the handshake key. Let’s look at an example:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Card Public Key: 5764801
+Door Public Key: 17807724
+
+--- Finding the loop size for the card ---
+# Loop 1
+value = 1 * 7        = 7
+value = 7 % 20201227 = 7
+
+# Loop 2
+value = 7 * 7         = 49
+value = 49 % 20201227 = 49
+
+# Loop 3
+value = 49 * 7         = 343
+value = 343 % 20201227 = 343
+
+# Loop 4
+value = 343 * 7         = 2401
+value = 2401 % 20201227 = 2401
+
+# Loop 5
+value = 2401 * 7         = 16807
+value = 16807 % 20201227 = 16807
+
+# Loop 6
+value = 16807 * 7         = 117649
+value = 117649 % 20201227 = 117649
+
+# Loop 7
+value = 117649 * 7        = 823543
+value = 823543 % 20201227 = 823543
+
+# Loop 8
+value = 823543 * 7         = 5764801
+value = 5764801 % 20201227 = 5764801 &amp;lt;-- The card's public key
+
+--- Applying the loop size to the door ---
+# Loop 1
+value = 1 * 17807724        = 17807724
+value = 17807724 % 20201227 = 17807724
+
+# Loop 2
+value = 17807724 * 17807724        = 317115034060176
+value = 317115034060176 % 20201227 = 10847306
+
+# Loop 3
+value = 10847306 * 17807724        = 193165831391544
+value = 193165831391544 % 20201227 = 1914476
+
+# Loop 4
+value = 1914476 * 17807724        = 34092460212624
+value = 34092460212624 % 20201227 = 874663
+
+# Loop 5
+value = 874663 * 17807724         = 15575757297012
+value = 15575757297012 % 20201227 = 5243202
+
+# Loop 6
+value = 5243202 * 17807724        = 93369494092248
+value = 93369494092248 % 20201227 = 8733831
+
+# Loop 7
+value = 8733831 * 17807724         = 155529651910644
+value = 155529651910644 % 20201227 = 1213104
+
+# Loop 8
+value = 1213104 * 17807724        = 21602621215296
+value = 21602621215296 % 20201227 = 14897079       &amp;lt;-- Cryptographic Handshake
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I will not display it, but if we had found the door’s loop size and then used the card’s public key as the subject number, we would have come to the same cryptographic handshake; this is how the door, and the card know they are a match.&lt;/p&gt;
+
+&lt;p&gt;With our &lt;em&gt;real&lt;/em&gt; card and door public keys, what is the cryptographic handshake between them?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/25/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
+    my ($card-key, $door-key) = $file.IO.lines.map(*.Int);
+    my $handshake = 1;
+    my $target = 1;
+    while $target != $door-key {
+        $target = ($target * 7) % 20201227;
+        $handshake = ($handshake * $card-key) % 20201227;
+    }
+    say $handshake;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+18293391
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;Rather than keep track of the loop size, we just do the above 2 loops in parallel until &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$target&lt;/code&gt; matches &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$door-key&lt;/code&gt;. Rather than do the two steps outline above, we are able to do the multiplication and remainder division (&lt;a href=&quot;https://en.wikipedia.org/wiki/Modulo_operation&quot;&gt;modulo&lt;/a&gt;) in one step. Finally, all we have to do is say the handshake!&lt;/p&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;2020 has been a tough year and everyone needs a break. Day 25 part 2 is a freebie. 🙂&lt;/p&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I had my ups and downs with this challenge. Obviously I did not fulfill my goal of solving everything in functional Raku; in fact, I wasn’t even able to solve everything in Raku. However, I learned a lot about the language, I learned a few new algorithms, and I had fun! This whole thing was a lot of fun, and I want to thank &lt;a href=&quot;https://github.com/topaz&quot;&gt;Eric&lt;/a&gt; for doing it for the past 6 years (even though this was my first time participating).&lt;/p&gt;
+
+&lt;p&gt;Next year I will have a one-and-a-half-year-old, so no promises I will be able to blog every day (it was hard enough this year), but I will do my best to participate, and I may blog for problems I find particularly clever.&lt;/p&gt;
+
+&lt;p&gt;With that, I would like to wish everyone a very merry Christmas and a happy New Year!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!</summary></entry><entry><title type="html">Perl Weekly Challenge 92</title><link href="http://localhost:4000/blog/perl-weekly-challenge-092/" rel="alternate" type="text/html" title="Perl Weekly Challenge 92" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-092</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-092/">&lt;p&gt;It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-25/&quot;&gt;finishing up AoC&lt;/a&gt;!&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-isomorphic-strings&quot;&gt;Task 1: Isomorphic Strings&lt;/h2&gt;
 
@@ -992,141 +1244,7 @@ ok 3 -
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Some fun little challenges that nicely complement Advent of Code. Now to start enjoying Christmas with my family! Merry Christmas everyone!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as finishing up AoC!</summary></entry><entry><title type="html">Advent of Code: Day 25</title><link href="http://localhost:4000/blog/advent-of-code-day-25/" rel="alternate" type="text/html" title="Advent of Code: Day 25" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-25</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-25/">&lt;p&gt;Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;We finally get to the front desk of the resort, and they tell us that the system is down, and we will be unable to check in. Luckily, they created all the room keys this morning, so we &lt;em&gt;will&lt;/em&gt; be able to go to our room, and just formally check in later. We are on the 25th floor, and the elevator is broken. 🙃&lt;/p&gt;
-
-&lt;p&gt;We make it to our room and scan the key and get the disheartening red light from the door. Luckily, there is a number to call IT on the card, and we give them a ring. They say we can either go down to the front desk to get it reset or reverse engineer the cryptographic handshake between the card and the door. Obviously we will take the latter choice.&lt;/p&gt;
-
-&lt;p&gt;We’re able to obtain the &lt;em&gt;public keys&lt;/em&gt; of both the door and the card (our input). To find the cryptographic handshake we must take the subject number (a constant; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;) and transform it according to the following rules:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Start with a value of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Set the value equal to itself times the subject number (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;)&lt;/li&gt;
-  &lt;li&gt;Set the value equal to the remainder after dividing by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;20201227&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Continue until the value equals the device’s public key&lt;/li&gt;
-  &lt;li&gt;For the above steps, count how many loops it took; this is the secret &lt;strong&gt;loop size&lt;/strong&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Once we have found the secret loop size for one of the devices, we can take the loop size and apply the same transformation as above using the public key from &lt;em&gt;the other device&lt;/em&gt; as our subject number, which yields the handshake key. Let’s look at an example:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Card Public Key: 5764801
-Door Public Key: 17807724
-
---- Finding the loop size for the card ---
-# Loop 1
-value = 1 * 7        = 7
-value = 7 % 20201227 = 7
-
-# Loop 2
-value = 7 * 7         = 49
-value = 49 % 20201227 = 49
-
-# Loop 3
-value = 49 * 7         = 343
-value = 343 % 20201227 = 343
-
-# Loop 4
-value = 343 * 7         = 2401
-value = 2401 % 20201227 = 2401
-
-# Loop 5
-value = 2401 * 7         = 16807
-value = 16807 % 20201227 = 16807
-
-# Loop 6
-value = 16807 * 7         = 117649
-value = 117649 % 20201227 = 117649
-
-# Loop 7
-value = 117649 * 7        = 823543
-value = 823543 % 20201227 = 823543
-
-# Loop 8
-value = 823543 * 7         = 5764801
-value = 5764801 % 20201227 = 5764801 &amp;lt;-- The card's public key
-
---- Applying the loop size to the door ---
-# Loop 1
-value = 1 * 17807724        = 17807724
-value = 17807724 % 20201227 = 17807724
-
-# Loop 2
-value = 17807724 * 17807724        = 317115034060176
-value = 317115034060176 % 20201227 = 10847306
-
-# Loop 3
-value = 10847306 * 17807724        = 193165831391544
-value = 193165831391544 % 20201227 = 1914476
-
-# Loop 4
-value = 1914476 * 17807724        = 34092460212624
-value = 34092460212624 % 20201227 = 874663
-
-# Loop 5
-value = 874663 * 17807724         = 15575757297012
-value = 15575757297012 % 20201227 = 5243202
-
-# Loop 6
-value = 5243202 * 17807724        = 93369494092248
-value = 93369494092248 % 20201227 = 8733831
-
-# Loop 7
-value = 8733831 * 17807724         = 155529651910644
-value = 155529651910644 % 20201227 = 1213104
-
-# Loop 8
-value = 1213104 * 17807724        = 21602621215296
-value = 21602621215296 % 20201227 = 14897079       &amp;lt;-- Cryptographic Handshake
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;I will not display it, but if we had found the door’s loop size and then used the card’s public key as the subject number, we would have come to the same cryptographic handshake; this is how the door, and the card know they are a match.&lt;/p&gt;
-
-&lt;p&gt;With our &lt;em&gt;real&lt;/em&gt; card and door public keys, what is the cryptographic handshake between them?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/25/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
-    my ($card-key, $door-key) = $file.IO.lines.map(*.Int);
-    my $handshake = 1;
-    my $target = 1;
-    while $target != $door-key {
-        $target = ($target * 7) % 20201227;
-        $handshake = ($handshake * $card-key) % 20201227;
-    }
-    say $handshake;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-18293391
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;Rather than keep track of the loop size, we just do the above 2 loops in parallel until &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$target&lt;/code&gt; matches &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$door-key&lt;/code&gt;. Rather than do the two steps outline above, we are able to do the multiplication and remainder division (&lt;a href=&quot;https://en.wikipedia.org/wiki/Modulo_operation&quot;&gt;modulo&lt;/a&gt;) in one step. Finally, all we have to do is say the handshake!&lt;/p&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;2020 has been a tough year and everyone needs a break. Day 25 part 2 is a freebie. 🙂&lt;/p&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;I had my ups and downs with this challenge. Obviously I did not fulfill my goal of solving everything in functional Raku; in fact, I wasn’t even able to solve everything in Raku. However, I learned a lot about the language, I learned a few new algorithms, and I had fun! This whole thing was a lot of fun, and I want to thank &lt;a href=&quot;https://github.com/topaz&quot;&gt;Eric&lt;/a&gt; for doing it for the past 6 years (even though this was my first time participating).&lt;/p&gt;
-
-&lt;p&gt;Next year I will have a one-and-a-half-year-old, so no promises I will be able to blog every day (it was hard enough this year), but I will do my best to participate, and I may blog for problems I find particularly clever.&lt;/p&gt;
-
-&lt;p&gt;With that, I would like to wish everyone a very merry Christmas and a happy New Year!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!</summary></entry><entry><title type="html">Advent of Code: Day 24</title><link href="http://localhost:4000/blog/advent-of-code-day-24/" rel="alternate" type="text/html" title="Advent of Code: Day 24" /><published>2020-12-24T00:00:00-06:00</published><updated>2020-12-24T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-24</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-24/">&lt;p&gt;Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-11/&quot;&gt;11&lt;/a&gt; and &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-17/&quot;&gt;17&lt;/a&gt;, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.&lt;/p&gt;
+&lt;p&gt;Some fun little challenges that nicely complement Advent of Code. Now to start enjoying Christmas with my family! Merry Christmas everyone!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as finishing up AoC!</summary></entry><entry><title type="html">Advent of Code: Day 24</title><link href="http://localhost:4000/blog/advent-of-code-day-24/" rel="alternate" type="text/html" title="Advent of Code: Day 24" /><published>2020-12-24T00:00:00-06:00</published><updated>2020-12-24T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-24</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-24/">&lt;p&gt;Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-11/&quot;&gt;11&lt;/a&gt; and &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-17/&quot;&gt;17&lt;/a&gt;, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -2341,516 +2459,4 @@ cdqvp,dglm,zhqjs,rbpg,xvtrfz,tgmzqjz,mfqgx,rffqhl
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Well, at least the creator of AoC is true to his word that weekday puzzles are easier. 🙂 This was a fun little one and puts us at 84% of the way there!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.</summary></entry><entry><title type="html">Advent of Code: Day 20</title><link href="http://localhost:4000/blog/advent-of-code-day-20/" rel="alternate" type="text/html" title="Advent of Code: Day 20" /><published>2020-12-20T00:00:00-06:00</published><updated>2020-12-20T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-20</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-20/">&lt;p&gt;Today was… not fun, to say the very least. It was a lot of tedium, and I am not super proud of my solution.&lt;/p&gt;
-
-&lt;p&gt;Today involved a lot of matrix operations. I attempted to use Raku’s &lt;a href=&quot;https://github.com/lichtkind/Raku-Math-Matrix&quot;&gt;Math::Matrix&lt;/a&gt;, but found the features to be lacking; I don’t know what I expected from a package that hasn’t had a release in 2+ years. Instead, this solution was written using &lt;a href=&quot;https://numpy.org/&quot;&gt;NumPy&lt;/a&gt;, a package which I am familiar with, but is not in my day-to-day rotation, so I am sure there is a better solution than mine out there.&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;The messages from &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-19/&quot;&gt;yesterday&lt;/a&gt; decode into a series of images that we need to reassemble back into a single image.&lt;/p&gt;
-
-&lt;p&gt;Each of our inputs comes with an ID and the image itself. Here is an example of nine tiles of input:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Tile 2311:
-..##.#..#.
-##..#.....
-#...##..#.
-####.#...#
-##.##.###.
-##...#.###
-.#.#.#..##
-..#....#..
-###...#.#.
-..###..###
-
-Tile 1951:
-#.##...##.
-#.####...#
-.....#..##
-#...######
-.##.#....#
-.###.#####
-###.##.##.
-.###....#.
-..#.#..#.#
-#...##.#..
-
-Tile 1171:
-####...##.
-#..##.#..#
-##.#..#.#.
-.###.####.
-..###.####
-.##....##.
-.#...####.
-#.##.####.
-####..#...
-.....##...
-
-Tile 1427:
-###.##.#..
-.#..#.##..
-.#.##.#..#
-#.#.#.##.#
-....#...##
-...##..##.
-...#.#####
-.#.####.#.
-..#..###.#
-..##.#..#.
-
-Tile 1489:
-##.#.#....
-..##...#..
-.##..##...
-..#...#...
-#####...#.
-#..#.#.#.#
-...#.#.#..
-##.#...##.
-..##.##.##
-###.##.#..
-
-Tile 2473:
-#....####.
-#..#.##...
-#.##..#...
-######.#.#
-.#...#.#.#
-.#########
-.###.#..#.
-########.#
-##...##.#.
-..###.#.#.
-
-Tile 2971:
-..#.#....#
-#...###...
-#.#.###...
-##.##..#..
-.#####..##
-.#..####.#
-#..#.#..#.
-..####.###
-..#.#.###.
-...#.#.#.#
-
-Tile 2729:
-...#.#.#.#
-####.#....
-..#.#.....
-....#..#.#
-.##..##.#.
-.#.####...
-####.#.#..
-##.####...
-##..#.##..
-#.##...##.
-
-Tile 3079:
-#.#.#####.
-.#..######
-..#.......
-######....
-####.#..#.
-.#...#.##.
-#.#####.##
-..#.###...
-..#.......
-..#.###...
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Unfortunately, it seems the camera was malfunctioning, so these images may be &lt;strong&gt;flipped&lt;/strong&gt; or &lt;strong&gt;rotated&lt;/strong&gt;. We can find the way these fit together by aligning the borders of adjacent tiles. Here are the above nine tiles flipped and rotated until they fit together:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#...##.#.. ..###..### #.#.#####.
-..#.#..#.# ###...#.#. .#..######
-.###....#. ..#....#.. ..#.......
-###.##.##. .#.#.#..## ######....
-.###.##### ##...#.### ####.#..#.
-.##.#....# ##.##.###. .#...#.##.
-#...###### ####.#...# #.#####.##
-.....#..## #...##..#. ..#.###...
-#.####...# ##..#..... ..#.......
-#.##...##. ..##.#..#. ..#.###...
-
-#.##...##. ..##.#..#. ..#.###...
-##..#.##.. ..#..###.# ##.##....#
-##.####... .#.####.#. ..#.###..#
-####.#.#.. ...#.##### ###.#..###
-.#.####... ...##..##. .######.##
-.##..##.#. ....#...## #.#.#.#...
-....#..#.# #.#.#.##.# #.###.###.
-..#.#..... .#.##.#..# #.###.##..
-####.#.... .#..#.##.. .######...
-...#.#.#.# ###.##.#.. .##...####
-
-...#.#.#.# ###.##.#.. .##...####
-..#.#.###. ..##.##.## #..#.##..#
-..####.### ##.#...##. .#.#..#.##
-#..#.#..#. ...#.#.#.. .####.###.
-.#..####.# #..#.#.#.# ####.###..
-.#####..## #####...#. .##....##.
-##.##..#.. ..#...#... .####...#.
-#.#.###... .##..##... .####.##.#
-#...###... ..##...#.. ...#..####
-..#.#....# ##.#.#.... ...##.....
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;With the corresponding tile IDs being:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1951    2311    3079
-2729    1427    2473
-2971    1489    1171
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;To confirm we put the image together correctly, we need to multiply the IDs of the four corners. In this case we get:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1951 * 3079 * 2971 * 1171 = 20899048083289
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;What is the product of the four corners in our real input?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/20/python/main.py&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;orientations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rotation&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;new_tile&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rot90&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rotation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_tile&lt;/span&gt;                        &lt;span class=&quot;c1&quot;&gt;# [1]
-&lt;/span&gt;        &lt;span class=&quot;k&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;flip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;tiles&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;block&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;lines&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;splitlines&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;tile_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lines&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;' '&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;tile&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lines&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:]])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'#'&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# [2]
-&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tile_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sqrt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;combined_tiles&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;found_all_matches&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start_tile_id&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start_tile&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;orientations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_tile_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]):&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;combined_tiles&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_tile_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start_tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;used&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_tile_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;                            &lt;span class=&quot;c1&quot;&gt;# [3]
-&lt;/span&gt;            &lt;span class=&quot;n&quot;&gt;found_all_matches&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;found_match&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_num&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;used&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                        &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
-
-                    &lt;span class=&quot;n&quot;&gt;previous_horizontal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;combined_tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;previous_vertical&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;combined_tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;
-
-                    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;try_tile&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;orientations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-                        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;previous_horizontal&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;previous_horizontal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;try_tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]):&lt;/span&gt;
-                            &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
-                        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;previous_vertical&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;previous_vertical&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;try_tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:]):&lt;/span&gt;
-                            &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
-
-                        &lt;span class=&quot;n&quot;&gt;combined_tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tile_num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;try_tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-                        &lt;span class=&quot;n&quot;&gt;used&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tile_num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-                        &lt;span class=&quot;n&quot;&gt;found_match&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-                        &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
-
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;found_match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;found_all_matches&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
-
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;found_all_matches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;found_all_matches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;tile_ids&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;entry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;entry&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;combined_tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reshape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# [4]
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;corner_product&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_ids&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_ids&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_ids&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_ids&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;corner_product&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ python main.py input.txt
-23497974998093
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;First things first, you can see this is an absolute travesty from a time complexity standpoint. I count 5 nested for-loops, making this &lt;em&gt;O(n&lt;sup&gt;5&lt;/sup&gt;)&lt;/em&gt;, which falls squarely in the &lt;a href=&quot;https://www.bigocheatsheet.com/&quot;&gt;horrible category&lt;/a&gt;. Regardless, it runs in under five seconds, so it’s not a huge deal. Just wanted to acknowledge that I &lt;em&gt;know&lt;/em&gt; it is bad.&lt;/p&gt;
-
-&lt;p&gt;The logic for this mess is as follows:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;First, parse the input into a dictionary with the ID as the key, and a 2D NumPy array as the value
-    &lt;ul&gt;
-      &lt;li&gt;We translate &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;False&lt;/code&gt; on the way in&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;We start with a random tile and iterate through it’s orientations
-    &lt;ul&gt;
-      &lt;li&gt;3 rotations (plus the un-rotated version) as well as one flip for each rotation&lt;/li&gt;
-      &lt;li&gt;For each rotation we look for the possible matches on all four edges&lt;/li&gt;
-      &lt;li&gt;When we find one that fits, we store it in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;combined_tiles&lt;/code&gt; and keep looking&lt;/li&gt;
-      &lt;li&gt;When we run into one that doesn’t fit, we start the whole process over&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Once we have put all the pieces in their place, we extract &lt;em&gt;just&lt;/em&gt; the tile IDs into a grid (like in the example) and multiply the corners.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;If it’s stupid, but it works, it ain’t stupid 🤷🏻‍♂️&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;For anyone not familiar with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;yield&lt;/code&gt; keyword, it is what’s known as a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;generator&lt;/code&gt; in Python (a lazy list in Raku). Basically, this iterable is only evaluated &lt;em&gt;when it is asked for&lt;/em&gt;, so all that is stored in memory is how to generate the next term, not anything else. Additionally, generators return to the function &lt;em&gt;exactly&lt;/em&gt; where they left off. So after yielding &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;new_tile&lt;/code&gt; the next term will be the flipped version of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;new_tile&lt;/code&gt;. &lt;a href=&quot;https://wiki.python.org/moin/Generators&quot;&gt;Here is a link&lt;/a&gt; for further reading.&lt;/li&gt;
-  &lt;li&gt;NumPy is interesting, so when you have an array compared to a value, it compares each value in the array to that value, and puts it into a new array. This is our way of converting to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;False&lt;/code&gt; values.&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;This defines a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;set&lt;/code&gt; with a single item, &lt;em&gt;not&lt;/em&gt; a dictionary. Python can be a little confusing on that front:&lt;/p&gt;
-
-    &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;               &lt;span class=&quot;c1&quot;&gt;# empty dict
-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'foo'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'bar'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;# dict with 1 item
-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;# empty set
-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'foo'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;          &lt;span class=&quot;c1&quot;&gt;# set with 1 item
-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'foo'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;# also a set with 1 item (`set()` takes an iterable)
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;reshape&lt;/code&gt; allows us to convert a list of lists back into an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n x n&lt;/code&gt; matrix.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;After putting the image together, we find that it is a picture of the ocean, and it is full of &lt;strong&gt;sea monsters&lt;/strong&gt;. First things first, lets take of the borders used to align the pieces. The above example becomes this:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.#.#..#. ##...#.# #..#####
-###....# .#....#. .#......
-##.##.## #.#.#..# #####...
-###.#### #...#.## ###.#..#
-##.#.... #.##.### #...#.##
-...##### ###.#... .#####.#
-....#..# ...##..# .#.###..
-.####... #..#.... .#......
-
-#..#.##. .#..###. #.##....
-#.####.. #.####.# .#.###..
-###.#.#. ..#.#### ##.#..##
-#.####.. ..##..## ######.#
-##..##.# ...#...# .#.#.#..
-...#..#. .#.#.##. .###.###
-.#.#.... #.##.#.. .###.##.
-###.#... #..#.##. ######..
-
-.#.#.### .##.##.# ..#.##..
-.####.## #.#...## #.#..#.#
-..#.#..# ..#.#.#. ####.###
-#..####. ..#.#.#. ###.###.
-#####..# ####...# ##....##
-#.##..#. .#...#.. ####...#
-.#.###.. ##..##.. ####.##.
-...###.. .##...#. ..#..###
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;And then we can remove the gaps to be left with a full grid:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.#.#..#.##...#.##..#####
-###....#.#....#..#......
-##.##.###.#.#..######...
-###.#####...#.#####.#..#
-##.#....#.##.####...#.##
-...########.#....#####.#
-....#..#...##..#.#.###..
-.####...#..#.....#......
-#..#.##..#..###.#.##....
-#.####..#.####.#.#.###..
-###.#.#...#.######.#..##
-#.####....##..########.#
-##..##.#...#...#.#.#.#..
-...#..#..#.#.##..###.###
-.#.#....#.##.#...###.##.
-###.#...#..#.##.######..
-.#.#.###.##.##.#..#.##..
-.####.###.#...###.#..#.#
-..#.#..#..#.#.#.####.###
-#..####...#.#.#.###.###.
-#####..#####...###....##
-#.##..#..#...#..####...#
-.#.###..##..##..####.##.
-...###...##...#...#..###
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We need to find the sea monsters in the above image. They look like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;                  # 
-#    ##    ##    ###
- #  #  #  #  #  #   
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;When looking for a sea monster, the spaces can be either &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.&lt;/code&gt;, as long as those specific &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#&lt;/code&gt; symbols match. After rotating and flipping the grid, we find two sea monsters (marked as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O&lt;/code&gt; characters):&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.####...#####..#...###..
-#####..#..#.#.####..#.#.
-.#.#...#.###...#.##.O#..
-#.O.##.OO#.#.OO.##.OOO##
-..#O.#O#.O##O..O.#O##.##
-...#.#..##.##...#..#..##
-#.##.#..#.#..#..##.#.#..
-.###.##.....#...###.#...
-#.####.#.#....##.#..#.#.
-##...#..#....#..#...####
-..#.##...###..#.#####..#
-....#.##.#.#####....#...
-..##.##.###.....#.##..#.
-#...#...###..####....##.
-.#.##...#.##.#.#.###...#
-#.###.#..####...##..#...
-#.###...#.##...#.##O###.
-.O##.#OO.###OO##..OOO##.
-..O#.O..O..O.#O##O##.###
-#.#..##.########..#..##.
-#.#####..#.#...##..#....
-#....##..#.#########..##
-#...#.....#..##...###.##
-#..###....##.#...##.##.#
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;After identifying the sea monsters, we can calculate how rough the water is by counting the number of remaining &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#&lt;/code&gt; characters. In the above example it is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;273&lt;/code&gt;; what is the water roughness in our actual input?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/20/python/main.py&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;orientations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rotation&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;new_matrix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rot90&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rotation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_matrix&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;flip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;tiles&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;block&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;lines&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;splitlines&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;tile_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lines&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;' '&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;tile&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lines&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:]])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'#'&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tile_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sqrt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;combined_tiles&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;found_all_matches&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start_tile_id&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start_tile&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;orientations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_tile_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]):&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;combined_tiles&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_tile_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start_tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;used&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_tile_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;found_all_matches&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;found_match&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_num&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;used&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                        &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
-
-                    &lt;span class=&quot;n&quot;&gt;previous_horizontal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;combined_tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;previous_vertical&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;combined_tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;
-
-                    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;try_tile&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;orientations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-                        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;previous_horizontal&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;previous_horizontal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;try_tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]):&lt;/span&gt;
-                            &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
-                        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;previous_vertical&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;previous_vertical&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;try_tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:]):&lt;/span&gt;
-                            &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
-
-                        &lt;span class=&quot;n&quot;&gt;combined_tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tile_num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;try_tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-                        &lt;span class=&quot;n&quot;&gt;used&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tile_num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-                        &lt;span class=&quot;n&quot;&gt;found_match&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-                        &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
-
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;found_match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;found_all_matches&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
-
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;found_all_matches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;found_all_matches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;final_grid_ids&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;entry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;entry&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;combined_tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reshape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;corner_product&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;final_grid_ids&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;final_grid_ids&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;final_grid_ids&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;final_grid_ids&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f'Part 1: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;corner_product&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;tile_width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;combined_tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# Remove borders on each side
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zeros&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tile_width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dtype&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;combined_tiles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;column&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;divmod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid_width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;column&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;column&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile_width&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;monster&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;'                  # '&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;'#    ##    ##    ###'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;' #  #  #  #  #  #   '&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;monster&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;monster&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'#'&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;water_roughness&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;orientation&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;orientations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;num_monsters&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;monster&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;monster&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;grid_slice&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;orientation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;monster&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;monster&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grid_slice&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;monster&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;monster&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;num_monsters&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num_monsters&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;water_roughness&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num_monsters&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;monster&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f'Part 2: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;water_roughness&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ python main.py input.txt
-Part 1: 20899048083289
-Part 2: 2256
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;Immediately where part one left off we apply the following logic:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;First remove the border from each tile we just aligned&lt;/li&gt;
-  &lt;li&gt;Start with an empty grid (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;np.zeroes&lt;/code&gt;) and build it up tile-by-tile so that we have an outer matrix full of smaller matrices&lt;/li&gt;
-  &lt;li&gt;Define our monster as a NumPy matrix&lt;/li&gt;
-  &lt;li&gt;Again, iterate through possible orientations (grid orientations this time) and generate slices the size of a monster&lt;/li&gt;
-  &lt;li&gt;Check if the slice &lt;em&gt;is&lt;/em&gt; a monster&lt;/li&gt;
-  &lt;li&gt;If we found a monster, we must be in the right orientation&lt;/li&gt;
-  &lt;li&gt;To find the water roughness we &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sum&lt;/code&gt; the whole grid (which will just count the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt; values), then subtract the number of those &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt; values that are in a monster &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;num_monsters - np.sum(monster)&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;According to the &lt;a href=&quot;https://www.youtube.com/watch?v=CFWuwNDOnIo&quot;&gt;creator of Advent of Code&lt;/a&gt;, weekend puzzles are intentionally harder because that is when people have time to do them. With that in mind, I am hoping the rest of the puzzles are easier than today! If I can’t have that, then I at least hope they are less tedious. 🙂 Just five more days!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Python" /><summary type="html">Today was… not fun, to say the very least. It was a lot of tedium, and I am not super proud of my solution.</summary></entry></feed>
+&lt;p&gt;Well, at least the creator of AoC is true to his word that weekday puzzles are easier. 🙂 This was a fun little one and puts us at 84% of the way there!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.</summary></entry></feed>

@@ -196,4 +196,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "http://localhost:4000/blog/perl-weekly-chellanege-095/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 96",
+        "excerpt":"I admittedly took a shortcut for part two this week, but it allowed me to introduce modules here (I don’t believe I have used them before in a blog), so I think it makes up for it. 🙂 Task 1: Reverse Words You are given a string $S. Write a...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "http://localhost:4000/blog/perl-weekly-challenge-096/",
+        "teaser": null
       }]
