@@ -1,4 +1,142 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-01-22T20:28:40-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 96</title><link href="http://localhost:4000/blog/perl-weekly-challenge-096/" rel="alternate" type="text/html" title="Perl Weekly Challenge 96" /><published>2021-01-22T00:00:00-06:00</published><updated>2021-01-22T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-096</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-096/">&lt;p&gt;I admittedly took a shortcut for part two this week, but it allowed me to introduce modules here (I don’t &lt;em&gt;believe&lt;/em&gt; I have used them before in a blog), so I think it makes up for it. 🙂&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-01-30T19:50:49-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 97</title><link href="http://localhost:4000/blog/perl-weekly-challenge-097/" rel="alternate" type="text/html" title="Perl Weekly Challenge 97" /><published>2021-01-30T00:00:00-06:00</published><updated>2021-01-30T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-097</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-097/">&lt;p&gt;My solution to challenge two builds on last week’s challenge two, so I encourage you to go read &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-096/&quot;&gt;last week’s post&lt;/a&gt; if you haven’t already!&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-caesar-cipher&quot;&gt;Task 1: Caesar Cipher&lt;/h2&gt;
+
+&lt;p&gt;You are given string &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt; containing alphabets &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;A..Z&lt;/code&gt; only and a number &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to encrypt the given string &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt; using a &lt;a href=&quot;https://en.wikipedia.org/wiki/Caesar_cipher&quot;&gt;Caesar Cipher&lt;/a&gt; with left shift of size &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $S = &quot;THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG&quot;, $N = 3
+Output: &quot;QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD&quot;
+
+Plain:  ABCDEFGHIJKLMNOPQRSTUVWXYZ
+Cipher: XYZABCDEFGHIJKLMNOPQRSTUVW
+
+Plaintext:  THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG
+Ciphertext: QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-097/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;constant @alphabet = ('A'..'Z').List; # [1]
+
+sub challenge(
+    Str $S where $S ~~ /^[&amp;lt;alpha&amp;gt;|&amp;lt;space&amp;gt;]+$/, # [2]
+    Int $N where $N &amp;gt;= 0
+) {
+    $S.uc.trans(@alphabet =&amp;gt; @alphabet.rotate(-$N)); # [3][4]
+}
+
+sub MAIN(Str $S, Int $N) {
+    say challenge($S, $N);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG' 3
+QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;We use some cool built-in functionality to make this so simple. Here is the logic:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Make sure the string is uppercase (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.uc&lt;/code&gt;). They say we will always get uppercase, but might as well validate.&lt;/li&gt;
+  &lt;li&gt;For each letter in the string, translate it to a different version of the alphabet that is rotated by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; spaces.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;That’s it!&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Since the alphabet is always going to be constant we can instantiate it at the top level as a &lt;a href=&quot;https://docs.raku.org/language/terms#Constants&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;constant&lt;/code&gt;&lt;/a&gt;. Constants are evaluated at compile time, so this speeds up the program (even if just marginally).&lt;/li&gt;
+  &lt;li&gt;You have likely seen me use this syntax before; these are called anonymous type constraints, and allow us to be a little more specific than just &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Str&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt;. In this case, we want a string that only contains letters and spaces, and an int that is greater than or equal to zero.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/trans&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt;&lt;/a&gt; is a cool subroutine; it takes two lists (or strings) defining replacements to be made in the supplied string. Given the example above, it is the equivalent of something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S.subst('a', 'x').subst('b', 'y')...&lt;/code&gt;. The left argument, in our case, will always be the alphabet, and the right argument is the alphabet rotated by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; spaces.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/rotate&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rotate&lt;/code&gt;&lt;/a&gt; takes a list and rotates it to the left. Since we need our letters shifted to the right, we use a negative number (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-$N&lt;/code&gt;).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-binary-substrings&quot;&gt;Task 2: Binary Substrings&lt;/h2&gt;
+
+&lt;p&gt;You are given a binary string &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$B&lt;/code&gt; and an integer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to split the binary string &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$B&lt;/code&gt; of size &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt; and then find the minimum number of flips required to make it all the same.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $B = “101100101”, $S = 3
+Output: 1
+
+Binary Substrings:
+  &quot;101&quot;: 0 flip
+  &quot;100&quot;: 1 flip to make it &quot;101&quot;
+  &quot;101&quot;: 0 flip
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input $B = “10110111”, $S = 4
+Output: 2
+
+Binary Substrings:
+  &quot;1011&quot;: 0 flip
+  &quot;0111&quot;: 2 flips to make it &quot;1011&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-097/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use Text::Levenshtein; # imports `distance`
+
+sub challenge(
+    Str $B where $B ~~ /^[0|1]+$/,
+    Int $S where $S &amp;gt; 0
+) {
+    my @segments = $B.comb.rotor($S, :partial).map(-&amp;gt; @chars { # [1]
+        my $segment = @chars.join;
+        $segment ~ '0' x ($S - $segment.chars) # [2][3]
+    });
+    distance(|@segments).sum; # [4]
+}
+
+multi sub MAIN(Str $B, Int $S) {
+    say challenge($B, $S);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 101100101 3
+1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;The number of flips seems oddly similar to the edit distance from last week, no? I was able to reuse &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Text::Levenshtein.distance&lt;/code&gt; from last week to find the “edit distance” between binary strings! We do a little work to split the string into &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt; pieces (padding with zeros, if necessary), then leave all the heaving lifting to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;distance&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/rotor&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rotor&lt;/code&gt;&lt;/a&gt; splits a list into pieces based on the argument (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt; in this case). We pass it the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:partial&lt;/code&gt; flag so that it keeps any pieces that are less than &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt; in size (rather than throwing them away).&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/~&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~&lt;/code&gt;&lt;/a&gt; is Raku’s string concatenation subroutine.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/x&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt;&lt;/a&gt; is Raku’s string repetition operator. I couldn’t an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rpad&lt;/code&gt; method in Raku, so this is my workaround.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;distance&lt;/code&gt; does not take a single list of arguments, it takes a variable amount of top-level arguments. To achieve that behavior, we use a &lt;a href=&quot;https://docs.raku.org/routine/%7C&quot;&gt;slip (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt;)&lt;/a&gt; to unpack the list we built.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;As I was writing this blog I realized it may have been better for me to left pad the binary strings in challenge two; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1001 != 100100&lt;/code&gt; but &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1001 == 001001&lt;/code&gt;. Oh well, the question doesn’t talk about the “partial” case anyway!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">My solution to challenge two builds on last week’s challenge two, so I encourage you to go read last week’s post if you haven’t already!</summary></entry><entry><title type="html">Perl Weekly Challenge 96</title><link href="http://localhost:4000/blog/perl-weekly-challenge-096/" rel="alternate" type="text/html" title="Perl Weekly Challenge 96" /><published>2021-01-22T00:00:00-06:00</published><updated>2021-01-22T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-096</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-096/">&lt;p&gt;I admittedly took a shortcut for part two this week, but it allowed me to introduce modules here (I don’t &lt;em&gt;believe&lt;/em&gt; I have used them before in a blog), so I think it makes up for it. 🙂&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-reverse-words&quot;&gt;Task 1: Reverse Words&lt;/h2&gt;
 
@@ -881,141 +1019,7 @@ ok 3 -
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;This challenge is a good case study in test-driven development! Be sure to write edge-case tests to make sure everything is behaving as expected. In the case of part one, it was &lt;em&gt;not&lt;/em&gt; behaving as expected and required a re-write.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I was going to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.</summary></entry><entry><title type="html">Advent of Code: Day 25</title><link href="http://localhost:4000/blog/advent-of-code-day-25/" rel="alternate" type="text/html" title="Advent of Code: Day 25" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-25</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-25/">&lt;p&gt;Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;We finally get to the front desk of the resort, and they tell us that the system is down, and we will be unable to check in. Luckily, they created all the room keys this morning, so we &lt;em&gt;will&lt;/em&gt; be able to go to our room, and just formally check in later. We are on the 25th floor, and the elevator is broken. 🙃&lt;/p&gt;
-
-&lt;p&gt;We make it to our room and scan the key and get the disheartening red light from the door. Luckily, there is a number to call IT on the card, and we give them a ring. They say we can either go down to the front desk to get it reset or reverse engineer the cryptographic handshake between the card and the door. Obviously we will take the latter choice.&lt;/p&gt;
-
-&lt;p&gt;We’re able to obtain the &lt;em&gt;public keys&lt;/em&gt; of both the door and the card (our input). To find the cryptographic handshake we must take the subject number (a constant; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;) and transform it according to the following rules:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Start with a value of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Set the value equal to itself times the subject number (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;)&lt;/li&gt;
-  &lt;li&gt;Set the value equal to the remainder after dividing by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;20201227&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Continue until the value equals the device’s public key&lt;/li&gt;
-  &lt;li&gt;For the above steps, count how many loops it took; this is the secret &lt;strong&gt;loop size&lt;/strong&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Once we have found the secret loop size for one of the devices, we can take the loop size and apply the same transformation as above using the public key from &lt;em&gt;the other device&lt;/em&gt; as our subject number, which yields the handshake key. Let’s look at an example:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Card Public Key: 5764801
-Door Public Key: 17807724
-
---- Finding the loop size for the card ---
-# Loop 1
-value = 1 * 7        = 7
-value = 7 % 20201227 = 7
-
-# Loop 2
-value = 7 * 7         = 49
-value = 49 % 20201227 = 49
-
-# Loop 3
-value = 49 * 7         = 343
-value = 343 % 20201227 = 343
-
-# Loop 4
-value = 343 * 7         = 2401
-value = 2401 % 20201227 = 2401
-
-# Loop 5
-value = 2401 * 7         = 16807
-value = 16807 % 20201227 = 16807
-
-# Loop 6
-value = 16807 * 7         = 117649
-value = 117649 % 20201227 = 117649
-
-# Loop 7
-value = 117649 * 7        = 823543
-value = 823543 % 20201227 = 823543
-
-# Loop 8
-value = 823543 * 7         = 5764801
-value = 5764801 % 20201227 = 5764801 &amp;lt;-- The card's public key
-
---- Applying the loop size to the door ---
-# Loop 1
-value = 1 * 17807724        = 17807724
-value = 17807724 % 20201227 = 17807724
-
-# Loop 2
-value = 17807724 * 17807724        = 317115034060176
-value = 317115034060176 % 20201227 = 10847306
-
-# Loop 3
-value = 10847306 * 17807724        = 193165831391544
-value = 193165831391544 % 20201227 = 1914476
-
-# Loop 4
-value = 1914476 * 17807724        = 34092460212624
-value = 34092460212624 % 20201227 = 874663
-
-# Loop 5
-value = 874663 * 17807724         = 15575757297012
-value = 15575757297012 % 20201227 = 5243202
-
-# Loop 6
-value = 5243202 * 17807724        = 93369494092248
-value = 93369494092248 % 20201227 = 8733831
-
-# Loop 7
-value = 8733831 * 17807724         = 155529651910644
-value = 155529651910644 % 20201227 = 1213104
-
-# Loop 8
-value = 1213104 * 17807724        = 21602621215296
-value = 21602621215296 % 20201227 = 14897079       &amp;lt;-- Cryptographic Handshake
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;I will not display it, but if we had found the door’s loop size and then used the card’s public key as the subject number, we would have come to the same cryptographic handshake; this is how the door, and the card know they are a match.&lt;/p&gt;
-
-&lt;p&gt;With our &lt;em&gt;real&lt;/em&gt; card and door public keys, what is the cryptographic handshake between them?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/25/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
-    my ($card-key, $door-key) = $file.IO.lines.map(*.Int);
-    my $handshake = 1;
-    my $target = 1;
-    while $target != $door-key {
-        $target = ($target * 7) % 20201227;
-        $handshake = ($handshake * $card-key) % 20201227;
-    }
-    say $handshake;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-18293391
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;Rather than keep track of the loop size, we just do the above 2 loops in parallel until &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$target&lt;/code&gt; matches &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$door-key&lt;/code&gt;. Rather than do the two steps outline above, we are able to do the multiplication and remainder division (&lt;a href=&quot;https://en.wikipedia.org/wiki/Modulo_operation&quot;&gt;modulo&lt;/a&gt;) in one step. Finally, all we have to do is say the handshake!&lt;/p&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;2020 has been a tough year and everyone needs a break. Day 25 part 2 is a freebie. 🙂&lt;/p&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;I had my ups and downs with this challenge. Obviously I did not fulfill my goal of solving everything in functional Raku; in fact, I wasn’t even able to solve everything in Raku. However, I learned a lot about the language, I learned a few new algorithms, and I had fun! This whole thing was a lot of fun, and I want to thank &lt;a href=&quot;https://github.com/topaz&quot;&gt;Eric&lt;/a&gt; for doing it for the past 6 years (even though this was my first time participating).&lt;/p&gt;
-
-&lt;p&gt;Next year I will have a one-and-a-half-year-old, so no promises I will be able to blog every day (it was hard enough this year), but I will do my best to participate, and I may blog for problems I find particularly clever.&lt;/p&gt;
-
-&lt;p&gt;With that, I would like to wish everyone a very merry Christmas and a happy New Year!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!</summary></entry><entry><title type="html">Perl Weekly Challenge 92</title><link href="http://localhost:4000/blog/perl-weekly-challenge-092/" rel="alternate" type="text/html" title="Perl Weekly Challenge 92" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-092</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-092/">&lt;p&gt;It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-25/&quot;&gt;finishing up AoC&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;This challenge is a good case study in test-driven development! Be sure to write edge-case tests to make sure everything is behaving as expected. In the case of part one, it was &lt;em&gt;not&lt;/em&gt; behaving as expected and required a re-write.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I was going to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.</summary></entry><entry><title type="html">Perl Weekly Challenge 92</title><link href="http://localhost:4000/blog/perl-weekly-challenge-092/" rel="alternate" type="text/html" title="Perl Weekly Challenge 92" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-092</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-092/">&lt;p&gt;It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-25/&quot;&gt;finishing up AoC&lt;/a&gt;!&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-isomorphic-strings&quot;&gt;Task 1: Isomorphic Strings&lt;/h2&gt;
 
@@ -1244,7 +1248,141 @@ ok 3 -
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Some fun little challenges that nicely complement Advent of Code. Now to start enjoying Christmas with my family! Merry Christmas everyone!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as finishing up AoC!</summary></entry><entry><title type="html">Advent of Code: Day 24</title><link href="http://localhost:4000/blog/advent-of-code-day-24/" rel="alternate" type="text/html" title="Advent of Code: Day 24" /><published>2020-12-24T00:00:00-06:00</published><updated>2020-12-24T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-24</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-24/">&lt;p&gt;Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-11/&quot;&gt;11&lt;/a&gt; and &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-17/&quot;&gt;17&lt;/a&gt;, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.&lt;/p&gt;
+&lt;p&gt;Some fun little challenges that nicely complement Advent of Code. Now to start enjoying Christmas with my family! Merry Christmas everyone!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as finishing up AoC!</summary></entry><entry><title type="html">Advent of Code: Day 25</title><link href="http://localhost:4000/blog/advent-of-code-day-25/" rel="alternate" type="text/html" title="Advent of Code: Day 25" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-25</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-25/">&lt;p&gt;Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
+
+&lt;p&gt;We finally get to the front desk of the resort, and they tell us that the system is down, and we will be unable to check in. Luckily, they created all the room keys this morning, so we &lt;em&gt;will&lt;/em&gt; be able to go to our room, and just formally check in later. We are on the 25th floor, and the elevator is broken. 🙃&lt;/p&gt;
+
+&lt;p&gt;We make it to our room and scan the key and get the disheartening red light from the door. Luckily, there is a number to call IT on the card, and we give them a ring. They say we can either go down to the front desk to get it reset or reverse engineer the cryptographic handshake between the card and the door. Obviously we will take the latter choice.&lt;/p&gt;
+
+&lt;p&gt;We’re able to obtain the &lt;em&gt;public keys&lt;/em&gt; of both the door and the card (our input). To find the cryptographic handshake we must take the subject number (a constant; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;) and transform it according to the following rules:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Start with a value of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Set the value equal to itself times the subject number (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;Set the value equal to the remainder after dividing by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;20201227&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Continue until the value equals the device’s public key&lt;/li&gt;
+  &lt;li&gt;For the above steps, count how many loops it took; this is the secret &lt;strong&gt;loop size&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Once we have found the secret loop size for one of the devices, we can take the loop size and apply the same transformation as above using the public key from &lt;em&gt;the other device&lt;/em&gt; as our subject number, which yields the handshake key. Let’s look at an example:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Card Public Key: 5764801
+Door Public Key: 17807724
+
+--- Finding the loop size for the card ---
+# Loop 1
+value = 1 * 7        = 7
+value = 7 % 20201227 = 7
+
+# Loop 2
+value = 7 * 7         = 49
+value = 49 % 20201227 = 49
+
+# Loop 3
+value = 49 * 7         = 343
+value = 343 % 20201227 = 343
+
+# Loop 4
+value = 343 * 7         = 2401
+value = 2401 % 20201227 = 2401
+
+# Loop 5
+value = 2401 * 7         = 16807
+value = 16807 % 20201227 = 16807
+
+# Loop 6
+value = 16807 * 7         = 117649
+value = 117649 % 20201227 = 117649
+
+# Loop 7
+value = 117649 * 7        = 823543
+value = 823543 % 20201227 = 823543
+
+# Loop 8
+value = 823543 * 7         = 5764801
+value = 5764801 % 20201227 = 5764801 &amp;lt;-- The card's public key
+
+--- Applying the loop size to the door ---
+# Loop 1
+value = 1 * 17807724        = 17807724
+value = 17807724 % 20201227 = 17807724
+
+# Loop 2
+value = 17807724 * 17807724        = 317115034060176
+value = 317115034060176 % 20201227 = 10847306
+
+# Loop 3
+value = 10847306 * 17807724        = 193165831391544
+value = 193165831391544 % 20201227 = 1914476
+
+# Loop 4
+value = 1914476 * 17807724        = 34092460212624
+value = 34092460212624 % 20201227 = 874663
+
+# Loop 5
+value = 874663 * 17807724         = 15575757297012
+value = 15575757297012 % 20201227 = 5243202
+
+# Loop 6
+value = 5243202 * 17807724        = 93369494092248
+value = 93369494092248 % 20201227 = 8733831
+
+# Loop 7
+value = 8733831 * 17807724         = 155529651910644
+value = 155529651910644 % 20201227 = 1213104
+
+# Loop 8
+value = 1213104 * 17807724        = 21602621215296
+value = 21602621215296 % 20201227 = 14897079       &amp;lt;-- Cryptographic Handshake
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I will not display it, but if we had found the door’s loop size and then used the card’s public key as the subject number, we would have come to the same cryptographic handshake; this is how the door, and the card know they are a match.&lt;/p&gt;
+
+&lt;p&gt;With our &lt;em&gt;real&lt;/em&gt; card and door public keys, what is the cryptographic handshake between them?&lt;/p&gt;
+
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/25/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
+    my ($card-key, $door-key) = $file.IO.lines.map(*.Int);
+    my $handshake = 1;
+    my $target = 1;
+    while $target != $door-key {
+        $target = ($target * 7) % 20201227;
+        $handshake = ($handshake * $card-key) % 20201227;
+    }
+    say $handshake;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
+18293391
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+
+&lt;p&gt;Rather than keep track of the loop size, we just do the above 2 loops in parallel until &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$target&lt;/code&gt; matches &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$door-key&lt;/code&gt;. Rather than do the two steps outline above, we are able to do the multiplication and remainder division (&lt;a href=&quot;https://en.wikipedia.org/wiki/Modulo_operation&quot;&gt;modulo&lt;/a&gt;) in one step. Finally, all we have to do is say the handshake!&lt;/p&gt;
+
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
+
+&lt;p&gt;2020 has been a tough year and everyone needs a break. Day 25 part 2 is a freebie. 🙂&lt;/p&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I had my ups and downs with this challenge. Obviously I did not fulfill my goal of solving everything in functional Raku; in fact, I wasn’t even able to solve everything in Raku. However, I learned a lot about the language, I learned a few new algorithms, and I had fun! This whole thing was a lot of fun, and I want to thank &lt;a href=&quot;https://github.com/topaz&quot;&gt;Eric&lt;/a&gt; for doing it for the past 6 years (even though this was my first time participating).&lt;/p&gt;
+
+&lt;p&gt;Next year I will have a one-and-a-half-year-old, so no promises I will be able to blog every day (it was hard enough this year), but I will do my best to participate, and I may blog for problems I find particularly clever.&lt;/p&gt;
+
+&lt;p&gt;With that, I would like to wish everyone a very merry Christmas and a happy New Year!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!</summary></entry><entry><title type="html">Advent of Code: Day 24</title><link href="http://localhost:4000/blog/advent-of-code-day-24/" rel="alternate" type="text/html" title="Advent of Code: Day 24" /><published>2020-12-24T00:00:00-06:00</published><updated>2020-12-24T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-24</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-24/">&lt;p&gt;Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-11/&quot;&gt;11&lt;/a&gt; and &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-17/&quot;&gt;17&lt;/a&gt;, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.&lt;/p&gt;
 
 &lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
@@ -2286,177 +2424,4 @@ Player 2's deck: 7, 5, 6, 2, 4, 1, 10, 8, 9, 3
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;I wrote part one at 6am and wrote part two around 10pm yesterday. I probably could have gotten it working in Raku, but I was hoping to do a puzzle a day for the duration of AoC, so I had to do what I had to do. Hopefully I will get back on track today and finish out the week (and the month) strong!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><category term="Python" /><summary type="html">I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my git history that the code itself was written on the 22nd.</summary></entry><entry><title type="html">Advent of Code: Day 21</title><link href="http://localhost:4000/blog/advent-of-code-day-21/" rel="alternate" type="text/html" title="Advent of Code: Day 21" /><published>2020-12-21T00:00:00-06:00</published><updated>2020-12-21T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-21</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-21/">&lt;p&gt;I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;We are trying to buy some snacks for the last leg of our journey, but we don’t speak the local language. Luckily, the allergen information is in English. We have a list of foods that looks like the following, where each line contains a list of ingredients in the foreign language followed by the allergens in English:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mxmxvkd kfcds sqjhc nhms (contains dairy, fish)
-trh fvjkl sbzzf mxmxvkd (contains dairy)
-sqjhc fvjkl (contains soy)
-sqjhc mxmxvkd sbzzf (contains fish)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This list has a caveat to it – allergens are not always listed for each food. So we first have to figure out which ingredient &lt;em&gt;can’t&lt;/em&gt; contain an allergen. In the above example it would be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;kfcds&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nhms&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sbzzf&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trh&lt;/code&gt;. We then want to count how many times those ingredients occur (in the above example it would be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5&lt;/code&gt;). What is the count of non-allergen ingredients in the real input?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/21/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
-    my @rules = $file.IO.lines.map(-&amp;gt; $line {
-        my ($ingredients-str, $allergens-str) = $line.split(' (contains ');
-        my @ingredients = $ingredients-str.split(' ');
-        my @allergens = $allergens-str.substr(0, *-1).split(', ');
-        { :@ingredients, :@allergens };
-    });
-    my $all-allergens = @rules.map(-&amp;gt; %rule { |%rule&amp;lt;allergens&amp;gt; }).Set;
-
-    my %candidates = $all-allergens.keys.map(-&amp;gt; $allergen {
-        $allergen =&amp;gt; [∩] @rules.grep(*&amp;lt;allergens&amp;gt; ∋ $allergen).map(*&amp;lt;ingredients&amp;gt;); # [1]
-    });
-
-    my (%mapping, @mapped);
-    while %mapping.elems &amp;lt; $all-allergens.elems {
-        for %candidates.kv -&amp;gt; $allergen, $ingredients {
-            if $ingredients.keys.elems == 1 {
-                %mapping{$allergen} = $ingredients.keys.head;
-                @mapped.push(%mapping{$allergen});
-                %candidates{$allergen}:delete;
-            }
-            %candidates{$allergen} ∖= @mapped; # [2]
-        }
-    }
-
-    say @rules.map((*&amp;lt;ingredients&amp;gt; ∖ @mapped).elems).sum;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-2061
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;We spend the first few lines getting our data into this structure (using the example data):&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[
-  {allergens =&amp;gt; [dairy fish], ingredients =&amp;gt; [mxmxvkd kfcds sqjhc nhms]},
-  {allergens =&amp;gt; [dairy], ingredients =&amp;gt; [trh fvjkl sbzzf mxmxvkd]},
-  {allergens =&amp;gt; [soy], ingredients =&amp;gt; [sqjhc fvjkl]},
-  {allergens =&amp;gt; [fish], ingredients =&amp;gt; [sqjhc mxmxvkd sbzzf]}
-]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Which is, of course, a list of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt; objects containing the ingredient and allergen information. We then create a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&lt;/code&gt; of all possible allergens (in this case &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set(dairy fish soy)&lt;/code&gt;).&lt;/p&gt;
-
-&lt;p&gt;Next, looking at the ingredients in comparison to the allergens set, we construct an object containing the allergens with their possible ingredients that looks like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{dairy =&amp;gt; Set(mxmxvkd), fish =&amp;gt; Set(mxmxvkd sqjhc), soy =&amp;gt; Set(fvjkl sqjhc)}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;After we have that, we loop through each candidate pair and see if the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&lt;/code&gt; is exactly 1 item. If it is, we moved that pair to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%mapping&lt;/code&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt; and the value to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@mapped&lt;/code&gt; list and remove the candidate from the other sets. Here is how it would look for each loop:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Start
-%mapping    = {}
-@mapped     = ()
-%candidates = {dairy =&amp;gt; Set(mxmxvkd), fish =&amp;gt; Set(mxmxvkd sqjhc), soy =&amp;gt; Set(fvjkl sqjhc)}
-
-# Loop 1
-%mapping    = {dairy =&amp;gt; mxmxvkd}
-@mapped     = (mxmxvkd)
-%candidates = {fish =&amp;gt; Set(sqjhc), soy =&amp;gt; Set(fvjkl sqjhc)}
-
-# Loop 2
-%mapping    = {dairy =&amp;gt; mxmxvkd, fish =&amp;gt; sqjhc}
-@mapped     = (mxmxvkd, sqjhc)
-%candidates = {soy =&amp;gt; Set(fvjkl)}
-
-# Loop 3
-%mapping    = {dairy =&amp;gt; mxmxvkd, fish =&amp;gt; sqjhc, soy =&amp;gt; fvjkl}
-@mapped     = (mxmxvkd, sqjhc, fvjkl)
-%candidates = {}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Finally, for each food we take the set disjunction &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;∖&lt;/code&gt; of the ingredients list and the known allergens (leaving the non-allergens), then sum the counts!&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;A few set operators in this line: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;∋&lt;/code&gt; is the reverse of the other operator I use of (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;∈&lt;/code&gt;). The latter reads &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x is an element of y&lt;/code&gt;, while the former reads &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;set y contains element x&lt;/code&gt;. When I use the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Whatever&lt;/code&gt; star, I like it to be on the left, so that is the reason for using it here. Additionally, we use the set intersection reduction operator (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[∩]&lt;/code&gt;) which finds the overlapping regions of the input allergen lists and converts them to a single set.&lt;/li&gt;
-  &lt;li&gt;This is also a new one, it is the set difference operator, aka the &lt;a href=&quot;https://en.wikipedia.org/wiki/Complement_(set_theory)#Relative_complement&quot;&gt;relative complement&lt;/a&gt; operator. It’s used to remove the already-mapped elements from the candidate sets.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;Now that we have isolated the safe ingredients, we should have enough information to generate a list of dangerous ingredients. We need to generate a comma-separated list order alphabetically &lt;em&gt;by allergen&lt;/em&gt; name. For the above example it would look like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mxmxvkd,sqjhc,fvjkl
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;What is the allergen list for our real input?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/21/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file, Bool :$p2 = False) {
-    my @rules = $file.IO.lines.map(-&amp;gt; $line {
-        my ($ingredients-str, $allergens-str) = $line.split(' (contains ');
-        my @ingredients = $ingredients-str.split(' ');
-        my @allergens = $allergens-str.substr(0, *-1).split(', ');
-        { :@ingredients, :@allergens };
-    });
-    my $all-allergens = @rules.map(-&amp;gt; %rule { |%rule&amp;lt;allergens&amp;gt; }).Set;
-
-    my %candidates = $all-allergens.keys.map(-&amp;gt; $allergen {
-        $allergen =&amp;gt; [∩] @rules.grep(*&amp;lt;allergens&amp;gt; ∋ $allergen).map(*&amp;lt;ingredients&amp;gt;);
-    });
-
-    my (%mapping, @mapped);
-    while %mapping.elems &amp;lt; $all-allergens.elems {
-        for %candidates.kv -&amp;gt; $allergen, $ingredients {
-            if $ingredients.keys.elems == 1 {
-                %mapping{$allergen} = $ingredients.keys.head;
-                @mapped.push(%mapping{$allergen});
-                %candidates{$allergen}:delete;
-            }
-            %candidates{$allergen} ∖= @mapped;
-        }
-    }
-
-    if $p2 {
-        say %mapping.sort.map(*.value).join(',');
-    } else {
-        say @rules.map((*&amp;lt;ingredients&amp;gt; ∖ @mapped).elems).sum;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-2061
-
-$ raku main.raku --p2 input.txt
-cdqvp,dglm,zhqjs,rbpg,xvtrfz,tgmzqjz,mfqgx,rffqhl
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;We basically already did this for part one, so all that changes is the last section.&lt;/p&gt;
-
-&lt;p&gt;We have our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%mapping&lt;/code&gt; hash which we then sort (by default it uses the key, which is our allergen), then we extract just the values, and finally join them into a comma-separated list.&lt;/p&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;Well, at least the creator of AoC is true to his word that weekday puzzles are easier. 🙂 This was a fun little one and puts us at 84% of the way there!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">I had much more fun with today’s puzzle than yesterday’s! We are back in Raku, after a few days of detouring through Python.</summary></entry></feed>
+&lt;p&gt;I wrote part one at 6am and wrote part two around 10pm yesterday. I probably could have gotten it working in Raku, but I was hoping to do a puzzle a day for the duration of AoC, so I had to do what I had to do. Hopefully I will get back on track today and finish out the week (and the month) strong!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><category term="Python" /><summary type="html">I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my git history that the code itself was written on the 22nd.</summary></entry></feed>
