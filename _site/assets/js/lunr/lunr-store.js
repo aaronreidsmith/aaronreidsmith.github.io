@@ -202,4 +202,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "http://localhost:4000/blog/perl-weekly-challenge-096/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 97",
+        "excerpt":"My solution to challenge two builds on last week’s challenge two, so I encourage you to go read last week’s post if you haven’t already! Task 1: Caesar Cipher You are given string $S containing alphabets A..Z only and a number $N. Write a script to encrypt the given string...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "http://localhost:4000/blog/perl-weekly-challenge-097/",
+        "teaser": null
       }]
