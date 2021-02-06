@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 90 - Aaron Smith</title>
-<meta name="description" content="Today was a busy day with both Advent of Code and the Perl Weekly Challenge. Luckily, the PWC was short and sweet this week, and a nice breather after the Advent of Code.">
+<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 98 - Aaron Smith</title>
+<meta name="description" content="This week’s solutions explore some more obscure parts of the Raku ecosystem, namely state variables and adverbs.">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Perl Weekly Challenge 90">
-<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-090/">
+<meta property="og:title" content="Perl Weekly Challenge 98">
+<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-098/">
 
 
-  <meta property="og:description" content="Today was a busy day with both Advent of Code and the Perl Weekly Challenge. Luckily, the PWC was short and sweet this week, and a nice breather after the Advent of Code.">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-12-07T00:00:00-06:00">
+  <meta property="og:description" content="This week’s solutions explore some more obscure parts of the Raku ecosystem, namely state variables and adverbs.">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-090/">
+
+  <meta property="article:published_time" content="2021-02-06T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-098/">
 
 
 
@@ -285,15 +285,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Perl Weekly Challenge 90">
-    <meta itemprop="description" content="Today was a busy day with both Advent of Code and the Perl Weekly Challenge. Luckily, the PWC was short and sweet this week, and a nice breather after the Advent of Code.">
-    <meta itemprop="datePublished" content="2020-12-07T00:00:00-06:00">
+    <meta itemprop="headline" content="Perl Weekly Challenge 98">
+    <meta itemprop="description" content="This week’s solutions explore some more obscure parts of the Raku ecosystem, namely state variables and adverbs.">
+    <meta itemprop="datePublished" content="2021-02-06T00:00:00-06:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 90
+          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 98
 </h1>
           
 
@@ -302,7 +302,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-07T00:00:00-06:00">December 7, 2020</time>
+        <time datetime="2021-02-06T00:00:00-06:00">February 6, 2021</time>
       </span>
     
 
@@ -315,7 +315,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          3 minute read
+          4 minute read
         
       </span>
     
@@ -327,125 +327,164 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>Today was a busy day with both <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-07/">Advent of Code</a> and the Perl Weekly Challenge. Luckily, the PWC was short and sweet this week, and a nice breather after the Advent of Code.</p>
+        <p>This week’s solutions explore some more obscure parts of the Raku ecosystem, namely <a href="https://docs.raku.org/syntax/state">state variables</a> and <a href="https://docs.raku.org/language/glossary#index-entry-Adverb">adverbs</a>.</p>
 
-<h2 id="task-1-dna-sequence">Task 1: DNA Sequence</h2>
+<h2 id="task-1-read-n-characters">Task 1: Read N-characters</h2>
 
-<p>You are given DNA sequence, GTAAACCCCTTTTCATTTAGACAGATCGACTCCTTATCCATTCTCAGAGATGTGTTGCTGGTCGCCG.</p>
+<p>You are given file <code class="language-plaintext highlighter-rouge">$FILE</code>.</p>
 
-<p>Write a script to print nucleotide count in the given DNA sequence. Also print the complementary sequence where Thymine (T) on one strand is always facing an adenine (A) and vice versa; guanine (G) is always facing a cytosine (C) and vice versa.</p>
+<p>Create subroutine <code class="language-plaintext highlighter-rouge">readN($FILE, $number)</code> that returns the first n-characters and moves the pointer to the <code class="language-plaintext highlighter-rouge">(n+1)th</code> character.</p>
+
+<h3 id="example">Example</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: Suppose the file (input.txt) contains "1234567890"
+Output:
+    print readN("input.txt", 4); # returns "1234"
+    print readN("input.txt", 4); # returns "5678"
+    print readN("input.txt", 4); # returns "90"
+</code></pre></div></div>
 
 <h3 id="solution">Solution</h3>
 
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-090/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-098/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>subset ValidDna of Str where { $_ ~~ /^^[A|T|G|C]+$$/ }
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub readN(Str $file-name, Int $chars-to-read where $chars-to-read &gt; 0) returns Str {
+    state %file-map;                                          # [1]
 
-sub MAIN($dna where $dna ~~ ValidDna, Bool :rc(:$reverse-complement) = False) { # [1]
-    say "Input stats:\n{$dna.comb.Bag.Hash}\n";                                 # [2]
-
-    say "Complement:";
-    my $translated = $dna.trans('ATGC' =&gt; 'TACG');                              # [3]
-    if $reverse-complement {
-        say "5'-{$translated.flip}-3'";
-    } else {
-        say "3'-$translated-5'"
+    if %file-map{$file-name}:!exists {                        # [2]
+        %file-map{$file-name} = IO::CatHandle.new($file-name) # [3]
     }
+
+    %file-map{$file-name}.readchars($chars-to-read);          # [4]
+}
+
+sub MAIN(Str $FILE, Int $N) {
+    say readN($FILE, $N);
+    say readN($FILE, $N);
+    say readN($FILE, $N);
 }
 </code></pre></div></div>
 
 <p>This program runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku GTAAACCCCTTTTCATTTAGACAGATCGACTCCTTATCCATTCTCAGAGATGTGTTGCTGGTCGCCG
-Input stats:
-A	14
-C	18
-G	13
-T	22
-
-Complement:
-3'-CATTTGGGGAAAAGTAAATCTGTCTAGCTGAGGAATAGGTAAGAGTCTCTACACAACGACCAGCGGC-5'
-
-$ raku ch-1.raku --reverse-complement GTAAACCCCTTTTCATTTAGACAGATCGACTCCTTATCCATTCTCAGAGATGTGTTGCTGGTCGCCG
-Input stats:
-A	14
-C	18
-G	13
-T	22
-
-Complement:
-5'-CGGCGACCAGCAACACATCTCTGAGAATGGATAAGGAGTCGATCTGTCTAAATGAAAAGGGGTTTAC-3'
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Assuming input.txt contains '1234567890'
+$ raku ch-1.raku input.txt 4
+1234
+5678
+90
 </code></pre></div></div>
 
 <h3 id="explanation">Explanation</h3>
 
-<p>Coming from a Biochemistry background, this one is rather simple. However, the question does not take into consideration that DNA has a <a href="https://en.wikipedia.org/wiki/Directionality_(molecular_biology)">direction</a>. Generally, if you are handed a string like this, you expect it to be read from 5’ to 3’ (5 prime to 3 prime). Because of the directionality, the opposite strand would be 3’ to 5’.</p>
-
-<p>So generally, when a question asks for the complementary strand, they want the <em>reverse</em> complement, so it is shown 5’ to 3’. This question did not specify, so I wrote an answer that handles both.</p>
+<p>All of this relies on two very cool aspects of Raku: <a href="https://docs.raku.org/syntax/state">state variables</a> and <a href="https://docs.raku.org/type/IO::CatHandle"><code class="language-plaintext highlighter-rouge">CatHandles</code></a>, which I will detail below. Basically, we just create a new <code class="language-plaintext highlighter-rouge">CatHandle</code> and pass all the heavy lifting to it via <code class="language-plaintext highlighter-rouge">readchars</code>; it keeps track of where it is in the file and will not attempt to read past the end of the file.</p>
 
 <h4 id="specific-comments">Specific comments</h4>
 
 <ol>
-  <li>This syntax allows us to give aliases to our command line arguments. In this case, we accept either <code class="language-plaintext highlighter-rouge">--rc</code> or <code class="language-plaintext highlighter-rouge">--reverse-complement</code> and store it in a variable called <code class="language-plaintext highlighter-rouge">$reverse-complement</code>.</li>
-  <li>A <a href="https://docs.raku.org/type/Bag"><code class="language-plaintext highlighter-rouge">Bag</code></a> is a weighted collection. When passed the <code class="language-plaintext highlighter-rouge">List</code> produced by <code class="language-plaintext highlighter-rouge">.comb</code>, it generates a bag with the weight of each letter. We only convert it to a <code class="language-plaintext highlighter-rouge">Hash</code> for pretty printing.</li>
-  <li>Raku’s <code class="language-plaintext highlighter-rouge">trans</code> method is a single-pass method, meaning you won’t translate <code class="language-plaintext highlighter-rouge">A</code> to <code class="language-plaintext highlighter-rouge">T</code> and then accidentally translate it back to <code class="language-plaintext highlighter-rouge">A</code> with a second pass.</li>
+  <li>A state variable in Raku is similar to a static variable in other languages, with the additional caveat that it can be instantiated in subroutines in addition to classes. This variable will be instantiated once and shared across all invocations of the subroutine. So, if we wanted to, we could do the following:</li>
 </ol>
 
-<h2 id="task-2-ethiopian-multiplication">Task 2: Ethiopian Multiplication</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># input1.txt
+# maryalamb
 
-<p>You are given two positive numbers <code class="language-plaintext highlighter-rouge">$A</code> and <code class="language-plaintext highlighter-rouge">$B</code>.</p>
+# input2.txt
+# hadlittle
 
-<p>Write a script to demonstrate <a href="https://threesixty360.wordpress.com/2009/06/09/ethiopian-multiplication/">Ethiopian Multiplication</a> using the given numbers.</p>
+sub MAIN {
+  my $input1 = 'input1.txt';
+  my $input2 = 'input2.txt';
+  
+  say readN($input1, 4);
+  say readN($input2, 3);
+  say readN($input1, 1);
+  say readN($input2, 6);
+  say readN($input1, 4);
+}
+
+# Output:
+# mary
+# had
+# a
+# little
+# lamb
+</code></pre></div></div>
+
+<ol>
+  <li>This is a special case of the <a href="https://docs.raku.org/type/Hash#:exists"><code class="language-plaintext highlighter-rouge">exists</code></a> adverb. Adverbs are just named arguments. In this case <code class="language-plaintext highlighter-rouge">:exists</code> is essentially the pair <code class="language-plaintext highlighter-rouge">exists =&gt; True</code>, so to negate it we use <code class="language-plaintext highlighter-rouge">!:exists</code>. I found this pretty interesting, because I thought it would have been <code class="language-plaintext highlighter-rouge">!%file-map{$file-name}:exists</code>, but Raku complains about that.</li>
+  <li>A <a href="https://docs.raku.org/type/IO::CatHandle"><code class="language-plaintext highlighter-rouge">CatHandle</code></a> is <em>normally</em> used to <code class="language-plaintext highlighter-rouge">cat</code> together several file handles and read them all at once. In this case, we are using it to take advantage of its <code class="language-plaintext highlighter-rouge">readchars</code> function discussed below.</li>
+  <li><a href="https://docs.raku.org/type/IO::CatHandle#method_readchars"><code class="language-plaintext highlighter-rouge">readchars</code></a> essentially just tracks our offset in the given handle and always outputs the next <code class="language-plaintext highlighter-rouge">n</code> characters that we request, and just returns an empty string if we are at the end of the file. Super convenient for this challenge!</li>
+</ol>
+
+<h2 id="task-2-search-insert-position">Task 2: Search Insert Position</h2>
+
+<p>You are given a sorted array of distinct integers <code class="language-plaintext highlighter-rouge">@N</code> and a target <code class="language-plaintext highlighter-rouge">$N</code>.</p>
+
+<p>Write a script to return the index of the given target if found otherwise place the target in the sorted array and return the index.</p>
+
+<h3 id="example-1">Example 1</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: @N = (1, 2, 3, 4) and $N = 3
+Output: 2 since the target 3 is in the array at the index 2.
+</code></pre></div></div>
+
+<h3 id="example-2">Example 2</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: @N = (1, 3, 5, 7) and $N = 6
+Output: 3 since the target 6 is missing and should be placed at the index 3.
+</code></pre></div></div>
+
+<h3 id="example-3">Example 3</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: @N = (12, 14, 16, 18) and $N = 10
+Output: 0 since the target 10 is missing and should be placed at the index 0.
+</code></pre></div></div>
+
+<h3 id="example-4">Example 4</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: @N = (11, 13, 15, 17) and $N = 19
+Output: 4 since the target 19 is missing and should be placed at the index 4.
+</code></pre></div></div>
 
 <h3 id="solution-1">Solution</h3>
 
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-090/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-098/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>subset PositiveInt of Int where { $_ ~~ Int &amp;&amp; $_ &gt; 0 }
-
-sub generate-pairs($a, $b) {
-    sprintf("%02d, %02d", $a, $b).put;
-    if $a == 1 {
-        (($a, $b),);
-    } else {
-        (($a, $b), |generate-pairs($a div 2, $b * 2));
-    }
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(@N is copy, Int $N) returns Int { # [1]
+    my @new = $N ∉ @N ?? (|@N, $N).sort !! @N;  # [2]
+    @new.first($N, :k);                         # [3]
 }
 
-sub MAIN(PositiveInt $A, PositiveInt $B) {
-    say "Input: A: $A, B: $B";
-    say "Divide A by 2 (ignoring remainders) until it is 1. Multiply B by 2 as we go:";
-    my @pairs = generate-pairs($A, $B);
-    say "Then, wherever A is odd, we add the Bs together:";
-    my @odd-bs = @pairs.grep(-&gt; @pair { !(@pair[0] %% 2) }).map(-&gt; @pair { @pair[1] });
-    say "{@odd-bs.join(' + ')} = {@odd-bs.sum}";
+sub MAIN(Int $N, *@N where all(@N) ~~ Int) {
+    say challenge(@N, $N)
 }
 </code></pre></div></div>
 
 <p>This program runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku 14 12
-Input: A=14, B=12
-Divide A by 2 (ignoring remainders) until it is 1. Multiply B by 2 as we go:
-14, 12
-07, 24
-03, 48
-01, 96
-Then, wherever A is odd, we add the Bs together:
-24 + 48 + 96 = 168
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># $N followed by @N
+$ raku ch-2.raku 3 1 2 3 4 
+2
 </code></pre></div></div>
 
 <h3 id="explanation-1">Explanation</h3>
 
-<p>This is a very straightforward solution; most of the mess in the code is from the messages printed out. Basically, we generate our pairs (and print them) using recursion, then filter them down to where <code class="language-plaintext highlighter-rouge">$A</code> is odd, and add up the <code class="language-plaintext highlighter-rouge">$B</code>s.</p>
+<p>This is pretty straight forward; we check if <code class="language-plaintext highlighter-rouge">$N</code> is in <code class="language-plaintext highlighter-rouge">@N</code> (if not, we add it and re-sort), then return the index of <code class="language-plaintext highlighter-rouge">$N</code>. That’s it!</p>
+
+<h4 id="specific-comments-1">Specific Comments</h4>
+
+<ol>
+  <li>In Raku, the sigil (<code class="language-plaintext highlighter-rouge">$</code>, <code class="language-plaintext highlighter-rouge">@</code>, <code class="language-plaintext highlighter-rouge">%</code>, etc.) is <em>part of</em> the variable declaration. Because of that, for better or for worse, it is not a problem (as far as the compiler is concerned) that we have to variables named <code class="language-plaintext highlighter-rouge">N</code>.</li>
+  <li>Rather than mark <code class="language-plaintext highlighter-rouge">@N</code> as <code class="language-plaintext highlighter-rouge">is copy</code> so we could use <code class="language-plaintext highlighter-rouge">@N.push($N).sort</code>, since we assign it to a new variable anyway (<code class="language-plaintext highlighter-rouge">@new</code>), we can use a <a href="https://docs.raku.org/type/Slip">slip</a> to append <code class="language-plaintext highlighter-rouge">$N</code> to <code class="language-plaintext highlighter-rouge">@N</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">first</code> returns the first instance of the argument in the list (in this case <code class="language-plaintext highlighter-rouge">$N</code>). We supply the <a href="https://docs.raku.org/routine/first#class_List"><code class="language-plaintext highlighter-rouge">:k</code> adverb</a> to have it return the <em>index</em> of <code class="language-plaintext highlighter-rouge">$N</code> rather than <code class="language-plaintext highlighter-rouge">$N</code> itself.</li>
+</ol>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>This week was super easy, so not much to add! Jump over to my blog on <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-07/">day 7 of the Advent of Code</a> for something more challenging.</p>
+<p>Raku has a lot of cool stuff built in to it. I find the hardest part of navigating this language is the documentation. Things are <em>mostly</em> well documented, but things like Stack Overflow posts and how-tos can be few and far between. Hopefully this blog is helpful for anyone trying to learn the language!</p>
 
         
       </section>
@@ -498,7 +537,7 @@ Then, wherever A is odd, we add the Bs together:
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-07T00:00:00-06:00">December 7, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-02-06T00:00:00-06:00">February 6, 2021</time></p>
 
 
       </footer>
@@ -508,23 +547,22 @@ Then, wherever A is odd, we add the Bs together:
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+90%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-090%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+98%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-098%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-090%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-098%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-090%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-098%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/advent-of-code-day-07/" class="pagination--pager" title="Advent of Code: Day 7
+      <a href="/blog/perl-weekly-challenge-097/" class="pagination--pager" title="Perl Weekly Challenge 97
 ">Previous</a>
     
     
-      <a href="/blog/advent-of-code-day-08/" class="pagination--pager" title="Advent of Code: Day 8
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -538,53 +576,6 @@ Then, wherever A is odd, we add the Bs together:
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/perl-weekly-challenge-098/" rel="permalink">Perl Weekly Challenge 98
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2021-02-06T00:00:00-06:00">February 6, 2021</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          4 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">This week’s solutions explore some more obscure parts of the Raku ecosystem, namely state variables and adverbs.
-
-</p>
-  </article>
-</div>
-
         
           
 
@@ -619,7 +610,7 @@ Then, wherever A is odd, we add the Bs together:
       <span class="page__meta-readtime">
         <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
-          4 minute read
+          3 minute read
         
       </span>
     
@@ -711,7 +702,7 @@ Then, wherever A is odd, we add the Bs together:
       <span class="page__meta-readtime">
         <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
-          3 minute read
+          5 minute read
         
       </span>
     
@@ -721,6 +712,51 @@ Then, wherever A is odd, we add the Bs together:
     <p class="archive__item-excerpt" itemprop="description">Two pretty simple challenges this week! I tried ot focus on strongly typed subroutines and methods to shake things up.
 
 </p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-094/" rel="permalink">Perl Weekly Challenge 94
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-01-10T00:00:00-06:00">January 10, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">The second challenge was a lot like last weeks second challenge, so I went a step further and implemented multiple tree traversals. I won’t include the tests...</p>
   </article>
 </div>
 

@@ -1,4 +1,161 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-01-30T19:50:49-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 97</title><link href="http://localhost:4000/blog/perl-weekly-challenge-097/" rel="alternate" type="text/html" title="Perl Weekly Challenge 97" /><published>2021-01-30T00:00:00-06:00</published><updated>2021-01-30T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-097</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-097/">&lt;p&gt;My solution to challenge two builds on last week’s challenge two, so I encourage you to go read &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-096/&quot;&gt;last week’s post&lt;/a&gt; if you haven’t already!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-02-06T15:20:38-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 98</title><link href="http://localhost:4000/blog/perl-weekly-challenge-098/" rel="alternate" type="text/html" title="Perl Weekly Challenge 98" /><published>2021-02-06T00:00:00-06:00</published><updated>2021-02-06T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-098</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-098/">&lt;p&gt;This week’s solutions explore some more obscure parts of the Raku ecosystem, namely &lt;a href=&quot;https://docs.raku.org/syntax/state&quot;&gt;state variables&lt;/a&gt; and &lt;a href=&quot;https://docs.raku.org/language/glossary#index-entry-Adverb&quot;&gt;adverbs&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-read-n-characters&quot;&gt;Task 1: Read N-characters&lt;/h2&gt;
+
+&lt;p&gt;You are given file &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$FILE&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Create subroutine &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;readN($FILE, $number)&lt;/code&gt; that returns the first n-characters and moves the pointer to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(n+1)th&lt;/code&gt; character.&lt;/p&gt;
+
+&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: Suppose the file (input.txt) contains &quot;1234567890&quot;
+Output:
+    print readN(&quot;input.txt&quot;, 4); # returns &quot;1234&quot;
+    print readN(&quot;input.txt&quot;, 4); # returns &quot;5678&quot;
+    print readN(&quot;input.txt&quot;, 4); # returns &quot;90&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-098/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub readN(Str $file-name, Int $chars-to-read where $chars-to-read &amp;gt; 0) returns Str {
+    state %file-map;                                          # [1]
+
+    if %file-map{$file-name}:!exists {                        # [2]
+        %file-map{$file-name} = IO::CatHandle.new($file-name) # [3]
+    }
+
+    %file-map{$file-name}.readchars($chars-to-read);          # [4]
+}
+
+sub MAIN(Str $FILE, Int $N) {
+    say readN($FILE, $N);
+    say readN($FILE, $N);
+    say readN($FILE, $N);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Assuming input.txt contains '1234567890'
+$ raku ch-1.raku input.txt 4
+1234
+5678
+90
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;All of this relies on two very cool aspects of Raku: &lt;a href=&quot;https://docs.raku.org/syntax/state&quot;&gt;state variables&lt;/a&gt; and &lt;a href=&quot;https://docs.raku.org/type/IO::CatHandle&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CatHandles&lt;/code&gt;&lt;/a&gt;, which I will detail below. Basically, we just create a new &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CatHandle&lt;/code&gt; and pass all the heavy lifting to it via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;readchars&lt;/code&gt;; it keeps track of where it is in the file and will not attempt to read past the end of the file.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;A state variable in Raku is similar to a static variable in other languages, with the additional caveat that it can be instantiated in subroutines in addition to classes. This variable will be instantiated once and shared across all invocations of the subroutine. So, if we wanted to, we could do the following:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# input1.txt
+# maryalamb
+
+# input2.txt
+# hadlittle
+
+sub MAIN {
+  my $input1 = 'input1.txt';
+  my $input2 = 'input2.txt';
+  
+  say readN($input1, 4);
+  say readN($input2, 3);
+  say readN($input1, 1);
+  say readN($input2, 6);
+  say readN($input1, 4);
+}
+
+# Output:
+# mary
+# had
+# a
+# little
+# lamb
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;This is a special case of the &lt;a href=&quot;https://docs.raku.org/type/Hash#:exists&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;exists&lt;/code&gt;&lt;/a&gt; adverb. Adverbs are just named arguments. In this case &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:exists&lt;/code&gt; is essentially the pair &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;exists =&amp;gt; True&lt;/code&gt;, so to negate it we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;!:exists&lt;/code&gt;. I found this pretty interesting, because I thought it would have been &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;!%file-map{$file-name}:exists&lt;/code&gt;, but Raku complains about that.&lt;/li&gt;
+  &lt;li&gt;A &lt;a href=&quot;https://docs.raku.org/type/IO::CatHandle&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CatHandle&lt;/code&gt;&lt;/a&gt; is &lt;em&gt;normally&lt;/em&gt; used to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cat&lt;/code&gt; together several file handles and read them all at once. In this case, we are using it to take advantage of its &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;readchars&lt;/code&gt; function discussed below.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/type/IO::CatHandle#method_readchars&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;readchars&lt;/code&gt;&lt;/a&gt; essentially just tracks our offset in the given handle and always outputs the next &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt; characters that we request, and just returns an empty string if we are at the end of the file. Super convenient for this challenge!&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-search-insert-position&quot;&gt;Task 2: Search Insert Position&lt;/h2&gt;
+
+&lt;p&gt;You are given a sorted array of distinct integers &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N&lt;/code&gt; and a target &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to return the index of the given target if found otherwise place the target in the sorted array and return the index.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @N = (1, 2, 3, 4) and $N = 3
+Output: 2 since the target 3 is in the array at the index 2.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @N = (1, 3, 5, 7) and $N = 6
+Output: 3 since the target 6 is missing and should be placed at the index 3.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-3&quot;&gt;Example 3&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @N = (12, 14, 16, 18) and $N = 10
+Output: 0 since the target 10 is missing and should be placed at the index 0.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-4&quot;&gt;Example 4&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @N = (11, 13, 15, 17) and $N = 19
+Output: 4 since the target 19 is missing and should be placed at the index 4.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-098/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(@N is copy, Int $N) returns Int { # [1]
+    my @new = $N ∉ @N ?? (|@N, $N).sort !! @N;  # [2]
+    @new.first($N, :k);                         # [3]
+}
+
+sub MAIN(Int $N, *@N where all(@N) ~~ Int) {
+    say challenge(@N, $N)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# $N followed by @N
+$ raku ch-2.raku 3 1 2 3 4 
+2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;This is pretty straight forward; we check if &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; is in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N&lt;/code&gt; (if not, we add it and re-sort), then return the index of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;. That’s it!&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;In Raku, the sigil (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%&lt;/code&gt;, etc.) is &lt;em&gt;part of&lt;/em&gt; the variable declaration. Because of that, for better or for worse, it is not a problem (as far as the compiler is concerned) that we have to variables named &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Rather than mark &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N&lt;/code&gt; as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is copy&lt;/code&gt; so we could use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N.push($N).sort&lt;/code&gt;, since we assign it to a new variable anyway (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@new&lt;/code&gt;), we can use a &lt;a href=&quot;https://docs.raku.org/type/Slip&quot;&gt;slip&lt;/a&gt; to append &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;first&lt;/code&gt; returns the first instance of the argument in the list (in this case &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;). We supply the &lt;a href=&quot;https://docs.raku.org/routine/first#class_List&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:k&lt;/code&gt; adverb&lt;/a&gt; to have it return the &lt;em&gt;index&lt;/em&gt; of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; rather than &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; itself.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;Raku has a lot of cool stuff built in to it. I find the hardest part of navigating this language is the documentation. Things are &lt;em&gt;mostly&lt;/em&gt; well documented, but things like Stack Overflow posts and how-tos can be few and far between. Hopefully this blog is helpful for anyone trying to learn the language!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week’s solutions explore some more obscure parts of the Raku ecosystem, namely state variables and adverbs.</summary></entry><entry><title type="html">Perl Weekly Challenge 97</title><link href="http://localhost:4000/blog/perl-weekly-challenge-097/" rel="alternate" type="text/html" title="Perl Weekly Challenge 97" /><published>2021-01-30T00:00:00-06:00</published><updated>2021-01-30T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-097</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-097/">&lt;p&gt;My solution to challenge two builds on last week’s challenge two, so I encourage you to go read &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-096/&quot;&gt;last week’s post&lt;/a&gt; if you haven’t already!&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-caesar-cipher&quot;&gt;Task 1: Caesar Cipher&lt;/h2&gt;
 
@@ -182,7 +339,7 @@ Challenge Weekly The
 &lt;p&gt;Pretty easy one-liner here. Here is the logic:&lt;/p&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;Take the string and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trim&lt;/code&gt; whitespace of the beginning and the end.&lt;/li&gt;
+  &lt;li&gt;Take the string and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trim&lt;/code&gt; whitespace off of the beginning and the end.&lt;/li&gt;
   &lt;li&gt;Split it into individual words using the handy &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;words&lt;/code&gt; method (the equivalent of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;split(/&amp;lt;space&amp;gt;+/)&lt;/code&gt;).&lt;/li&gt;
   &lt;li&gt;Reverse the list generated from Step 2&lt;/li&gt;
   &lt;li&gt;Re-join the list into a space-separated string using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.join(' ')&lt;/code&gt;.&lt;/li&gt;
@@ -1882,546 +2039,4 @@ $ raku main.raku --p2 input.txt
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;I am burnt out on this, but I am planning on finishing the week out. I enjoy most of the puzzles, but the blogging is starting to wear on me. 😅 2 more days; we got this!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!</summary></entry><entry><title type="html">Advent of Code: Day 22</title><link href="http://localhost:4000/blog/advent-of-code-day-22/" rel="alternate" type="text/html" title="Advent of Code: Day 22" /><published>2020-12-23T00:00:00-06:00</published><updated>2020-12-23T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-22</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-22/">&lt;p&gt;I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my &lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/commit/0f0559fb30044848b0985e732497dc6674798158&quot;&gt;git history&lt;/a&gt; that the code itself was written on the 22nd.&lt;/p&gt;
-
-&lt;p&gt;I solved the first half of the problem in Raku and then &lt;em&gt;tried&lt;/em&gt; to write the second half in Raku but got stuck, so this is the first problem where each half was solved in a different language.&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;Our last mode of transportation is a raft and are bored out of our minds. There is a little crab on our raft, and we decide to play a class game of &lt;a href=&quot;https://bicyclecards.com/how-to-play/war/&quot;&gt;War&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;The rules are simple:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Each player has a deck of cards (the decks do not have any duplicate values).&lt;/li&gt;
-  &lt;li&gt;Each turn each player reveals the top card in their deck. Whomever’s is bigger wins the round and puts both cards on the bottom of their deck, with the bigger card on top.&lt;/li&gt;
-  &lt;li&gt;When one player gets &lt;em&gt;all&lt;/em&gt; the cards in their deck, that player wins&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Here is an example:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-- Round 1 --
-Player 1's deck: 9, 2, 6, 3, 1
-Player 2's deck: 5, 8, 4, 7, 10
-Player 1 plays: 9
-Player 2 plays: 5
-Player 1 wins the round!
-
--- Round 2 --
-Player 1's deck: 2, 6, 3, 1, 9, 5
-Player 2's deck: 8, 4, 7, 10
-Player 1 plays: 2
-Player 2 plays: 8
-Player 2 wins the round!
-
--- Round 3 --
-Player 1's deck: 6, 3, 1, 9, 5
-Player 2's deck: 4, 7, 10, 8, 2
-Player 1 plays: 6
-Player 2 plays: 4
-Player 1 wins the round!
-
--- Round 4 --
-Player 1's deck: 3, 1, 9, 5, 6, 4
-Player 2's deck: 7, 10, 8, 2
-Player 1 plays: 3
-Player 2 plays: 7
-Player 2 wins the round!
-
--- Round 5 --
-Player 1's deck: 1, 9, 5, 6, 4
-Player 2's deck: 10, 8, 2, 7, 3
-Player 1 plays: 1
-Player 2 plays: 10
-Player 2 wins the round!
-
-...several more rounds pass...
-
--- Round 27 --
-Player 1's deck: 5, 4, 1
-Player 2's deck: 8, 9, 7, 3, 2, 10, 6
-Player 1 plays: 5
-Player 2 plays: 8
-Player 2 wins the round!
-
--- Round 28 --
-Player 1's deck: 4, 1
-Player 2's deck: 9, 7, 3, 2, 10, 6, 8, 5
-Player 1 plays: 4
-Player 2 plays: 9
-Player 2 wins the round!
-
--- Round 29 --
-Player 1's deck: 1
-Player 2's deck: 7, 3, 2, 10, 6, 8, 5, 9, 4
-Player 1 plays: 1
-Player 2 plays: 7
-Player 2 wins the round!
-
-
-== Post-game results ==
-Player 1's deck: 
-Player 2's deck: 3, 2, 10, 6, 8, 5, 9, 4, 7, 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;When we get to the end, we can calculate the winning player’s score like this, here each position’s value is its card value multiplied by its position from the bottom of the deck:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   3 * 10
-+  2 *  9
-+ 10 *  8
-+  6 *  7
-+  8 *  6
-+  5 *  5
-+  9 *  4
-+  4 *  3
-+  7 *  2
-+  1 *  1
-= 306
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;What is the winning player’s score with the actual input?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/22/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub calculate-score(@deck) {
-    @deck.reverse.kv.map(-&amp;gt; $index, $value { ($index + 1) * $value }).sum;
-}
-
-sub play-game(@player1, @player2) {
-    if @player1.elems == 0 {
-        calculate-score(@player2);
-    } elsif @player2.elems == 0 {
-        calculate-score(@player1);
-    } else {
-        my $player1-card = @player1.head;
-        my $player2-card = @player2.head;
-        if $player1-card &amp;gt; $player2-card {
-            play-game(
-                (|@player1[1..*], $player1-card, $player2-card),
-                @player2[1..*]
-            );
-        } else {
-            play-game(
-                @player1[1..*],
-                (|@player2[1..*], $player2-card, $player1-card)
-            );
-        }
-    }
-}
-
-sub MAIN($file) {
-    my ($player1-str, $player2-str) = $file.IO.lines(:nl-in(&quot;\n\n&quot;));
-    my @player1 = $player1-str.lines[1..*].map(*.Int);
-    my @player2 = $player2-str.lines[1..*].map(*.Int);
-    say play-game(@player1, @player2);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-33400
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;I guess it is worth saying that our input looks like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Player 1:
-45
-10
-43
-46
-25
-36
-16
-38
-30
-15
-26
-34
-9
-2
-44
-1
-4
-40
-5
-24
-49
-3
-41
-19
-13
-
-Player 2:
-28
-50
-37
-20
-6
-42
-32
-47
-39
-22
-14
-7
-21
-17
-27
-8
-48
-11
-23
-12
-18
-35
-29
-33
-31
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Most of the stuff that happens in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; is just parsing that into two lists of integers. We then pass those lists to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;play-game&lt;/code&gt;, which has very simple logic:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;If one player has zero cards, return the score of the other player&lt;/li&gt;
-  &lt;li&gt;Otherwise, pull their top cards and compare them. The player with the higher card put their card on the bottom of the deck &lt;em&gt;and then&lt;/em&gt; the loser’s card on the bottom of their deck.&lt;/li&gt;
-  &lt;li&gt;Play the game recursively until our end condition is met&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Other than the main logic, our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;calculate-score&lt;/code&gt; does it’s job by reversing the list then multiplying each item by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$index + 1&lt;/code&gt; (since we measure distance from the bottom), then summing.&lt;/p&gt;
-
-&lt;p&gt;That’s it!&lt;/p&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;Now we challenge the crab to a game of &lt;strong&gt;Recursive War&lt;/strong&gt;. Recursive War is similar to regular War, with the following changes:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Before either player deals a card, if there was a previous round in this game that had exactly the same cards in the same order in the same players’ decks, the game instantly ends in a win for player 1. Previous rounds from other games are not considered. (This prevents infinite games of Recursive Combat, which everyone agrees is a bad idea.)&lt;/li&gt;
-  &lt;li&gt;Otherwise, this round’s cards must be in a new configuration; the players begin the round by each drawing the top card of their deck as normal.&lt;/li&gt;
-  &lt;li&gt;If both players have at least as many cards remaining in their deck as the value of the card they just drew, the winner of the round is determined by playing a new game of Recursive Combat (see below).&lt;/li&gt;
-  &lt;li&gt;Otherwise, at least one player must not have enough cards left in their deck to recurse; the winner of the round is the player with the higher-value card.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;To play a sub-game of Recursive Combat, each player creates a new deck by making a copy of the next cards in their deck (the quantity of cards copied is equal to the number on the card they drew to trigger the sub-game). During this sub-game, the game that triggered it is on hold and completely unaffected; no cards are removed from players’ decks to form the sub-game. (For example, if player 1 drew the 3 card, their deck in the sub-game would be copies of the next three cards in their deck.)&lt;/p&gt;
-
-&lt;p&gt;Here is an example of a recursive combat game (sorry it’s so long…):&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;=== Game 1 ===
-
--- Round 1 (Game 1) --
-Player 1's deck: 9, 2, 6, 3, 1
-Player 2's deck: 5, 8, 4, 7, 10
-Player 1 plays: 9
-Player 2 plays: 5
-Player 1 wins round 1 of game 1!
-
--- Round 2 (Game 1) --
-Player 1's deck: 2, 6, 3, 1, 9, 5
-Player 2's deck: 8, 4, 7, 10
-Player 1 plays: 2
-Player 2 plays: 8
-Player 2 wins round 2 of game 1!
-
--- Round 3 (Game 1) --
-Player 1's deck: 6, 3, 1, 9, 5
-Player 2's deck: 4, 7, 10, 8, 2
-Player 1 plays: 6
-Player 2 plays: 4
-Player 1 wins round 3 of game 1!
-
--- Round 4 (Game 1) --
-Player 1's deck: 3, 1, 9, 5, 6, 4
-Player 2's deck: 7, 10, 8, 2
-Player 1 plays: 3
-Player 2 plays: 7
-Player 2 wins round 4 of game 1!
-
--- Round 5 (Game 1) --
-Player 1's deck: 1, 9, 5, 6, 4
-Player 2's deck: 10, 8, 2, 7, 3
-Player 1 plays: 1
-Player 2 plays: 10
-Player 2 wins round 5 of game 1!
-
--- Round 6 (Game 1) --
-Player 1's deck: 9, 5, 6, 4
-Player 2's deck: 8, 2, 7, 3, 10, 1
-Player 1 plays: 9
-Player 2 plays: 8
-Player 1 wins round 6 of game 1!
-
--- Round 7 (Game 1) --
-Player 1's deck: 5, 6, 4, 9, 8
-Player 2's deck: 2, 7, 3, 10, 1
-Player 1 plays: 5
-Player 2 plays: 2
-Player 1 wins round 7 of game 1!
-
--- Round 8 (Game 1) --
-Player 1's deck: 6, 4, 9, 8, 5, 2
-Player 2's deck: 7, 3, 10, 1
-Player 1 plays: 6
-Player 2 plays: 7
-Player 2 wins round 8 of game 1!
-
--- Round 9 (Game 1) --
-Player 1's deck: 4, 9, 8, 5, 2
-Player 2's deck: 3, 10, 1, 7, 6
-Player 1 plays: 4
-Player 2 plays: 3
-Playing a sub-game to determine the winner...
-
-=== Game 2 ===
-
--- Round 1 (Game 2) --
-Player 1's deck: 9, 8, 5, 2
-Player 2's deck: 10, 1, 7
-Player 1 plays: 9
-Player 2 plays: 10
-Player 2 wins round 1 of game 2!
-
--- Round 2 (Game 2) --
-Player 1's deck: 8, 5, 2
-Player 2's deck: 1, 7, 10, 9
-Player 1 plays: 8
-Player 2 plays: 1
-Player 1 wins round 2 of game 2!
-
--- Round 3 (Game 2) --
-Player 1's deck: 5, 2, 8, 1
-Player 2's deck: 7, 10, 9
-Player 1 plays: 5
-Player 2 plays: 7
-Player 2 wins round 3 of game 2!
-
--- Round 4 (Game 2) --
-Player 1's deck: 2, 8, 1
-Player 2's deck: 10, 9, 7, 5
-Player 1 plays: 2
-Player 2 plays: 10
-Player 2 wins round 4 of game 2!
-
--- Round 5 (Game 2) --
-Player 1's deck: 8, 1
-Player 2's deck: 9, 7, 5, 10, 2
-Player 1 plays: 8
-Player 2 plays: 9
-Player 2 wins round 5 of game 2!
-
--- Round 6 (Game 2) --
-Player 1's deck: 1
-Player 2's deck: 7, 5, 10, 2, 9, 8
-Player 1 plays: 1
-Player 2 plays: 7
-Player 2 wins round 6 of game 2!
-The winner of game 2 is player 2!
-
-...anyway, back to game 1.
-Player 2 wins round 9 of game 1!
-
--- Round 10 (Game 1) --
-Player 1's deck: 9, 8, 5, 2
-Player 2's deck: 10, 1, 7, 6, 3, 4
-Player 1 plays: 9
-Player 2 plays: 10
-Player 2 wins round 10 of game 1!
-
--- Round 11 (Game 1) --
-Player 1's deck: 8, 5, 2
-Player 2's deck: 1, 7, 6, 3, 4, 10, 9
-Player 1 plays: 8
-Player 2 plays: 1
-Player 1 wins round 11 of game 1!
-
--- Round 12 (Game 1) --
-Player 1's deck: 5, 2, 8, 1
-Player 2's deck: 7, 6, 3, 4, 10, 9
-Player 1 plays: 5
-Player 2 plays: 7
-Player 2 wins round 12 of game 1!
-
--- Round 13 (Game 1) --
-Player 1's deck: 2, 8, 1
-Player 2's deck: 6, 3, 4, 10, 9, 7, 5
-Player 1 plays: 2
-Player 2 plays: 6
-Playing a sub-game to determine the winner...
-
-=== Game 3 ===
-
--- Round 1 (Game 3) --
-Player 1's deck: 8, 1
-Player 2's deck: 3, 4, 10, 9, 7, 5
-Player 1 plays: 8
-Player 2 plays: 3
-Player 1 wins round 1 of game 3!
-
--- Round 2 (Game 3) --
-Player 1's deck: 1, 8, 3
-Player 2's deck: 4, 10, 9, 7, 5
-Player 1 plays: 1
-Player 2 plays: 4
-Playing a sub-game to determine the winner...
-
-=== Game 4 ===
-
--- Round 1 (Game 4) --
-Player 1's deck: 8
-Player 2's deck: 10, 9, 7, 5
-Player 1 plays: 8
-Player 2 plays: 10
-Player 2 wins round 1 of game 4!
-The winner of game 4 is player 2!
-
-...anyway, back to game 3.
-Player 2 wins round 2 of game 3!
-
--- Round 3 (Game 3) --
-Player 1's deck: 8, 3
-Player 2's deck: 10, 9, 7, 5, 4, 1
-Player 1 plays: 8
-Player 2 plays: 10
-Player 2 wins round 3 of game 3!
-
--- Round 4 (Game 3) --
-Player 1's deck: 3
-Player 2's deck: 9, 7, 5, 4, 1, 10, 8
-Player 1 plays: 3
-Player 2 plays: 9
-Player 2 wins round 4 of game 3!
-The winner of game 3 is player 2!
-
-...anyway, back to game 1.
-Player 2 wins round 13 of game 1!
-
--- Round 14 (Game 1) --
-Player 1's deck: 8, 1
-Player 2's deck: 3, 4, 10, 9, 7, 5, 6, 2
-Player 1 plays: 8
-Player 2 plays: 3
-Player 1 wins round 14 of game 1!
-
--- Round 15 (Game 1) --
-Player 1's deck: 1, 8, 3
-Player 2's deck: 4, 10, 9, 7, 5, 6, 2
-Player 1 plays: 1
-Player 2 plays: 4
-Playing a sub-game to determine the winner...
-
-=== Game 5 ===
-
--- Round 1 (Game 5) --
-Player 1's deck: 8
-Player 2's deck: 10, 9, 7, 5
-Player 1 plays: 8
-Player 2 plays: 10
-Player 2 wins round 1 of game 5!
-The winner of game 5 is player 2!
-
-...anyway, back to game 1.
-Player 2 wins round 15 of game 1!
-
--- Round 16 (Game 1) --
-Player 1's deck: 8, 3
-Player 2's deck: 10, 9, 7, 5, 6, 2, 4, 1
-Player 1 plays: 8
-Player 2 plays: 10
-Player 2 wins round 16 of game 1!
-
--- Round 17 (Game 1) --
-Player 1's deck: 3
-Player 2's deck: 9, 7, 5, 6, 2, 4, 1, 10, 8
-Player 1 plays: 3
-Player 2 plays: 9
-Player 2 wins round 17 of game 1!
-The winner of game 1 is player 2!
-
-
-== Post-game results ==
-Player 1's deck: 
-Player 2's deck: 7, 5, 6, 2, 4, 1, 10, 8, 9, 3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;em&gt;Now&lt;/em&gt;, what is the score of the winner?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/22/python/main.py&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;calculate_score&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deck&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deck&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[::&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])])&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;play_game&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;player1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;seen&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player1&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;tuple&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;player1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;tuple&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;player2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;seen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;seen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-        &lt;span class=&quot;n&quot;&gt;p1_card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:]&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;p2_card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:]&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1_card&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;player1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2_card&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;player2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;player1_prime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p1_card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;player2_prime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p2_card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;player1_prime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player2_prime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;play_game&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;player1_prime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player2_prime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;player1_prime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;player2_prime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;player1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p1_card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2_card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;player2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p2_card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1_card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1_card&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2_card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;player1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p1_card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2_card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;player2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p2_card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1_card&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player2&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;p1_string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2_string&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;player1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1_string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:]]&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;player2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2_string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:]]&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;play_game&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;player1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;player2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;calculate_score&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ python main.py input.txt
-33745
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;__main__&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;calculate_score&lt;/code&gt; functions are the same as their Raku counterparts; what changed here was &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;play_game&lt;/code&gt;. We basically follow the following logic:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;If we have seen this orientation (in this game or sub-game), player 1 wins immediately&lt;/li&gt;
-  &lt;li&gt;Otherwise, we draw our cards&lt;/li&gt;
-  &lt;li&gt;If we have both enough cards for a sub game (“enough” is an amount greater than the card we drew), then play a sub-game to determine the winner&lt;/li&gt;
-  &lt;li&gt;Once the winner is determined (either through a sub game or just comparing cards), add the cards to the bottom of the winner’s deck as normal.&lt;/li&gt;
-  &lt;li&gt;Repeat until one player has all the cards!&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;I wrote part one at 6am and wrote part two around 10pm yesterday. I probably could have gotten it working in Raku, but I was hoping to do a puzzle a day for the duration of AoC, so I had to do what I had to do. Hopefully I will get back on track today and finish out the week (and the month) strong!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><category term="Python" /><summary type="html">I am posting day 22’s blog a day late due to an outage at work that took precedence. However, you can see from my git history that the code itself was written on the 22nd.</summary></entry></feed>
+&lt;p&gt;I am burnt out on this, but I am planning on finishing the week out. I enjoy most of the puzzles, but the blogging is starting to wear on me. 😅 2 more days; we got this!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">This is just trashy, slow code that gets the job done. Not functional, not fast, not clever, and not nice to look at. Anyway, enjoy!</summary></entry></feed>
