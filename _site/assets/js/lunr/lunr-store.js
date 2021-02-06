@@ -208,4 +208,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "http://localhost:4000/blog/perl-weekly-challenge-097/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 98",
+        "excerpt":"This week’s solutions explore some more obscure parts of the Raku ecosystem, namely state variables and adverbs. Task 1: Read N-characters You are given file $FILE. Create subroutine readN($FILE, $number) that returns the first n-characters and moves the pointer to the (n+1)th character. Example Input: Suppose the file (input.txt) contains...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "http://localhost:4000/blog/perl-weekly-challenge-098/",
+        "teaser": null
       }]
