@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 97 - Aaron Smith</title>
-<meta name="description" content="My solution to challenge two builds on last week’s challenge two, so I encourage you to go read last week’s post if you haven’t already!">
+<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 99 - Aaron Smith</title>
+<meta name="description" content="This week’s theme is regex, which is something the Perl family of languages has always been known for.">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Perl Weekly Challenge 97">
-<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-097/">
+<meta property="og:title" content="Perl Weekly Challenge 99">
+<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-099/">
 
 
-  <meta property="og:description" content="My solution to challenge two builds on last week’s challenge two, so I encourage you to go read last week’s post if you haven’t already!">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2021-01-30T00:00:00-06:00">
+  <meta property="og:description" content="This week’s theme is regex, which is something the Perl family of languages has always been known for.">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-097/">
+
+  <meta property="article:published_time" content="2021-02-13T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-099/">
 
 
 
@@ -285,15 +285,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Perl Weekly Challenge 97">
-    <meta itemprop="description" content="My solution to challenge two builds on last week’s challenge two, so I encourage you to go read last week’s post if you haven’t already!">
-    <meta itemprop="datePublished" content="2021-01-30T00:00:00-06:00">
+    <meta itemprop="headline" content="Perl Weekly Challenge 99">
+    <meta itemprop="description" content="This week’s theme is regex, which is something the Perl family of languages has always been known for.">
+    <meta itemprop="datePublished" content="2021-02-13T00:00:00-06:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 97
+          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 99
 </h1>
           
 
@@ -302,7 +302,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2021-01-30T00:00:00-06:00">January 30, 2021</time>
+        <time datetime="2021-02-13T00:00:00-06:00">February 13, 2021</time>
       </span>
     
 
@@ -327,145 +327,165 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>My solution to challenge two builds on last week’s challenge two, so I encourage you to go read <a href="https://aaronreidsmith.github.io/blog/perl-weekly-challenge-096/">last week’s post</a> if you haven’t already!</p>
+        <p>This week’s theme is <a href="https://en.wikipedia.org/wiki/Regular_expression"><em>regex</em></a>, which is something the Perl family of languages has always been known for.</p>
 
-<h2 id="task-1-caesar-cipher">Task 1: Caesar Cipher</h2>
+<h2 id="task-1-pattern-match">Task 1: Pattern Match</h2>
 
-<p>You are given string <code class="language-plaintext highlighter-rouge">$S</code> containing alphabets <code class="language-plaintext highlighter-rouge">A..Z</code> only and a number <code class="language-plaintext highlighter-rouge">$N</code>.</p>
+<p>You are given a string <code class="language-plaintext highlighter-rouge">$S</code> and a pattern <code class="language-plaintext highlighter-rouge">$P</code>.</p>
 
-<p>Write a script to encrypt the given string <code class="language-plaintext highlighter-rouge">$S</code> using a <a href="https://en.wikipedia.org/wiki/Caesar_cipher">Caesar Cipher</a> with left shift of size <code class="language-plaintext highlighter-rouge">$N</code>.</p>
+<p>Write a script to check if the given pattern matches the entire string. Print <code class="language-plaintext highlighter-rouge">1</code> if so, otherwise <code class="language-plaintext highlighter-rouge">0</code>.</p>
 
-<h3 id="example">Example</h3>
+<p>The patterns can also have the following characters:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $S = "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", $N = 3
-Output: "QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD"
-
-Plain:  ABCDEFGHIJKLMNOPQRSTUVWXYZ
-Cipher: XYZABCDEFGHIJKLMNOPQRSTUVW
-
-Plaintext:  THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG
-Ciphertext: QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD
-</code></pre></div></div>
-
-<h3 id="solution">Solution</h3>
-
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-097/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
-
-<p>See below for explanation and any implementation-specific comments.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>constant @alphabet = ('A'..'Z').List; # [1]
-
-sub challenge(
-    Str $S where $S ~~ /^[&lt;alpha&gt;|&lt;space&gt;]+$/, # [2]
-    Int $N where $N &gt;= 0
-) {
-    $S.uc.trans(@alphabet =&gt; @alphabet.rotate(-$N)); # [3][4]
-}
-
-sub MAIN(Str $S, Int $N) {
-    say challenge($S, $N);
-}
-</code></pre></div></div>
-
-<p>This program runs as such:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku 'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG' 3
-QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD
-</code></pre></div></div>
-
-<h3 id="explanation">Explanation</h3>
-
-<p>We use some cool built-in functionality to make this so simple. Here is the logic:</p>
-
-<ol>
-  <li>Make sure the string is uppercase (<code class="language-plaintext highlighter-rouge">.uc</code>). They say we will always get uppercase, but might as well validate.</li>
-  <li>For each letter in the string, translate it to a different version of the alphabet that is rotated by <code class="language-plaintext highlighter-rouge">$N</code> spaces.</li>
-</ol>
-
-<p>That’s it!</p>
-
-<h4 id="specific-comments">Specific comments</h4>
-
-<ol>
-  <li>Since the alphabet is always going to be constant we can instantiate it at the top level as a <a href="https://docs.raku.org/language/terms#Constants"><code class="language-plaintext highlighter-rouge">constant</code></a>. Constants are evaluated at compile time, so this speeds up the program (even if just marginally).</li>
-  <li>You have likely seen me use this syntax before; these are called anonymous type constraints, and allow us to be a little more specific than just <code class="language-plaintext highlighter-rouge">Str</code> or <code class="language-plaintext highlighter-rouge">Int</code>. In this case, we want a string that only contains letters and spaces, and an int that is greater than or equal to zero.</li>
-  <li><a href="https://docs.raku.org/routine/trans"><code class="language-plaintext highlighter-rouge">trans</code></a> is a cool subroutine; it takes two lists (or strings) defining replacements to be made in the supplied string. Given the example above, it is the equivalent of something like <code class="language-plaintext highlighter-rouge">$S.subst('a', 'x').subst('b', 'y')...</code>. The left argument, in our case, will always be the alphabet, and the right argument is the alphabet rotated by <code class="language-plaintext highlighter-rouge">$N</code> spaces.</li>
-  <li><a href="https://docs.raku.org/routine/rotate"><code class="language-plaintext highlighter-rouge">rotate</code></a> takes a list and rotates it to the left. Since we need our letters shifted to the right, we use a negative number (<code class="language-plaintext highlighter-rouge">-$N</code>).</li>
-</ol>
-
-<h2 id="task-2-binary-substrings">Task 2: Binary Substrings</h2>
-
-<p>You are given a binary string <code class="language-plaintext highlighter-rouge">$B</code> and an integer <code class="language-plaintext highlighter-rouge">$S</code>.</p>
-
-<p>Write a script to split the binary string <code class="language-plaintext highlighter-rouge">$B</code> of size <code class="language-plaintext highlighter-rouge">$S</code> and then find the minimum number of flips required to make it all the same.</p>
+<p><code class="language-plaintext highlighter-rouge">?</code> - Match any single character.<br />
+<code class="language-plaintext highlighter-rouge">*</code> - Match any sequence of characters.</p>
 
 <h3 id="example-1">Example 1</h3>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $B = “101100101”, $S = 3
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $S = "abcde" $P = "a*e"
 Output: 1
-
-Binary Substrings:
-  "101": 0 flip
-  "100": 1 flip to make it "101"
-  "101": 0 flip
 </code></pre></div></div>
 
 <h3 id="example-2">Example 2</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input $B = “10110111”, $S = 4
-Output: 2
-
-Binary Substrings:
-  "1011": 0 flip
-  "0111": 2 flips to make it "1011"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $S = "abcde" $P = "a*d"
+Output: 0
 </code></pre></div></div>
 
-<h3 id="solution-1">Solution</h3>
+<h3 id="example-3">Example 3</h3>
 
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-097/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $S = "abcde" $P = "?b*d"
+Output: 0
+</code></pre></div></div>
+
+<h3 id="example-4">Example 4</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $S = "abcde" $P = "a*c?e"
+Output: 1
+</code></pre></div></div>
+
+<h3 id="solution">Solution</h3>
+
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-099/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Text::Levenshtein; # imports `distance`
-
-sub challenge(
-    Str $B where $B ~~ /^[0|1]+$/,
-    Int $S where $S &gt; 0
-) {
-    my @segments = $B.comb.rotor($S, :partial).map(-&gt; @chars { # [1]
-        my $segment = @chars.join;
-        $segment ~ '0' x ($S - $segment.chars) # [2][3]
-    });
-    distance(|@segments).sum; # [4]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(Str $S, Str $P) returns Int {
+    my $regex = '^' ~ $P.trans(['*', '?'] =&gt; ['.*', '.']) ~ '$'; # [1][2][3]
+    ($S ~~ /&lt;$regex&gt;/).Bool.Int;                                 # [4][5]
 }
 
-multi sub MAIN(Str $B, Int $S) {
-    say challenge($B, $S);
+sub MAIN(Str $S, Str $P) {
+    say challenge($S, $P);
 }
 </code></pre></div></div>
 
 <p>This program runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku 101100101 3
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku abcde a*e
 1
+</code></pre></div></div>
+
+<h3 id="explanation">Explanation</h3>
+
+<p>This one is pretty simple – we essentially just translate our pattern characters to their regex counterparts (see table below), then check if it matches <code class="language-plaintext highlighter-rouge">$S</code>. If so, we return <code class="language-plaintext highlighter-rouge">1</code>, otherwise <code class="language-plaintext highlighter-rouge">0</code>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Pattern Character</th>
+      <th>Regex Counterpart</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">?</code></td>
+      <td><code class="language-plaintext highlighter-rouge">.</code></td>
+      <td>Any single character</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">*</code></td>
+      <td><code class="language-plaintext highlighter-rouge">.*</code></td>
+      <td>Any single character <em>zero or more times</em> (the <code class="language-plaintext highlighter-rouge">*</code> means “zero or more” in regex)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="specific-comments">Specific comments</h4>
+
+<ol>
+  <li>The question says the pattern has to match the entire string, so we add <code class="language-plaintext highlighter-rouge">^</code> (which means “start of string”) and <code class="language-plaintext highlighter-rouge">$</code> (which means “end of string”) to the pattern.</li>
+  <li>The <a href="https://docs.raku.org/routine/trans"><code class="language-plaintext highlighter-rouge">trans</code></a> method can take either two strings or two lists. If we provide two strings, they must be of the same length. Since one of our characters maps to <em>two</em> regex characters (<code class="language-plaintext highlighter-rouge">*</code> -&gt; <code class="language-plaintext highlighter-rouge">.*</code>), we have to use the list style.</li>
+  <li><code class="language-plaintext highlighter-rouge">~</code> is the Raku <a href="https://docs.raku.org/routine/~">concatenate operator</a> so that we create just one string.</li>
+  <li>To reference a regex stored in a variable, we have to use the <a href="https://docs.raku.org/language/regexes#Regex_interpolation">bracket notation</a>.</li>
+  <li>The <a href="https://docs.raku.org/routine/~~">smart match operator</a> (<code class="language-plaintext highlighter-rouge">~~</code>) returns a <a href="https://docs.raku.org/type/Match"><code class="language-plaintext highlighter-rouge">Match</code></a> object, which we cast to a boolean (to see <em>if</em> it matched) and then an integer (a boolean will cast to <code class="language-plaintext highlighter-rouge">0</code> if false, and <code class="language-plaintext highlighter-rouge">1</code> if true).</li>
+</ol>
+
+<h2 id="task-2-unique-subsequence">Task 2: Unique Subsequence</h2>
+
+<p>You are given two strings <code class="language-plaintext highlighter-rouge">$S</code> and <code class="language-plaintext highlighter-rouge">$T</code>.</p>
+
+<p>Write a script to find out count of different unique subsequences matching <code class="language-plaintext highlighter-rouge">$T</code> without changing the position of characters.</p>
+
+<h3 id="example-1-1">Example 1</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $S = "littleit', $T = 'lit'
+Output: 5
+
+    1: [lit] tleit
+    2: [li] t [t] leit
+    3: [li] ttlei [t]
+    4: litt [l] e [it]
+    5: [l] ittle [it]
+</code></pre></div></div>
+
+<h3 id="example-2-1">Example 2</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $S = "london', $T = 'lon'
+Output: 3
+
+    1: [lon] don
+    2: [lo] ndo [n]
+    3: [l] ond [on]
+</code></pre></div></div>
+
+<h3 id="solution-1">Solution</h3>
+
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-099/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(Str $S, Str $T) returns Int {
+    my $regex = $T.comb.join('.*');     # [1]
+    ($S ~~ m:exhaustive/&lt;$regex&gt;/).Int; # [2][3]
+}
+
+sub MAIN(Str $S, Str $T) {
+    say challenge($S, $T);
+}
+</code></pre></div></div>
+
+<p>This program runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku littleit lit
+5
 </code></pre></div></div>
 
 <h3 id="explanation-1">Explanation</h3>
 
-<p>The number of flips seems oddly similar to the edit distance from last week, no? I was able to reuse <code class="language-plaintext highlighter-rouge">Text::Levenshtein.distance</code> from last week to find the “edit distance” between binary strings! We do a little work to split the string into <code class="language-plaintext highlighter-rouge">$S</code> pieces (padding with zeros, if necessary), then leave all the heaving lifting to <code class="language-plaintext highlighter-rouge">distance</code>.</p>
+<p>We basically take our <code class="language-plaintext highlighter-rouge">$T</code> and convert it to a regex that looks like this: <code class="language-plaintext highlighter-rouge">l.*i.*t</code>. Which, as we know from Task 1, means that we want to match the word <code class="language-plaintext highlighter-rouge">lit</code> with <em>zero or more characters</em> between each letter. We then do an exhaustive match against <code class="language-plaintext highlighter-rouge">$S</code> and count the number of matches.</p>
 
 <h4 id="specific-comments-1">Specific Comments</h4>
 
 <ol>
-  <li><a href="https://docs.raku.org/routine/rotor"><code class="language-plaintext highlighter-rouge">rotor</code></a> splits a list into pieces based on the argument (<code class="language-plaintext highlighter-rouge">$S</code> in this case). We pass it the <code class="language-plaintext highlighter-rouge">:partial</code> flag so that it keeps any pieces that are less than <code class="language-plaintext highlighter-rouge">$S</code> in size (rather than throwing them away).</li>
-  <li><a href="https://docs.raku.org/routine/~"><code class="language-plaintext highlighter-rouge">~</code></a> is Raku’s string concatenation subroutine.</li>
-  <li><a href="https://docs.raku.org/routine/x"><code class="language-plaintext highlighter-rouge">x</code></a> is Raku’s string repetition operator. I couldn’t an <code class="language-plaintext highlighter-rouge">rpad</code> method in Raku, so this is my workaround.</li>
-  <li><code class="language-plaintext highlighter-rouge">distance</code> does not take a single list of arguments, it takes a variable amount of top-level arguments. To achieve that behavior, we use a <a href="https://docs.raku.org/routine/%7C">slip (<code class="language-plaintext highlighter-rouge">|</code>)</a> to unpack the list we built.</li>
+  <li><code class="language-plaintext highlighter-rouge">comb</code> converts the string to a list of characters (i.e. <code class="language-plaintext highlighter-rouge">'foo'</code> -&gt; <code class="language-plaintext highlighter-rouge">['f', 'o', 'o']</code>), which we then join together with our <code class="language-plaintext highlighter-rouge">.*</code> regex.</li>
+  <li>We supply the <a href="https://docs.raku.org/language/regexes#Adverbs"><code class="language-plaintext highlighter-rouge">exhaustive</code> adverb</a> (we have to say this is a <code class="language-plaintext highlighter-rouge">match</code> adverb with <code class="language-plaintext highlighter-rouge">m</code>, or else it would think it is a <em>regex</em> adverb), which tells the regex to keep going after the first match and find an exhaustive list of matches.</li>
+  <li>Calling <code class="language-plaintext highlighter-rouge">.Int</code> on a match object directly will return the number of matches it found.</li>
 </ol>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>As I was writing this blog I realized it may have been better for me to left pad the binary strings in challenge two; <code class="language-plaintext highlighter-rouge">1001 != 100100</code> but <code class="language-plaintext highlighter-rouge">1001 == 001001</code>. Oh well, the question doesn’t talk about the “partial” case anyway!</p>
+<p>Perl has always been the king of regex, which is why it got (and continues to stay) so popular. Raku continues that legacy and made these problems relatively simple.</p>
 
         
       </section>
@@ -518,7 +538,7 @@ multi sub MAIN(Str $B, Int $S) {
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-01-30T00:00:00-06:00">January 30, 2021</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-02-13T00:00:00-06:00">February 13, 2021</time></p>
 
 
       </footer>
@@ -528,23 +548,22 @@ multi sub MAIN(Str $B, Int $S) {
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+97%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-097%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+99%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-099%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-097%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-099%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-097%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-099%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/perl-weekly-challenge-096/" class="pagination--pager" title="Perl Weekly Challenge 96
+      <a href="/blog/perl-weekly-challenge-098/" class="pagination--pager" title="Perl Weekly Challenge 98
 ">Previous</a>
     
     
-      <a href="/blog/perl-weekly-challenge-098/" class="pagination--pager" title="Perl Weekly Challenge 98
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -558,53 +577,6 @@ multi sub MAIN(Str $B, Int $S) {
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/perl-weekly-challenge-099/" rel="permalink">Perl Weekly Challenge 99
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2021-02-13T00:00:00-06:00">February 13, 2021</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          3 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">This week’s theme is regex, which is something the Perl family of languages has always been known for.
-
-</p>
-  </article>
-</div>
-
         
           
 
@@ -647,6 +619,53 @@ multi sub MAIN(Str $B, Int $S) {
 
 
     <p class="archive__item-excerpt" itemprop="description">This week’s solutions explore some more obscure parts of the Raku ecosystem, namely state variables and adverbs.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-097/" rel="permalink">Perl Weekly Challenge 97
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-01-30T00:00:00-06:00">January 30, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">My solution to challenge two builds on last week’s challenge two, so I encourage you to go read last week’s post if you haven’t already!
 
 </p>
   </article>
