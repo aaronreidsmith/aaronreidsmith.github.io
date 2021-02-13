@@ -214,4 +214,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "http://localhost:4000/blog/perl-weekly-challenge-098/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 99",
+        "excerpt":"This week’s theme is regex, which is something the Perl family of languages has always been known for. Task 1: Pattern Match You are given a string $S and a pattern $P. Write a script to check if the given pattern matches the entire string. Print 1 if so, otherwise...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "http://localhost:4000/blog/perl-weekly-challenge-099/",
+        "teaser": null
       }]
