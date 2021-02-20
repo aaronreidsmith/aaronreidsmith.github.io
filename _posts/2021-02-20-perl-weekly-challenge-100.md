@@ -60,7 +60,7 @@ sub challenge-expanded(Str \t) returns Str {
         (h == 12 ??
           (q  eq 'am' ?? 0 !! h) !!
           h + (12 * ( q eq 'pm'))) !!
-        h == 0|12 ?? 12 !! h%12,
+        h == 0|12 ?? 12 !! h % 12,
       m,
       q ?? '' !! (h >= 12 ?? 'pm' !! 'am')
     );
