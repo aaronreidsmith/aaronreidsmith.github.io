@@ -103,9 +103,9 @@ For the hour, we follow the following logic:
           - If yes: `hour = 12 + hour`
           - If no: `hour` is left alone
   - If no:
-  	- Is the hour equal to 0 or 12?
-	  - If yes: `hour = 12`
-	  - If no: `hour = hour % 12`
+    - Is the hour equal to 0 or 12?
+      - If yes: `hour = 12`
+      - If no: `hour = hour % 12`
 
 Minute will always be `0-59`, so we leave it alone.
 
