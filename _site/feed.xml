@@ -1,4 +1,590 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-02-13T12:55:55-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 99</title><link href="http://localhost:4000/blog/perl-weekly-challenge-099/" rel="alternate" type="text/html" title="Perl Weekly Challenge 99" /><published>2021-02-13T00:00:00-06:00</published><updated>2021-02-13T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-099</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-099/">&lt;p&gt;This week’s theme is &lt;a href=&quot;https://en.wikipedia.org/wiki/Regular_expression&quot;&gt;&lt;em&gt;regex&lt;/em&gt;&lt;/a&gt;, which is something the Perl family of languages has always been known for.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-02-27T10:51:42-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 101</title><link href="http://localhost:4000/blog/perl-weekly-challenge-101/" rel="alternate" type="text/html" title="Perl Weekly Challenge 101" /><published>2021-02-27T00:00:00-06:00</published><updated>2021-02-27T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-101</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-101/">&lt;p&gt;This week was pretty fun – solution one ends up re-using some code from &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-088/&quot;&gt;my first post&lt;/a&gt; (Challenge 88), and solution two explores &lt;a href=&quot;https://en.wikipedia.org/wiki/Barycentric_coordinate_system&quot;&gt;Barycentric coordinates&lt;/a&gt;! No ugly one-liners this week. 🙂&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-pack-a-spiral&quot;&gt;Task 1: Pack a Spiral&lt;/h2&gt;
+
+&lt;p&gt;You are given an array &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@A&lt;/code&gt; of items (integers say, but they can be anything).&lt;/p&gt;
+
+&lt;p&gt;Your task is to pack that array into an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MxN&lt;/code&gt; matrix spirally &lt;strong&gt;counterclockwise&lt;/strong&gt;, as tightly as possible. “Tightly” means the absolute value of the difference between &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;M&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|M-N|&lt;/code&gt;) has to be as small as possible.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @A = (1,2,3,4)
+
+Output:
+
+    4 3
+    1 2
+
+Since the given array is already a 1x4 matrix on its own, but that's not as tight as possible. Instead, you'd spiral it counterclockwise into
+
+    4 3
+    1 2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @A = (1,2,3,4,5,6)
+
+Output:
+
+    6 5 4
+    1 2 3
+
+or
+
+    5 4
+    6 3
+    1 2
+
+Either will do as an answer, because they're equally tight.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-3&quot;&gt;Example 3&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @A = (1,2,3,4,5,6,7,8,9,10,11,12)
+
+Output:
+
+       9  8  7 6
+      10 11 12 5
+       1  2  3 4
+
+or
+
+       8  7 6
+       9 12 5
+      10 11 4
+       1  2 3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-101/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Finds all factor pairs of a given numbers
+sub factors(Int $n) returns Positional {
+    my $max = $n.sqrt.floor;
+    my $number = 1;
+    my @factors;
+    while $number &amp;lt;= $max {
+        my $potential-factor = $n / $number;
+        if $potential-factor == $potential-factor.Int {
+            @factors.push(($number.clone, $potential-factor)); # [1]
+        }
+        $number++;
+    }
+    @factors;
+}
+
+# Formats a 2D array into a multi-line string
+sub format(@two-d) returns Str {
+    my $width = @two-d[*;*].max(*.chars).chars;                                # [2]
+    my @formatted = gather {
+        for @two-d -&amp;gt; @row {
+            take @row.map(-&amp;gt; $num { sprintf('%*s', $width, $num) }).join(' '); # [3]
+        }
+    }
+    @formatted.join(&quot;\n&quot;);
+}
+
+sub challenge(@A) returns Str {
+    enum Direction &amp;lt;NORTH EAST SOUTH WEST&amp;gt;;
+
+    my @factors = factors(@A.elems);
+    my ($m, $n) = @factors.min(-&amp;gt; ($a, $b) { abs($a - $b) });
+    my (@matrix, @output);
+    for ^$m {
+        my (@matrix-row, @output-row);
+        for ^$n {
+            @matrix-row.push({ :!visited });
+            @output-row.push(Nil)
+        }
+        @matrix.push(@matrix-row);
+        @output.push(@output-row);
+    }
+
+    sub visit-cell($i, $j, $element) { # [4]
+        my %cell = @matrix[$i][$j];
+        if !%cell&amp;lt;visited&amp;gt; {
+            @output[$i][$j] = $element;
+        }
+        @matrix[$i][$j]&amp;lt;visited&amp;gt; = True;
+    }
+
+    my ($min-row, $min-col) = 0, 0;
+    my ($max-row, $max-col) = @matrix.elems - 1, @matrix.tail.elems - 1;
+    my ($current-row, $current-col, $current-direction) = $min-row, $min-col, EAST;
+
+    for @A -&amp;gt; $element {
+        visit-cell($current-row, $current-col, $element);
+        given $current-direction {
+            when EAST {
+                if $current-col == $max-col || @matrix[$current-row][$current-col+1]&amp;lt;visited&amp;gt; {
+                    $current-direction = SOUTH;
+                    $current-row += 1;
+                } else {
+                    $current-col += 1;
+                }
+            }
+            when SOUTH {
+                if ($current-row == $max-row &amp;amp;&amp;amp; $current-col == $max-col) || @matrix[$current-row+1][$current-col]&amp;lt;visited&amp;gt; {
+                    $current-direction = WEST;
+                    $current-col -= 1;
+                } else {
+                    $current-row += 1;
+                }
+            }
+            when WEST {
+                if $current-col == $min-col || @matrix[$current-row][$current-col-1]&amp;lt;visited&amp;gt; {
+                    $current-direction = NORTH;
+                    $current-row -= 1;
+                } else {
+                    $current-col -= 1;
+                }
+            }
+            when NORTH {
+                # No need to check for special case here, because we always start in the top left
+                if @matrix[$current-row-1][$current-col]&amp;lt;visited&amp;gt; {
+                    $current-direction = EAST;
+                    $current-col += 1;
+                } else {
+                    $current-row -= 1;
+                }
+            }
+        }
+    }
+
+    format(@output.reverse);
+}
+
+sub MAIN(*@A) {
+    say challenge(@A);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 1 2 3 4
+4 3
+2 1
+
+$ raku ch-1.raku 1 2 3 4 5 6
+6 5 4
+1 2 3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;The problem says to wrap the spiral counterclockwise (i.e., start at the bottom left, and fill-in counterclockwise), this is pretty hard to do, given a dynamic-sized array. What I did instead was start at the top left, fill in clockwise, then reverse (mirror) the outer array, so the spiral started at the bottom left.&lt;/p&gt;
+
+&lt;p&gt;Here is the basic logic:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Find all the factors of the length of the input array.&lt;/li&gt;
+  &lt;li&gt;Find the pair of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;M&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; such that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|M-N|&lt;/code&gt; is minimized
+    &lt;ul&gt;
+      &lt;li&gt;Because of the way we find the factors, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;M&lt;/code&gt; will always be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;= N&lt;/code&gt;, so we will have horizontal output as opposed to the vertical output.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Define the 2D array with empty cells (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@output&lt;/code&gt;), as well as a separate companion array (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@matrix&lt;/code&gt;) that keeps track of visited cells.&lt;/li&gt;
+  &lt;li&gt;Traverse through the input array, keeping track of visited cells in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@matrix&lt;/code&gt;, and filling in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@output&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Once &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@output&lt;/code&gt; has been filled in, reverse it, and format it into the expected output string.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;I found it interesting that I had to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$number.clone&lt;/code&gt; here, but if I just used &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$number&lt;/code&gt;, all the pairs in the output ended up with the same &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;M&lt;/code&gt; value.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[*;*]&lt;/code&gt; is the way to flatten a 2D array. If it were a 3D array you would use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[*;*;*]&lt;/code&gt; and the pattern continues for more-nested arrays. An interesting quirk of Raku.&lt;/li&gt;
+  &lt;li&gt;Normally in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprintf&lt;/code&gt; we would do something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%2s&lt;/code&gt; to say we want to pad something to two characters. However, since the width is variable, we are able to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%*s&lt;/code&gt; and pass the width in as an argument.&lt;/li&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;visit-cell&lt;/code&gt; subroutine needs to be defined within &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; because it is a &lt;a href=&quot;https://stackoverflow.com/a/7464475/10696164&quot;&gt;closure&lt;/a&gt;, meaning it has access to the variables defined within &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt;, but outside &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;visit-cell&lt;/code&gt;. In this case, it is accessing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@output&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@matrix&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-origin-containing-triangle&quot;&gt;Task 2: Origin-containing Triangle&lt;/h2&gt;
+
+&lt;p&gt;You are given three points in the plane, as a list of six coordinates: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;A=(x1,y1)&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;B=(x2,y2)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C=(x3,y3)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to find out if the triangle formed by the given three coordinates contain origin &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(0,0)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Print &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; if found otherwise &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1-1&quot;&gt;Example 1&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: A=(0,1), B=(1,0) and C=(2,2)
+
+Output: 0 because that triangle does not contain (0,0).
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-2-1&quot;&gt;Example 2&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: A=(1,1), B=(-1,1) and C=(0,-3)
+
+Output: 1 because that triangle contains (0,0) in its interior.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-3-1&quot;&gt;Example 3&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: A=(0,1), B=(2,0) and C=(-6,0)
+
+Output: 1 because (0,0) is on the edge connecting B and C.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-101/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Point {
+    has Int $.x;
+    has Int $.y;
+
+    multi method new($x, $y) { # [1]
+        self.bless(:$x, :$y);
+    }
+}
+
+sub challenge(Point $A, Point $B, Point $C, Point $target = Point.new(0, 0)) returns Int {
+    my $area = 0.5 * (-$B.y * $C.x + $A.y * (-$B.x + $C.x) + $A.x * ($B.y - $C.y) + $B.x * $C.y);
+    my $s = 1 / (2 * $area) * ($A.y * $C.x - $A.x * $C.y + ($C.y - $A.y) * $target.x + ($A.x - $C.x) * $target.y);
+    my $t = 1 / (2 * $area) * ($A.x * $B.y - $A.y * $B.x + ($A.y - $B.y) * $target.x + ($B.x - $A.x) * $target.y);
+    (0 &amp;lt;= $s &amp;lt;= 1 &amp;amp;&amp;amp; 0 &amp;lt;= $t &amp;lt;= 1 &amp;amp;&amp;amp; $s + $t &amp;lt;= 1).Int;
+}
+
+sub MAIN(Int $x1, Int $y1, Int $x2, Int $y2, Int $x3, Int $y3) {
+    say challenge(
+        Point.new($x1, $y1),
+        Point.new($x2, $y2),
+        Point.new($x3, $y3)
+    );
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 0 1 1 0 2 2
+0
+
+$ raku ch-2.raku 1 1 -1 1 0 -3
+1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;This solution is essentially &lt;a href=&quot;https://stackoverflow.com/a/14382692/10696164&quot;&gt;this StackOverflow answer&lt;/a&gt; combined with &lt;a href=&quot;https://stackoverflow.com/a/2049712/10696164&quot;&gt;this StackOverflow answer&lt;/a&gt; with classes instead of individual points. I won’t pretend I understand &lt;a href=&quot;https://en.wikipedia.org/wiki/Barycentric_coordinate_system&quot;&gt;Barycentric coordinates&lt;/a&gt;, but it was easy enough to translate the solution into Raku. We do the following:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Turn our six integers into &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Point&lt;/code&gt; objects, so we can reference them via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$point.x&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$point.y&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Find the area of the triangle defined by the three points.&lt;/li&gt;
+  &lt;li&gt;Use the area to find the Barycentric values &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;s&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;If &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0 &amp;lt;= s &amp;lt;= 1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0 &amp;lt;= t &amp;lt;= 1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;s + t &amp;lt;= 1&lt;/code&gt;, then the target point (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(0,0)&lt;/code&gt; by default, but can be anything) is in the triangle, otherwise it is not.&lt;/li&gt;
+  &lt;li&gt;Cast the above boolean to an integer, because that is what is requested in the challenge.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;p&gt;I think the linked StackOverflow questions do a better job of describing Barycentric coordinates than I can, so I just have one implementation comment.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;It’s much easier to deal with this problem with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Point&lt;/code&gt; object. However, defining instances of classes in Raku is quite verbose; by default, it would be like this: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Point.new(x =&amp;gt; $x1, y =&amp;gt; $y1)&lt;/code&gt;. We define our own &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;new&lt;/code&gt; method that just takes positional arguments and internally calls the named arguments via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bless&lt;/code&gt;. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;self.bless(:$x, :$y)&lt;/code&gt; is shorthand for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;self.bless(x =&amp;gt; $x, y =&amp;gt; $y)&lt;/code&gt;. In fact, this &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Point&lt;/code&gt; implementation is actually &lt;a href=&quot;https://docs.raku.org/routine/bless&quot;&gt;the example&lt;/a&gt; for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bless&lt;/code&gt; method.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;Nothing much to add this week. See y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week was pretty fun – solution one ends up re-using some code from my first post (Challenge 88), and solution two explores Barycentric coordinates! No ugly one-liners this week. 🙂</summary></entry><entry><title type="html">Perl Weekly Challenge 100</title><link href="http://localhost:4000/blog/perl-weekly-challenge-100/" rel="alternate" type="text/html" title="Perl Weekly Challenge 100" /><published>2021-02-20T00:00:00-06:00</published><updated>2021-02-20T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-100</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-100/">&lt;p&gt;This week was a lot of fun! Challenge 1 threw an additional curve ball at us – the solution should be a “one-liner.” I did my best to fit my solution on one line; the solution itself is 163 characters long.&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-fun-time&quot;&gt;Task 1: Fun Time&lt;/h2&gt;
+
+&lt;p&gt;You are given a time (12 hour / 24 hour).&lt;/p&gt;
+
+&lt;p&gt;Write a script to convert the given time from a 12-hour format to 24-hour format and vice versa.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Ideally we expect a one-liner.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 05:15 pm or 05:15pm
+Output: 17:15
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 19:15
+Output: 07:15 pm or 07:15pm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-100/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Str \t) returns Str {
+    t~~/(\d+)\:(\d+)\s?([a|p]m)?/;my (\h,\m,\q)=$/[*];sprintf('%02d:%02d%s',q??h==12??q eq'am'??0!!h!!h+(12*(q eq'pm'))!!h==0|12??12!!h%12,m,q??''!!h&amp;gt;=12??'pm'!!'am');
+}
+
+# Implementation comments will go in this version of the above solution
+sub challenge-expanded(Str \t) returns Str {
+    t ~~ /
+      (\d+)     # One or more digits (should technically use \d ** {2}, but this is shorter
+      \:        # A literal colon character
+      (\d+)     # One or more digits (again, should use \d ** {2})
+      \s?       # An optional space (to support HH:MMam or HH:MM am)
+      ([a|p]m)? # An optional 'am' or 'pm' (to support both 12- and 24-hour time)
+    /;
+
+    my (\h, \m, \q) = $/[*]; # [1][2][3]
+
+	 # The logic in here is the same as above, with added parentheses for clarity
+    sprintf(
+      '%02d:%02d%s', # [4]
+      q ??
+        (h == 12 ??
+          (q  eq 'am' ?? 0 !! h) !!
+          h + (12 * ( q eq 'pm'))) !!
+        h == 0|12 ?? 12 !! h % 12,
+      m,
+      q ?? '' !! (h &amp;gt;= 12 ?? 'pm' !! 'am')
+    );
+}
+
+sub MAIN(Str $time) {
+    say challenge($time);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 05:15 pm
+17:15
+
+$ raku ch-1.raku 19:15
+7:15pm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;This one is ugly, so I apologize in advance! When I hear “one-liner” I immediately think &lt;a href=&quot;https://en.wikipedia.org/wiki/Code_golf&quot;&gt;“code golf”&lt;/a&gt;. I used every trick I know to make my solution as short as possible while handling all the edge cases (it’s pretty easy to handle the given test cases, but the boundaries make things tricky. I tested every possible time in my full solution on GitHub). You’ll notice I &lt;em&gt;heavily&lt;/em&gt; lean on the ternary operator for all my branching logic.&lt;/p&gt;
+
+&lt;p&gt;For what it’s worth, this still has some flaws (for example, it will accept the time &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;99:99am&lt;/code&gt;), but it accepts &lt;strong&gt;all&lt;/strong&gt; valid input, so that is good enough for me.&lt;/p&gt;
+
+&lt;p&gt;First, we look for a string matching the regex provided (see embedded comment on what we are looking for). From this regex, we extract 3 elements: the hour, the minute, and the qualifier (am/pm) if it exists. Once we have those 3 elements, we pass them to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprintf&lt;/code&gt; function for all the logic.&lt;/p&gt;
+
+&lt;p&gt;For the hour, we follow the following logic:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Is there a qualifier?
+    &lt;ul&gt;
+      &lt;li&gt;If yes:
+        &lt;ul&gt;
+          &lt;li&gt;Is the hour equal to 12?
+            &lt;ul&gt;
+              &lt;li&gt;If yes:
+                &lt;ul&gt;
+                  &lt;li&gt;Is the qualifier equal to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;am&lt;/code&gt;?
+                    &lt;ul&gt;
+                      &lt;li&gt;If yes: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hour = 12&lt;/code&gt;&lt;/li&gt;
+                      &lt;li&gt;If no: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hour&lt;/code&gt; is left alone&lt;/li&gt;
+                    &lt;/ul&gt;
+                  &lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/li&gt;
+              &lt;li&gt;If no:
+                &lt;ul&gt;
+                  &lt;li&gt;Is the qualifier equal to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pm&lt;/code&gt;?
+                    &lt;ul&gt;
+                      &lt;li&gt;If yes: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hour = 12 + hour&lt;/code&gt;&lt;/li&gt;
+                      &lt;li&gt;If no: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hour&lt;/code&gt; is left alone&lt;/li&gt;
+                    &lt;/ul&gt;
+                  &lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;If no:
+        &lt;ul&gt;
+          &lt;li&gt;Is the hour equal to 0 or 12?
+            &lt;ul&gt;
+              &lt;li&gt;If yes: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hour = 12&lt;/code&gt;&lt;/li&gt;
+              &lt;li&gt;If no: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hour = hour % 12&lt;/code&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Minute will always be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0-59&lt;/code&gt;, so we leave it alone.&lt;/p&gt;
+
+&lt;p&gt;For the qualifier, we follow the following logic:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Is there a qualifier?
+    &lt;ul&gt;
+      &lt;li&gt;If yes, we are converting to a 24-hour format, so the new qualifier is empty&lt;/li&gt;
+      &lt;li&gt;If no:
+        &lt;ul&gt;
+          &lt;li&gt;Is the hour greater than or equal to 12?
+            &lt;ul&gt;
+              &lt;li&gt;If yes: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;qualifier = 'pm'&lt;/code&gt;&lt;/li&gt;
+              &lt;li&gt;If no: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;qualifier = 'am'&lt;/code&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Finally, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprintf&lt;/code&gt; handles all the formatting (discussed below).&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Everywhere where I used a variable, you’ll notice I use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\variable-name&lt;/code&gt;. In Raku, there are several &lt;a href=&quot;https://docs.raku.org/language/variables#Sigils&quot;&gt;sigils&lt;/a&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$&lt;/code&gt; for scalars, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@&lt;/code&gt; for positionals, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%&lt;/code&gt; for associatives, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;amp;&lt;/code&gt; for functions. There is also the special &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\&lt;/code&gt; sigil for &lt;a href=&quot;https://docs.raku.org/type/Scalar#index-entry-%5c_(sigilless_scalar)&quot;&gt;sigilless scalars&lt;/a&gt;. Basically, if a variable is defined as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\variable-name&lt;/code&gt;, we are able to reference it as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;variable-name&lt;/code&gt;. This saved me 11 characters, by my count.&lt;/li&gt;
+  &lt;li&gt;A match object (returned by the smartmatch operator [&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~~&lt;/code&gt;]) creates a variable names &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$/&lt;/code&gt;, so that is where that came from. I could just have easily said &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;my $match = t ~~ &amp;lt;the rest&amp;gt;&lt;/code&gt;, but that would cost my characters.&lt;/li&gt;
+  &lt;li&gt;We used &lt;a href=&quot;https://docs.raku.org/language/regexes#Capturing&quot;&gt;regex capturing&lt;/a&gt; to pull out the hour, minute, and qualifier. Those end up in the match object (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$/&lt;/code&gt;) as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hour = $/[0]&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;minute = $/[1]&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;qualifier = $/[2]&lt;/code&gt;. We are able to extract &lt;em&gt;all 3&lt;/em&gt; elements by using the special &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; index to reference &lt;em&gt;all&lt;/em&gt; elements in the array.&lt;/li&gt;
+  &lt;li&gt;Raku’s &lt;a href=&quot;https://docs.raku.org/routine/sprintf&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprintf&lt;/code&gt; function&lt;/a&gt; is similar to Unix’s. It takes a formatting string (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;'%02d:%02d%s'&lt;/code&gt;) that describes the output. In this case, we say we want a 2-digit number, then a colon, then another 2-digit number, then a string. Those three elements are filled in with arguments 2-4 (hour, minute, qualifier).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-triangle-sum&quot;&gt;Task 2: Triangle Sum&lt;/h2&gt;
+
+&lt;p&gt;You are given triangle array.&lt;/p&gt;
+
+&lt;p&gt;Write a script to find the minimum path sum from top to bottom.&lt;/p&gt;
+
+&lt;p&gt;When you are on index &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; on the current row then you may move to either index &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; or index &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i + 1&lt;/code&gt; on the next row.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1-1&quot;&gt;Example 1&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: Triangle = [ [1], [2,4], [6,4,9], [5,1,7,2] ]
+Output: 8
+
+Explanation: The given triangle
+
+            1
+           2 4
+          6 4 9
+         5 1 7 2
+
+The minimum path sum from top to bottom:  1 + 2 + 4 + 1 = 8
+
+             [1]
+           [2]  4
+           6 [4] 9
+          5 [1] 7 2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-2-1&quot;&gt;Example 2&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: Triangle = [ [3], [3,1], [5,2,3], [4,3,1,3] ]
+Output: 7
+
+Explanation: The given triangle
+
+            3
+           3 1
+          5 2 3
+         4 3 1 3
+
+The minimum path sum from top to bottom: 3 + 1 + 2 + 1 = 7
+
+             [3]
+            3  [1]
+           5 [2] 3
+          4 3 [1] 3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-100/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(@triangle) {
+    my @layers = (0..@triangle.end); # [1]
+    my @indices = gather {           # [2]
+        for @triangle -&amp;gt; @layer {
+            take (0..@layer.end).List;
+        }
+    }
+    my @paths = gather {
+        for ([X] @indices) -&amp;gt; @path {         # [3]
+            my @zipped = @path Z @path[1..*]; # [4]
+            my $valid = True;
+            for @zipped -&amp;gt; ($a, $b) {
+                if $b &amp;lt; $a || $b &amp;gt; $a + 1 {
+                    $valid = False;
+                    last;
+                }
+            }
+            take @path if $valid;             # [5]
+        }
+    }
+    my @sums = gather {
+        my $sum = 0;
+        for @paths -&amp;gt; @path {
+            for @layers Z @path -&amp;gt; ($layer, $index) {
+                $sum += @triangle[$layer][$index];
+            }
+            take $sum;
+            $sum = 0;
+        }
+    }
+    @sums.min;
+}
+
+sub MAIN(*@N where all(@N) ~~ Int) {
+	 # Some extra logic to turn a list into a triangle
+    my ($index, $size) = (0, 1);
+    my @triangle;
+    while $index &amp;lt;= @N.end {
+        my $end-index = $index + $size;
+
+        my @layer = @N[$index..^$end-index];
+        @triangle.push(@layer);
+
+        $index = $end-index;
+        $size++;
+    }
+    say challenge(@triangle);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 1 2 4 6 4 9 5 1 7 2
+8
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;The logic here is pretty straightforward:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Find how many layers to the triangle there are&lt;/li&gt;
+  &lt;li&gt;Find the valid indices of each layer. So, for example 1, this would be something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;((0), (0, 1), (0, 1, 2), (0, 1, 2, 3))&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Find all valid paths. “Valid” in this case means that we always move from position &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; to position &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i+1&lt;/code&gt; on the next layer.&lt;/li&gt;
+  &lt;li&gt;Find the sum of each valid path.&lt;/li&gt;
+  &lt;li&gt;Return the minimum sum out of the valid paths.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Raku has a great method for positionals called &lt;a href=&quot;https://docs.raku.org/routine/end&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;end&lt;/code&gt;&lt;/a&gt;. It returns the last index in a list and saves us from confusion (similar to something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;len(list) - 1&lt;/code&gt;).&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/syntax/gather%20take&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gather&lt;/code&gt;&lt;/a&gt; is a way to build up a list based on some logic. It can be thought of as a more powerful list comprehension (from Python).&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/X&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt;&lt;/a&gt; is the cross product operator. When used like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[X] @list&lt;/code&gt;, it works like this: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[X] ((1, 2, 3), (4, 5, 6), (7, 8, 9)) == (1, 2, 3) X (4, 5, 6) X (7, 8, 9)&lt;/code&gt;. In this case, it creates all possible paths through the triangle (which we filter down to valid paths).&lt;/li&gt;
+  &lt;li&gt;To make sure we only move from position &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; to position &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i+1&lt;/code&gt; from layer to layer, we “zip” against our path from position &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i+1&lt;/code&gt; to the end.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if&lt;/code&gt; can be used in a postfix form to save space. In this case, we only want to take a path if it is valid (as defined above).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I had a lot of fun with this week’s challenges, especially challenge 1! Let me know if you think of a shorter solution. Otherwise, see y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week was a lot of fun! Challenge 1 threw an additional curve ball at us – the solution should be a “one-liner.” I did my best to fit my solution on one line; the solution itself is 163 characters long.</summary></entry><entry><title type="html">Perl Weekly Challenge 99</title><link href="http://localhost:4000/blog/perl-weekly-challenge-099/" rel="alternate" type="text/html" title="Perl Weekly Challenge 99" /><published>2021-02-13T00:00:00-06:00</published><updated>2021-02-13T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-099</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-099/">&lt;p&gt;This week’s theme is &lt;a href=&quot;https://en.wikipedia.org/wiki/Regular_expression&quot;&gt;&lt;em&gt;regex&lt;/em&gt;&lt;/a&gt;, which is something the Perl family of languages has always been known for.&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-pattern-match&quot;&gt;Task 1: Pattern Match&lt;/h2&gt;
 
@@ -1563,368 +2149,4 @@ ok 3 -
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Some fun little challenges that nicely complement Advent of Code. Now to start enjoying Christmas with my family! Merry Christmas everyone!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as finishing up AoC!</summary></entry><entry><title type="html">Advent of Code: Day 25</title><link href="http://localhost:4000/blog/advent-of-code-day-25/" rel="alternate" type="text/html" title="Advent of Code: Day 25" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-25</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-25/">&lt;p&gt;Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;We finally get to the front desk of the resort, and they tell us that the system is down, and we will be unable to check in. Luckily, they created all the room keys this morning, so we &lt;em&gt;will&lt;/em&gt; be able to go to our room, and just formally check in later. We are on the 25th floor, and the elevator is broken. 🙃&lt;/p&gt;
-
-&lt;p&gt;We make it to our room and scan the key and get the disheartening red light from the door. Luckily, there is a number to call IT on the card, and we give them a ring. They say we can either go down to the front desk to get it reset or reverse engineer the cryptographic handshake between the card and the door. Obviously we will take the latter choice.&lt;/p&gt;
-
-&lt;p&gt;We’re able to obtain the &lt;em&gt;public keys&lt;/em&gt; of both the door and the card (our input). To find the cryptographic handshake we must take the subject number (a constant; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;) and transform it according to the following rules:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Start with a value of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Set the value equal to itself times the subject number (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;)&lt;/li&gt;
-  &lt;li&gt;Set the value equal to the remainder after dividing by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;20201227&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Continue until the value equals the device’s public key&lt;/li&gt;
-  &lt;li&gt;For the above steps, count how many loops it took; this is the secret &lt;strong&gt;loop size&lt;/strong&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Once we have found the secret loop size for one of the devices, we can take the loop size and apply the same transformation as above using the public key from &lt;em&gt;the other device&lt;/em&gt; as our subject number, which yields the handshake key. Let’s look at an example:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Card Public Key: 5764801
-Door Public Key: 17807724
-
---- Finding the loop size for the card ---
-# Loop 1
-value = 1 * 7        = 7
-value = 7 % 20201227 = 7
-
-# Loop 2
-value = 7 * 7         = 49
-value = 49 % 20201227 = 49
-
-# Loop 3
-value = 49 * 7         = 343
-value = 343 % 20201227 = 343
-
-# Loop 4
-value = 343 * 7         = 2401
-value = 2401 % 20201227 = 2401
-
-# Loop 5
-value = 2401 * 7         = 16807
-value = 16807 % 20201227 = 16807
-
-# Loop 6
-value = 16807 * 7         = 117649
-value = 117649 % 20201227 = 117649
-
-# Loop 7
-value = 117649 * 7        = 823543
-value = 823543 % 20201227 = 823543
-
-# Loop 8
-value = 823543 * 7         = 5764801
-value = 5764801 % 20201227 = 5764801 &amp;lt;-- The card's public key
-
---- Applying the loop size to the door ---
-# Loop 1
-value = 1 * 17807724        = 17807724
-value = 17807724 % 20201227 = 17807724
-
-# Loop 2
-value = 17807724 * 17807724        = 317115034060176
-value = 317115034060176 % 20201227 = 10847306
-
-# Loop 3
-value = 10847306 * 17807724        = 193165831391544
-value = 193165831391544 % 20201227 = 1914476
-
-# Loop 4
-value = 1914476 * 17807724        = 34092460212624
-value = 34092460212624 % 20201227 = 874663
-
-# Loop 5
-value = 874663 * 17807724         = 15575757297012
-value = 15575757297012 % 20201227 = 5243202
-
-# Loop 6
-value = 5243202 * 17807724        = 93369494092248
-value = 93369494092248 % 20201227 = 8733831
-
-# Loop 7
-value = 8733831 * 17807724         = 155529651910644
-value = 155529651910644 % 20201227 = 1213104
-
-# Loop 8
-value = 1213104 * 17807724        = 21602621215296
-value = 21602621215296 % 20201227 = 14897079       &amp;lt;-- Cryptographic Handshake
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;I will not display it, but if we had found the door’s loop size and then used the card’s public key as the subject number, we would have come to the same cryptographic handshake; this is how the door, and the card know they are a match.&lt;/p&gt;
-
-&lt;p&gt;With our &lt;em&gt;real&lt;/em&gt; card and door public keys, what is the cryptographic handshake between them?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/25/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
-    my ($card-key, $door-key) = $file.IO.lines.map(*.Int);
-    my $handshake = 1;
-    my $target = 1;
-    while $target != $door-key {
-        $target = ($target * 7) % 20201227;
-        $handshake = ($handshake * $card-key) % 20201227;
-    }
-    say $handshake;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-18293391
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;Rather than keep track of the loop size, we just do the above 2 loops in parallel until &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$target&lt;/code&gt; matches &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$door-key&lt;/code&gt;. Rather than do the two steps outline above, we are able to do the multiplication and remainder division (&lt;a href=&quot;https://en.wikipedia.org/wiki/Modulo_operation&quot;&gt;modulo&lt;/a&gt;) in one step. Finally, all we have to do is say the handshake!&lt;/p&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;2020 has been a tough year and everyone needs a break. Day 25 part 2 is a freebie. 🙂&lt;/p&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;I had my ups and downs with this challenge. Obviously I did not fulfill my goal of solving everything in functional Raku; in fact, I wasn’t even able to solve everything in Raku. However, I learned a lot about the language, I learned a few new algorithms, and I had fun! This whole thing was a lot of fun, and I want to thank &lt;a href=&quot;https://github.com/topaz&quot;&gt;Eric&lt;/a&gt; for doing it for the past 6 years (even though this was my first time participating).&lt;/p&gt;
-
-&lt;p&gt;Next year I will have a one-and-a-half-year-old, so no promises I will be able to blog every day (it was hard enough this year), but I will do my best to participate, and I may blog for problems I find particularly clever.&lt;/p&gt;
-
-&lt;p&gt;With that, I would like to wish everyone a very merry Christmas and a happy New Year!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Merry Christmas! Part two was probably my favorite part of all of Advent of Code; check it out!</summary></entry><entry><title type="html">Advent of Code: Day 24</title><link href="http://localhost:4000/blog/advent-of-code-day-24/" rel="alternate" type="text/html" title="Advent of Code: Day 24" /><published>2020-12-24T00:00:00-06:00</published><updated>2020-12-24T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-day-24</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-day-24/">&lt;p&gt;Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-11/&quot;&gt;11&lt;/a&gt; and &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-17/&quot;&gt;17&lt;/a&gt;, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.&lt;/p&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-
-&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
-
-&lt;p&gt;We &lt;em&gt;finally&lt;/em&gt; made it to the resort, but there is a problem – they are renovating the lobby floor, and we can’t make it to the check-in desk until they are done. Since we are in a rush, we offer to help.&lt;/p&gt;
-
-&lt;p&gt;The workers are trying to lay a pattern using hexagonal tiles. All the tiles are white on one side and black on the other; to start, the workers laid them all out in the “white” orientation. The foreman gives us a list that looks like the following:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sesenwnenenewseeswwswswwnenewsewsw
-neeenesenwnwwswnenewnwwsewnenwseswesw
-seswneswswsenwwnwse
-nwnwneseeswswnenewneswwnewseswneseene
-swweswneswnenwsewnwneneseenw
-eesenwseswswnenwswnwnwsewwnwsene
-sewnenenenesenwsewnenwwwse
-wenwwweseeeweswwwnwwe
-wsweesenenewnwwnwsenewsenwwsesesenwne
-neeswseenwwswnwswswnw
-nenwswwsewswnenenewsenwsenwnesesenew
-enewnwewneswsewnwswenweswnenwsenwsw
-sweneswneswneneenwnewenewwneswswnese
-swwesenesewenwneswnwwneseswwne
-enesenwswwswneneswsenwnewswseenwsese
-wnwnesenesenenwwnenwsewesewsesesew
-nenewswnwewswnenesenwnesewesw
-eneswnwswnwsenenwnwnwwseeswneewsenese
-neswnwewnwnwseenwseesewsenwsweewe
-wseweeenwnesenwwwswnew
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;From an arbitrary starting tile, this defines directions to the tiles that need to be flipped; one set of directions per line. From each tile, there are six directions we can move in: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;e&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;se&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sw&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;w&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nw&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ne&lt;/code&gt;. So the first line above would split into these directions:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;se se nw ne ne ne w se e sw w sw sw w ne ne w se w sw
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Once we follow the directions to the appropriate tile, we flip it. One note, some of these tiles may flip and then &lt;em&gt;flip back&lt;/em&gt;. After all the instructions have been processed, how many tiles are flipped with their black side up?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/24/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub MAIN($file) {
-    my $regex = /^(e|se|sw|w|nw|ne)+$/;
-    my @instructions =
-        $file.IO
-        .lines
-        .map(-&amp;gt; $line {
-            $line.match($regex).map(*.Str).split(' ')
-        });
-    my $flipped = Set.new;
-    for @instructions -&amp;gt; @instruction-set {
-        my ($q, $r) = (0, 0);
-        for @instruction-set -&amp;gt; $direction {
-            given $direction {
-                when 'e'  { $q += 1          }
-                when 'se' { $r += 1          }
-                when 'sw' { $q -= 1; $r += 1 }
-                when 'w'  { $q -= 1          }
-                when 'nw' { $r -= 1          }
-                when 'ne' { $q += 1; $r -= 1 }
-            }
-        }
-        my $tile-key = &quot;$q:$r&quot;;    # [1]
-        if $tile-key ∈ $flipped {
-            $flipped ⊖= $tile-key; # [2]
-        } else {
-            $flipped ∪= $tile-key; # [3]
-        }
-    }
-    say $flipped.elems;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-459
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;First things first, we need to split the input into a list of lists, where the inner list contains the individual directions we need to move. We do so by matching each line against a regex and converting that into a list. Next, since a hexagonal grid is kind of an unconventional data structure, I decided to go with a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&lt;/code&gt; to store the flipped tiles rather than a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;List&lt;/code&gt; or some other traversable.&lt;/p&gt;
-
-&lt;p&gt;Now that we have the building blocks, how do we follow these directions? I found this great resource dedicated to &lt;a href=&quot;https://www.redblobgames.com/grids/hexagons&quot;&gt;hexagonal grids&lt;/a&gt; and how to traverse them. We use something called &lt;a href=&quot;https://www.redblobgames.com/grids/hexagons/#coordinates-axial&quot;&gt;axial coordinates&lt;/a&gt;. Here is a good representation of what is happening:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/aaronreidsmith/aaronreidsmith.github.io/master/assets/images/axial-coordinates.png&quot; alt=&quot;Axial Coordinates (credit: Red Blob Games)&quot; /&gt;
-&lt;sub&gt;Image credit: &lt;a href=&quot;https://www.redblobgames.com/grids/hexagons/#coordinates-axial&quot;&gt;Red Blob Games&lt;/a&gt;&lt;sub&gt;&lt;/sub&gt;&lt;/sub&gt;&lt;/p&gt;
-
-&lt;p&gt;Basically, we move east or west, we increment or decrement our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;q&lt;/code&gt; value. Similarly, if we move northwest or southeast, we increment or decrement our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;r&lt;/code&gt; value. If we move northeast or southwest, we increment one while decrementing the other. Now that we understand that, it is fairly easy to see what is happening in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;given&lt;/code&gt; block.&lt;/p&gt;
-
-&lt;p&gt;Once we reach our desired tile, we check if it is in our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$flipped&lt;/code&gt; set. If so, we need to remove it (or “un-flip” it); otherwise, it goes &lt;em&gt;in&lt;/em&gt; to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$flipped&lt;/code&gt; set. Finally, we just count the flipped tiles (via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$flipped.elems&lt;/code&gt;).&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Sets can only contain scalars in Raku (i.e., &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set.new((1, 2, 3))&lt;/code&gt; yields &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set(1, 2, 3)&lt;/code&gt;), so we can’t just add the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;q&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;r&lt;/code&gt; values to the set as-is. My workaround is to convert them to a string with the format &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;q:r&lt;/code&gt; so we are able to store them in a set, but still retrieve them easily later.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;⊖&lt;/code&gt; is the &lt;a href=&quot;https://en.wikipedia.org/wiki/Symmetric_difference&quot;&gt;symmetric difference&lt;/a&gt; operator, which removes elements that are present in both sets. In conjunction with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;=&lt;/code&gt; operator, it reassigns to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$flipped&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;∪&lt;/code&gt; is the &lt;a href=&quot;https://en.wikipedia.org/wiki/Union_(set_theory)&quot;&gt;set union&lt;/a&gt;, which returns all the items in both sets cast to a new set. In conjunction with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;=&lt;/code&gt; operator, it reassigns to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$flipped&lt;/code&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
-
-&lt;p&gt;Now we find out that the tiles in the lobby are meant to be a sort-of “living art exhibit.” Every day the tiles are flipped according to the following rules:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Any &lt;strong&gt;black&lt;/strong&gt; tile with &lt;strong&gt;zero&lt;/strong&gt; or &lt;strong&gt;more than 2&lt;/strong&gt; black tiles immediately adjacent to it is flipped to &lt;strong&gt;white&lt;/strong&gt;.&lt;/li&gt;
-  &lt;li&gt;Any &lt;strong&gt;white&lt;/strong&gt; tile with &lt;strong&gt;exactly 2&lt;/strong&gt; black tiles immediately adjacent to it is flipped to &lt;strong&gt;black&lt;/strong&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The rules are applied simultaneously to every tile; put another way, it is first determined which tiles need to be flipped, then they are all flipped at the same time.&lt;/p&gt;
-
-&lt;p&gt;Starting with the layout &lt;em&gt;after&lt;/em&gt; part one, what how many tiles will be black after 100 days?&lt;/p&gt;
-
-&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/24/raku/main.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub adjacent($q, $r) {
-    &quot;{$q + 1}:$r&quot;,       # [1]
-    &quot;$q:{$r + 1}&quot;,
-    &quot;{$q - 1}:{$r + 1}&quot;,
-    &quot;{$q - 1}:$r&quot;,
-    &quot;$q:{$r - 1}&quot;,
-    &quot;{$q + 1}:{$r - 1}&quot;  # [2]
-}
-
-sub MAIN($file, Bool :$p2 = False) {
-    my $regex = /^(e|se|sw|w|nw|ne)+$/;
-    my @instructions =
-        $file.IO
-        .lines
-        .map(-&amp;gt; $line {
-            $line.match($regex).map(*.Str).split(' ')
-        });
-
-    my $flipped = Set.new;
-    for @instructions -&amp;gt; @instruction-set {
-        my ($q, $r) = (0, 0);
-        for @instruction-set -&amp;gt; $direction {
-            given $direction {
-                when 'e'  { $q += 1          }
-                when 'se' { $r += 1          }
-                when 'sw' { $q -= 1; $r += 1 }
-                when 'w'  { $q -= 1          }
-                when 'nw' { $r -= 1          }
-                when 'ne' { $q += 1; $r -= 1 }
-            }
-        }
-        my $tile = &quot;$q:$r&quot;;
-        if $tile ∈ $flipped {
-            $flipped ⊖= $tile;
-        } else {
-            $flipped ∪= $tile;
-        }
-    }
-
-    if $p2 {
-        for (^100) {
-            my $flipped-this-round = Set.new;
-            my $unflipped-this-round = Set.new;
-            my @q-range = $flipped.keys.map(*.split(':')[0].Int).minmax;
-            my @r-range = $flipped.keys.map(*.split(':')[1].Int).minmax;
-            for (@q-range.min - 1 .. @q-range.max + 1) -&amp;gt; $q {
-                for (@r-range.min - 1 .. @r-range.max + 1) -&amp;gt; $r {
-                    my $tile = &quot;$q:$r&quot;;
-                    my $adjacent-flipped = adjacent($q, $r).grep(* ∈ $flipped).elems;
-                    if $tile ∈ $flipped {
-                        if $adjacent-flipped == 0 || $adjacent-flipped &amp;gt; 2 {
-                            $unflipped-this-round ∪= $tile;
-                        }
-                    } else {
-                        if $adjacent-flipped == 2 {
-                            $flipped-this-round ∪= $tile;
-                        }
-                    }
-                }
-            }
-            $flipped ∪= $flipped-this-round;
-            $flipped ⊖= $unflipped-this-round;
-        }
-    }
-    say $flipped.elems;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku main.raku input.txt
-459
-
-$ raku main.raku --p2 input.txt
-4150
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
-
-&lt;p&gt;I had some initial difficulty here because I didn’t have a good data structure to traverse, so how would this work? Turns out we don’t need it, we just need the min and max black tile coordinates (from our arbitrary starting tile), and we can traverse that way!&lt;/p&gt;
-
-&lt;p&gt;All that was added was the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if $p2 {...}&lt;/code&gt; block, as well as a helper function (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;adjacent&lt;/code&gt;) to help find adjacent tiles. The logic here is fairly straightforward:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Once we have our layout for part 1, we kick off 100 iterations.&lt;/li&gt;
-  &lt;li&gt;Within each iteration, to not affect &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$flipped&lt;/code&gt; state until the end, we create 2 new sets: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$flipped-this-round&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$unflipped-this-round&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;We find the minimum and maximum &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;q&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;r&lt;/code&gt; values and go one tile further (we need to account for the neighbors of those outer black tiles).&lt;/li&gt;
-  &lt;li&gt;For each tile in our area we check if it is black (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$tile ∈ $flipped&lt;/code&gt;).
-    &lt;ul&gt;
-      &lt;li&gt;If so, we check if it has either &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;gt;2&lt;/code&gt; black neighbors. If so, it goes in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$unflipped-this-round&lt;/code&gt; set.&lt;/li&gt;
-      &lt;li&gt;If it is a white tile, we check if it has exactly &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2&lt;/code&gt; black neighbors. If so, it goes in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$flipped-this-round&lt;/code&gt; set.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;We update &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$flipped&lt;/code&gt; by unioning it with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$flipped-this-round&lt;/code&gt; and removing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$unflipped-this-round&lt;/code&gt; elements via symmetric set difference.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;After 100 round, just like part one, we count our black tiles via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$flipped.elems&lt;/code&gt;!&lt;/p&gt;
-
-&lt;h5 id=&quot;specific-comments-1&quot;&gt;Specific comments&lt;/h5&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Parentheses are optional when constructing a list in Raku. In this case, I felt it read better to not use them.&lt;/li&gt;
-  &lt;li&gt;Additionally, semicolons are optional &lt;em&gt;for the last expression in a block&lt;/em&gt;. You have seen this before (look at those &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;given/when&lt;/code&gt; blocks, for example), but I have never called it out. Similarly, I felt it read better without it here.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;I had fun with this one! Maybe it helps that I am actually off for the holidays and don’t have to rush through it before or after work. Looking forward to crossing the finish line tomorrow!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Raku" /><summary type="html">Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days 11 and 17, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.</summary></entry></feed>
+&lt;p&gt;Some fun little challenges that nicely complement Advent of Code. Now to start enjoying Christmas with my family! Merry Christmas everyone!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as finishing up AoC!</summary></entry></feed>
