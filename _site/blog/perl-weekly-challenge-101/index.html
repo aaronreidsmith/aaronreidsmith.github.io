@@ -1,0 +1,974 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.22.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 101 - Aaron Smith</title>
+<meta name="description" content="This week was pretty fun – solution one ends up re-using some code from my first post (Challenge 88), and solution two explores Barycentric coordinates! No ugly one-liners this week. 🙂">
+
+
+  <meta name="author" content="Aaron Smith">
+  
+  <meta property="article:author" content="Aaron Smith">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Aaron Smith">
+<meta property="og:title" content="Perl Weekly Challenge 101">
+<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-101/">
+
+
+  <meta property="og:description" content="This week was pretty fun – solution one ends up re-using some code from my first post (Challenge 88), and solution two explores Barycentric coordinates! No ugly one-liners this week. 🙂">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2021-02-27T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-101/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Aaron Smith Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Aaron Smith Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/tags/">Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/assets/files/aaron_smith_resume.pdf">Resume</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/headshot-square.jpg" alt="Aaron Smith" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Aaron Smith</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Data Engineer specializing in streaming data at scale, especially on AWS</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Connect</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Austin, TX</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Perl Weekly Challenge 101">
+    <meta itemprop="description" content="This week was pretty fun – solution one ends up re-using some code from my first post (Challenge 88), and solution two explores Barycentric coordinates! No ugly one-liners this week. 🙂">
+    <meta itemprop="datePublished" content="2021-02-27T00:00:00-06:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 101
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-02-27T00:00:00-06:00">February 27, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          6 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>This week was pretty fun – solution one ends up re-using some code from <a href="https://aaronreidsmith.github.io/blog/perl-weekly-challenge-088/">my first post</a> (Challenge 88), and solution two explores <a href="https://en.wikipedia.org/wiki/Barycentric_coordinate_system">Barycentric coordinates</a>! No ugly one-liners this week. 🙂</p>
+
+<h2 id="task-1-pack-a-spiral">Task 1: Pack a Spiral</h2>
+
+<p>You are given an array <code class="language-plaintext highlighter-rouge">@A</code> of items (integers say, but they can be anything).</p>
+
+<p>Your task is to pack that array into an <code class="language-plaintext highlighter-rouge">MxN</code> matrix spirally <strong>counterclockwise</strong>, as tightly as possible. “Tightly” means the absolute value of the difference between <code class="language-plaintext highlighter-rouge">M</code> and <code class="language-plaintext highlighter-rouge">N</code> (<code class="language-plaintext highlighter-rouge">|M-N|</code>) has to be as small as possible.</p>
+
+<h3 id="example-1">Example 1</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: @A = (1,2,3,4)
+
+Output:
+
+    4 3
+    1 2
+
+Since the given array is already a 1x4 matrix on its own, but that's not as tight as possible. Instead, you'd spiral it counterclockwise into
+
+    4 3
+    1 2
+</code></pre></div></div>
+
+<h3 id="example-2">Example 2</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: @A = (1,2,3,4,5,6)
+
+Output:
+
+    6 5 4
+    1 2 3
+
+or
+
+    5 4
+    6 3
+    1 2
+
+Either will do as an answer, because they're equally tight.
+</code></pre></div></div>
+
+<h3 id="example-3">Example 3</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: @A = (1,2,3,4,5,6,7,8,9,10,11,12)
+
+Output:
+
+       9  8  7 6
+      10 11 12 5
+       1  2  3 4
+
+or
+
+       8  7 6
+       9 12 5
+      10 11 4
+       1  2 3
+</code></pre></div></div>
+
+<h3 id="solution">Solution</h3>
+
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-101/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Finds all factor pairs of a given numbers
+sub factors(Int $n) returns Positional {
+    my $max = $n.sqrt.floor;
+    my $number = 1;
+    my @factors;
+    while $number &lt;= $max {
+        my $potential-factor = $n / $number;
+        if $potential-factor == $potential-factor.Int {
+            @factors.push(($number.clone, $potential-factor)); # [1]
+        }
+        $number++;
+    }
+    @factors;
+}
+
+# Formats a 2D array into a multi-line string
+sub format(@two-d) returns Str {
+    my $width = @two-d[*;*].max(*.chars).chars;                                # [2]
+    my @formatted = gather {
+        for @two-d -&gt; @row {
+            take @row.map(-&gt; $num { sprintf('%*s', $width, $num) }).join(' '); # [3]
+        }
+    }
+    @formatted.join("\n");
+}
+
+sub challenge(@A) returns Str {
+    enum Direction &lt;NORTH EAST SOUTH WEST&gt;;
+
+    my @factors = factors(@A.elems);
+    my ($m, $n) = @factors.min(-&gt; ($a, $b) { abs($a - $b) });
+    my (@matrix, @output);
+    for ^$m {
+        my (@matrix-row, @output-row);
+        for ^$n {
+            @matrix-row.push({ :!visited });
+            @output-row.push(Nil)
+        }
+        @matrix.push(@matrix-row);
+        @output.push(@output-row);
+    }
+
+    sub visit-cell($i, $j, $element) { # [4]
+        my %cell = @matrix[$i][$j];
+        if !%cell&lt;visited&gt; {
+            @output[$i][$j] = $element;
+        }
+        @matrix[$i][$j]&lt;visited&gt; = True;
+    }
+
+    my ($min-row, $min-col) = 0, 0;
+    my ($max-row, $max-col) = @matrix.elems - 1, @matrix.tail.elems - 1;
+    my ($current-row, $current-col, $current-direction) = $min-row, $min-col, EAST;
+
+    for @A -&gt; $element {
+        visit-cell($current-row, $current-col, $element);
+        given $current-direction {
+            when EAST {
+                if $current-col == $max-col || @matrix[$current-row][$current-col+1]&lt;visited&gt; {
+                    $current-direction = SOUTH;
+                    $current-row += 1;
+                } else {
+                    $current-col += 1;
+                }
+            }
+            when SOUTH {
+                if ($current-row == $max-row &amp;&amp; $current-col == $max-col) || @matrix[$current-row+1][$current-col]&lt;visited&gt; {
+                    $current-direction = WEST;
+                    $current-col -= 1;
+                } else {
+                    $current-row += 1;
+                }
+            }
+            when WEST {
+                if $current-col == $min-col || @matrix[$current-row][$current-col-1]&lt;visited&gt; {
+                    $current-direction = NORTH;
+                    $current-row -= 1;
+                } else {
+                    $current-col -= 1;
+                }
+            }
+            when NORTH {
+                # No need to check for special case here, because we always start in the top left
+                if @matrix[$current-row-1][$current-col]&lt;visited&gt; {
+                    $current-direction = EAST;
+                    $current-col += 1;
+                } else {
+                    $current-row -= 1;
+                }
+            }
+        }
+    }
+
+    format(@output.reverse);
+}
+
+sub MAIN(*@A) {
+    say challenge(@A);
+}
+</code></pre></div></div>
+
+<p>This program runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku 1 2 3 4
+4 3
+2 1
+
+$ raku ch-1.raku 1 2 3 4 5 6
+6 5 4
+1 2 3
+</code></pre></div></div>
+
+<h3 id="explanation">Explanation</h3>
+
+<p>The problem says to wrap the spiral counterclockwise (i.e., start at the bottom left, and fill-in counterclockwise), this is pretty hard to do, given a dynamic-sized array. What I did instead was start at the top left, fill in clockwise, then reverse (mirror) the outer array, so the spiral started at the bottom left.</p>
+
+<p>Here is the basic logic:</p>
+
+<ol>
+  <li>Find all the factors of the length of the input array.</li>
+  <li>Find the pair of <code class="language-plaintext highlighter-rouge">M</code> and <code class="language-plaintext highlighter-rouge">N</code> such that <code class="language-plaintext highlighter-rouge">|M-N|</code> is minimized
+    <ul>
+      <li>Because of the way we find the factors, <code class="language-plaintext highlighter-rouge">M</code> will always be <code class="language-plaintext highlighter-rouge">&lt;= N</code>, so we will have horizontal output as opposed to the vertical output.</li>
+    </ul>
+  </li>
+  <li>Define the 2D array with empty cells (<code class="language-plaintext highlighter-rouge">@output</code>), as well as a separate companion array (<code class="language-plaintext highlighter-rouge">@matrix</code>) that keeps track of visited cells.</li>
+  <li>Traverse through the input array, keeping track of visited cells in <code class="language-plaintext highlighter-rouge">@matrix</code>, and filling in <code class="language-plaintext highlighter-rouge">@output</code>.</li>
+  <li>Once <code class="language-plaintext highlighter-rouge">@output</code> has been filled in, reverse it, and format it into the expected output string.</li>
+</ol>
+
+<h4 id="specific-comments">Specific comments</h4>
+
+<ol>
+  <li>I found it interesting that I had to use <code class="language-plaintext highlighter-rouge">$number.clone</code> here, but if I just used <code class="language-plaintext highlighter-rouge">$number</code>, all the pairs in the output ended up with the same <code class="language-plaintext highlighter-rouge">M</code> value.</li>
+  <li><code class="language-plaintext highlighter-rouge">[*;*]</code> is the way to flatten a 2D array. If it were a 3D array you would use <code class="language-plaintext highlighter-rouge">[*;*;*]</code> and the pattern continues for more-nested arrays. An interesting quirk of Raku.</li>
+  <li>Normally in <code class="language-plaintext highlighter-rouge">sprintf</code> we would do something like <code class="language-plaintext highlighter-rouge">%2s</code> to say we want to pad something to two characters. However, since the width is variable, we are able to use <code class="language-plaintext highlighter-rouge">%*s</code> and pass the width in as an argument.</li>
+  <li>The <code class="language-plaintext highlighter-rouge">visit-cell</code> subroutine needs to be defined within <code class="language-plaintext highlighter-rouge">challenge</code> because it is a <a href="https://stackoverflow.com/a/7464475/10696164">closure</a>, meaning it has access to the variables defined within <code class="language-plaintext highlighter-rouge">challenge</code>, but outside <code class="language-plaintext highlighter-rouge">visit-cell</code>. In this case, it is accessing <code class="language-plaintext highlighter-rouge">@output</code> and <code class="language-plaintext highlighter-rouge">@matrix</code>.</li>
+</ol>
+
+<h2 id="task-2-origin-containing-triangle">Task 2: Origin-containing Triangle</h2>
+
+<p>You are given three points in the plane, as a list of six coordinates: <code class="language-plaintext highlighter-rouge">A=(x1,y1)</code>, <code class="language-plaintext highlighter-rouge">B=(x2,y2)</code> and <code class="language-plaintext highlighter-rouge">C=(x3,y3)</code>.</p>
+
+<p>Write a script to find out if the triangle formed by the given three coordinates contain origin <code class="language-plaintext highlighter-rouge">(0,0)</code>.</p>
+
+<p>Print <code class="language-plaintext highlighter-rouge">1</code> if found otherwise <code class="language-plaintext highlighter-rouge">0</code>.</p>
+
+<h3 id="example-1-1">Example 1</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: A=(0,1), B=(1,0) and C=(2,2)
+
+Output: 0 because that triangle does not contain (0,0).
+</code></pre></div></div>
+
+<h3 id="example-2-1">Example 2</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: A=(1,1), B=(-1,1) and C=(0,-3)
+
+Output: 1 because that triangle contains (0,0) in its interior.
+</code></pre></div></div>
+
+<h3 id="example-3-1">Example 3</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: A=(0,1), B=(2,0) and C=(-6,0)
+
+Output: 1 because (0,0) is on the edge connecting B and C.
+</code></pre></div></div>
+
+<h3 id="solution-1">Solution</h3>
+
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-101/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Point {
+    has Int $.x;
+    has Int $.y;
+
+    multi method new($x, $y) { # [1]
+        self.bless(:$x, :$y);
+    }
+}
+
+sub challenge(Point $A, Point $B, Point $C, Point $target = Point.new(0, 0)) returns Int {
+    my $area = 0.5 * (-$B.y * $C.x + $A.y * (-$B.x + $C.x) + $A.x * ($B.y - $C.y) + $B.x * $C.y);
+    my $s = 1 / (2 * $area) * ($A.y * $C.x - $A.x * $C.y + ($C.y - $A.y) * $target.x + ($A.x - $C.x) * $target.y);
+    my $t = 1 / (2 * $area) * ($A.x * $B.y - $A.y * $B.x + ($A.y - $B.y) * $target.x + ($B.x - $A.x) * $target.y);
+    (0 &lt;= $s &lt;= 1 &amp;&amp; 0 &lt;= $t &lt;= 1 &amp;&amp; $s + $t &lt;= 1).Int;
+}
+
+sub MAIN(Int $x1, Int $y1, Int $x2, Int $y2, Int $x3, Int $y3) {
+    say challenge(
+        Point.new($x1, $y1),
+        Point.new($x2, $y2),
+        Point.new($x3, $y3)
+    );
+}
+</code></pre></div></div>
+
+<p>This program runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku 0 1 1 0 2 2
+0
+
+$ raku ch-2.raku 1 1 -1 1 0 -3
+1
+</code></pre></div></div>
+
+<h3 id="explanation-1">Explanation</h3>
+
+<p>This solution is essentially <a href="https://stackoverflow.com/a/14382692/10696164">this StackOverflow answer</a> combined with <a href="https://stackoverflow.com/a/2049712/10696164">this StackOverflow answer</a> with classes instead of individual points. I won’t pretend I understand <a href="https://en.wikipedia.org/wiki/Barycentric_coordinate_system">Barycentric coordinates</a>, but it was easy enough to translate the solution into Raku. We do the following:</p>
+
+<ol>
+  <li>Turn our six integers into <code class="language-plaintext highlighter-rouge">Point</code> objects, so we can reference them via <code class="language-plaintext highlighter-rouge">$point.x</code> and <code class="language-plaintext highlighter-rouge">$point.y</code>.</li>
+  <li>Find the area of the triangle defined by the three points.</li>
+  <li>Use the area to find the Barycentric values <code class="language-plaintext highlighter-rouge">s</code> and <code class="language-plaintext highlighter-rouge">t</code>.</li>
+  <li>If <code class="language-plaintext highlighter-rouge">0 &lt;= s &lt;= 1</code> and <code class="language-plaintext highlighter-rouge">0 &lt;= t &lt;= 1</code> and <code class="language-plaintext highlighter-rouge">s + t &lt;= 1</code>, then the target point (<code class="language-plaintext highlighter-rouge">(0,0)</code> by default, but can be anything) is in the triangle, otherwise it is not.</li>
+  <li>Cast the above boolean to an integer, because that is what is requested in the challenge.</li>
+</ol>
+
+<h4 id="specific-comments-1">Specific Comments</h4>
+
+<p>I think the linked StackOverflow questions do a better job of describing Barycentric coordinates than I can, so I just have one implementation comment.</p>
+
+<ol>
+  <li>It’s much easier to deal with this problem with the <code class="language-plaintext highlighter-rouge">Point</code> object. However, defining instances of classes in Raku is quite verbose; by default, it would be like this: <code class="language-plaintext highlighter-rouge">Point.new(x =&gt; $x1, y =&gt; $y1)</code>. We define our own <code class="language-plaintext highlighter-rouge">new</code> method that just takes positional arguments and internally calls the named arguments via <code class="language-plaintext highlighter-rouge">bless</code>. <code class="language-plaintext highlighter-rouge">self.bless(:$x, :$y)</code> is shorthand for <code class="language-plaintext highlighter-rouge">self.bless(x =&gt; $x, y =&gt; $y)</code>. In fact, this <code class="language-plaintext highlighter-rouge">Point</code> implementation is actually <a href="https://docs.raku.org/routine/bless">the example</a> for the <code class="language-plaintext highlighter-rouge">bless</code> method.</li>
+</ol>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>Nothing much to add this week. See y’all next week!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#perl-weekly-challenge" class="page__taxonomy-item" rel="tag">Perl Weekly Challenge</a><span class="sep">, </span>
+    
+      <a href="/tags/#raku" class="page__taxonomy-item" rel="tag">Raku</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-02-27T00:00:00-06:00">February 27, 2021</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+101%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-101%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-101%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-101%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/perl-weekly-challenge-100/" class="pagination--pager" title="Perl Weekly Challenge 100
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-100/" rel="permalink">Perl Weekly Challenge 100
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-02-20T00:00:00-06:00">February 20, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">This week was a lot of fun! Challenge 1 threw an additional curve ball at us – the solution should be a “one-liner.” I did my best to fit my solution on one ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-099/" rel="permalink">Perl Weekly Challenge 99
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-02-13T00:00:00-06:00">February 13, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">This week’s theme is regex, which is something the Perl family of languages has always been known for.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-098/" rel="permalink">Perl Weekly Challenge 98
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-02-06T00:00:00-06:00">February 6, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">This week’s solutions explore some more obscure parts of the Raku ecosystem, namely state variables and adverbs.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-097/" rel="permalink">Perl Weekly Challenge 97
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-01-30T00:00:00-06:00">January 30, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">My solution to challenge two builds on last week’s challenge two, so I encourage you to go read last week’s post if you haven’t already!
+
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Connect:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+        
+      
+        
+          <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i> Stack Overflow</a></li>
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Aaron Smith. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>
