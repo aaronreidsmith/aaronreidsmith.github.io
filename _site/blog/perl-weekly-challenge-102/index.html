@@ -1,0 +1,868 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.22.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 102 - Aaron Smith</title>
+<meta name="description" content="Part one was an exercise in efficiency and short-circuiting; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add!">
+
+
+  <meta name="author" content="Aaron Smith">
+  
+  <meta property="article:author" content="Aaron Smith">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Aaron Smith">
+<meta property="og:title" content="Perl Weekly Challenge 102">
+<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-102/">
+
+
+  <meta property="og:description" content="Part one was an exercise in efficiency and short-circuiting; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add!">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2021-03-07T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-102/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Aaron Smith Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Aaron Smith Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/tags/">Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/assets/files/aaron_smith_resume.pdf">Resume</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/headshot-square.jpg" alt="Aaron Smith" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Aaron Smith</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Data Engineer specializing in streaming data at scale, especially on AWS</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Connect</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Austin, TX</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Perl Weekly Challenge 102">
+    <meta itemprop="description" content="Part one was an exercise in efficiency and short-circuiting; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add!">
+    <meta itemprop="datePublished" content="2021-03-07T00:00:00-06:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 102
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-03-07T00:00:00-06:00">March 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Part one was an exercise in efficiency and <a href="https://en.wikipedia.org/wiki/Short-circuit_evaluation">short-circuiting</a>; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add!</p>
+
+<h2 id="task-1-rare-numbers">Task 1: Rare Numbers</h2>
+
+<p>You are given a positive integer <code class="language-plaintext highlighter-rouge">$N</code>.</p>
+
+<p>Write a script to generate all Rare numbers of size <code class="language-plaintext highlighter-rouge">$N</code> if exists. Please checkout the <a href="http://www.shyamsundergupta.com/rare.htm">page</a> for more information about it.</p>
+
+<p><strong>Note:</strong> If you don’t want to go to the link above, a rare number basically has the following characteristics:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$N + $N.reverse = &lt;perfect square&gt;
+$N - $N.reverse = &lt;perfect square&gt;
+</code></pre></div></div>
+
+<h3 id="examples">Examples</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(a) 2 digits: 65
+(b) 6 digits: 621770
+(c) 9 digits: 281089082
+</code></pre></div></div>
+
+<h3 id="solution">Solution</h3>
+
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-102/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub digital-root(Int $N) returns Int {
+    my @digits = $N.comb;
+    my $digital-root = [+] @digits;
+    while @digits.elems &gt; 1 {
+        @digits = $digital-root.comb;
+        $digital-root = [+] @digits;
+    }
+    $digital-root;
+}
+
+sub is-rare(Int $N) returns Bool {
+    return False if $N.comb.head % 2 != 0;
+    return False if digital-root($N) ~~ 0|1|3|4|6|7; # [1][2]
+
+    my $reversed   = $N.flip.Int;
+    my $difference = $N - $reversed;
+
+    if $difference &gt;= 0 &amp;&amp; $difference.sqrt.narrow ~~ Int { # [3]
+        # Only calculate this if the difference is valid
+        my $sum = $N + $reversed;
+        $sum.sqrt.narrow ~~ Int;
+    } else {
+        False;
+    }
+}
+
+sub challenge(Int $N) returns Str {
+    my $min = ('2' ~ ('0' x $N - 1)).Int;
+    my $max = ('8' ~ ('9' x $N - 1)).Int;
+    ($min..$max).hyper.grep(&amp;is-rare).join(', '); # [4][5]
+}
+
+sub MAIN(Int $N) {
+    say challenge($N);
+}
+</code></pre></div></div>
+
+<p>This program runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku 6
+621770
+</code></pre></div></div>
+
+<h3 id="explanation">Explanation</h3>
+
+<p>This implementation is not overly clever; it basically just goes through every number of size <code class="language-plaintext highlighter-rouge">$N</code> and checks if it is a rare number. It does use some Raku-isms as well as some logic to short-circuit. For <code class="language-plaintext highlighter-rouge">$N = 6</code> it runs in ~8 seconds on my machine.</p>
+
+<ol>
+  <li>Find the minimum and maximum number of size <code class="language-plaintext highlighter-rouge">$N</code> it <em>could</em> be (according to the link in the challenge, rare numbers cannot start with an odd digit, so for <code class="language-plaintext highlighter-rouge">$N = 6</code> or range becomes <code class="language-plaintext highlighter-rouge">200000..899999</code>).</li>
+  <li>For each candidate:
+    <ul>
+      <li>Skip this candidate if the first digit is not even.</li>
+      <li>Skip this candidate if the <a href="https://en.wikipedia.org/wiki/Digital_root">digital root</a> is not one of 2, 5, 8, or 9 (again, this fact comes from the link in the challenge).</li>
+      <li>Find the reversed number and the difference (only the difference for now. My thought is it is easier to calculate the square root of smaller numbers, so there is no reason to calculate the square root of the larger number if the smaller one fails).</li>
+      <li>If the difference is greater-than-or-equal-to zero <em>and</em> its square root is an integer, calculate the sum and check if it is also a perfect square.
+        <ul>
+          <li>If so, return <code class="language-plaintext highlighter-rouge">True</code>.</li>
+          <li>If any step is false, return <code class="language-plaintext highlighter-rouge">False</code>.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="specific-comments">Specific comments</h4>
+
+<ol>
+  <li>Given that my day job is all Scala, where <a href="https://blog.knoldus.com/scala-best-practices-say-no-to-return/">using <code class="language-plaintext highlighter-rouge">return</code> is discouraged</a>, you’ll notice that bleeds into my Raku as well. The reason we use <code class="language-plaintext highlighter-rouge">return</code> here is to explicitly short-circuit this function in idiomatic Raku (with the condition following the actual declaration [<code class="language-plaintext highlighter-rouge">return False</code>]).</li>
+  <li>This is an anonymous way to create a <a href="https://docs.raku.org/type/Junction">Junction</a>. In this case, we are saying “if the digital root matches any of 0 or 1 or 3 or 4 or 6 or 7” in a more idiomatic way.</li>
+  <li><a href="https://docs.raku.org/routine/narrow"><code class="language-plaintext highlighter-rouge">narrow</code></a> is a way to find the narrowest type a number fits into. <code class="language-plaintext highlighter-rouge">$N.sqrt</code> returns a <a href="https://docs.raku.org/type/Num"><code class="language-plaintext highlighter-rouge">Num</code></a> object, even if the value is an integer. This is the idiomatic way to check that the returned value is an integer.
+    <ul>
+      <li>I am glad I found this, because in the past I would have done something like <code class="language-plaintext highlighter-rouge">$N.sqrt.Int == $N.sqrt</code>, which requires me to duplicate computations.</li>
+    </ul>
+  </li>
+  <li><a href="https://docs.raku.org/routine/hyper"><code class="language-plaintext highlighter-rouge">hyper</code></a> allows us to perform some action (in this case <code class="language-plaintext highlighter-rouge">grep</code>) on a sequence <em>in parallel</em> while still keeping the output in the original order of the sequence (see <a href="https://docs.raku.org/routine/race"><code class="language-plaintext highlighter-rouge">race</code></a> if order doesn’t matter).</li>
+  <li>We are able to pass a function to <code class="language-plaintext highlighter-rouge">grep</code>. Since functions are first-class citizens in Raku, they come with their own <a href="https://docs.raku.org/language/variables#index-entry-sigil_&amp;">sigil</a>, so we pass it in as <code class="language-plaintext highlighter-rouge">&amp;function-name</code>. This is the equivalent of <code class="language-plaintext highlighter-rouge">.grep(-&gt; $candidate { is-rare($candidate) })</code>, but easier to write.</li>
+</ol>
+
+<h2 id="task-2-hash-counting-string">Task 2: Hash-counting String</h2>
+
+<p>You are given a positive integer <code class="language-plaintext highlighter-rouge">$N</code>.</p>
+
+<p>Write a script to produce Hash-counting string of that length.</p>
+
+<p>The definition of a hash-counting string is as follows:</p>
+
+<ul>
+  <li>the string consists only of digits 0-9 and hashes, ‘#’</li>
+  <li>there are no two consecutive hashes: ‘##’ does not appear in your string</li>
+  <li>the last character is a hash</li>
+  <li>the number immediately preceding each hash (if it exists) is the position of that hash in the string, with the position being counted up from 1</li>
+</ul>
+
+<p>It can be shown that for every positive integer N there is exactly one such length-N string.</p>
+
+<h3 id="examples-1">Examples</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(a) "#" is the counting string of length 1
+(b) "2#" is the counting string of length 2
+(c) "#3#" is the string of length 3
+(d) "#3#5#7#10#" is the string of length 10
+(e) "2#4#6#8#11#14#" is the string of length 14
+</code></pre></div></div>
+
+<h3 id="solution-1">Solution</h3>
+
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-102/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(Int $N) returns Str {
+    my @output;
+    my $index = $N - 1;
+    while $index &gt;= 0 {
+        @output[$index] = '#';
+        my $position = $index + 1; # Position is 1-based while index is 0-based
+        for $position.flip.comb.kv -&gt; $offset, $digit {
+            @output[$index - ($offset + 1)] = $digit;
+        }
+        $index -= ($position.chars + 1);
+    }
+    @output.join;
+}
+
+sub MAIN(Int $N) {
+    say challenge($N);
+}
+</code></pre></div></div>
+
+<p>This program runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku 14
+2#4#6#8#11#14#
+</code></pre></div></div>
+
+<h3 id="explanation-1">Explanation</h3>
+
+<p>We are given two really concrete details about the sequence:</p>
+
+<ul>
+  <li>the last character is a hash</li>
+  <li>the number immediately preceding each hash (if it exists) is the position of that hash in the string, with the position being counted up from 1</li>
+</ul>
+
+<p>Given that, we follow the following steps:</p>
+
+<ol>
+  <li>Define an array (<code class="language-plaintext highlighter-rouge">@output</code>) and start from the end (<code class="language-plaintext highlighter-rouge">$index = $N - 1</code>, since the array is 0-indexed).</li>
+  <li>While <code class="language-plaintext highlighter-rouge">$index</code> is greater-than-or-equal-to zero:
+    <ul>
+      <li>Set <code class="language-plaintext highlighter-rouge">@output[$index]</code> to <code class="language-plaintext highlighter-rouge">#</code>.</li>
+      <li>Find the 1-based index (<code class="language-plaintext highlighter-rouge">$position</code>) of that hash character (<code class="language-plaintext highlighter-rouge">$index + 1</code>).</li>
+      <li>Iterate <strong>backwards</strong> through the 1-based index and fill in the indices in front of the newly-placed <code class="language-plaintext highlighter-rouge">#</code> with the digits of <code class="language-plaintext highlighter-rouge">$position</code>.</li>
+      <li>Decrement <code class="language-plaintext highlighter-rouge">$index</code> by the amount of characters in <code class="language-plaintext highlighter-rouge">$position + 1</code> (the <code class="language-plaintext highlighter-rouge">1</code> is for the hash character).</li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="specific-comments-1">Specific Comments</h4>
+
+<p>Nothing to add here; this one is pretty straight forward.</p>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>It’s pretty cool that Raku has <code class="language-plaintext highlighter-rouge">.sqrt</code> built right in, but I find it odd that it doesn’t have some sort of <code class="language-plaintext highlighter-rouge">.is-whole</code> functionality (Python has <code class="language-plaintext highlighter-rouge">.is_integer()</code>, Scala has <code class="language-plaintext highlighter-rouge">.isWhole</code>). Maybe it does, and the documentation is just bad; it would not be the first time I have run into that! Honestly, if you read back through my blog, I think I have found 3 separate ways to check if a floating-point number (<code class="language-plaintext highlighter-rouge">Num</code>) is an integer (<code class="language-plaintext highlighter-rouge">Int</code>) in Raku. Oh well, I guess it is all part of the journey!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#perl-weekly-challenge" class="page__taxonomy-item" rel="tag">Perl Weekly Challenge</a><span class="sep">, </span>
+    
+      <a href="/tags/#raku" class="page__taxonomy-item" rel="tag">Raku</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-03-07T00:00:00-06:00">March 7, 2021</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+102%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-102%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-102%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-102%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/perl-weekly-challenge-101/" class="pagination--pager" title="Perl Weekly Challenge 101
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-101/" rel="permalink">Perl Weekly Challenge 101
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-02-27T00:00:00-06:00">February 27, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          6 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">This week was pretty fun – solution one ends up re-using some code from my first post (Challenge 88), and solution two explores Barycentric coordinates! No u...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-100/" rel="permalink">Perl Weekly Challenge 100
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-02-20T00:00:00-06:00">February 20, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">This week was a lot of fun! Challenge 1 threw an additional curve ball at us – the solution should be a “one-liner.” I did my best to fit my solution on one ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-099/" rel="permalink">Perl Weekly Challenge 99
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-02-13T00:00:00-06:00">February 13, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">This week’s theme is regex, which is something the Perl family of languages has always been known for.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-098/" rel="permalink">Perl Weekly Challenge 98
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-02-06T00:00:00-06:00">February 6, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">This week’s solutions explore some more obscure parts of the Raku ecosystem, namely state variables and adverbs.
+
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Connect:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+        
+      
+        
+          <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i> Stack Overflow</a></li>
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Aaron Smith. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

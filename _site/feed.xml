@@ -1,4 +1,194 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-02-27T10:51:42-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 101</title><link href="http://localhost:4000/blog/perl-weekly-challenge-101/" rel="alternate" type="text/html" title="Perl Weekly Challenge 101" /><published>2021-02-27T00:00:00-06:00</published><updated>2021-02-27T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-101</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-101/">&lt;p&gt;This week was pretty fun – solution one ends up re-using some code from &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-088/&quot;&gt;my first post&lt;/a&gt; (Challenge 88), and solution two explores &lt;a href=&quot;https://en.wikipedia.org/wiki/Barycentric_coordinate_system&quot;&gt;Barycentric coordinates&lt;/a&gt;! No ugly one-liners this week. 🙂&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-03-07T12:52:55-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 102</title><link href="http://localhost:4000/blog/perl-weekly-challenge-102/" rel="alternate" type="text/html" title="Perl Weekly Challenge 102" /><published>2021-03-07T00:00:00-06:00</published><updated>2021-03-07T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-102</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-102/">&lt;p&gt;Part one was an exercise in efficiency and &lt;a href=&quot;https://en.wikipedia.org/wiki/Short-circuit_evaluation&quot;&gt;short-circuiting&lt;/a&gt;; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add!&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-rare-numbers&quot;&gt;Task 1: Rare Numbers&lt;/h2&gt;
+
+&lt;p&gt;You are given a positive integer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to generate all Rare numbers of size &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; if exists. Please checkout the &lt;a href=&quot;http://www.shyamsundergupta.com/rare.htm&quot;&gt;page&lt;/a&gt; for more information about it.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; If you don’t want to go to the link above, a rare number basically has the following characteristics:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$N + $N.reverse = &amp;lt;perfect square&amp;gt;
+$N - $N.reverse = &amp;lt;perfect square&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;examples&quot;&gt;Examples&lt;/h3&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(a) 2 digits: 65
+(b) 6 digits: 621770
+(c) 9 digits: 281089082
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-102/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub digital-root(Int $N) returns Int {
+    my @digits = $N.comb;
+    my $digital-root = [+] @digits;
+    while @digits.elems &amp;gt; 1 {
+        @digits = $digital-root.comb;
+        $digital-root = [+] @digits;
+    }
+    $digital-root;
+}
+
+sub is-rare(Int $N) returns Bool {
+    return False if $N.comb.head % 2 != 0;
+    return False if digital-root($N) ~~ 0|1|3|4|6|7; # [1][2]
+
+    my $reversed   = $N.flip.Int;
+    my $difference = $N - $reversed;
+
+    if $difference &amp;gt;= 0 &amp;amp;&amp;amp; $difference.sqrt.narrow ~~ Int { # [3]
+        # Only calculate this if the difference is valid
+        my $sum = $N + $reversed;
+        $sum.sqrt.narrow ~~ Int;
+    } else {
+        False;
+    }
+}
+
+sub challenge(Int $N) returns Str {
+    my $min = ('2' ~ ('0' x $N - 1)).Int;
+    my $max = ('8' ~ ('9' x $N - 1)).Int;
+    ($min..$max).hyper.grep(&amp;amp;is-rare).join(', '); # [4][5]
+}
+
+sub MAIN(Int $N) {
+    say challenge($N);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 6
+621770
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;This implementation is not overly clever; it basically just goes through every number of size &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; and checks if it is a rare number. It does use some Raku-isms as well as some logic to short-circuit. For &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N = 6&lt;/code&gt; it runs in ~8 seconds on my machine.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Find the minimum and maximum number of size &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; it &lt;em&gt;could&lt;/em&gt; be (according to the link in the challenge, rare numbers cannot start with an odd digit, so for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N = 6&lt;/code&gt; or range becomes &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;200000..899999&lt;/code&gt;).&lt;/li&gt;
+  &lt;li&gt;For each candidate:
+    &lt;ul&gt;
+      &lt;li&gt;Skip this candidate if the first digit is not even.&lt;/li&gt;
+      &lt;li&gt;Skip this candidate if the &lt;a href=&quot;https://en.wikipedia.org/wiki/Digital_root&quot;&gt;digital root&lt;/a&gt; is not one of 2, 5, 8, or 9 (again, this fact comes from the link in the challenge).&lt;/li&gt;
+      &lt;li&gt;Find the reversed number and the difference (only the difference for now. My thought is it is easier to calculate the square root of smaller numbers, so there is no reason to calculate the square root of the larger number if the smaller one fails).&lt;/li&gt;
+      &lt;li&gt;If the difference is greater-than-or-equal-to zero &lt;em&gt;and&lt;/em&gt; its square root is an integer, calculate the sum and check if it is also a perfect square.
+        &lt;ul&gt;
+          &lt;li&gt;If so, return &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt;.&lt;/li&gt;
+          &lt;li&gt;If any step is false, return &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;False&lt;/code&gt;.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Given that my day job is all Scala, where &lt;a href=&quot;https://blog.knoldus.com/scala-best-practices-say-no-to-return/&quot;&gt;using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;return&lt;/code&gt; is discouraged&lt;/a&gt;, you’ll notice that bleeds into my Raku as well. The reason we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;return&lt;/code&gt; here is to explicitly short-circuit this function in idiomatic Raku (with the condition following the actual declaration [&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;return False&lt;/code&gt;]).&lt;/li&gt;
+  &lt;li&gt;This is an anonymous way to create a &lt;a href=&quot;https://docs.raku.org/type/Junction&quot;&gt;Junction&lt;/a&gt;. In this case, we are saying “if the digital root matches any of 0 or 1 or 3 or 4 or 6 or 7” in a more idiomatic way.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/narrow&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;narrow&lt;/code&gt;&lt;/a&gt; is a way to find the narrowest type a number fits into. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N.sqrt&lt;/code&gt; returns a &lt;a href=&quot;https://docs.raku.org/type/Num&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Num&lt;/code&gt;&lt;/a&gt; object, even if the value is an integer. This is the idiomatic way to check that the returned value is an integer.
+    &lt;ul&gt;
+      &lt;li&gt;I am glad I found this, because in the past I would have done something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N.sqrt.Int == $N.sqrt&lt;/code&gt;, which requires me to duplicate computations.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/hyper&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hyper&lt;/code&gt;&lt;/a&gt; allows us to perform some action (in this case &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;grep&lt;/code&gt;) on a sequence &lt;em&gt;in parallel&lt;/em&gt; while still keeping the output in the original order of the sequence (see &lt;a href=&quot;https://docs.raku.org/routine/race&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;race&lt;/code&gt;&lt;/a&gt; if order doesn’t matter).&lt;/li&gt;
+  &lt;li&gt;We are able to pass a function to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;grep&lt;/code&gt;. Since functions are first-class citizens in Raku, they come with their own &lt;a href=&quot;https://docs.raku.org/language/variables#index-entry-sigil_&amp;amp;&quot;&gt;sigil&lt;/a&gt;, so we pass it in as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;amp;function-name&lt;/code&gt;. This is the equivalent of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.grep(-&amp;gt; $candidate { is-rare($candidate) })&lt;/code&gt;, but easier to write.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-hash-counting-string&quot;&gt;Task 2: Hash-counting String&lt;/h2&gt;
+
+&lt;p&gt;You are given a positive integer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to produce Hash-counting string of that length.&lt;/p&gt;
+
+&lt;p&gt;The definition of a hash-counting string is as follows:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the string consists only of digits 0-9 and hashes, ‘#’&lt;/li&gt;
+  &lt;li&gt;there are no two consecutive hashes: ‘##’ does not appear in your string&lt;/li&gt;
+  &lt;li&gt;the last character is a hash&lt;/li&gt;
+  &lt;li&gt;the number immediately preceding each hash (if it exists) is the position of that hash in the string, with the position being counted up from 1&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It can be shown that for every positive integer N there is exactly one such length-N string.&lt;/p&gt;
+
+&lt;h3 id=&quot;examples-1&quot;&gt;Examples&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(a) &quot;#&quot; is the counting string of length 1
+(b) &quot;2#&quot; is the counting string of length 2
+(c) &quot;#3#&quot; is the string of length 3
+(d) &quot;#3#5#7#10#&quot; is the string of length 10
+(e) &quot;2#4#6#8#11#14#&quot; is the string of length 14
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-102/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Int $N) returns Str {
+    my @output;
+    my $index = $N - 1;
+    while $index &amp;gt;= 0 {
+        @output[$index] = '#';
+        my $position = $index + 1; # Position is 1-based while index is 0-based
+        for $position.flip.comb.kv -&amp;gt; $offset, $digit {
+            @output[$index - ($offset + 1)] = $digit;
+        }
+        $index -= ($position.chars + 1);
+    }
+    @output.join;
+}
+
+sub MAIN(Int $N) {
+    say challenge($N);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 14
+2#4#6#8#11#14#
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;We are given two really concrete details about the sequence:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the last character is a hash&lt;/li&gt;
+  &lt;li&gt;the number immediately preceding each hash (if it exists) is the position of that hash in the string, with the position being counted up from 1&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Given that, we follow the following steps:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Define an array (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@output&lt;/code&gt;) and start from the end (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$index = $N - 1&lt;/code&gt;, since the array is 0-indexed).&lt;/li&gt;
+  &lt;li&gt;While &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$index&lt;/code&gt; is greater-than-or-equal-to zero:
+    &lt;ul&gt;
+      &lt;li&gt;Set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@output[$index]&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#&lt;/code&gt;.&lt;/li&gt;
+      &lt;li&gt;Find the 1-based index (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$position&lt;/code&gt;) of that hash character (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$index + 1&lt;/code&gt;).&lt;/li&gt;
+      &lt;li&gt;Iterate &lt;strong&gt;backwards&lt;/strong&gt; through the 1-based index and fill in the indices in front of the newly-placed &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#&lt;/code&gt; with the digits of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$position&lt;/code&gt;.&lt;/li&gt;
+      &lt;li&gt;Decrement &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$index&lt;/code&gt; by the amount of characters in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$position + 1&lt;/code&gt; (the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; is for the hash character).&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;p&gt;Nothing to add here; this one is pretty straight forward.&lt;/p&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;It’s pretty cool that Raku has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.sqrt&lt;/code&gt; built right in, but I find it odd that it doesn’t have some sort of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.is-whole&lt;/code&gt; functionality (Python has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.is_integer()&lt;/code&gt;, Scala has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.isWhole&lt;/code&gt;). Maybe it does, and the documentation is just bad; it would not be the first time I have run into that! Honestly, if you read back through my blog, I think I have found 3 separate ways to check if a floating-point number (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Num&lt;/code&gt;) is an integer (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt;) in Raku. Oh well, I guess it is all part of the journey!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Part one was an exercise in efficiency and short-circuiting; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add!</summary></entry><entry><title type="html">Perl Weekly Challenge 101</title><link href="http://localhost:4000/blog/perl-weekly-challenge-101/" rel="alternate" type="text/html" title="Perl Weekly Challenge 101" /><published>2021-02-27T00:00:00-06:00</published><updated>2021-02-27T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-101</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-101/">&lt;p&gt;This week was pretty fun – solution one ends up re-using some code from &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-088/&quot;&gt;my first post&lt;/a&gt; (Challenge 88), and solution two explores &lt;a href=&quot;https://en.wikipedia.org/wiki/Barycentric_coordinate_system&quot;&gt;Barycentric coordinates&lt;/a&gt;! No ugly one-liners this week. 🙂&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-pack-a-spiral&quot;&gt;Task 1: Pack a Spiral&lt;/h2&gt;
 
@@ -1920,233 +2110,4 @@ ok 3 -
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;This challenge is a good case study in test-driven development! Be sure to write edge-case tests to make sure everything is behaving as expected. In the case of part one, it was &lt;em&gt;not&lt;/em&gt; behaving as expected and required a re-write.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I was going to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.</summary></entry><entry><title type="html">Perl Weekly Challenge 92</title><link href="http://localhost:4000/blog/perl-weekly-challenge-092/" rel="alternate" type="text/html" title="Perl Weekly Challenge 92" /><published>2020-12-25T00:00:00-06:00</published><updated>2020-12-25T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-092</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-092/">&lt;p&gt;It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-25/&quot;&gt;finishing up AoC&lt;/a&gt;!&lt;/p&gt;
-
-&lt;h2 id=&quot;task-1-isomorphic-strings&quot;&gt;Task 1: Isomorphic Strings&lt;/h2&gt;
-
-&lt;p&gt;You are given two strings &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$A&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$B&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Write a script to check if the given strings are &lt;a href=&quot;https://www.educative.io/edpresso/how-to-check-if-two-strings-are-isomorphic&quot;&gt;isomorphic&lt;/a&gt;. Print &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; if they are otherwise &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $A = &quot;abc&quot;; $B = &quot;xyz&quot;
-Output: 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $A = &quot;abb&quot;; $B = &quot;xyy&quot;
-Output: 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-3&quot;&gt;Example 3&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $A = &quot;sum&quot;; $B = &quot;add&quot;
-Output: 0
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-092/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use MONKEY-TYPING;  # [1]
-
-augment class Seq {
-    method OrderedSet {
-        my @set;
-        for self -&amp;gt; $item {
-            next if $item ∈ @set;
-            @set.push($item);
-        }
-        @set;
-    }
-}
-
-sub challenge(Str $A, Str $B) returns Int {
-    my $a-chars = $A.comb.OrderedSet.join;
-    my $b-chars = $B.comb.OrderedSet.join;
-    ($A.trans($a-chars =&amp;gt; $b-chars) eq $B).Int;
-}
-
-multi sub MAIN(Str $A, Str $B) {
-    say challenge($A, $B);
-}
-
-multi sub MAIN(Bool :$test) {
-    use Test;
-
-    my @tests = (
-        ('abc', 'xyz', 1),
-        ('abb', 'xyy', 1),
-        ('sum', 'add', 0)
-    );
-
-    for @tests -&amp;gt; @test {
-        is(challenge(@test[0], @test[1]), @test[2]);
-    }
-
-    done-testing;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku abc xyz
-1
-
-$ raku ch-1.raku --test
-ok 1 - 
-ok 2 - 
-ok 3 - 
-1..3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;Once again, most the logic lives in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt;. Basically, I wanted to take advantage of something we used &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-090&quot;&gt;a couple weeks ago&lt;/a&gt;, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt; subroutine. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt; takes two strings and &lt;em&gt;translates&lt;/em&gt; the given input using the map. If I were to hardcode it for the example, this is basically what I am trying to check:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;'abc'.trans('abc' =&amp;gt; 'xyz') eq 'xyz'
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;To do this we need to remove duplicates (so we need a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&lt;/code&gt;), but we also need to preserve order (so something like an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OrderedSet&lt;/code&gt;). Unfortunately, such a thing doesn’t exist in Raku… so we have to create it!&lt;/p&gt;
-
-&lt;p&gt;I am doing something which is &lt;em&gt;technically&lt;/em&gt; &lt;a href=&quot;https://docs.raku.org/syntax/augment&quot;&gt;frowned upon&lt;/a&gt; by using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;augment&lt;/code&gt; keyword, but it is a fairly normal pattern in Scala, so I just went with it. Basically, we just &lt;a href=&quot;https://en.wikipedia.org/wiki/Monkey_patch&quot;&gt;monkey patch&lt;/a&gt; an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OrderedSet&lt;/code&gt; method onto the existing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Seq&lt;/code&gt; builtin. In Scala, we would do this via an implicit class; here is an example:&lt;/p&gt;
-
-&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;implicit&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ExtendedString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;excited&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;$str!!!&quot;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;s&quot;&gt;&quot;Hello world&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;excited&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// Hello world!!!&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;I feel Raku makes this much clearer via the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;augment&lt;/code&gt; keyword. It says we are &lt;em&gt;augmenting&lt;/em&gt; the class &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Seq&lt;/code&gt; and then we define the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OrderedSet&lt;/code&gt; method. The method itself does not &lt;em&gt;technically&lt;/em&gt; return a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&lt;/code&gt;, but it returns a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;List&lt;/code&gt; that maintains order and removes duplicates – all we need.&lt;/p&gt;
-
-&lt;p&gt;Once we have both the left and right strings converted to ordered sets, we convert them &lt;em&gt;back&lt;/em&gt; into strings to use in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt; method as shown above&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;If we want to use the “frowned upon” pragma of monkey patching, we have to manually turn it on using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;use MONKEY-TYPING&lt;/code&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;task-2-insert-interval&quot;&gt;Task 2: Insert Interval&lt;/h2&gt;
-
-&lt;p&gt;You are given a set of sorted non-overlapping intervals and a new interval.&lt;/p&gt;
-
-&lt;p&gt;Write a script to merge the new interval to the given set of intervals.&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1-1&quot;&gt;Example 1&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input $S = (1,4), (8,10); $N = (2,6)
-Output: (1,6), (8,10)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2-1&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input $S = (1,2), (3,7), (8,10); $N = (5,8)
-Output: (1,2), (3,10)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-3-1&quot;&gt;Example 3&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input $S = (1,5), (7,9); $N = (10,11)
-Output: (1,5), (7,9), (10,11)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-092/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset MultiRange of Str where { $_ ~~ /^[&amp;lt;digit&amp;gt;+'-'&amp;lt;digit&amp;gt;+',']+[&amp;lt;digit&amp;gt;+'-'&amp;lt;digit&amp;gt;+]$/ }
-subset Range of Str where { $_ ~~ /^&amp;lt;digit&amp;gt;+'-'&amp;lt;digit&amp;gt;+$/ }
-
-sub challenge(@S, $N) {
-    my @combined = (|@S, $N).sort({ $^a.min cmp $^b.min });
-    my @final = (@combined.head,);
-    OUT: for @combined[1..*] -&amp;gt; $new-range {           # [1]
-        my ($min, $max) = $new-range.minmax;
-        IN: for @final.kv -&amp;gt; $index, $range {
-            next IN if $min ∈ $range &amp;amp;&amp;amp; $max ∈ $range; # [2]
-            if $min ∈ $range {
-                @final[$index] = ($range.min..$max);
-                next OUT;
-            } elsif $max ∈ $range {
-                @final[$index] = ($min..$range.max);
-                next OUT;
-            } elsif $index == @final.end {
-                @final.push($new-range);
-            }
-        }
-    }
-    @final.map(-&amp;gt; $range { &quot;({$range.min},{$range.max})&quot; }).join(', ');
-}
-
-multi sub MAIN(MultiRange :$S, Range :$N) {
-    my @s = $S.split(',').map(*.split('-').map(*.Int).minmax);
-    my $n = $N.split('-').map(*.Int).minmax;
-    say challenge(@s, $n);
-}
-
-multi sub MAIN(Bool :$test) {
-    use Test;
-
-    my @tests = (
-        ((1..4), (8..10), (2..6), '(1,6), (8,10)'),
-        ((1..2), (3..7), (8..10), (5..8), '(1,2), (3,10)'),
-        ((1..5), (7..9), (10..11), '(1,5), (7,9), (10,11)')
-    );
-
-    for @tests -&amp;gt; @test {
-        my @S = @test[0..^*-2];
-        my $N = @test[*-2];
-        my $answer = @test[*-1];
-        is(challenge(@S, $N), $answer);
-    }
-
-    done-testing;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku -S=1-4,8-10 -N=2-6
-(1,6), (8,10)
-
-$ raku ch-2.raku --test
-ok 1 - 
-ok 2 - 
-ok 3 - 
-1..3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; has a little validation and parsing. It validates that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;S&lt;/code&gt; contains &lt;em&gt;at least&lt;/em&gt; two ranges (defined as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X-Y&lt;/code&gt;) via the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MultiRange&lt;/code&gt; subset, and that we get exactly one range in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; (via the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Range&lt;/code&gt; subset). It then parses those ranges into actual &lt;a href=&quot;https://docs.raku.org/type/Range&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Range&lt;/code&gt;&lt;/a&gt; objects to give to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; subroutine.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; first puts all the ranges in order &lt;em&gt;by their minimum element&lt;/em&gt; and creates an output list called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@final&lt;/code&gt; that contains the minimum range of the input ranges. We then iterate through the remaining ranges. For each one, we check the following conditions:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;If it is &lt;em&gt;wholly contained&lt;/em&gt; by an existing range, skip it.&lt;/li&gt;
-  &lt;li&gt;If the &lt;em&gt;minimum&lt;/em&gt; item in our new range is contained in any existing range, extend the existing range up to the new maximum.&lt;/li&gt;
-  &lt;li&gt;If the &lt;em&gt;maximum&lt;/em&gt; item in our new range is contained in any existing range, extend the existing range down to the new minimum.&lt;/li&gt;
-  &lt;li&gt;If we have exhausted all the overlap checks, this must be a totally distinct range and just add it to the end.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Finally, once we have our ranges, we need to convert them to the output format defined, so we do that and return.&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;This is a Raku feature called &lt;a href=&quot;https://docs.raku.org/type/Label&quot;&gt;Labels&lt;/a&gt;, where we can add a label to our &lt;a href=&quot;https://docs.raku.org/type/Supply&quot;&gt;Supply&lt;/a&gt; objects (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;for&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;do&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gather&lt;/code&gt;, etc). It allows us to name our loops and use the features outline in #2.&lt;/li&gt;
-  &lt;li&gt;With labels in place, if we want to break both an inner and an outer loop, we can do that in one statement (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;last OUT&lt;/code&gt;), or if we want to go to the next outer loop without finishing our inner loop, we can do that as well (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;next OUT&lt;/code&gt;). This makes the code faster and more readable, in my opinion.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;Some fun little challenges that nicely complement Advent of Code. Now to start enjoying Christmas with my family! Merry Christmas everyone!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as finishing up AoC!</summary></entry></feed>
+&lt;p&gt;This challenge is a good case study in test-driven development! Be sure to write edge-case tests to make sure everything is behaving as expected. In the case of part one, it was &lt;em&gt;not&lt;/em&gt; behaving as expected and required a re-write.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I was going to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.</summary></entry></feed>
