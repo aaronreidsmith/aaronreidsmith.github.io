@@ -232,4 +232,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-101/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 102",
+        "excerpt":"Part one was an exercise in efficiency and short-circuiting; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add! Task 1: Rare Numbers You are given a positive integer $N. Write a...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-102/",
+        "teaser": null
       }]
