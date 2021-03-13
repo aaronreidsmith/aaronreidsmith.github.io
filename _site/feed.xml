@@ -1,4 +1,205 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-03-07T12:52:55-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 102</title><link href="http://localhost:4000/blog/perl-weekly-challenge-102/" rel="alternate" type="text/html" title="Perl Weekly Challenge 102" /><published>2021-03-07T00:00:00-06:00</published><updated>2021-03-07T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-102</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-102/">&lt;p&gt;Part one was an exercise in efficiency and &lt;a href=&quot;https://en.wikipedia.org/wiki/Short-circuit_evaluation&quot;&gt;short-circuiting&lt;/a&gt;; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-03-13T13:16:47-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 103</title><link href="http://localhost:4000/blog/perl-weekly-challenge-103/" rel="alternate" type="text/html" title="Perl Weekly Challenge 103" /><published>2021-03-13T00:00:00-06:00</published><updated>2021-03-13T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-103</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-103/">&lt;p&gt;Challenge two this week was… interesting, to say the least. But, we are through it, and it’s the weekend! 🍻&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-chinese-zodiac&quot;&gt;Task 1: Chinese Zodiac&lt;/h2&gt;
+
+&lt;p&gt;You are given a year &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$year&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to determine the Chinese Zodiac for the given year &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$year&lt;/code&gt;. Please check out &lt;a href=&quot;https://en.wikipedia.org/wiki/Chinese_zodiac&quot;&gt;wikipage&lt;/a&gt; for more information about it.&lt;/p&gt;
+
+&lt;p&gt;The animal cycle: Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig.&lt;br /&gt;
+The element cycle: Wood, Fire, Earth, Metal, Water.&lt;/p&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-103/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Int $year) returns Str {
+    constant $root-year = 1924; # From Wikipedia
+
+    my $difference         = $year - $root-year;
+    my $element-difference = $difference &amp;lt; 0 ?? $difference + 10 !! $difference; # [1]
+    my $animal-difference  = $difference &amp;lt; 0 ?? $difference + 12 !! $difference;
+
+    my $element = do given $element-difference % 10 { # [2][3]
+        when 0|1 { 'Wood'  }
+        when 2|3 { 'Fire'  }
+        when 4|5 { 'Earth' }
+        when 6|7 { 'Metal' }
+        when 8|9 { 'Water' }
+    }
+    my $animal = do given $animal-difference % 12 {
+        when 0  { 'Rat'     }
+        when 1  { 'Ox'      }
+        when 2  { 'Tiger'   }
+        when 3  { 'Rabbit'  }
+        when 4  { 'Dragon'  }
+        when 5  { 'Snake'   }
+        when 6  { 'Horse'   }
+        when 7  { 'Goat'    }
+        when 8  { 'Monkey'  }
+        when 9  { 'Rooster' }
+        when 10 { 'Dog'     }
+        when 11 { 'Pig'     }
+    }
+
+    &quot;$element $animal&quot;; # [4]
+}
+
+sub MAIN(Int $year) {
+    say challenge($year);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 2017
+Fire Rooster
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;I’m sure there is a better root than 1924, but that is the first year in the table on the &lt;a href=&quot;https://en.wikipedia.org/wiki/Chinese_zodiac&quot;&gt;Wikipedia page&lt;/a&gt;. Reading through the Wikipedia page, we can see two things:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The element cycle has 5 rotations (Wood, Fire, Earth, Metal, and Water), and each one lasts for 2 years (a Yin year and a Yang year [which we don’t care about]).&lt;/li&gt;
+  &lt;li&gt;The animal cycle has 12 rotations (Rat, Ox,  Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig), and each one lasts for 1 year.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;This makes our logic pretty simple – we just need to find our distance from the known year of 1924 and find which cycle that year falls in. For element, we find the difference and then find the remainder after dividing by 10 (5 cycles x 2 years each). If it is 0 or 1, it is Wood, if it is 2 or 3 it is Fire, etc. Similarly, we find the difference and find the remainder after dividing by 12 for the animals. If it is 0 it is Rat, if it is 1 it is Ox, etc. That’s it!&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;We can’t just do &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;abs($year - $root-year)&lt;/code&gt; because for years before &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$root-year&lt;/code&gt;, it would yield the wrong cycle (for example, 1923 would have a remainder of 1 for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$element&lt;/code&gt; instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;9&lt;/code&gt;). Because of this, if the difference is negative, we need to add the size of the cycle (10 and 12, respectively) to put it in its correct place.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;given&lt;/code&gt; is a flow control keyword and doesn’t actually return anything. To make the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;given&lt;/code&gt; block return its value, we need to add the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;do&lt;/code&gt; keyword before it.&lt;/li&gt;
+  &lt;li&gt;You’ll notice there is no &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;default&lt;/code&gt; block for these &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;given&lt;/code&gt;s. That is intentional, since we know all the possible outcomes. Best practice would probably be something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;default { die &quot;Unexpected input: $_&quot; }&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Double quotes tell the Raku compiler to interpolate this string, so we get &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&quot;Fire Rooster&quot;&lt;/code&gt; instead of the literal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;'$element $animal'&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-whats-playing&quot;&gt;Task 2: What’s playing?&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Note: This was copied directly from &lt;a href=&quot;https://perlweeklychallenge.org/blog/perl-weekly-challenge-103/#TASK2&quot;&gt;perlweeklychallenge.org&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Working from home, you decided that on occasion you wanted some background noise while working. You threw together a network streamer to continuously loop through the files and launched it in a tmux (or screen) session, giving it a directory tree of files to play. During the day, you connected an audio player to the stream, listening through the workday, closing it when done.&lt;/p&gt;
+
+&lt;p&gt;For weeks you connect to the stream daily, slowly noticing a gradual drift of the media. After several weeks, you take vacation. When you return, you are pleasantly surprised to find the streamer still running. Before connecting, however, if you consider the puzzle of determining which track is playing.&lt;/p&gt;
+
+&lt;p&gt;After looking at a few modules to read info regarding the media, a quick bit of coding gave you a file list. The file list is in a simple CSV format, each line containing two fields: the first the number of milliseconds in length, the latter the media’s title (this example is of several episodes available from the MercuryTheatre.info):&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1709363,&quot;Les Miserables Episode 1: The Bishop (broadcast date: 1937-07-23)&quot;
+1723781,&quot;Les Miserables Episode 2: Javert (broadcast date: 1937-07-30)&quot;
+1723781,&quot;Les Miserables Episode 3: The Trial (broadcast date: 1937-08-06)&quot;
+1678356,&quot;Les Miserables Episode 4: Cosette (broadcast date: 1937-08-13)&quot;
+1646043,&quot;Les Miserables Episode 5: The Grave (broadcast date: 1937-08-20)&quot;
+1714640,&quot;Les Miserables Episode 6: The Barricade (broadcast date: 1937-08-27)&quot;
+1714640,&quot;Les Miserables Episode 7: Conclusion (broadcast date: 1937-09-03)&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;For this script, you can assume to be provided the following information:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;* the value of $^T ($BASETIME) of the streamer script,
+* the value of time(), and
+* a CSV file containing the media to play consisting of the length in milliseconds and an identifier for the media (title, filename, or other).
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Write a program to output which file is currently playing. For purposes of this script, you may assume gapless playback, and format the output as you see fit.&lt;/p&gt;
+
+&lt;p&gt;Optional: Also display the current position in the media as a time-like value.&lt;/p&gt;
+
+&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 3 command line parameters: start time, current time, file name
+
+    # starttime
+    1606134123
+
+    # currenttime
+    1614591276
+
+    # filelist.csv
+
+Output:
+
+    &quot;Les Miserables Episode 1: The Bishop (broadcast date: 1937-07-23)&quot;
+    00:10:24
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-103/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use Text::CSV; # imports `csv` function
+
+sub challenge(Int $start-time, Int $current-time, Str $file-name) returns Str {
+    my @playlist          = csv(in =&amp;gt; $file-name);
+    my $playlist-length   = @playlist[*;0].sum;                                      # [1]
+    my $playlist-position = ($current-time - $start-time) * 1000 % $playlist-length;
+
+    my ($track, $timestamp);
+    for @playlist -&amp;gt; ($track-length, $track-name) {
+        # If we are &amp;lt;= the playlist position, skip to the next track
+        if $track-length &amp;lt;= $playlist-position {
+            $playlist-position -= $track-length;
+            next;                                                                    # [2]
+        }
+
+        # We know we are in the right track now, so find how far in we are
+        $track            = $track-name;
+        my $total-seconds = ($playlist-position / 1000).Int;
+        my $hour          = ($total-seconds / 3600).Int;
+        my $minutes       = ($total-seconds % 3600 / 60).Int;
+        my $seconds       = $total-seconds % 60;
+        $timestamp        = sprintf('%02d:%02d:%02d', $hour, $minutes, $seconds);
+        last;                                                                        # [3]
+    }
+
+    &quot;$track\n$timestamp&quot;;
+}
+
+sub MAIN(Int $start-time, Int $current-time, Str $file-name) {
+    say challenge($start-time, $current-time, $file-name);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Assumes `filelist.csv` contains the above input
+$ raku ch-2.raku 1606134123 1614591276 filelist.csv
+Les Miserables Episode 1: The Bishop (broadcast date: 1937-07-23)
+00:10:24
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;I found this question to be &lt;em&gt;incredibly&lt;/em&gt; confusing. Maybe it is the wording, or the fact that it was written by a guest author, but it didn’t make sense to me at first. Additionally, we are &lt;em&gt;explicitly&lt;/em&gt; told that one set of numbers (the ones in the CSV) are in milliseconds, and the others are not specified; I started programming this assuming they are &lt;em&gt;also&lt;/em&gt; in milliseconds only to have to figure out later on they are in seconds. With that out of the way, let’s look at the actual logic:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Read the CSV into a list of lists.&lt;/li&gt;
+  &lt;li&gt;Find the total length of the playlist.&lt;/li&gt;
+  &lt;li&gt;Find the position that we are in the playlist (in milliseconds).&lt;/li&gt;
+  &lt;li&gt;Iterate through each track in the playlist:
+    &lt;ul&gt;
+      &lt;li&gt;If the length of the track is less than the position in the playlist, decrement the position in the playlist by the length of the track and continue&lt;/li&gt;
+      &lt;li&gt;Otherwise, we are &lt;em&gt;in&lt;/em&gt; the track we need to be in, and we need to find the position in the track. We do this by calculating the total seconds we are into the track, then formatting that using some simple division. It’s also important we remember to break after we have found what track we are in.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;This is an interesting way to find the sum of a particular index in the list. This says “give me position 0 for the whole list, then sum it.”&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;next&lt;/code&gt; is the equivalent of something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;continue&lt;/code&gt; in other languages.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;last&lt;/code&gt; is the equivalent of something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;break&lt;/code&gt; in other languages.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;Overall, not my favorite set of questions this week, but what can you do! Hope y’all enjoy the rest of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Metal Ox&lt;/code&gt; year!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Challenge two this week was… interesting, to say the least. But, we are through it, and it’s the weekend! 🍻</summary></entry><entry><title type="html">Perl Weekly Challenge 102</title><link href="http://localhost:4000/blog/perl-weekly-challenge-102/" rel="alternate" type="text/html" title="Perl Weekly Challenge 102" /><published>2021-03-07T00:00:00-06:00</published><updated>2021-03-07T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-102</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-102/">&lt;p&gt;Part one was an exercise in efficiency and &lt;a href=&quot;https://en.wikipedia.org/wiki/Short-circuit_evaluation&quot;&gt;short-circuiting&lt;/a&gt;; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add!&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-rare-numbers&quot;&gt;Task 1: Rare Numbers&lt;/h2&gt;
 
@@ -1706,408 +1907,4 @@ Postorder -&amp;gt; (Left, Right, Root)
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Hoping for something a little less copy/paste next week, but regardless, this was a fun start to the new year!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">The second challenge was a lot like last weeks second challenge, so I went a step further and implemented multiple tree traversals. I won’t include the tests this week, but feel free to click the GitHub links to see the test cases.</summary></entry><entry><title type="html">Perl Weekly Challenge 93</title><link href="http://localhost:4000/blog/perl-weekly-challenge-093/" rel="alternate" type="text/html" title="Perl Weekly Challenge 93" /><published>2020-12-30T00:00:00-06:00</published><updated>2020-12-30T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-093</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-093/">&lt;p&gt;I was &lt;em&gt;going&lt;/em&gt; to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.&lt;/p&gt;
-
-&lt;h2 id=&quot;task-1-max-points&quot;&gt;Task 1: Max Points&lt;/h2&gt;
-
-&lt;p&gt;You are given set of co-ordinates &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Write a script to count maximum points on a straight line when given co-ordinates plotted on 2-d plane.&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;|
-|     x
-|   x
-| x
-+ _ _ _ _
-
-Input: (1,1), (2,2), (3,3)
-Output: 3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;|
-|
-| x       x
-|   x
-| x   x
-+ _ _ _ _ _
-
-Input: (1,1), (2,2), (3,1), (1,3), (5,3)
-Output: 3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-093/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;h4 id=&quot;first-attempt&quot;&gt;First Attempt&lt;/h4&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(@pairs) {
-    my %lines;
-    my $already-compared = Set.new;
-
-    for @pairs -&amp;gt; @pair {
-        my @pairs-to-compare = @pairs.grep(* ne @pair);
-
-        for @pairs-to-compare -&amp;gt; @other-pair {
-            my ($x1, $y1) = @pair;
-            my ($x2, $y2) = @other-pair;
-
-            next if &quot;$x1,$y1:$x2,$y2&quot; ∈ $already-compared || &quot;$x2,$y2:$x1,$y1&quot; ∈ $already-compared; # [1]
-
-            my $numerator = $y2 - $y1;
-            my $denominator = $x2 - $x1;
-
-            # Find the slope
-            my $m = $denominator == 0 ?? 'undefined' !! $numerator / $denominator;
-
-            # If it is a vertical line, use the x-intercept for uniqueness
-            my $b = $m eq 'undefined' ?? @pair[1] !! @pair[1] - ($m * @pair[0]);
-
-            # Slope and y-intercept (or x-intercept) are unique, so this is all we need
-            %lines{&quot;$m:$b&quot;}++;                                                           # [2]
-
-            $already-compared ∪= &quot;$x1,$y1:$x2,$y2&quot;;
-        }
-    }
-    %lines.max(-&amp;gt; $entry { $entry.value }).value;
-}
-
-multi sub MAIN(*@N where all(@N) ~~ Int &amp;amp;&amp;amp; @N.elems %% 2) { # [3]
-    my @pairs = @N.map(-&amp;gt; $x, $y { ($x, $y) });
-    say challenge(@pairs);
-}
-
-multi sub MAIN(Bool :$test) {
-    use Test;
-
-    my @tests = (
-        (((1, 1), (2, 2), (3, 3)), 3),
-        (((1, 1), (2, 2), (3, 1), (1, 3), (5, 3)), 3),
-        (((1, 1), (2, 1), (3, 1), (4, 1)), 4)
-    );
-
-    for @tests -&amp;gt; (@pairs, $expected) {
-        is(challenge(@pairs), $expected);
-    }
-
-    done-testing;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 1 1 2 2 3 3
-3
-
-$ raku ch-1.raku --test
-ok 1 - 
-ok 2 - 
-not ok 3 - 
-1..3
-# Failed test at /home/asmith/perlweeklychallenge-club/challenge-093/aaronreidsmith/raku/ch-1.raku line 47
-# expected: '4'
-#      got: '6'
-# You failed 1 test of 3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;corrected-solution&quot;&gt;Corrected Solution&lt;/h4&gt;
-
-&lt;p&gt;As you can see, the above solution fails for my added test case. We will explore this below, but here is the corrected version (with an additional test case):&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Point {
-    has $.x;
-    has $.y;
-
-    multi method new($x, $y) { # [4]
-        self.bless(:$x, :$y);
-    }
-}
-
-class Line {
-    has $.slope;
-    has $.x-intercept;
-    has $.y-intercept;
-    has Set $.points is rw;
-}
-
-sub challenge(@points) {
-    my %lines;
-    for @points.kv -&amp;gt; $index, $point {
-        for @points[$index+1..*] -&amp;gt; $other-point {
-            my $numerator = $other-point.y - $point.y;
-            my $denominator = $other-point.x - $point.x;
-
-            my $slope = $denominator == 0 ?? 'undefined' !! $numerator / $denominator;
-
-            my $y-intercept;
-            if $slope eq 'undefined' {
-                $y-intercept = $point.y == 0 ?? 0 !! 'undefined';
-            } else {
-                $y-intercept = $point.y - ($slope * $point.x);
-            }
-
-            my $x-intercept;
-            if $slope eq 'undefined' {
-                $x-intercept = $point.x;
-            } elsif $slope == 0 {
-                $x-intercept = 'undefined'
-            } else {
-                $x-intercept = -$y-intercept / $slope;
-            }
-
-            my $points = Set.new(&quot;{$point.x},{$point.y}&quot;, &quot;{$other-point.x},{$other-point.y}&quot;);
-
-            my $key = &quot;$slope,$x-intercept,$y-intercept&quot;; # [5]
-            
-            if %lines{$key}:exists {
-                %lines{$key}.points ∪= $points;
-            } else {
-                %lines{$key} = Line.new(:$slope, :$x-intercept, :$y-intercept, :$points);
-            }
-        }
-    }
-    %lines.max({ $_.value.points.elems }).value.points.elems;
-}
-
-multi sub MAIN(*@N where all(@N) ~~ Int &amp;amp;&amp;amp; @N.elems %% 2) {
-    my @pairs = @N.map(-&amp;gt; $x, $y { Point.new($x, $y) });
-    say challenge(@pairs);
-}
-
-multi sub MAIN(Bool :$test) {
-    use Test;
-
-    my @tests = (
-        ((Point.new(1, 1), Point.new(2, 2), Point.new(3, 3)), 3),
-        ((Point.new(1, 1), Point.new(2, 2), Point.new(3, 1), Point.new(1, 3), Point.new(5, 3)), 3),
-        ((Point.new(1, 1), Point.new(2, 1), Point.new(3, 1), Point.new(4, 1)), 4),
-        ((Point.new(1, 1), Point.new(1, 2), Point.new(2, 1), Point.new(3, 1), Point.new(4, 1)), 4)
-    );
-
-    for @tests -&amp;gt; (@points, $expected) {
-        is(challenge(@points), $expected);
-    }
-
-    done-testing;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 1 1 2 2 3 3
-3
-
-$ raku ch-1.raku --test
-ok 1 - 
-ok 2 - 
-ok 3 - 
-ok 4 -
-1..4
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;For both of these there is some logic in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; that I will explain once. Basically, we expect the user to pass us one or more integers, and they have to pass us an &lt;em&gt;even&lt;/em&gt; number of integers so that we can split it into pairs. We then pass this to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; subroutine.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;First Attempt&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The logic here is as follows:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;For each point, compare it to each other point.&lt;/li&gt;
-  &lt;li&gt;During the comparison calculate both the slope and (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$m&lt;/code&gt;) and the y-intercept (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$b&lt;/code&gt;)&lt;/li&gt;
-  &lt;li&gt;Store the slope/y-intercept combo in a Hash called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%lines&lt;/code&gt;.
-    &lt;ul&gt;
-      &lt;li&gt;Increment if it exists, otherwise, set to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Comparing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 1) &amp;lt;-&amp;gt; (2, 2)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(2, 2) &amp;lt;-&amp;gt; (1, 1)&lt;/code&gt; is the same thing, so we store that in a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&lt;/code&gt; to save ourselves a few cycles.&lt;/li&gt;
-  &lt;li&gt;Finally, find the maximum entry by value and return it.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;This logic breaks down in the case of a horizontal line (see test number 3). The reason it breaks down is because the pairs are evaluated like this:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(2, 1)&lt;/code&gt; – m = 0, b = 1. New line – set to 1&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(3, 1)&lt;/code&gt; – m = 0, b = 1. Existing line – increment to 2&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(4, 1)&lt;/code&gt; – m = 0, b = 1. Existing line – increment to 3&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(2, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 1)&lt;/code&gt; – Same as number 1 – skip&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(2, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(3, 1)&lt;/code&gt; – m = 0, b = 1. Existing line – increment to 4&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(2, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(4, 1)&lt;/code&gt; – m = 0, b = 1. Existing line – increment to 5&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(3, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 1)&lt;/code&gt; – Same as number 2 – skip&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(3, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(2, 1)&lt;/code&gt; – Same as number 5 – skip&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(3, 1)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(4, 1)&lt;/code&gt; – m - 0, b = 1. Existing line – increment to 6&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;As you can see, even with four points, we generate an answer of six. My first though was to just take the minimum of the number of points and the longest run we found, which would yield four. However, if we had any points &lt;em&gt;not&lt;/em&gt; on the line (look at test 4 the corrected solution), then it would yield the wrong answer as well.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Corrected Solution&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The logic here is similar, but accounts for the above situation. First, you will notice I added a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Point&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Line&lt;/code&gt; class, to make things a little easier. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Line&lt;/code&gt; class also contains a set of points along that line that we can use to de-duplicate if necessary. Once those are defined, the logic is as follows:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Compare each point to each &lt;em&gt;subsequent&lt;/em&gt; point.
-    &lt;ul&gt;
-      &lt;li&gt;There is no need to look at past points, as it results in the “skips” shown above&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;During each comparison we calculate the slope, x-intercept and y-intercept.
-    &lt;ul&gt;
-      &lt;li&gt;The reason for this is because if we have an undefined slope (vertical line), we need to know where along the x-axis it falls.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Once we have the above calculated, we create a joint key of all 3 to use in a Hash.&lt;/li&gt;
-  &lt;li&gt;Using the above key, we look up our string in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%lines&lt;/code&gt; Hash. If it exists, we add the points used to find it to the points contained in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Line&lt;/code&gt; object (since it is a set, it will de-duplicate itself automatically). Otherwise, we create a new &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Line&lt;/code&gt; object and store it with the key from #3.&lt;/li&gt;
-  &lt;li&gt;Finally, we find the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Line&lt;/code&gt; with the most &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Point&lt;/code&gt;s and return the number of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Point&lt;/code&gt;s.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;We need to use a string here or else the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Set&lt;/code&gt; will erroneously combine some of our points. Sets flatten their arguments in Raku, which makes it tricky to store nested items. This has been my go-to solution.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt; objects behave kind of like default dicts in Python in that if you use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;++&lt;/code&gt; on a key that does not exist, it will create the key and increment it to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Raku has an operator specifically for “divisible by.” In other languages, you might see &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x % 2 == 0&lt;/code&gt; to check if something is divisible by 2, but in Raku you can say &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$x %% 2&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Raku, like some other languages, allows us to define multiple constructors. The default one is created for us and takes named arguments. This one takes positional arguments and passes them to the default constructor via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;self.bless&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Similar to #1, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hash&lt;/code&gt; objects always use string keys. So if we need some kind of compound key, we need to cast it to a string as seen here.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;task-2-sum-path&quot;&gt;Task 2: Sum Path&lt;/h2&gt;
-
-&lt;p&gt;You are given binary tree containing numbers &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0-9&lt;/code&gt; only.&lt;/p&gt;
-
-&lt;p&gt;Write a script to sum all possible paths from root to leaf.&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1-1&quot;&gt;Example 1&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input:
-     1
-    /
-   2
-  / \
- 3   4
-
-Output: 13
-as sum two paths (1-&amp;gt;2-&amp;gt;3) and (1-&amp;gt;2-&amp;gt;4)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2-1&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input:
-     1
-    / \
-   2   3
-  /   / \
- 4   5   6
-
-Output: 26
-as sum three paths (1-&amp;gt;2-&amp;gt;4), (1-&amp;gt;3-&amp;gt;5) and (1-&amp;gt;3-&amp;gt;6)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-093/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset NodeValue of Str where { $_ ~~ /^&amp;lt;digit&amp;gt;$/ || $_ eq 'Nil' } # [1]
-
-class Node {
-    has Node $.left  is rw = Nil; # [2]
-    has Node $.right is rw = Nil;
-    has Int $.value        = 0;
-}
-
-sub build-tree(@array, $root is copy = Nil, Int $i = 0) {
-    if $i &amp;lt; @array.elems &amp;amp;&amp;amp; @array[$i] ne 'Nil' {
-        $root       = Node.new(value =&amp;gt; @array[$i].Int);
-        $root.left  = build-tree(@array, $root.left, 2 * $i + 1);
-        $root.right = build-tree(@array, $root.right, 2 * $i + 2);
-    }
-    $root;
-}
-
-sub challenge(Node $root, @path is copy = ()) {
-    my $path-sum = 0;
-    with $root {
-        @path.push($root.value);
-
-        if !$root.left.defined &amp;amp;&amp;amp; !$root.right.defined {
-            $path-sum = @path.sum;
-        } else {
-            $path-sum += challenge($root.left, @path);
-            $path-sum += challenge($root.right, @path);
-        }
-    }
-    $path-sum;
-}
-
-multi sub MAIN(*@N where all(@N) ~~ NodeValue) {
-    my $root = build-tree(@N);
-    say challenge($root);
-}
-
-multi sub MAIN(Bool :$test) {
-    use Test;
-
-    my @tests = (
-        (build-tree(('1', '2', 'Nil', '3', '4')), 13),
-        (build-tree(('1', '2', '3', '4', 'Nil', '5', '6')), 26),
-        (build-tree(('2', '7', '5', '2', '6', 'Nil', '9', 'Nil', '5', '11', '4', 'Nil')), 77)
-    );
-
-    for @tests -&amp;gt; ($tree, $expected) {
-        is(challenge($tree), $expected);
-    }
-
-    done-testing;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 1 2 Nil 3 4
-13
-
-$ raku ch-2.raku 1 2 3 4 Nil 5 6
-26
-
-$ raku ch-2.raku --test
-ok 1 - 
-ok 2 - 
-ok 3 - 
-1..3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;The hardest part of this, for me, was giving the user some kind of command line interface to be able to define their own trees (something that wasn’t explicitly part of the problem). We basically just use the &lt;a href=&quot;https://www.geeksforgeeks.org/binary-tree-array-implementation/&quot;&gt;array implementation&lt;/a&gt; of a binary tree where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@array[0]&lt;/code&gt; is the root, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@array[1]&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@array[2]&lt;/code&gt; are the second row, etc. Anything that is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Nil&lt;/code&gt; is recognized as an empty node (i.e., an &lt;a href=&quot;http://www.opendatastructures.org/versions/edition-0.1d/ods-java/node37.html&quot;&gt;unbalanced tree&lt;/a&gt;). So, for example, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1 2 Nil 3 4&lt;/code&gt; represents the first example shown above.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; does some validation to make sure everything is either a number or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Nil&lt;/code&gt; and then let’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build-tree&lt;/code&gt; convert the array into an actual tree (by creating &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Node&lt;/code&gt; objects). Once we have a tree, we give it to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; which implements the following logic:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;If the node is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Nil&lt;/code&gt; return 0.
-    &lt;ul&gt;
-      &lt;li&gt;Technically unnecessary since we check if we are at a terminal node before recursing, but doesn’t hurt to have.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Push the current node’s value into our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@path&lt;/code&gt; list.&lt;/li&gt;
-  &lt;li&gt;If we are at a leaf node (no &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;left&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;right&lt;/code&gt;), then calculate the sum of the path and return.&lt;/li&gt;
-  &lt;li&gt;Otherwise, recurse both left and right ith the existing path and add it to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$path-sum&lt;/code&gt; variable.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;This line ensures that, even though we are expecting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Str&lt;/code&gt; types, that all of them are either digits or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;'Nil'&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;By default, class attributes are read only, so by defining them as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is rw&lt;/code&gt; (read/write), we say that they are mutable. Additionally, we assign these attributes default values.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;This challenge is a good case study in test-driven development! Be sure to write edge-case tests to make sure everything is behaving as expected. In the case of part one, it was &lt;em&gt;not&lt;/em&gt; behaving as expected and required a re-write.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I was going to stop adding my test cases (to the blog, not the code) this week, but after writing a solution that passed the provided test cases for part one, I wrote a new test that it failed and had to rewrite the whole thing. Because of that, today’s solutions still have the tests included. Additionally, in part one, I will go through both the failing solution and the corrected one.</summary></entry></feed>
+&lt;p&gt;Hoping for something a little less copy/paste next week, but regardless, this was a fun start to the new year!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">The second challenge was a lot like last weeks second challenge, so I went a step further and implemented multiple tree traversals. I won’t include the tests this week, but feel free to click the GitHub links to see the test cases.</summary></entry></feed>
