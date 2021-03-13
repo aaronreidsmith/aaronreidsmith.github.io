@@ -238,4 +238,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-102/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 103",
+        "excerpt":"Challenge two this week was… interesting, to say the least. But, we are through it, and it’s the weekend! 🍻 Task 1: Chinese Zodiac You are given a year $year. Write a script to determine the Chinese Zodiac for the given year $year. Please check out wikipage for more information...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-103/",
+        "teaser": null
       }]

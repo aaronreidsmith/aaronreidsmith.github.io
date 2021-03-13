@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 102 - Aaron Smith</title>
-<meta name="description" content="Part one was an exercise in efficiency and short-circuiting; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add!">
+<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 103 - Aaron Smith</title>
+<meta name="description" content="Challenge two this week was… interesting, to say the least. But, we are through it, and it’s the weekend! 🍻">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Perl Weekly Challenge 102">
-<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-102/">
+<meta property="og:title" content="Perl Weekly Challenge 103">
+<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-103/">
 
 
-  <meta property="og:description" content="Part one was an exercise in efficiency and short-circuiting; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add!">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2021-03-07T00:00:00-06:00">
+  <meta property="og:description" content="Challenge two this week was… interesting, to say the least. But, we are through it, and it’s the weekend! 🍻">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-102/">
+
+  <meta property="article:published_time" content="2021-03-13T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-103/">
 
 
 
@@ -286,15 +286,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Perl Weekly Challenge 102">
-    <meta itemprop="description" content="Part one was an exercise in efficiency and short-circuiting; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add!">
-    <meta itemprop="datePublished" content="2021-03-07T00:00:00-06:00">
+    <meta itemprop="headline" content="Perl Weekly Challenge 103">
+    <meta itemprop="description" content="Challenge two this week was… interesting, to say the least. But, we are through it, and it’s the weekend! 🍻">
+    <meta itemprop="datePublished" content="2021-03-13T00:00:00-06:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 102
+          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 103
 </h1>
           
 
@@ -303,7 +303,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2021-03-07T00:00:00-06:00">March 7, 2021</time>
+        <time datetime="2021-03-13T00:00:00-06:00">March 13, 2021</time>
       </span>
     
 
@@ -316,7 +316,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          5 minute read
+          7 minute read
         
       </span>
     
@@ -328,197 +328,208 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>Part one was an exercise in efficiency and <a href="https://en.wikipedia.org/wiki/Short-circuit_evaluation">short-circuiting</a>; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add!</p>
+        <p>Challenge two this week was… interesting, to say the least. But, we are through it, and it’s the weekend! 🍻</p>
 
-<h2 id="task-1-rare-numbers">Task 1: Rare Numbers</h2>
+<h2 id="task-1-chinese-zodiac">Task 1: Chinese Zodiac</h2>
 
-<p>You are given a positive integer <code class="language-plaintext highlighter-rouge">$N</code>.</p>
+<p>You are given a year <code class="language-plaintext highlighter-rouge">$year</code>.</p>
 
-<p>Write a script to generate all Rare numbers of size <code class="language-plaintext highlighter-rouge">$N</code> if exists. Please checkout the <a href="http://www.shyamsundergupta.com/rare.htm">page</a> for more information about it.</p>
+<p>Write a script to determine the Chinese Zodiac for the given year <code class="language-plaintext highlighter-rouge">$year</code>. Please check out <a href="https://en.wikipedia.org/wiki/Chinese_zodiac">wikipage</a> for more information about it.</p>
 
-<p><strong>Note:</strong> If you don’t want to go to the link above, a rare number basically has the following characteristics:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$N + $N.reverse = &lt;perfect square&gt;
-$N - $N.reverse = &lt;perfect square&gt;
-</code></pre></div></div>
-
-<h3 id="examples">Examples</h3>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(a) 2 digits: 65
-(b) 6 digits: 621770
-(c) 9 digits: 281089082
-</code></pre></div></div>
+<p>The animal cycle: Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig.<br />
+The element cycle: Wood, Fire, Earth, Metal, Water.</p>
 
 <h3 id="solution">Solution</h3>
 
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-102/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-103/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub digital-root(Int $N) returns Int {
-    my @digits = $N.comb;
-    my $digital-root = [+] @digits;
-    while @digits.elems &gt; 1 {
-        @digits = $digital-root.comb;
-        $digital-root = [+] @digits;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(Int $year) returns Str {
+    constant $root-year = 1924; # From Wikipedia
+
+    my $difference         = $year - $root-year;
+    my $element-difference = $difference &lt; 0 ?? $difference + 10 !! $difference; # [1]
+    my $animal-difference  = $difference &lt; 0 ?? $difference + 12 !! $difference;
+
+    my $element = do given $element-difference % 10 { # [2][3]
+        when 0|1 { 'Wood'  }
+        when 2|3 { 'Fire'  }
+        when 4|5 { 'Earth' }
+        when 6|7 { 'Metal' }
+        when 8|9 { 'Water' }
     }
-    $digital-root;
-}
-
-sub is-rare(Int $N) returns Bool {
-    return False if $N.comb.head % 2 != 0;
-    return False if digital-root($N) ~~ 0|1|3|4|6|7; # [1][2]
-
-    my $reversed   = $N.flip.Int;
-    my $difference = $N - $reversed;
-
-    if $difference &gt;= 0 &amp;&amp; $difference.sqrt.narrow ~~ Int { # [3]
-        # Only calculate this if the difference is valid
-        my $sum = $N + $reversed;
-        $sum.sqrt.narrow ~~ Int;
-    } else {
-        False;
+    my $animal = do given $animal-difference % 12 {
+        when 0  { 'Rat'     }
+        when 1  { 'Ox'      }
+        when 2  { 'Tiger'   }
+        when 3  { 'Rabbit'  }
+        when 4  { 'Dragon'  }
+        when 5  { 'Snake'   }
+        when 6  { 'Horse'   }
+        when 7  { 'Goat'    }
+        when 8  { 'Monkey'  }
+        when 9  { 'Rooster' }
+        when 10 { 'Dog'     }
+        when 11 { 'Pig'     }
     }
+
+    "$element $animal"; # [4]
 }
 
-sub challenge(Int $N) returns Str {
-    my $min = ('2' ~ ('0' x $N - 1)).Int;
-    my $max = ('8' ~ ('9' x $N - 1)).Int;
-    ($min..$max).hyper.grep(&amp;is-rare).join(', '); # [4][5]
-}
-
-sub MAIN(Int $N) {
-    say challenge($N);
+sub MAIN(Int $year) {
+    say challenge($year);
 }
 </code></pre></div></div>
 
 <p>This program runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku 6
-621770
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku 2017
+Fire Rooster
 </code></pre></div></div>
 
 <h3 id="explanation">Explanation</h3>
 
-<p>This implementation is not overly clever; it basically just goes through every number of size <code class="language-plaintext highlighter-rouge">$N</code> and checks if it is a rare number. It does use some Raku-isms as well as some logic to short-circuit. For <code class="language-plaintext highlighter-rouge">$N = 6</code> it runs in ~8 seconds on my machine.</p>
+<p>I’m sure there is a better root than 1924, but that is the first year in the table on the <a href="https://en.wikipedia.org/wiki/Chinese_zodiac">Wikipedia page</a>. Reading through the Wikipedia page, we can see two things:</p>
 
 <ol>
-  <li>Find the minimum and maximum number of size <code class="language-plaintext highlighter-rouge">$N</code> it <em>could</em> be (according to the link in the challenge, rare numbers cannot start with an odd digit, so for <code class="language-plaintext highlighter-rouge">$N = 6</code> or range becomes <code class="language-plaintext highlighter-rouge">200000..899999</code>).</li>
-  <li>For each candidate:
-    <ul>
-      <li>Skip this candidate if the first digit is not even.</li>
-      <li>Skip this candidate if the <a href="https://en.wikipedia.org/wiki/Digital_root">digital root</a> is not one of 2, 5, 8, or 9 (again, this fact comes from the link in the challenge).</li>
-      <li>Find the reversed number and the difference (only the difference for now. My thought is it is easier to calculate the square root of smaller numbers, so there is no reason to calculate the square root of the larger number if the smaller one fails).</li>
-      <li>If the difference is greater-than-or-equal-to zero <em>and</em> its square root is an integer, calculate the sum and check if it is also a perfect square.
-        <ul>
-          <li>If so, return <code class="language-plaintext highlighter-rouge">True</code>.</li>
-          <li>If any step is false, return <code class="language-plaintext highlighter-rouge">False</code>.</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
+  <li>The element cycle has 5 rotations (Wood, Fire, Earth, Metal, and Water), and each one lasts for 2 years (a Yin year and a Yang year [which we don’t care about]).</li>
+  <li>The animal cycle has 12 rotations (Rat, Ox,  Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig), and each one lasts for 1 year.</li>
 </ol>
+
+<p>This makes our logic pretty simple – we just need to find our distance from the known year of 1924 and find which cycle that year falls in. For element, we find the difference and then find the remainder after dividing by 10 (5 cycles x 2 years each). If it is 0 or 1, it is Wood, if it is 2 or 3 it is Fire, etc. Similarly, we find the difference and find the remainder after dividing by 12 for the animals. If it is 0 it is Rat, if it is 1 it is Ox, etc. That’s it!</p>
 
 <h4 id="specific-comments">Specific comments</h4>
 
 <ol>
-  <li>Given that my day job is all Scala, where <a href="https://blog.knoldus.com/scala-best-practices-say-no-to-return/">using <code class="language-plaintext highlighter-rouge">return</code> is discouraged</a>, you’ll notice that bleeds into my Raku as well. The reason we use <code class="language-plaintext highlighter-rouge">return</code> here is to explicitly short-circuit this function in idiomatic Raku (with the condition following the actual declaration [<code class="language-plaintext highlighter-rouge">return False</code>]).</li>
-  <li>This is an anonymous way to create a <a href="https://docs.raku.org/type/Junction">Junction</a>. In this case, we are saying “if the digital root matches any of 0 or 1 or 3 or 4 or 6 or 7” in a more idiomatic way.</li>
-  <li><a href="https://docs.raku.org/routine/narrow"><code class="language-plaintext highlighter-rouge">narrow</code></a> is a way to find the narrowest type a number fits into. <code class="language-plaintext highlighter-rouge">$N.sqrt</code> returns a <a href="https://docs.raku.org/type/Num"><code class="language-plaintext highlighter-rouge">Num</code></a> object, even if the value is an integer. This is the idiomatic way to check that the returned value is an integer.
-    <ul>
-      <li>I am glad I found this, because in the past I would have done something like <code class="language-plaintext highlighter-rouge">$N.sqrt.Int == $N.sqrt</code>, which requires me to duplicate computations.</li>
-    </ul>
-  </li>
-  <li><a href="https://docs.raku.org/routine/hyper"><code class="language-plaintext highlighter-rouge">hyper</code></a> allows us to perform some action (in this case <code class="language-plaintext highlighter-rouge">grep</code>) on a sequence <em>in parallel</em> while still keeping the output in the original order of the sequence (see <a href="https://docs.raku.org/routine/race"><code class="language-plaintext highlighter-rouge">race</code></a> if order doesn’t matter).</li>
-  <li>We are able to pass a function to <code class="language-plaintext highlighter-rouge">grep</code>. Since functions are first-class citizens in Raku, they come with their own <a href="https://docs.raku.org/language/variables#index-entry-sigil_&amp;">sigil</a>, so we pass it in as <code class="language-plaintext highlighter-rouge">&amp;function-name</code>. This is the equivalent of <code class="language-plaintext highlighter-rouge">.grep(-&gt; $candidate { is-rare($candidate) })</code>, but easier to write.</li>
+  <li>We can’t just do <code class="language-plaintext highlighter-rouge">abs($year - $root-year)</code> because for years before <code class="language-plaintext highlighter-rouge">$root-year</code>, it would yield the wrong cycle (for example, 1923 would have a remainder of 1 for <code class="language-plaintext highlighter-rouge">$element</code> instead of <code class="language-plaintext highlighter-rouge">9</code>). Because of this, if the difference is negative, we need to add the size of the cycle (10 and 12, respectively) to put it in its correct place.</li>
+  <li><code class="language-plaintext highlighter-rouge">given</code> is a flow control keyword and doesn’t actually return anything. To make the <code class="language-plaintext highlighter-rouge">given</code> block return its value, we need to add the <code class="language-plaintext highlighter-rouge">do</code> keyword before it.</li>
+  <li>You’ll notice there is no <code class="language-plaintext highlighter-rouge">default</code> block for these <code class="language-plaintext highlighter-rouge">given</code>s. That is intentional, since we know all the possible outcomes. Best practice would probably be something like <code class="language-plaintext highlighter-rouge">default { die "Unexpected input: $_" }</code>.</li>
+  <li>Double quotes tell the Raku compiler to interpolate this string, so we get <code class="language-plaintext highlighter-rouge">"Fire Rooster"</code> instead of the literal <code class="language-plaintext highlighter-rouge">'$element $animal'</code>.</li>
 </ol>
 
-<h2 id="task-2-hash-counting-string">Task 2: Hash-counting String</h2>
+<h2 id="task-2-whats-playing">Task 2: What’s playing?</h2>
 
-<p>You are given a positive integer <code class="language-plaintext highlighter-rouge">$N</code>.</p>
+<p><strong>Note: This was copied directly from <a href="https://perlweeklychallenge.org/blog/perl-weekly-challenge-103/#TASK2">perlweeklychallenge.org</a></strong></p>
 
-<p>Write a script to produce Hash-counting string of that length.</p>
+<p>Working from home, you decided that on occasion you wanted some background noise while working. You threw together a network streamer to continuously loop through the files and launched it in a tmux (or screen) session, giving it a directory tree of files to play. During the day, you connected an audio player to the stream, listening through the workday, closing it when done.</p>
 
-<p>The definition of a hash-counting string is as follows:</p>
+<p>For weeks you connect to the stream daily, slowly noticing a gradual drift of the media. After several weeks, you take vacation. When you return, you are pleasantly surprised to find the streamer still running. Before connecting, however, if you consider the puzzle of determining which track is playing.</p>
 
-<ul>
-  <li>the string consists only of digits 0-9 and hashes, ‘#’</li>
-  <li>there are no two consecutive hashes: ‘##’ does not appear in your string</li>
-  <li>the last character is a hash</li>
-  <li>the number immediately preceding each hash (if it exists) is the position of that hash in the string, with the position being counted up from 1</li>
-</ul>
+<p>After looking at a few modules to read info regarding the media, a quick bit of coding gave you a file list. The file list is in a simple CSV format, each line containing two fields: the first the number of milliseconds in length, the latter the media’s title (this example is of several episodes available from the MercuryTheatre.info):</p>
 
-<p>It can be shown that for every positive integer N there is exactly one such length-N string.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1709363,"Les Miserables Episode 1: The Bishop (broadcast date: 1937-07-23)"
+1723781,"Les Miserables Episode 2: Javert (broadcast date: 1937-07-30)"
+1723781,"Les Miserables Episode 3: The Trial (broadcast date: 1937-08-06)"
+1678356,"Les Miserables Episode 4: Cosette (broadcast date: 1937-08-13)"
+1646043,"Les Miserables Episode 5: The Grave (broadcast date: 1937-08-20)"
+1714640,"Les Miserables Episode 6: The Barricade (broadcast date: 1937-08-27)"
+1714640,"Les Miserables Episode 7: Conclusion (broadcast date: 1937-09-03)"
+</code></pre></div></div>
 
-<h3 id="examples-1">Examples</h3>
+<p>For this script, you can assume to be provided the following information:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(a) "#" is the counting string of length 1
-(b) "2#" is the counting string of length 2
-(c) "#3#" is the string of length 3
-(d) "#3#5#7#10#" is the string of length 10
-(e) "2#4#6#8#11#14#" is the string of length 14
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* the value of $^T ($BASETIME) of the streamer script,
+* the value of time(), and
+* a CSV file containing the media to play consisting of the length in milliseconds and an identifier for the media (title, filename, or other).
+</code></pre></div></div>
+
+<p>Write a program to output which file is currently playing. For purposes of this script, you may assume gapless playback, and format the output as you see fit.</p>
+
+<p>Optional: Also display the current position in the media as a time-like value.</p>
+
+<h3 id="example">Example</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: 3 command line parameters: start time, current time, file name
+
+    # starttime
+    1606134123
+
+    # currenttime
+    1614591276
+
+    # filelist.csv
+
+Output:
+
+    "Les Miserables Episode 1: The Bishop (broadcast date: 1937-07-23)"
+    00:10:24
 </code></pre></div></div>
 
 <h3 id="solution-1">Solution</h3>
 
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-102/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-103/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(Int $N) returns Str {
-    my @output;
-    my $index = $N - 1;
-    while $index &gt;= 0 {
-        @output[$index] = '#';
-        my $position = $index + 1; # Position is 1-based while index is 0-based
-        for $position.flip.comb.kv -&gt; $offset, $digit {
-            @output[$index - ($offset + 1)] = $digit;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Text::CSV; # imports `csv` function
+
+sub challenge(Int $start-time, Int $current-time, Str $file-name) returns Str {
+    my @playlist          = csv(in =&gt; $file-name);
+    my $playlist-length   = @playlist[*;0].sum;                                      # [1]
+    my $playlist-position = ($current-time - $start-time) * 1000 % $playlist-length;
+
+    my ($track, $timestamp);
+    for @playlist -&gt; ($track-length, $track-name) {
+        # If we are &lt;= the playlist position, skip to the next track
+        if $track-length &lt;= $playlist-position {
+            $playlist-position -= $track-length;
+            next;                                                                    # [2]
         }
-        $index -= ($position.chars + 1);
+
+        # We know we are in the right track now, so find how far in we are
+        $track            = $track-name;
+        my $total-seconds = ($playlist-position / 1000).Int;
+        my $hour          = ($total-seconds / 3600).Int;
+        my $minutes       = ($total-seconds % 3600 / 60).Int;
+        my $seconds       = $total-seconds % 60;
+        $timestamp        = sprintf('%02d:%02d:%02d', $hour, $minutes, $seconds);
+        last;                                                                        # [3]
     }
-    @output.join;
+
+    "$track\n$timestamp";
 }
 
-sub MAIN(Int $N) {
-    say challenge($N);
+sub MAIN(Int $start-time, Int $current-time, Str $file-name) {
+    say challenge($start-time, $current-time, $file-name);
 }
 </code></pre></div></div>
 
 <p>This program runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku 14
-2#4#6#8#11#14#
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Assumes `filelist.csv` contains the above input
+$ raku ch-2.raku 1606134123 1614591276 filelist.csv
+Les Miserables Episode 1: The Bishop (broadcast date: 1937-07-23)
+00:10:24
 </code></pre></div></div>
 
 <h3 id="explanation-1">Explanation</h3>
 
-<p>We are given two really concrete details about the sequence:</p>
-
-<ul>
-  <li>the last character is a hash</li>
-  <li>the number immediately preceding each hash (if it exists) is the position of that hash in the string, with the position being counted up from 1</li>
-</ul>
-
-<p>Given that, we follow the following steps:</p>
+<p>I found this question to be <em>incredibly</em> confusing. Maybe it is the wording, or the fact that it was written by a guest author, but it didn’t make sense to me at first. Additionally, we are <em>explicitly</em> told that one set of numbers (the ones in the CSV) are in milliseconds, and the others are not specified; I started programming this assuming they are <em>also</em> in milliseconds only to have to figure out later on they are in seconds. With that out of the way, let’s look at the actual logic:</p>
 
 <ol>
-  <li>Define an array (<code class="language-plaintext highlighter-rouge">@output</code>) and start from the end (<code class="language-plaintext highlighter-rouge">$index = $N - 1</code>, since the array is 0-indexed).</li>
-  <li>While <code class="language-plaintext highlighter-rouge">$index</code> is greater-than-or-equal-to zero:
+  <li>Read the CSV into a list of lists.</li>
+  <li>Find the total length of the playlist.</li>
+  <li>Find the position that we are in the playlist (in milliseconds).</li>
+  <li>Iterate through each track in the playlist:
     <ul>
-      <li>Set <code class="language-plaintext highlighter-rouge">@output[$index]</code> to <code class="language-plaintext highlighter-rouge">#</code>.</li>
-      <li>Find the 1-based index (<code class="language-plaintext highlighter-rouge">$position</code>) of that hash character (<code class="language-plaintext highlighter-rouge">$index + 1</code>).</li>
-      <li>Iterate <strong>backwards</strong> through the 1-based index and fill in the indices in front of the newly-placed <code class="language-plaintext highlighter-rouge">#</code> with the digits of <code class="language-plaintext highlighter-rouge">$position</code>.</li>
-      <li>Decrement <code class="language-plaintext highlighter-rouge">$index</code> by the amount of characters in <code class="language-plaintext highlighter-rouge">$position + 1</code> (the <code class="language-plaintext highlighter-rouge">1</code> is for the hash character).</li>
+      <li>If the length of the track is less than the position in the playlist, decrement the position in the playlist by the length of the track and continue</li>
+      <li>Otherwise, we are <em>in</em> the track we need to be in, and we need to find the position in the track. We do this by calculating the total seconds we are into the track, then formatting that using some simple division. It’s also important we remember to break after we have found what track we are in.</li>
     </ul>
   </li>
 </ol>
 
 <h4 id="specific-comments-1">Specific Comments</h4>
 
-<p>Nothing to add here; this one is pretty straight forward.</p>
+<ol>
+  <li>This is an interesting way to find the sum of a particular index in the list. This says “give me position 0 for the whole list, then sum it.”</li>
+  <li><code class="language-plaintext highlighter-rouge">next</code> is the equivalent of something like <code class="language-plaintext highlighter-rouge">continue</code> in other languages.</li>
+  <li><code class="language-plaintext highlighter-rouge">last</code> is the equivalent of something like <code class="language-plaintext highlighter-rouge">break</code> in other languages.</li>
+</ol>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>It’s pretty cool that Raku has <code class="language-plaintext highlighter-rouge">.sqrt</code> built right in, but I find it odd that it doesn’t have some sort of <code class="language-plaintext highlighter-rouge">.is-whole</code> functionality (Python has <code class="language-plaintext highlighter-rouge">.is_integer()</code>, Scala has <code class="language-plaintext highlighter-rouge">.isWhole</code>). Maybe it does, and the documentation is just bad; it would not be the first time I have run into that! Honestly, if you read back through my blog, I think I have found 3 separate ways to check if a floating-point number (<code class="language-plaintext highlighter-rouge">Num</code>) is an integer (<code class="language-plaintext highlighter-rouge">Int</code>) in Raku. Oh well, I guess it is all part of the journey!</p>
+<p>Overall, not my favorite set of questions this week, but what can you do! Hope y’all enjoy the rest of the <code class="language-plaintext highlighter-rouge">Metal Ox</code> year!</p>
 
         
       </section>
@@ -561,7 +572,7 @@ sub MAIN(Int $N) {
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-03-07T00:00:00-06:00">March 7, 2021</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-03-13T00:00:00-06:00">March 13, 2021</time></p>
 
 
       </footer>
@@ -571,23 +582,22 @@ sub MAIN(Int $N) {
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+102%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-102%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+103%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-103%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-102%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-103%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-102%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-103%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/perl-weekly-challenge-101/" class="pagination--pager" title="Perl Weekly Challenge 101
+      <a href="/blog/perl-weekly-challenge-102/" class="pagination--pager" title="Perl Weekly Challenge 102
 ">Previous</a>
     
     
-      <a href="/blog/perl-weekly-challenge-103/" class="pagination--pager" title="Perl Weekly Challenge 103
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -611,7 +621,7 @@ sub MAIN(Int $N) {
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/blog/perl-weekly-challenge-103/" rel="permalink">Perl Weekly Challenge 103
+        <a href="/blog/perl-weekly-challenge-102/" rel="permalink">Perl Weekly Challenge 102
 </a>
       
     </h2>
@@ -622,7 +632,7 @@ sub MAIN(Int $N) {
       
       <span class="page__meta-date">
         <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2021-03-13T00:00:00-06:00">March 13, 2021</time>
+        <time datetime="2021-03-07T00:00:00-06:00">March 7, 2021</time>
       </span>
     
 
@@ -635,16 +645,14 @@ sub MAIN(Int $N) {
       <span class="page__meta-readtime">
         <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
-          2 minute read
+          5 minute read
         
       </span>
     
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Challenge two this week was… interesting, to say the least. But, we are through it, and it’s the weekend! 🍻
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">Part one was an exercise in efficiency and short-circuiting; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see...</p>
   </article>
 </div>
 
