@@ -1,4 +1,181 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-03-13T13:16:47-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 103</title><link href="http://localhost:4000/blog/perl-weekly-challenge-103/" rel="alternate" type="text/html" title="Perl Weekly Challenge 103" /><published>2021-03-13T00:00:00-06:00</published><updated>2021-03-13T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-103</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-103/">&lt;p&gt;Challenge two this week was… interesting, to say the least. But, we are through it, and it’s the weekend! 🍻&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-03-21T10:42:36-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 104</title><link href="http://localhost:4000/blog/perl-weekly-challenge-104/" rel="alternate" type="text/html" title="Perl Weekly Challenge 104" /><published>2021-03-21T00:00:00-05:00</published><updated>2021-03-21T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-104</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-104/">&lt;p&gt;This week had some fun topics like &lt;a href=&quot;https://en.wikipedia.org/wiki/Recursion_(computer_science)&quot;&gt;recursion&lt;/a&gt;, &lt;a href=&quot;https://en.wikipedia.org/wiki/Memoization&quot;&gt;memoization&lt;/a&gt;, and IO/data validation!&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-fusc-sequence&quot;&gt;Task 1: FUSC Sequence&lt;/h2&gt;
+
+&lt;p&gt;Write a script to generate first 50 members of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FUSC&lt;/code&gt; Sequence. Please refer to &lt;a href=&quot;http://oeis.org/A002487&quot;&gt;OEIS&lt;/a&gt; for more information.&lt;/p&gt;
+
+&lt;p&gt;The sequence defined as below:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;fusc(0) = 0
+fusc(1) = 1
+for n &amp;gt; 1:
+when n is even: fusc(n) = fusc(n / 2),
+when n is odd: fusc(n) = fusc((n-1)/2) + fusc((n+1)/2)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-104/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use experimental :cached; # [1]
+
+sub fusc(Int(Rat) $n) is cached returns Int { # [2]
+    given $n {
+        when 0      { 0 }
+        when 1      { 1 }
+        when * %% 2 { fusc($n / 2) }                            # [3]
+        default     { fusc(($n - 1) / 2) + fusc(($n + 1) / 2) } # [4]
+    }
+}
+
+sub MAIN(Int $terms = 50) {
+    say (^$terms).map(&amp;amp;fusc); # [4]
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku
+(0 1 1 2 1 3 2 3 1 4 3 5 2 5 3 4 1 5 4 7 3 8 5 7 2 7 5 8 3 7 4 5 1 6 5 9 4 11 7 10 3 11 8 13 5 12 7 9 2 9)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;I feel like this is pretty straight forward, and aligns well to the definition of the FUSC sequence. When we look at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$n&lt;/code&gt;, we run through the following logic:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Is it 0? Return 0.&lt;/li&gt;
+  &lt;li&gt;Is it 1? Return 1.&lt;/li&gt;
+  &lt;li&gt;Is it even? Return &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc($n / 2)&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Otherwise, return &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc(($n - 1) / 2) + fusc(($n + 1) / 2)&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The function recurses until it ends up in one of the two stopping conditions (0 or 1). So obviously &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc(50)&lt;/code&gt; is going to go through &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc(49)&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc(48)&lt;/code&gt;, etc. See below for how we make this efficient.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Caching in Raku is an experimental feature, so we have to import it (and add the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is cached&lt;/code&gt; trait to our subroutine). The basic idea is that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc($n)&lt;/code&gt; is &lt;em&gt;always&lt;/em&gt; the same value, so once we calculate it once, we can just look it up later. Adding this trait essentially adds a hash behind the scenes that checks if &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc($n)&lt;/code&gt; already exists. If it does, it just returns that value, otherwise, it will actually calculate the value and store it in the hash before returning.&lt;/li&gt;
+  &lt;li&gt;Notice the function signature takes &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int(Rat)&lt;/code&gt;. This means that this function will accept either &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; &lt;em&gt;or&lt;/em&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Rat&lt;/code&gt; (&lt;a href=&quot;https://docs.raku.org/type/Rat&quot;&gt;Rational number&lt;/a&gt;) types, but it will coerce the input to an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt;. The reason for this is that division in Raku will generate a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Rat&lt;/code&gt; type, even for something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2 / 1&lt;/code&gt;. So we need to convert it to an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; on the recursive calls. This saves use from having to write &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc(($n / 2).Int)&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Raku has a special “is divisible by” operator. So instead of saying &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$n % 2 == 0&lt;/code&gt;, we can say &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$n %% 2&lt;/code&gt;. Also notice that in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;given&lt;/code&gt; block, we have to use the “whatever star” (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt;) to do this operation; this is because we can’t &lt;a href=&quot;https://docs.raku.org/language/operators#index-entry-smartmatch_operator&quot;&gt;smartmatch&lt;/a&gt; against &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%% 2&lt;/code&gt;, so we need to be more explicit.&lt;/li&gt;
+  &lt;li&gt;Remember when passing a function as an argument (in this case to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt;), it has a special &lt;a href=&quot;https://docs.raku.org/language/variables#index-entry-sigil_&amp;amp;&quot;&gt;sigil&lt;/a&gt; – &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;amp;&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-nim-game&quot;&gt;Task 2: NIM Game&lt;/h2&gt;
+
+&lt;p&gt;Write a script to simulate the NIM Game.&lt;/p&gt;
+
+&lt;p&gt;It is played between 2 players. For the purpose of this task, let assume you play against the machine.&lt;/p&gt;
+
+&lt;p&gt;There are 3 simple rules to follow:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;a) You have 12 tokens
+b) Each player can pick 1, 2 or 3 tokens at a time
+c) The player who picks the last token wins the game
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-104/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Formats a message defined as plural to be singular if $n == 1
+sub format(Str $message, Int $n) returns Str {
+    $n == 1 ?? $message.trans(['are', 'tokens'] =&amp;gt; ['is', 'token']) !! $message; # [1]
+}
+
+sub challenge(Int $n) {
+    my $remaining = $n;
+
+    # Defined within the challenge sub because it references $remaining
+    sub default-prompt returns Any {
+        prompt(format(&quot;There are $remaining tokens. How many would you like to pick up? (1, 2, 3) &quot;, $remaining)); # [2]
+    }
+
+    my $input = default-prompt;
+    my $most-recent-move;
+    while $remaining &amp;gt; 0 {
+        given $input {
+            when 1|2|3 {
+                if $input &amp;gt; $remaining {
+                    $input = prompt(&quot;There are only $remaining tokens left. Please enter a valid number &quot;)
+                } else {
+                    say format(&quot;You take $input tokens&quot;, $input);
+                    $remaining -= $input;
+                    $most-recent-move = 'You';
+
+                    last if $remaining == 0;
+
+                    # If there are only 3 or less tokens, take all of them. Otherwise, take a random number between 1 and 3
+                    my $bot-move = $remaining ~~ 1|2|3 ?? $remaining !! (1..3).pick;
+                    say format(&quot;The computer takes $bot-move tokens&quot;, $bot-move);
+                    $remaining -= $bot-move;
+                    $most-recent-move = 'Computer';
+
+                    last if $remaining == 0;
+
+                    $input = default-prompt;
+                }
+            }
+            default { $input = prompt('Please enter 1, 2, or 3 ') }
+        }
+    }
+    say $most-recent-move eq 'Computer' ?? 'The computer wins!' !! 'You win!'; # [3]
+}
+
+sub MAIN(Int $n where $n &amp;gt; 0 = 12) { # [4]
+    challenge($n);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku
+There are 12 tokens. How many would you like to pick up? (1, 2, 3) 3
+You take 3 tokens
+The computer takes 3 tokens
+There are 6 tokens. How many would you like to pick up? (1, 2, 3) 2
+You take 2 tokens
+The computer takes 3 tokens
+There is 1 token. How many would you like to pick up? (1, 2, 3) 1
+You take 1 token
+You win!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;This task is basically an exercise in IO (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;prompt&lt;/code&gt;) and data validation (did I get what I expect?). We follow the following steps:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Ask the user to give us a number (1, 2, or 3).
+    &lt;ul&gt;
+      &lt;li&gt;Did they give it to us? Move on to step 2.&lt;/li&gt;
+      &lt;li&gt;Otherwise, keep asking for a valid input (doesn’t matter if they gave us an invalid number, a string, etc.).&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Do a special check to see if their number is higher than the remaining tokens (only happens when there are 3 or fewer tokens). If so, keep prompting them for a valid input.&lt;/li&gt;
+  &lt;li&gt;Now that we know we have valid input, decrement &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$remaining&lt;/code&gt; to reflect the number of token the user took.&lt;/li&gt;
+  &lt;li&gt;If there are 0 tokens left, exit the loop and print that the user won.&lt;/li&gt;
+  &lt;li&gt;Otherwise, there are tokens left, and it is the computer’s turn. Our bot is semi-smart, so if there are 3 or fewer tokens take all of them (and win). Otherwise, take a random valid number of tokens.&lt;/li&gt;
+  &lt;li&gt;If there are 0 tokens left, exit the loop and print that th computer won.&lt;/li&gt;
+  &lt;li&gt;Finally, if there are still tokens left, repeat steps 1-6 until there are 0 tokens left.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;This is simply a helper function, so we can write all of our prompts like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&quot;There are $n tokens remaining&quot;&lt;/code&gt; and they will get properly formatted if &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$n&lt;/code&gt; is 1. This is very specific to this question, obviously, but it is useful. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt; basically just translates all &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;are&lt;/code&gt; instances to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is&lt;/code&gt; and all &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tokens&lt;/code&gt; instances to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;token&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;You’ll notice a few things about this subroutine. First, we don’t have to define it with parentheses if it doesn’t take any arguments. Second, it returns &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Any&lt;/code&gt; because we don’t know what we are going to get from the user. Third, it is defined &lt;em&gt;inside&lt;/em&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; because it is acting as a &lt;a href=&quot;https://simple.wikipedia.org/wiki/Closure_(computer_science)&quot;&gt;closure&lt;/a&gt;, meaning it references variables defined outside itself (in this case, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$remaining&lt;/code&gt;).&lt;/li&gt;
+  &lt;li&gt;Raku is kind of strange in that if you want to do string equality you have to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eq&lt;/code&gt; instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;==&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;This function signature specifies that it takes an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; that is greater than 0, and if it is not provided, it defaults to 12.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;Raku gives us some cool tools to make these challenges easier. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;given&lt;/code&gt; syntax was especially helpful in both of these challenges (and in others)!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week had some fun topics like recursion, memoization, and IO/data validation!</summary></entry><entry><title type="html">Perl Weekly Challenge 103</title><link href="http://localhost:4000/blog/perl-weekly-challenge-103/" rel="alternate" type="text/html" title="Perl Weekly Challenge 103" /><published>2021-03-13T00:00:00-06:00</published><updated>2021-03-13T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-103</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-103/">&lt;p&gt;Challenge two this week was… interesting, to say the least. But, we are through it, and it’s the weekend! 🍻&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-chinese-zodiac&quot;&gt;Task 1: Chinese Zodiac&lt;/h2&gt;
 
@@ -1733,178 +1910,4 @@ Minimum element of stack: 1
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Strongly typed Raku is much faster than gradually typed Raku, but I find it to be more cumbersome. Scalars are fairly easy (which is the majority of what we dealt with here), but I find positional (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Lists&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Arrays&lt;/code&gt;, etc.) and associatives (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hashes&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Maps&lt;/code&gt;, etc.) to be more challenging. For example, the way you constrain a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;List&lt;/code&gt; and an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Array&lt;/code&gt; is &lt;em&gt;slightly&lt;/em&gt; different. And &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Maps&lt;/code&gt; &lt;em&gt;always&lt;/em&gt; have to have string keys, which makes things both cumbersome and slow. In fact, there was some interesting discussion around Raku’s speed (or lack thereof) on the &lt;a href=&quot;https://www.reddit.com/r/rakulang/comments/kxjsca/raku_is_friggin_slow/&quot;&gt;Raku subreddit&lt;/a&gt;, and I encourage anyone reading this to spend a little time over there. Anyway, that’s enough rambling from me. Until next time!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Two pretty simple challenges this week! I tried ot focus on strongly typed subroutines and methods to shake things up.</summary></entry><entry><title type="html">Perl Weekly Challenge 94</title><link href="http://localhost:4000/blog/perl-weekly-challenge-094/" rel="alternate" type="text/html" title="Perl Weekly Challenge 94" /><published>2021-01-10T00:00:00-06:00</published><updated>2021-01-10T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-094</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-094/">&lt;p&gt;The second challenge was a lot like last weeks second challenge, so I went a step further and implemented multiple tree traversals. I won’t include the tests this week, but feel free to click the GitHub links to see the test cases.&lt;/p&gt;
-
-&lt;h2 id=&quot;task-1-group-anagrams&quot;&gt;Task 1: Group Anagrams&lt;/h2&gt;
-
-&lt;p&gt;You are given an array of strings &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@S&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Write a script to group &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Anagrams&lt;/code&gt; together in any random order.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; Input: (&quot;opt&quot;, &quot;bat&quot;, &quot;saw&quot;, &quot;tab&quot;, &quot;pot&quot;, &quot;top&quot;, &quot;was&quot;)
-Output: [ (&quot;bat&quot;, &quot;tab&quot;),
-          (&quot;saw&quot;, &quot;was&quot;),
-          (&quot;top&quot;, &quot;pot&quot;, &quot;opt&quot;) ]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; Input: (&quot;x&quot;)
-Output: [ (&quot;x&quot;) ]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-094/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(@S) {
-    my $output = Set.new;
-    for @S -&amp;gt; $word {
-        my @permutations = $word.comb.permutations.map(*.join); # [1]
-        $output ∪= (@S ∩ @permutations).keys.sort.join(',');    # [2]
-    }
-    $output.keys.map(*.split(',')).sort
-}
-sub MAIN(*@S where all(@S) ~~ /^&amp;lt;alpha&amp;gt;+$/) { # [3]
-    say challenge(@S);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku opt bat saw tab pot top was
-((bat tab) (opt pot top) (saw was))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;This solution utilizes a cool Raku subroutine called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;permutations&lt;/code&gt;, which finds all the permutations of a given list. It only works for list smaller than 20 elements, so that is a caveat here. The logic is as follows:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;For each inout word, find all the permutations.&lt;/li&gt;
-  &lt;li&gt;Find the &lt;em&gt;union&lt;/em&gt; of the input words with the permutations of our current word to find permutations in the input list.&lt;/li&gt;
-  &lt;li&gt;Add the above union to a set, so we don’t store duplicates.&lt;/li&gt;
-  &lt;li&gt;Return the set as a list of lists in alphabetical order (the problem says random order, but I alphabetized for determinism in my tests).&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;permutations&lt;/code&gt; only works on a list, so we have to cast our word to a list via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;comb&lt;/code&gt;, then back to a string via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;join&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Sets only work on scalars, so since we have a &lt;em&gt;list&lt;/em&gt; of words, we have to join it into a string separated by a comma.&lt;/li&gt;
-  &lt;li&gt;The challenge doesn’t say to only accept letters, but I felt it was implied.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;task-2-binary-tree-to-linked-list&quot;&gt;Task 2: Binary Tree to Linked List&lt;/h2&gt;
-
-&lt;p&gt;You are given a binary tree.&lt;/p&gt;
-
-&lt;p&gt;Write a script to represent the given binary tree as an object and flatten it to a linked list object. Finally, print the linked list object.&lt;/p&gt;
-
-&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input:
-
-    1
-   / \
-  2   3
- / \
-4   5
-   / \
-  6   7
-
-Output:
-
-1 -&amp;gt; 2 -&amp;gt; 4 -&amp;gt; 5 -&amp;gt; 6 -&amp;gt; 7 -&amp;gt; 3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-094/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset NodeValue of Str where { $_ ~~ /^&amp;lt;digit&amp;gt;$/ || $_ eq 'Nil' }
-
-class Node {
-    has Node $.left  is rw = Nil;
-    has Node $.right is rw = Nil;
-    has Int $.value        = 0;
-}
-
-enum Traversal &amp;lt;Preorder Inorder Postorder&amp;gt;;
-
-sub build-tree(@array, $root is copy = Nil, Int $i = 0) {
-    if $i &amp;lt; @array.elems &amp;amp;&amp;amp; @array[$i] ne 'Nil' {
-        $root       = Node.new(value =&amp;gt; @array[$i].Int);
-        $root.left  = build-tree(@array, $root.left, 2 * $i + 1);
-        $root.right = build-tree(@array, $root.right, 2 * $i + 2);
-    }
-    $root;
-}
-
-sub challenge(Node $root, Traversal $traversal) {
-    with $root {
-        given $traversal {
-            when Preorder  { ($root.value, |challenge($root.left, $traversal), |challenge($root.right, $traversal)) }
-            when Inorder   { (|challenge($root.left, $traversal), $root.value, |challenge($root.right, $traversal)) }
-            when Postorder { (|challenge($root.left, $traversal), |challenge($root.right, $traversal), $root.value) }
-        }
-    }
-}
-
-sub challenge-wrapper(Node $root, Traversal $traversal = Preorder) {
-    challenge($root, $traversal).join(' -&amp;gt; ');
-}
-
-sub MAIN(Str :$traversal = 'preorder', *@N where all(@N) ~~ NodeValue) {
-    my $root = build-tree(@N);
-    given $traversal.lc {
-        when 'preorder'  { say challenge-wrapper($root, Preorder) }
-        when 'inorder'   { say challenge-wrapper($root, Inorder) }
-        when 'postorder' { say challenge-wrapper($root, Postorder) }
-        default          { die &quot;Traversal must be one of: (preorder, inorder, postorder), not $traversal&quot; }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 1 2 3 4 5 Nil Nil Nil Nil 6 7
-1 -&amp;gt; 2 -&amp;gt; 4 -&amp;gt; 5 -&amp;gt; 6 -&amp;gt; 7 -&amp;gt; 3
-
-# Same as above with traversal explicitly stated
-$ raku ch-2.raku --traversal=preorder 1 2 3 4 5 Nil Nil Nil Nil 6 7
-1 -&amp;gt; 2 -&amp;gt; 4 -&amp;gt; 5 -&amp;gt; 6 -&amp;gt; 7 -&amp;gt; 3
-
-$ raku ch-2.raku --traversal=inorder 1 2 3 4 5 Nil Nil Nil Nil 6 7
-4 -&amp;gt; 2 -&amp;gt; 6 -&amp;gt; 5 -&amp;gt; 7 -&amp;gt; 1 -&amp;gt; 3
-
-$ raku ch-2.raku --traversal=postorder 1 2 3 4 5 Nil Nil Nil Nil 6 7
-4 -&amp;gt; 6 -&amp;gt; 7 -&amp;gt; 5 -&amp;gt; 2 -&amp;gt; 3 -&amp;gt; 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;The bulk of this code is the same as &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-093/#solution-1&quot;&gt;last week’s&lt;/a&gt;, with the overlapping code being used to build a tree from command line arguments. Since the challenge code itself is only a line or two, I added the ability to pick which type of &lt;a href=&quot;https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/&quot;&gt;tree traversal&lt;/a&gt; you want (with the default being &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;preorder&lt;/code&gt;, as shown in the example).&lt;/p&gt;
-
-&lt;p&gt;Basically, we just have a subroutine that takes a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Node&lt;/code&gt;, and depending on what traversal type is chosen, will build up an array like one of the following (where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Left&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Right&lt;/code&gt; can themselves be a tree and will be expanded recursively):&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Preorder  -&amp;gt; (Root, Left, Right)
-Inorder   -&amp;gt; (Left, Root, Right)
-Postorder -&amp;gt; (Left, Right, Root)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We then have a simple wrapper to “stringify” the list with arrows between the elements.&lt;/p&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;Hoping for something a little less copy/paste next week, but regardless, this was a fun start to the new year!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">The second challenge was a lot like last weeks second challenge, so I went a step further and implemented multiple tree traversals. I won’t include the tests this week, but feel free to click the GitHub links to see the test cases.</summary></entry></feed>
+&lt;p&gt;Strongly typed Raku is much faster than gradually typed Raku, but I find it to be more cumbersome. Scalars are fairly easy (which is the majority of what we dealt with here), but I find positional (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Lists&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Arrays&lt;/code&gt;, etc.) and associatives (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hashes&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Maps&lt;/code&gt;, etc.) to be more challenging. For example, the way you constrain a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;List&lt;/code&gt; and an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Array&lt;/code&gt; is &lt;em&gt;slightly&lt;/em&gt; different. And &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Maps&lt;/code&gt; &lt;em&gt;always&lt;/em&gt; have to have string keys, which makes things both cumbersome and slow. In fact, there was some interesting discussion around Raku’s speed (or lack thereof) on the &lt;a href=&quot;https://www.reddit.com/r/rakulang/comments/kxjsca/raku_is_friggin_slow/&quot;&gt;Raku subreddit&lt;/a&gt;, and I encourage anyone reading this to spend a little time over there. Anyway, that’s enough rambling from me. Until next time!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Two pretty simple challenges this week! I tried ot focus on strongly typed subroutines and methods to shake things up.</summary></entry></feed>

@@ -244,4 +244,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-103/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 104",
+        "excerpt":"This week had some fun topics like recursion, memoization, and IO/data validation! Task 1: FUSC Sequence Write a script to generate first 50 members of FUSC Sequence. Please refer to OEIS for more information. The sequence defined as below: fusc(0) = 0 fusc(1) = 1 for n &gt; 1: when...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-104/",
+        "teaser": null
       }]
