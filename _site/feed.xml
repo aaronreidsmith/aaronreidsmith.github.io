@@ -1,4 +1,144 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-03-21T10:42:36-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 104</title><link href="http://localhost:4000/blog/perl-weekly-challenge-104/" rel="alternate" type="text/html" title="Perl Weekly Challenge 104" /><published>2021-03-21T00:00:00-05:00</published><updated>2021-03-21T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-104</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-104/">&lt;p&gt;This week had some fun topics like &lt;a href=&quot;https://en.wikipedia.org/wiki/Recursion_(computer_science)&quot;&gt;recursion&lt;/a&gt;, &lt;a href=&quot;https://en.wikipedia.org/wiki/Memoization&quot;&gt;memoization&lt;/a&gt;, and IO/data validation!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-03-27T11:46:22-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 105</title><link href="http://localhost:4000/blog/perl-weekly-challenge-105/" rel="alternate" type="text/html" title="Perl Weekly Challenge 105" /><published>2021-03-27T00:00:00-05:00</published><updated>2021-03-27T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-105</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-105/">&lt;p&gt;This week’s challenges are short and sweet, but still give us the opportunity to explore some interesting Raku-isms!&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-nth-root&quot;&gt;Task 1: Nth root&lt;/h2&gt;
+
+&lt;p&gt;You are given positive numbers &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$k&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to find out the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;th root of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$k&lt;/code&gt;. For more information, please take a look at the &lt;a href=&quot;https://en.wikipedia.org/wiki/Nth_root#Computing_principal_roots&quot;&gt;wiki page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;examples&quot;&gt;Examples&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $N = 5, $k = 248832
+Output: 12
+
+Input: $N = 5, $k = 34
+Output: 2.02
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-105/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Numeric $N, Numeric $k) returns Str { # [1]
+    my $root = $k ** (1 / $N);
+    $root.round(.01).Str;                           # [2]
+}
+
+sub MAIN(Num $N, Num $k) {
+    say challenge($N, $k);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 5 248832
+12
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;!-- Allow inlining of math functionality --&gt;
+&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], [&quot;\\(&quot;,&quot;\\)&quot;] ],
+      processEscapes: true
+    }
+  });
+&lt;/script&gt;
+
+&lt;!-- Import math functionality --&gt;
+&lt;script type=&quot;text/javascript&quot; async=&quot;&quot; src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML&quot;&gt;
+&lt;/script&gt;
+
+&lt;p&gt;This solution relies on the fact that $ \sqrt[N]{k} $ can be rewritten as $ k^{1/N} $ (which is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$k ** (1 / $N)&lt;/code&gt; in Raku). So we simply have to do that and round to the appropriate amount of decimal places (the example shows 2 or less, so that is what we do as well).&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The examples just show integers, but this function should theoretically be able to take any numeric value, so we use &lt;a href=&quot;https://docs.raku.org/type/Numeric&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Numeric&lt;/code&gt;&lt;/a&gt; for both of our input types.&lt;/li&gt;
+  &lt;li&gt;Raku’s &lt;a href=&quot;https://docs.raku.org/routine/round&quot;&gt;round&lt;/a&gt; function is interesting in that you don’t specify the number of decimals, you specify some arbitrary scale, and it will round to the &lt;em&gt;closest multiple of that scale&lt;/em&gt;. So &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; would round to an integer and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.01&lt;/code&gt; would round to two decimals. Additionally, it will drop trailing zeros (and even the decimal if the rounded number only has zeros as decimals).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-the-name-game&quot;&gt;Task 2: The Name Game&lt;/h2&gt;
+
+&lt;p&gt;You are given a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$name&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to display the lyrics to the Shirley Ellis song The Name Game. Please checkout the wiki page for more information.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $name = &quot;Katie&quot;
+Output:
+
+    Katie, Katie, bo-batie,
+    Bonana-fanna fo-fatie
+    Fee fi mo-matie
+    Katie!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-105/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Str $name) returns Str {
+    my $X = $name.wordcase;                                             # [1]
+    my $Y = $X ~~ /^[A|E|I|O|U|Y]&amp;lt;-[aeiouy]&amp;gt;/ ?? $X.lc !! $X.substr(1); # [2]
+
+    qq:to/END/;                                                         # [3]
+    $X, $X, bo-b$Y
+    Bonana-fanna fo-f$Y
+    Fee fi mo-m$Y
+    $X!
+    END
+}
+
+sub MAIN(Str $name) {
+    say challenge($name);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku Aaron
+Aaron, Aaron, bo-baron
+Bonana-fanna fo-faron
+Fee fi mo-maron
+Aaron!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;According to the wikipedia page, the structure can be broken down like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(X), (X), bo-b(Y)
+Bonana-fanna fo-f(Y)
+Fee fi mo-m(Y)
+(X)!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The only caveat it adds is:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;If the name starts with a b, f, or m, that sound simply is not repeated. For example: Billy becomes &quot;Billy Billy bo-illy&quot;; Fred becomes &quot;bonana fanna fo-red&quot;; Marsha becomes &quot;fee fi mo-arsha&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I actually don’t think this caveat is enough. For example, my son’s name is Everett, and if we just cut off the first letter of his name as the wiki suggests, we would get things like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bverett&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fverett&lt;/code&gt;. So, I added an additional stipulation: any name that starts with a vowel followed by a consonant should keep the &lt;em&gt;entirety&lt;/em&gt; of the name as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Y&lt;/code&gt;, otherwise it is just &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt; minus the first letter.&lt;/p&gt;
+
+&lt;p&gt;Once we have found &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Y&lt;/code&gt;, we just slot them into the song. Easy peasy!&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/wordcase&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wordcase&lt;/code&gt;&lt;/a&gt; makes the first letter uppercase, and the rest lowercase.&lt;/li&gt;
+  &lt;li&gt;This checks to see if the first letter is a vowel (including &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Y&lt;/code&gt;) directly followed a consonant. If that is the case, keep the entirety of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$X&lt;/code&gt; and just convert it to lowercase to make sense in the song. Otherwise, take the &lt;a href=&quot;https://docs.raku.org/routine/substr&quot;&gt;substring&lt;/a&gt; of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$X&lt;/code&gt; from index 1 to the end.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/language/quoting#Heredocs:_:to&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;qq&lt;/code&gt;&lt;/a&gt; is an easy way to make multi-line strings that include interpolation. In this case, we say “the rest of this up until &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;END&lt;/code&gt; is a literal string.” Additionally, since all lines are indented to the same depth, it strips of leading indentation.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;Like I said, short and sweet! See y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week’s challenges are short and sweet, but still give us the opportunity to explore some interesting Raku-isms!</summary></entry><entry><title type="html">Perl Weekly Challenge 104</title><link href="http://localhost:4000/blog/perl-weekly-challenge-104/" rel="alternate" type="text/html" title="Perl Weekly Challenge 104" /><published>2021-03-21T00:00:00-05:00</published><updated>2021-03-21T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-104</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-104/">&lt;p&gt;This week had some fun topics like &lt;a href=&quot;https://en.wikipedia.org/wiki/Recursion_(computer_science)&quot;&gt;recursion&lt;/a&gt;, &lt;a href=&quot;https://en.wikipedia.org/wiki/Memoization&quot;&gt;memoization&lt;/a&gt;, and IO/data validation!&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-fusc-sequence&quot;&gt;Task 1: FUSC Sequence&lt;/h2&gt;
 
@@ -1723,191 +1863,4 @@ sub MAIN(Str $S1, Str $S2) {
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;In my day-to-day I always encourage folks to use modules where possible. In puzzles like these, I usually prefer to write my own implementation, even if it is less efficient. But it was a long week, so I took the lazy way out. 😉 See y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I admittedly took a shortcut for part two this week, but it allowed me to introduce modules here (I don’t believe I have used them before in a blog), so I think it makes up for it. 🙂</summary></entry><entry><title type="html">Perl Weekly Challenge 95</title><link href="http://localhost:4000/blog/perl-weekly-chellanege-095/" rel="alternate" type="text/html" title="Perl Weekly Challenge 95" /><published>2021-01-16T00:00:00-06:00</published><updated>2021-01-16T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-chellanege-095</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-chellanege-095/">&lt;p&gt;Two pretty simple challenges this week! I tried ot focus on strongly typed subroutines and methods to shake things up.&lt;/p&gt;
-
-&lt;h2 id=&quot;task-1-palindrome-number&quot;&gt;Task 1: Palindrome Number&lt;/h2&gt;
-
-&lt;p&gt;You are given a number &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Write a script to figure out if the given number is a palindrome. Print &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; if true otherwise &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 1221
-Output: 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: -101
-Output: 0 (since -101 and 101- are not the same)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-3&quot;&gt;Example 3&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 90
-Output: 0
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-095/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Int $N) {
-    ($N.Str.flip eq $N.Str).Int; # [1]
-}
-
-sub MAIN(Int $N) {
-    say challenge($N);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 1221
-1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;Pretty simple solution here. THe &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; subroutine takes the input, casts it to a string, reverses it and compares it to the input argument (returning a boolean). Finally, it casts that boolean to a number to match the challenges output.&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Casting to a string allows us to account for any negative sign easily.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;task-2-demo-stack&quot;&gt;Task 2: Demo Stack&lt;/h2&gt;
-
-&lt;p&gt;Write a script to demonstrate stack operations like below:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;push($n)&lt;/code&gt; - add &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$n&lt;/code&gt; to the stack&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pop()&lt;/code&gt; - remove the top element&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;top()&lt;/code&gt; - get the top element&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;min()&lt;/code&gt; - return the minimum element&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
-
-&lt;p&gt;Note: This is shown with Perl 5 syntax.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;my $stack = Stack-&amp;gt;new;
-$stack-&amp;gt;push(2);
-$stack-&amp;gt;push(-1);
-$stack-&amp;gt;push(0);
-$stack-&amp;gt;pop;       # removes 0
-print $stack-&amp;gt;top; # prints -1
-$stack-&amp;gt;push(0);
-print $stack-&amp;gt;min; # prints -1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-095/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Stack {
-    has @!internal-state of Int;
-
-    method push(Int $elem --&amp;gt; True) {
-        @!internal-state.push($elem);
-    }
-
-    method pop() returns Int {
-        if @!internal-state.elems == 0 {
-            warn &quot;Cannot pop an empty stack!&quot;;
-        } else {
-            @!internal-state.pop;
-        }
-    }
-
-    method top returns Int {
-        if @!internal-state.elems == 0 {
-            warn &quot;Cannot find top of empty stack!&quot;;
-        } else {
-            @!internal-state.tail;
-        }
-    }
-
-    method min returns Int {
-        if @!internal-state.elems == 0 {
-            warn &quot;Cannot find minimum of empty stack!&quot;;
-        } else {
-            @!internal-state.min;
-        }
-    }
-
-    method Str returns Str {
-        &quot;({@!internal-state.join(', ')}) &amp;lt;-- Top&quot;;
-    }
-}
-
-sub MAIN(*@push where all(@push) ~~ Int, Int :$pop = 2) {
-     # Can't put a default on &quot;slurpy&quot; args, so this is our work around
-    @push = @push.elems &amp;gt; 0 ?? @push !! (1, 2, 3, 4);
-
-    my $stack = Stack.new;
-    for @push -&amp;gt; $elem {
-        $stack.push($elem);
-    }
-    say &quot;     Stack after pushing: $stack&quot;;
-    for ^$pop {
-        $stack.pop();
-    }
-    say &quot;     Stack after popping: $stack&quot;;
-    say &quot;    Top element of stack: {$stack.top}&quot;;
-    say &quot;Minimum element of stack: {$stack.min}&quot;;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# All default
-$ raku ch-2.raku 
-     Stack after pushing: (1, 2, 3, 4) &amp;lt;-- Top
-     Stack after popping: (1, 2) &amp;lt;-- Top
-    Top element of stack: 2
-Minimum element of stack: 1
-
-# Override pop default
-$ raku ch-2.raku --pop=1
-     Stack after pushing: (1, 2, 3, 4) &amp;lt;-- Top
-     Stack after popping: (1, 2, 3) &amp;lt;-- Top
-    Top element of stack: 3
-Minimum element of stack: 1
-
-# Override pop and push defaults
-$ raku ch-2.raku --pop=1 1 2 3
-     Stack after pushing: (1, 2, 3) &amp;lt;-- Top
-     Stack after popping: (1, 2) &amp;lt;-- Top
-    Top element of stack: 2
-Minimum element of stack: 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;A stack is a last in, first out (LIFO) structure, where we can only interact with the top. You can think of it like a stack of plates; it’s not easy to grab the middle plate from the stack!&lt;/p&gt;
-
-&lt;p&gt;In this case, we decided to make the stack homogenous (i.e., it can only hold integers). A Raku &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;List&lt;/code&gt; already has a stack-like interface, so we basically just wrap that and add some warnings.&lt;/p&gt;
-
-&lt;p&gt;We simply define a class with a private &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Array&lt;/code&gt; of integers such that the user can only interact with it via the methods described in the challenge. Then, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAIN&lt;/code&gt; subroutine simply demos those methods.&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Raku classes have something called &lt;a href=&quot;https://docs.raku.org/language/variables#Twigils&quot;&gt;twigils&lt;/a&gt;. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;!&lt;/code&gt; twigil here indicates that this variable is private to the class, and cannot be seen by any outside callers.&lt;/li&gt;
-  &lt;li&gt;This could also be written as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;has Int @!internal-state&lt;/code&gt;, but I feel that doesn’t read as well. It can be written like this since the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@&lt;/code&gt; sigil already denotes it is a positional variable, so you only need to constrain the members.&lt;/li&gt;
-  &lt;li&gt;This is a &lt;a href=&quot;https://docs.raku.org/routine/say#(Independent_routines)_sub_say&quot;&gt;common pattern&lt;/a&gt; for methods and subroutines that don’t actually return anything. Similar to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Unit&lt;/code&gt; in Scala, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;void&lt;/code&gt; in Java, or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;None&lt;/code&gt; in Python. And of course &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--&amp;gt;&lt;/code&gt; is the way we define the return type.&lt;/li&gt;
-  &lt;li&gt;The returns type can &lt;em&gt;also&lt;/em&gt; be defined using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;returns &amp;lt;type&amp;gt;&lt;/code&gt; as shown here. The difference between &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--&amp;gt;&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;returns&lt;/code&gt; is that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;returns&lt;/code&gt; can only specify abstract types, whereas &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--&amp;gt;&lt;/code&gt; can specify both abstract type or specific values, which is why we needed to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--&amp;gt;&lt;/code&gt; to return the &lt;em&gt;specific value&lt;/em&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;True&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;You’ll notice we don’t add the empty parentheses here. They are optional if there are no arguments to the method. In this case, I am using the Scala convention of having parentheses if the method has &lt;a href=&quot;https://en.wikipedia.org/wiki/Side_effect_(computer_science)&quot;&gt;side effects&lt;/a&gt;, and leaving them off otherwise.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Str&lt;/code&gt; is a magic method, similar to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;__str__&lt;/code&gt; in Python or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;toString&lt;/code&gt; in Java and Scala. It is called whenever this variable is coerced to a string. So we don’t have to say &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&quot;Stack: {$stack.Str}&quot;&lt;/code&gt;, we can just say &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&quot;Stack: $stack&quot;&lt;/code&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;Strongly typed Raku is much faster than gradually typed Raku, but I find it to be more cumbersome. Scalars are fairly easy (which is the majority of what we dealt with here), but I find positional (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Lists&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Arrays&lt;/code&gt;, etc.) and associatives (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hashes&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Maps&lt;/code&gt;, etc.) to be more challenging. For example, the way you constrain a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;List&lt;/code&gt; and an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Array&lt;/code&gt; is &lt;em&gt;slightly&lt;/em&gt; different. And &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Maps&lt;/code&gt; &lt;em&gt;always&lt;/em&gt; have to have string keys, which makes things both cumbersome and slow. In fact, there was some interesting discussion around Raku’s speed (or lack thereof) on the &lt;a href=&quot;https://www.reddit.com/r/rakulang/comments/kxjsca/raku_is_friggin_slow/&quot;&gt;Raku subreddit&lt;/a&gt;, and I encourage anyone reading this to spend a little time over there. Anyway, that’s enough rambling from me. Until next time!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Two pretty simple challenges this week! I tried ot focus on strongly typed subroutines and methods to shake things up.</summary></entry></feed>
+&lt;p&gt;In my day-to-day I always encourage folks to use modules where possible. In puzzles like these, I usually prefer to write my own implementation, even if it is less efficient. But it was a long week, so I took the lazy way out. 😉 See y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I admittedly took a shortcut for part two this week, but it allowed me to introduce modules here (I don’t believe I have used them before in a blog), so I think it makes up for it. 🙂</summary></entry></feed>
