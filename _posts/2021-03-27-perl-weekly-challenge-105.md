@@ -78,7 +78,7 @@ This solution relies on the fact that $ \sqrt[N]{k} $ can be rewritten as $ k^{1
 
 You are given a `$name`.
 
-Write a script to display the lyrics to the Shirley Ellis song The Name Game. Please checkout the wiki page for more information.
+Write a script to display the lyrics to the Shirley Ellis song The Name Game. Please checkout the [wiki page](https://en.m.wikipedia.org/wiki/The_Name_Game) for more information.
 
 ```
 Input: $name = "Katie"
