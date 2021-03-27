@@ -102,9 +102,9 @@ sub challenge(Str $name) returns Str {
     my $Y = $X ~~ /^[A|E|I|O|U|Y]<-[aeiouy]>/ ?? $X.lc !! $X.substr(1); # [2]
 
     qq:to/END/;                                                         # [3]
-    $X, $X, bo-b$Y
-    Bonana-fanna fo-f$Y
-    Fee fi mo-m$Y
+    $X, $X, bo-{$X.starts-with('B') ?? '' !! 'b'}$Y                     # [4]
+    Bonana-fanna fo-{$X.starts-with('F') ?? '' !! 'f'}$Y
+    Fee fi mo-{$X.starts-with('M') ?? '' !! 'm'}$Y
     $X!
     END
 }
@@ -150,6 +150,7 @@ Once we have found `X` and `Y`, we just slot them into the song. Easy peasy!
 1. [`wordcase`](https://docs.raku.org/routine/wordcase) makes the first letter uppercase, and the rest lowercase.
 2. This checks to see if the first letter is a vowel (including `Y`) directly followed a consonant. If that is the case, keep the entirety of `$X` and just convert it to lowercase to make sense in the song. Otherwise, take the [substring](https://docs.raku.org/routine/substr) of `$X` from index 1 to the end.
 3. [`qq`](https://docs.raku.org/language/quoting#Heredocs:_:to) is an easy way to make multi-line strings that include interpolation. In this case, we say "the rest of this up until `END` is a literal string." Additionally, since all lines are indented to the same depth, it strips of leading indentation.
+4. Since this whole construct is interpolated, we are able to embed the special cases for `B`, `F`, and `M` directly into the output string.
 
 ## Final Thoughts
 
