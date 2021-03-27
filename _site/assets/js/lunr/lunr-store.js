@@ -250,4 +250,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-104/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 105",
+        "excerpt":"This week’s challenges are short and sweet, but still give us the opportunity to explore some interesting Raku-isms! Task 1: Nth root You are given positive numbers $N and $k. Write a script to find out the $Nth root of $k. For more information, please take a look at the...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-105/",
+        "teaser": null
       }]
