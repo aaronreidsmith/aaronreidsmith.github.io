@@ -256,4 +256,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-105/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 106",
+        "excerpt":"Task 2 seems like it would be difficult, but once again, Raku has built-in mechanisms to help us out! Task 1: Maximum Gap You are given an array of integers @N. Write a script to display the maximum difference between two successive elements once the array is sorted. If the...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-106/",
+        "teaser": null
       }]

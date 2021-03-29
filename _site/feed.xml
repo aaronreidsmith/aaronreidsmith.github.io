@@ -1,4 +1,127 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-03-27T11:46:22-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 105</title><link href="http://localhost:4000/blog/perl-weekly-challenge-105/" rel="alternate" type="text/html" title="Perl Weekly Challenge 105" /><published>2021-03-27T00:00:00-05:00</published><updated>2021-03-27T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-105</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-105/">&lt;p&gt;This week’s challenges are short and sweet, but still give us the opportunity to explore some interesting Raku-isms!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-03-29T09:15:53-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 106</title><link href="http://localhost:4000/blog/perl-weekly-challenge-106/" rel="alternate" type="text/html" title="Perl Weekly Challenge 106" /><published>2021-03-29T00:00:00-05:00</published><updated>2021-03-29T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-106</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-106/">&lt;p&gt;Task 2 &lt;em&gt;seems&lt;/em&gt; like it would be difficult, but once again, Raku has built-in mechanisms to help us out!&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-maximum-gap&quot;&gt;Task 1: Maximum Gap&lt;/h2&gt;
+
+&lt;p&gt;You are given an array of integers &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to display the maximum difference between two successive elements once the array is sorted.&lt;/p&gt;
+
+&lt;p&gt;If the array contains only 1 element then display 0.&lt;/p&gt;
+
+&lt;h3 id=&quot;examples&quot;&gt;Examples&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @N = (2, 9, 3, 5)
+Output: 4
+
+Input: @N = (1, 3, 8, 2, 0)
+Output: 5
+
+Input: @N = (5)
+Output: 0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-106/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(@N where all(@N) ~~ Int) returns Int {   # [1]
+    if @N.elems == 1 {
+        0;
+    } else {
+        my @sorted = @N.sort;
+        my @zipped = @sorted[0..*-1] Z @sorted[1..*];  # [2]
+        @zipped.map(-&amp;gt; ($a, $b) { abs($b - $a) }).max; # [3]
+    }
+}
+
+sub MAIN(*@N where all(@N) ~~ Int) {
+    say challenge(@N);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 2 9 3 5
+4
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;This one is probably easier to walk through with an example. If &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N&lt;/code&gt; only has one element, we just return &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;, so we won’t discuss that path.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;We get this input: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N = (2, 9, 3, 5)&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;We sort it so we have &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@sorted = (2, 3, 5, 9)&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;We generate two lists: One of everything but the last element (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@sorted[0..*-1] = (2, 3, 5)&lt;/code&gt;) and one of everything but the first element (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@sorted[1..*] = (3, 5, 9)&lt;/code&gt;). Then we zip them together so we have &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@zipped = ((2, 3), (3, 5), (5, 9))&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;For each pair, we find the difference between the numbers, so we end up with this: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 2, 4)&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Finally, we call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.max&lt;/code&gt; and return the maximum difference, which is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;4&lt;/code&gt; in this case.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Raku has so many different sequence types (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Positional&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Array&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;List&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Seq&lt;/code&gt;, etc.) that I have not figured out a good way to parameterize positional inputs. This is the best I can come up with, but for long sequences, it is incredibly slow.&lt;/li&gt;
+  &lt;li&gt;The “whatever star” is signaling the last index of the list, in this case. So we are simply generating a list containing everything but the last item zipped with a list containing everything but the last item (see above for example).&lt;/li&gt;
+  &lt;li&gt;In theory, we could have negative numbers in our input, so it is necessary to have the call to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;abs&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-decimal-string&quot;&gt;Task 2: Decimal String&lt;/h2&gt;
+
+&lt;p&gt;You are given a numerator and denominator i.e. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$D&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to convert the fraction into decimal string. If the fractional part is recurring then put it in parentheses.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $N = 1, $D = 3
+Output: &quot;0.(3)&quot;
+
+Input: $N = 1, $D = 2
+Output: &quot;0.5&quot;
+
+Input: $N = 5, $D = 66
+Output: &quot;0.0(75)&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-106/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Numeric $N, Numeric $D) returns Str {                  # [1]
+    my ($base, $repeating) = ($N / $D).base-repeating;               # [2]
+    $repeating = $repeating eq '' ?? $repeating !! &quot;\($repeating\)&quot;; # [3]
+    $base ~ $repeating;                                              # [4]
+}
+
+sub MAIN(Numeric $N, Numeric $D) {
+    say challenge($N, $D);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 1 7
+0.(142857)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;This looks suspiciously small for what seems like a complex problem. All the logic happens in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;base-repeating&lt;/code&gt; (which I will detail below). All we have to do is supply the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;D&lt;/code&gt;, and the rest of the code is just for formatting!&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;In theory someone could pass in arbitrary decimal numbers, so we accept &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Numeric&lt;/code&gt; instead of just &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/base-repeating&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;base-repeating&lt;/code&gt;&lt;/a&gt; operates on a &lt;a href=&quot;https://docs.raku.org/type/Rational&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Rational&lt;/code&gt;&lt;/a&gt;, which is Raku’s way of saying fraction. It splits the fraction into pieces – the base and the repeating portion. For something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5 / 2&lt;/code&gt;, it would return &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;('2.5', '')&lt;/code&gt;. For something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1 / 3&lt;/code&gt;, we would get &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;'0.', '3')&lt;/code&gt;. Once we have that, we just have to format like the question asks.&lt;/li&gt;
+  &lt;li&gt;If the repeated section is empty, we want to just leave it alone. Otherwise, we want to wrap it in parentheses as the challenge states.&lt;/li&gt;
+  &lt;li&gt;We could also have written &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&quot;$base$repeating&quot;&lt;/code&gt; to concatenate the pieces, but that is harder to read, so I used the string concatenation operator (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~&lt;/code&gt;).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I don’t know whether or not to consider it cheating when Raku has all the cool built-ins. I guess we’re just using the tools we are provided, but it feels too easy. 😅&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Task 2 seems like it would be difficult, but once again, Raku has built-in mechanisms to help us out!</summary></entry><entry><title type="html">Perl Weekly Challenge 105</title><link href="http://localhost:4000/blog/perl-weekly-challenge-105/" rel="alternate" type="text/html" title="Perl Weekly Challenge 105" /><published>2021-03-27T00:00:00-05:00</published><updated>2021-03-27T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-105</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-105/">&lt;p&gt;This week’s challenges are short and sweet, but still give us the opportunity to explore some interesting Raku-isms!&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-nth-root&quot;&gt;Task 1: Nth root&lt;/h2&gt;
 
@@ -88,9 +211,9 @@ Output:
     my $Y = $X ~~ /^[A|E|I|O|U|Y]&amp;lt;-[aeiouy]&amp;gt;/ ?? $X.lc !! $X.substr(1); # [2]
 
     qq:to/END/;                                                         # [3]
-    $X, $X, bo-b$Y
-    Bonana-fanna fo-f$Y
-    Fee fi mo-m$Y
+    $X, $X, bo-{$X.starts-with('B') ?? '' !! 'b'}$Y                     # [4]
+    Bonana-fanna fo-{$X.starts-with('F') ?? '' !! 'f'}$Y
+    Fee fi mo-{$X.starts-with('M') ?? '' !! 'm'}$Y
     $X!
     END
 }
@@ -134,6 +257,7 @@ Fee fi mo-m(Y)
   &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/wordcase&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wordcase&lt;/code&gt;&lt;/a&gt; makes the first letter uppercase, and the rest lowercase.&lt;/li&gt;
   &lt;li&gt;This checks to see if the first letter is a vowel (including &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Y&lt;/code&gt;) directly followed a consonant. If that is the case, keep the entirety of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$X&lt;/code&gt; and just convert it to lowercase to make sense in the song. Otherwise, take the &lt;a href=&quot;https://docs.raku.org/routine/substr&quot;&gt;substring&lt;/a&gt; of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$X&lt;/code&gt; from index 1 to the end.&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/language/quoting#Heredocs:_:to&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;qq&lt;/code&gt;&lt;/a&gt; is an easy way to make multi-line strings that include interpolation. In this case, we say “the rest of this up until &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;END&lt;/code&gt; is a literal string.” Additionally, since all lines are indented to the same depth, it strips of leading indentation.&lt;/li&gt;
+  &lt;li&gt;Since this whole construct is interpolated, we are able to embed the special cases for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;B&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;F&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;M&lt;/code&gt; directly into the output string.&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
@@ -1745,122 +1869,4 @@ multi sub MAIN(Str $B, Int $S) {
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;As I was writing this blog I realized it may have been better for me to left pad the binary strings in challenge two; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1001 != 100100&lt;/code&gt; but &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1001 == 001001&lt;/code&gt;. Oh well, the question doesn’t talk about the “partial” case anyway!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">My solution to challenge two builds on last week’s challenge two, so I encourage you to go read last week’s post if you haven’t already!</summary></entry><entry><title type="html">Perl Weekly Challenge 96</title><link href="http://localhost:4000/blog/perl-weekly-challenge-096/" rel="alternate" type="text/html" title="Perl Weekly Challenge 96" /><published>2021-01-22T00:00:00-06:00</published><updated>2021-01-22T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-096</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-096/">&lt;p&gt;I admittedly took a shortcut for part two this week, but it allowed me to introduce modules here (I don’t &lt;em&gt;believe&lt;/em&gt; I have used them before in a blog), so I think it makes up for it. 🙂&lt;/p&gt;
-
-&lt;h2 id=&quot;task-1-reverse-words&quot;&gt;Task 1: Reverse Words&lt;/h2&gt;
-
-&lt;p&gt;You are given a string &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Write a script to reverse the order of words in the given string. The string may contain leading/trailing spaces. The string may have more than one space between words in the string. Print the result without leading/trailing spaces and there should be only one space between words.&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $S = &quot;The Weekly Challenge&quot;
-Output: &quot;Challenge Weekly The&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $S = &quot;    Perl and   Raku are  part of the same family  &quot;
-Output: &quot;family same the of part are Raku and Perl&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-096/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Str $S) returns Str {
-    $S.trim.words.reverse.join(' ');
-}
-
-sub MAIN(Str $S) {
-    say challenge($S);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 'The Weekly Challenge'
-Challenge Weekly The
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;Pretty easy one-liner here. Here is the logic:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Take the string and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trim&lt;/code&gt; whitespace off of the beginning and the end.&lt;/li&gt;
-  &lt;li&gt;Split it into individual words using the handy &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;words&lt;/code&gt; method (the equivalent of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;split(/&amp;lt;space&amp;gt;+/)&lt;/code&gt;).&lt;/li&gt;
-  &lt;li&gt;Reverse the list generated from Step 2&lt;/li&gt;
-  &lt;li&gt;Re-join the list into a space-separated string using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.join(' ')&lt;/code&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;task-2-edit-distance&quot;&gt;Task 2: Edit Distance&lt;/h2&gt;
-
-&lt;p&gt;You are given two strings &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S2&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Write a script to find out the minimum operations required to convert &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S1&lt;/code&gt; into &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S2&lt;/code&gt;. The operations can be “insert,” “remove,” or “replace” a character. Check out &lt;a href=&quot;https://en.wikipedia.org/wiki/Edit_distance&quot;&gt;Wikipedia page&lt;/a&gt; for more information.&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1-1&quot;&gt;Example 1&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $S1 = &quot;kitten&quot;; $S2 = &quot;sitting&quot;
-Output: 3
-
-Explanation:
-Operation 1: replace 'k' with 's'
-Operation 2: replace 'e' with 'i'
-Operation 3: insert 'g' at the end
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2-1&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $S1 = &quot;sunday&quot;; $S2 = &quot;monday&quot;
-Output: 2
-
-Explanation:
-Operation 1: replace 's' with 'm'
-Operation 2: replace 'u' with 'o'
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-096/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use Text::Levenshtein; # imports `distance` # [1]
-
-sub challenge(Str $S1, Str $S2) returns Int {
-    distance($S1.lc, $S2.lc).head; # [2][3]
-}
-
-sub MAIN(Str $S1, Str $S2) {
-    say challenge($S1, $S2);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku kitten sitting
-3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;This was definitely a cop-out. Edit distance is also known as &lt;a href=&quot;https://en.wikipedia.org/wiki/Levenshtein_distance&quot;&gt;&lt;em&gt;Levenshtein Distance&lt;/em&gt;&lt;/a&gt;; when an algorithm has someone’s name attached to it, it is usually better to find an existing implementation. 😅 With that being said, if anyone &lt;em&gt;is&lt;/em&gt; interested in the Raku implementation of the algorithm, &lt;a href=&quot;https://github.com/thundergnat/Text-Levenshtein/blob/master/lib/Text/Levenshtein.pm6#L3-L28&quot;&gt;here is the source code for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Text::Levenshtein&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;In case it is not obvious, we simply pass the input strings to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;distance&lt;/code&gt; and let it do the work.&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;I encourage anyone reading this to read the &lt;a href=&quot;https://docs.raku.org/language/modules&quot;&gt;Raku documentation on modules&lt;/a&gt;. Basically, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;use&lt;/code&gt; is one of several keywords to import modules, and is probably the most common you will see in the wild. You can import specific elements, if the author allows it, or you can write it as we did here and get the default imports.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;distance&lt;/code&gt; will treat uppercase and lowercase letters differently, which I did not want, so we explicitly cast everything to lowercase (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.lc&lt;/code&gt;) before passing them to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;distance&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;distance&lt;/code&gt; will accept a variable number of arguments and compare the 2nd to Nth arguments to the first one, returning an array of Levenshtein distances. Since we only have two arguments, we need to extract the first (and only) distance in the array using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;head&lt;/code&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;In my day-to-day I always encourage folks to use modules where possible. In puzzles like these, I usually prefer to write my own implementation, even if it is less efficient. But it was a long week, so I took the lazy way out. 😉 See y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I admittedly took a shortcut for part two this week, but it allowed me to introduce modules here (I don’t believe I have used them before in a blog), so I think it makes up for it. 🙂</summary></entry></feed>
+&lt;p&gt;As I was writing this blog I realized it may have been better for me to left pad the binary strings in challenge two; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1001 != 100100&lt;/code&gt; but &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1001 == 001001&lt;/code&gt;. Oh well, the question doesn’t talk about the “partial” case anyway!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">My solution to challenge two builds on last week’s challenge two, so I encourage you to go read last week’s post if you haven’t already!</summary></entry></feed>
