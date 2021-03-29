@@ -418,9 +418,9 @@ Output:
     my $Y = $X ~~ /^[A|E|I|O|U|Y]&lt;-[aeiouy]&gt;/ ?? $X.lc !! $X.substr(1); # [2]
 
     qq:to/END/;                                                         # [3]
-    $X, $X, bo-b$Y
-    Bonana-fanna fo-f$Y
-    Fee fi mo-m$Y
+    $X, $X, bo-{$X.starts-with('B') ?? '' !! 'b'}$Y                     # [4]
+    Bonana-fanna fo-{$X.starts-with('F') ?? '' !! 'f'}$Y
+    Fee fi mo-{$X.starts-with('M') ?? '' !! 'm'}$Y
     $X!
     END
 }
@@ -464,6 +464,7 @@ Fee fi mo-m(Y)
   <li><a href="https://docs.raku.org/routine/wordcase"><code class="language-plaintext highlighter-rouge">wordcase</code></a> makes the first letter uppercase, and the rest lowercase.</li>
   <li>This checks to see if the first letter is a vowel (including <code class="language-plaintext highlighter-rouge">Y</code>) directly followed a consonant. If that is the case, keep the entirety of <code class="language-plaintext highlighter-rouge">$X</code> and just convert it to lowercase to make sense in the song. Otherwise, take the <a href="https://docs.raku.org/routine/substr">substring</a> of <code class="language-plaintext highlighter-rouge">$X</code> from index 1 to the end.</li>
   <li><a href="https://docs.raku.org/language/quoting#Heredocs:_:to"><code class="language-plaintext highlighter-rouge">qq</code></a> is an easy way to make multi-line strings that include interpolation. In this case, we say “the rest of this up until <code class="language-plaintext highlighter-rouge">END</code> is a literal string.” Additionally, since all lines are indented to the same depth, it strips of leading indentation.</li>
+  <li>Since this whole construct is interpolated, we are able to embed the special cases for <code class="language-plaintext highlighter-rouge">B</code>, <code class="language-plaintext highlighter-rouge">F</code>, and <code class="language-plaintext highlighter-rouge">M</code> directly into the output string.</li>
 </ol>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
@@ -536,7 +537,8 @@ Fee fi mo-m(Y)
 ">Previous</a>
     
     
-      <a href="#" class="pagination--pager disabled">Next</a>
+      <a href="/blog/perl-weekly-challenge-106/" class="pagination--pager" title="Perl Weekly Challenge 106
+">Next</a>
     
   </nav>
 
@@ -550,6 +552,53 @@ Fee fi mo-m(Y)
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-106/" rel="permalink">Perl Weekly Challenge 106
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-03-29T00:00:00-05:00">March 29, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Task 2 seems like it would be difficult, but once again, Raku has built-in mechanisms to help us out!
+
+</p>
+  </article>
+</div>
+
         
           
 
@@ -686,51 +735,6 @@ Fee fi mo-m(Y)
 
 
     <p class="archive__item-excerpt" itemprop="description">Part one was an exercise in efficiency and short-circuiting; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see...</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/perl-weekly-challenge-101/" rel="permalink">Perl Weekly Challenge 101
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2021-02-27T00:00:00-06:00">February 27, 2021</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          6 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">This week was pretty fun – solution one ends up re-using some code from my first post (Challenge 88), and solution two explores Barycentric coordinates! No u...</p>
   </article>
 </div>
 
