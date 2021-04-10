@@ -1,4 +1,153 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-03-29T09:15:53-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 106</title><link href="http://localhost:4000/blog/perl-weekly-challenge-106/" rel="alternate" type="text/html" title="Perl Weekly Challenge 106" /><published>2021-03-29T00:00:00-05:00</published><updated>2021-03-29T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-106</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-106/">&lt;p&gt;Task 2 &lt;em&gt;seems&lt;/em&gt; like it would be difficult, but once again, Raku has built-in mechanisms to help us out!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-04-10T15:17:08-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 107</title><link href="http://localhost:4000/blog/perl-weekly-challenge-107/" rel="alternate" type="text/html" title="Perl Weekly Challenge 107" /><published>2021-04-10T00:00:00-05:00</published><updated>2021-04-10T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-107</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-107/">&lt;p&gt;I wrote this week’s answers several days ago, but forgot to commit them. I ended up getting a new laptop and had to rewrite them. I think they ended up the same, but I guess no one knows for sure!&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-self-descriptive-numbers&quot;&gt;Task 1: Self-descriptive Numbers&lt;/h2&gt;
+
+&lt;p&gt;Write a script to display the first three self-descriptive numbers. As per &lt;a href=&quot;https://en.wikipedia.org/wiki/Self-descriptive_number&quot;&gt;wikipedia&lt;/a&gt;, the definition of “self-descriptive number” is:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;In mathematics, a self-descriptive number is an integer m that in a given base b is b digits long in which each digit d at position n (the most significant digit being at position 0, and the least significant at position b−1) counts how many instances of digit n are in m.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;For example:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 1210 is a four-digit self-descriptive number:
+
+    Position 0 has value 1 i.e. there is only one 0 in the number
+    Position 1 has value 2 i.e. there are two 1 in the number
+    Position 2 has value 1 i.e. there is only one 2 in the number
+    Position 3 has value 0 i.e. there is no 3 in the number
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Expected output:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1210, 2020, 21200
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-107/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Int $n) returns Str { # [1]
+    my @output;
+    for (^∞) -&amp;gt; $i {                # [2][3]
+        my @digits = $i.comb;
+        my $valid = True;
+        for @digits.kv -&amp;gt; $index, $value {
+            $valid = @digits.grep($index).elems == $value;
+            last unless $valid;     # [4]
+        }
+        @output.push($i) if $valid; # [5]
+        last if @output.elems == $n;
+    }
+    @output.join(', ');
+}
+
+sub MAIN(Int $n = 3) {
+    say challenge($n);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku
+1210, 2020, 21200
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;We begin by defining a list to hold our output, then kick of an infinite loop starting at 0. For each number, we convert it to a list of digits (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.comb&lt;/code&gt;). For each index, value pair, we check if the input number has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$value&lt;/code&gt; number of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$index&lt;/code&gt; digits. So for 1210 we would check if it had 1 zero, 2 ones, 1 two, and 0 threes. If it meets the conditions, we add it to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@output&lt;/code&gt;. Finally, if we have found all 3 that we are looking for, we break out of the infinite loop and return.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;We make this generic by accepting the argument &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$n&lt;/code&gt;, but the fourth self-describing number is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3,211,000&lt;/code&gt;, and the fifth is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;42,101,000&lt;/code&gt;, so this method would get slow very quickly.&lt;/li&gt;
+  &lt;li&gt;We &lt;em&gt;could&lt;/em&gt; have said &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;loop&lt;/code&gt; to start an infinite loop, but then we wouldn’t have access to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$i&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;When using this method, we always have to use the carrot (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;^&lt;/code&gt;) to say we are not including infinity. This is because it is impossible to be inclusive of infinity.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;unless&lt;/code&gt; is just the opposite of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if&lt;/code&gt;. I feel this reads better than &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;last if !$valid&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;I find the post-fix way of using conditionals to read better a lot of the time in Raku, as seen here.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-list-methods&quot;&gt;Task 2: List Methods&lt;/h2&gt;
+
+&lt;p&gt;Write a script to list methods of a package/class.&lt;/p&gt;
+
+&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
+
+&lt;p&gt;Class definition:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;package Calc;
+
+use strict;
+use warnings;
+
+sub new { bless {}, shift; }
+sub add { }
+sub mul { }
+sub div { }
+
+1;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Expected output:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;BEGIN
+mul
+div
+new
+add
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-107/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Used for testing
+class Calc {      # [1]
+    method add {}
+    method mul {}
+    method div {}
+}
+
+sub challenge(Any $class) returns Str {     # [2]
+    $class.^methods.map(*.gist).join(&quot;\n&quot;); # [3][4]
+}
+
+sub MAIN {
+    say challenge(Calc.new);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku
+add
+mul
+div
+BUILDALL
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;The example shows a class definition in Perl, but we are using Raku, so we can just define our class using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;class&lt;/code&gt; keyword as shown. Additionally, we have a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BUILDALL&lt;/code&gt; method instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BEGIN&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Raku gives us the &lt;a href=&quot;https://docs.raku.org/language/classtut#Introspection&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;^methods&lt;/code&gt;&lt;/a&gt; meta method to introspect an object’s methods, so we just have to utilize that on the input object!&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;In Perl, we have to define classes in their own file, but in Raku we can just use the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;class&lt;/code&gt; keyword.&lt;/li&gt;
+  &lt;li&gt;All objects inherit from &lt;a href=&quot;https://docs.raku.org/type/Any&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Any&lt;/code&gt;&lt;/a&gt;, so we are just saying we accept any class here.&lt;/li&gt;
+  &lt;li&gt;Raku provides us a nice introspection method, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;^methods&lt;/code&gt;, which returns a list of defined methods and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BUILDALL&lt;/code&gt;. We can also pass in the flag &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:local&lt;/code&gt; meaning “only show us methods defined in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Calc&lt;/code&gt; and not super classes,” or we could pass in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:all&lt;/code&gt; meaning “show us all methods that can act on this class.”&lt;/li&gt;
+  &lt;li&gt;The returned type is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;List[Method]&lt;/code&gt;, so to cast everything to a string, we need to call each method’s &lt;a href=&quot;https://docs.raku.org/routine/gist&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gist&lt;/code&gt;&lt;/a&gt; method.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;Once again, Raku makes these challenges super easy. Looking forward to something tougher in the future!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I wrote this week’s answers several days ago, but forgot to commit them. I ended up getting a new laptop and had to rewrite them. I think they ended up the same, but I guess no one knows for sure!</summary></entry><entry><title type="html">Perl Weekly Challenge 106</title><link href="http://localhost:4000/blog/perl-weekly-challenge-106/" rel="alternate" type="text/html" title="Perl Weekly Challenge 106" /><published>2021-03-29T00:00:00-05:00</published><updated>2021-03-29T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-106</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-106/">&lt;p&gt;Task 2 &lt;em&gt;seems&lt;/em&gt; like it would be difficult, but once again, Raku has built-in mechanisms to help us out!&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-maximum-gap&quot;&gt;Task 1: Maximum Gap&lt;/h2&gt;
 
@@ -189,7 +338,7 @@ sub MAIN(Num $N, Num $k) {
 
 &lt;p&gt;You are given a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$name&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;Write a script to display the lyrics to the Shirley Ellis song The Name Game. Please checkout the wiki page for more information.&lt;/p&gt;
+&lt;p&gt;Write a script to display the lyrics to the Shirley Ellis song The Name Game. Please checkout the &lt;a href=&quot;https://en.m.wikipedia.org/wiki/The_Name_Game&quot;&gt;wiki page&lt;/a&gt; for more information.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $name = &quot;Katie&quot;
 Output:
@@ -1731,142 +1880,4 @@ $ raku ch-2.raku 3 1 2 3 4
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Raku has a lot of cool stuff built in to it. I find the hardest part of navigating this language is the documentation. Things are &lt;em&gt;mostly&lt;/em&gt; well documented, but things like Stack Overflow posts and how-tos can be few and far between. Hopefully this blog is helpful for anyone trying to learn the language!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week’s solutions explore some more obscure parts of the Raku ecosystem, namely state variables and adverbs.</summary></entry><entry><title type="html">Perl Weekly Challenge 97</title><link href="http://localhost:4000/blog/perl-weekly-challenge-097/" rel="alternate" type="text/html" title="Perl Weekly Challenge 97" /><published>2021-01-30T00:00:00-06:00</published><updated>2021-01-30T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-097</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-097/">&lt;p&gt;My solution to challenge two builds on last week’s challenge two, so I encourage you to go read &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-096/&quot;&gt;last week’s post&lt;/a&gt; if you haven’t already!&lt;/p&gt;
-
-&lt;h2 id=&quot;task-1-caesar-cipher&quot;&gt;Task 1: Caesar Cipher&lt;/h2&gt;
-
-&lt;p&gt;You are given string &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt; containing alphabets &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;A..Z&lt;/code&gt; only and a number &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Write a script to encrypt the given string &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt; using a &lt;a href=&quot;https://en.wikipedia.org/wiki/Caesar_cipher&quot;&gt;Caesar Cipher&lt;/a&gt; with left shift of size &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $S = &quot;THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG&quot;, $N = 3
-Output: &quot;QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD&quot;
-
-Plain:  ABCDEFGHIJKLMNOPQRSTUVWXYZ
-Cipher: XYZABCDEFGHIJKLMNOPQRSTUVW
-
-Plaintext:  THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG
-Ciphertext: QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-097/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;constant @alphabet = ('A'..'Z').List; # [1]
-
-sub challenge(
-    Str $S where $S ~~ /^[&amp;lt;alpha&amp;gt;|&amp;lt;space&amp;gt;]+$/, # [2]
-    Int $N where $N &amp;gt;= 0
-) {
-    $S.uc.trans(@alphabet =&amp;gt; @alphabet.rotate(-$N)); # [3][4]
-}
-
-sub MAIN(Str $S, Int $N) {
-    say challenge($S, $N);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG' 3
-QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;We use some cool built-in functionality to make this so simple. Here is the logic:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Make sure the string is uppercase (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.uc&lt;/code&gt;). They say we will always get uppercase, but might as well validate.&lt;/li&gt;
-  &lt;li&gt;For each letter in the string, translate it to a different version of the alphabet that is rotated by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; spaces.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;That’s it!&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Since the alphabet is always going to be constant we can instantiate it at the top level as a &lt;a href=&quot;https://docs.raku.org/language/terms#Constants&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;constant&lt;/code&gt;&lt;/a&gt;. Constants are evaluated at compile time, so this speeds up the program (even if just marginally).&lt;/li&gt;
-  &lt;li&gt;You have likely seen me use this syntax before; these are called anonymous type constraints, and allow us to be a little more specific than just &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Str&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt;. In this case, we want a string that only contains letters and spaces, and an int that is greater than or equal to zero.&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/trans&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt;&lt;/a&gt; is a cool subroutine; it takes two lists (or strings) defining replacements to be made in the supplied string. Given the example above, it is the equivalent of something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S.subst('a', 'x').subst('b', 'y')...&lt;/code&gt;. The left argument, in our case, will always be the alphabet, and the right argument is the alphabet rotated by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; spaces.&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/rotate&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rotate&lt;/code&gt;&lt;/a&gt; takes a list and rotates it to the left. Since we need our letters shifted to the right, we use a negative number (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-$N&lt;/code&gt;).&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;task-2-binary-substrings&quot;&gt;Task 2: Binary Substrings&lt;/h2&gt;
-
-&lt;p&gt;You are given a binary string &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$B&lt;/code&gt; and an integer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Write a script to split the binary string &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$B&lt;/code&gt; of size &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt; and then find the minimum number of flips required to make it all the same.&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $B = “101100101”, $S = 3
-Output: 1
-
-Binary Substrings:
-  &quot;101&quot;: 0 flip
-  &quot;100&quot;: 1 flip to make it &quot;101&quot;
-  &quot;101&quot;: 0 flip
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input $B = “10110111”, $S = 4
-Output: 2
-
-Binary Substrings:
-  &quot;1011&quot;: 0 flip
-  &quot;0111&quot;: 2 flips to make it &quot;1011&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-097/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use Text::Levenshtein; # imports `distance`
-
-sub challenge(
-    Str $B where $B ~~ /^[0|1]+$/,
-    Int $S where $S &amp;gt; 0
-) {
-    my @segments = $B.comb.rotor($S, :partial).map(-&amp;gt; @chars { # [1]
-        my $segment = @chars.join;
-        $segment ~ '0' x ($S - $segment.chars) # [2][3]
-    });
-    distance(|@segments).sum; # [4]
-}
-
-multi sub MAIN(Str $B, Int $S) {
-    say challenge($B, $S);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 101100101 3
-1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;The number of flips seems oddly similar to the edit distance from last week, no? I was able to reuse &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Text::Levenshtein.distance&lt;/code&gt; from last week to find the “edit distance” between binary strings! We do a little work to split the string into &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt; pieces (padding with zeros, if necessary), then leave all the heaving lifting to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;distance&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/rotor&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rotor&lt;/code&gt;&lt;/a&gt; splits a list into pieces based on the argument (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt; in this case). We pass it the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:partial&lt;/code&gt; flag so that it keeps any pieces that are less than &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$S&lt;/code&gt; in size (rather than throwing them away).&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/~&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~&lt;/code&gt;&lt;/a&gt; is Raku’s string concatenation subroutine.&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/x&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt;&lt;/a&gt; is Raku’s string repetition operator. I couldn’t an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rpad&lt;/code&gt; method in Raku, so this is my workaround.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;distance&lt;/code&gt; does not take a single list of arguments, it takes a variable amount of top-level arguments. To achieve that behavior, we use a &lt;a href=&quot;https://docs.raku.org/routine/%7C&quot;&gt;slip (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|&lt;/code&gt;)&lt;/a&gt; to unpack the list we built.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;As I was writing this blog I realized it may have been better for me to left pad the binary strings in challenge two; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1001 != 100100&lt;/code&gt; but &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1001 == 001001&lt;/code&gt;. Oh well, the question doesn’t talk about the “partial” case anyway!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">My solution to challenge two builds on last week’s challenge two, so I encourage you to go read last week’s post if you haven’t already!</summary></entry></feed>
+&lt;p&gt;Raku has a lot of cool stuff built in to it. I find the hardest part of navigating this language is the documentation. Things are &lt;em&gt;mostly&lt;/em&gt; well documented, but things like Stack Overflow posts and how-tos can be few and far between. Hopefully this blog is helpful for anyone trying to learn the language!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week’s solutions explore some more obscure parts of the Raku ecosystem, namely state variables and adverbs.</summary></entry></feed>

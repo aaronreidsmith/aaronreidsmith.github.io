@@ -262,4 +262,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-106/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 107",
+        "excerpt":"I wrote this week’s answers several days ago, but forgot to commit them. I ended up getting a new laptop and had to rewrite them. I think they ended up the same, but I guess no one knows for sure! Task 1: Self-descriptive Numbers Write a script to display the...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-107/",
+        "teaser": null
       }]
