@@ -268,4 +268,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-107/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 108",
+        "excerpt":"Task 1 this week is kind of a joke, but task 2 was interesting! Task 1: Locate Memory Write a script to declare a variable or constant and print its location in the memory. Solution GitHub Link See below for explanation and any implementation-specific comments. sub challenge(Any $variable) returns Int...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-108/",
+        "teaser": null
       }]
