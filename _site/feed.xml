@@ -1,4 +1,171 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-04-10T15:17:08-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 107</title><link href="http://localhost:4000/blog/perl-weekly-challenge-107/" rel="alternate" type="text/html" title="Perl Weekly Challenge 107" /><published>2021-04-10T00:00:00-05:00</published><updated>2021-04-10T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-107</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-107/">&lt;p&gt;I wrote this week’s answers several days ago, but forgot to commit them. I ended up getting a new laptop and had to rewrite them. I think they ended up the same, but I guess no one knows for sure!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-04-12T17:38:29-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 108</title><link href="http://localhost:4000/blog/perl-weekly-challenge-108/" rel="alternate" type="text/html" title="Perl Weekly Challenge 108" /><published>2021-04-12T00:00:00-05:00</published><updated>2021-04-12T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-108</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-108/">&lt;p&gt;Task 1 this week is kind of a joke, but task 2 was interesting!&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-locate-memory&quot;&gt;Task 1: Locate Memory&lt;/h2&gt;
+
+&lt;p&gt;Write a script to declare a variable or constant and print its location in the memory.&lt;/p&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-108/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Any $variable) returns Int {
+    $variable.WHERE;
+}
+
+sub MAIN {
+    my $variable = rand;      # [1][2]
+    say challenge($variable);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku
+140444494947864
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;Raku has the &lt;a href=&quot;https://docs.raku.org/routine/WHERE&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WHERE&lt;/code&gt;&lt;/a&gt; method built into it that “Returns an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; representing the memory address of the object,” we simply need to utilize that.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rand&lt;/code&gt; is a built-in subroutine that returns a random integer.&lt;/li&gt;
+  &lt;li&gt;Following the Scala style, I would normally use parentheses for subroutines that are not “pure” and write this as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rand()&lt;/code&gt;, but Raku complains with the following error: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Unsupported use of rand().  In Raku please use: rand.&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-bell-numbers&quot;&gt;Task 2: Bell Numbers&lt;/h2&gt;
+
+&lt;p&gt;Write a script to display top 10 Bell Numbers. Please refer to the &lt;a href=&quot;https://en.wikipedia.org/wiki/Bell_number&quot;&gt;Wikipedia page&lt;/a&gt; for more information.&lt;/p&gt;
+
+&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;B&lt;sub&gt;0&lt;/sub&gt;: 1, as you can only have one partition of zero element set.&lt;/li&gt;
+  &lt;li&gt;B&lt;sub&gt;1&lt;/sub&gt;: 1, as you can only have one partition of one element set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{a}&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;B&lt;sub&gt;2&lt;/sub&gt;: 2&lt;/p&gt;
+
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{a}{b}
+{a,b}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;B&lt;sub&gt;3&lt;/sub&gt;: 5&lt;/p&gt;
+
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{a}{b}{c}
+{a,b}{c}
+{a}{b,c}
+{a,c}{b}
+{a,b,c}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;B&lt;sub&gt;4&lt;/sub&gt;: 15&lt;/p&gt;
+
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{a}{b}{c}{d}
+{a,b,c,d}
+{a,b}{c,d}
+{a,c}{b,d}
+{a,d}{b,c}
+{a,b}{c}{d}
+{a,c}{b}{d}
+{a,d}{b}{c}
+{b,c}{a}{d}
+{b,d}{a}{c}
+{c,d}{a}{b}
+{a}{b,c,d}
+{b}{a,c,d}
+{c}{a,b,d}
+{d}{a,b,c}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-108/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use experimental :cached;
+
+sub challenge(Int $n where $n &amp;gt;= 0) is cached returns Int {            # [1]
+    given $n {
+        when 0|1 { 1 }
+        default {
+            my $n-minus-one = $n - 1;
+            gather for (0..$n-minus-one) -&amp;gt; $k {                       # [2]
+                take (^$n-minus-one).combinations($k) * challenge($k); # [2]
+            }.sum
+        }
+    }
+}
+
+sub MAIN(Int $n = 10) {
+    say (^$n).map(&amp;amp;challenge);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku
+(1 1 2 5 15 52 203 877 4140 21147 115975)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;!-- Allow inlining of math functionality --&gt;
+&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], [&quot;\\(&quot;,&quot;\\)&quot;] ],
+      processEscapes: true
+    }
+  });
+&lt;/script&gt;
+
+&lt;!-- Import math functionality --&gt;
+&lt;script type=&quot;text/javascript&quot; async=&quot;&quot; src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML&quot;&gt;
+&lt;/script&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; The question asks for the “top 10 Bell Numbers.” Since this is an ever-increasing sequence, there is no “top,” so I interpretted that to mean &lt;em&gt;first&lt;/em&gt; 10 Bell numbers.&lt;/p&gt;
+
+&lt;p&gt;At first glance, this code has nothing to do with the input sequences, but digging into the above-linked Wikipedia entry, we find this equation:&lt;/p&gt;
+
+&lt;p&gt;$ B_{n+1} = \sum_{k=0}^{n}{n \choose k}B_{k} $&lt;/p&gt;
+
+&lt;p&gt;This tells us that each Bell number is built upon by the previous Bell numbers. And we know the first two Bell numbers, so we can follow this.&lt;/p&gt;
+
+&lt;p&gt;Let’s re-write this to calculate $ B_{2} $ and see how it works; remember, since we are calculating for $ B_{n+1} $, we use $ n = 1 $.&lt;/p&gt;
+
+&lt;p&gt;$ B_{2} = \sum_{k=0}^{1}{1 \choose k}B_{k} $&lt;/p&gt;
+
+&lt;p&gt;Which can be expanded as:&lt;/p&gt;
+
+&lt;p&gt;$ B_{2} = {1 \choose 0}B_{0} + {1 \choose 1}B_{1} $&lt;/p&gt;
+
+&lt;p&gt;Which can be reduced to:&lt;/p&gt;
+
+&lt;p&gt;$ B_{2} = (1)(1) + (1)(1) = 2 $&lt;/p&gt;
+
+&lt;p&gt;So $ B_{2} = 2 $ and we can use that to calculate $ B_{3} $ and so on.&lt;/p&gt;
+
+&lt;p&gt;Now that we have the algorithm figured out, and decided we are going to apply it to the &lt;em&gt;first&lt;/em&gt; 10 terms, it’s a simple matter to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt; the function over the sequence from 0 (inclusive) to 10 (exclusive).&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Since this is a recursive function, once we calculate $ B_{2} $ we will use it in $ B_{3} $, $ B_{4} $ and so on. No use re-calculating it every time, so we memoize this function using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is cached&lt;/code&gt; trait.&lt;/li&gt;
+  &lt;li&gt;gather/take is a construct to build up a sequence using a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Supply&lt;/code&gt; (in this case, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;for&lt;/code&gt; loop).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I love me some pattern matching and recursion, coming from a Scala day job, so it is fun to use those constructs in other languages, especially Raku. 🙂&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Task 1 this week is kind of a joke, but task 2 was interesting!</summary></entry><entry><title type="html">Perl Weekly Challenge 107</title><link href="http://localhost:4000/blog/perl-weekly-challenge-107/" rel="alternate" type="text/html" title="Perl Weekly Challenge 107" /><published>2021-04-10T00:00:00-05:00</published><updated>2021-04-10T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-107</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-107/">&lt;p&gt;I wrote this week’s answers several days ago, but forgot to commit them. I ended up getting a new laptop and had to rewrite them. I think they ended up the same, but I guess no one knows for sure!&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-self-descriptive-numbers&quot;&gt;Task 1: Self-descriptive Numbers&lt;/h2&gt;
 
@@ -1723,161 +1890,4 @@ sub MAIN(Str $S, Str $T) {
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Perl has always been the king of regex, which is why it got (and continues to stay) so popular. Raku continues that legacy and made these problems relatively simple.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week’s theme is regex, which is something the Perl family of languages has always been known for.</summary></entry><entry><title type="html">Perl Weekly Challenge 98</title><link href="http://localhost:4000/blog/perl-weekly-challenge-098/" rel="alternate" type="text/html" title="Perl Weekly Challenge 98" /><published>2021-02-06T00:00:00-06:00</published><updated>2021-02-06T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-098</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-098/">&lt;p&gt;This week’s solutions explore some more obscure parts of the Raku ecosystem, namely &lt;a href=&quot;https://docs.raku.org/syntax/state&quot;&gt;state variables&lt;/a&gt; and &lt;a href=&quot;https://docs.raku.org/language/glossary#index-entry-Adverb&quot;&gt;adverbs&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;task-1-read-n-characters&quot;&gt;Task 1: Read N-characters&lt;/h2&gt;
-
-&lt;p&gt;You are given file &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$FILE&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Create subroutine &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;readN($FILE, $number)&lt;/code&gt; that returns the first n-characters and moves the pointer to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(n+1)th&lt;/code&gt; character.&lt;/p&gt;
-
-&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: Suppose the file (input.txt) contains &quot;1234567890&quot;
-Output:
-    print readN(&quot;input.txt&quot;, 4); # returns &quot;1234&quot;
-    print readN(&quot;input.txt&quot;, 4); # returns &quot;5678&quot;
-    print readN(&quot;input.txt&quot;, 4); # returns &quot;90&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-098/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub readN(Str $file-name, Int $chars-to-read where $chars-to-read &amp;gt; 0) returns Str {
-    state %file-map;                                          # [1]
-
-    if %file-map{$file-name}:!exists {                        # [2]
-        %file-map{$file-name} = IO::CatHandle.new($file-name) # [3]
-    }
-
-    %file-map{$file-name}.readchars($chars-to-read);          # [4]
-}
-
-sub MAIN(Str $FILE, Int $N) {
-    say readN($FILE, $N);
-    say readN($FILE, $N);
-    say readN($FILE, $N);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Assuming input.txt contains '1234567890'
-$ raku ch-1.raku input.txt 4
-1234
-5678
-90
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;All of this relies on two very cool aspects of Raku: &lt;a href=&quot;https://docs.raku.org/syntax/state&quot;&gt;state variables&lt;/a&gt; and &lt;a href=&quot;https://docs.raku.org/type/IO::CatHandle&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CatHandles&lt;/code&gt;&lt;/a&gt;, which I will detail below. Basically, we just create a new &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CatHandle&lt;/code&gt; and pass all the heavy lifting to it via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;readchars&lt;/code&gt;; it keeps track of where it is in the file and will not attempt to read past the end of the file.&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;A state variable in Raku is similar to a static variable in other languages, with the additional caveat that it can be instantiated in subroutines in addition to classes. This variable will be instantiated once and shared across all invocations of the subroutine. So, if we wanted to, we could do the following:&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# input1.txt
-# maryalamb
-
-# input2.txt
-# hadlittle
-
-sub MAIN {
-  my $input1 = 'input1.txt';
-  my $input2 = 'input2.txt';
-  
-  say readN($input1, 4);
-  say readN($input2, 3);
-  say readN($input1, 1);
-  say readN($input2, 6);
-  say readN($input1, 4);
-}
-
-# Output:
-# mary
-# had
-# a
-# little
-# lamb
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;This is a special case of the &lt;a href=&quot;https://docs.raku.org/type/Hash#:exists&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;exists&lt;/code&gt;&lt;/a&gt; adverb. Adverbs are just named arguments. In this case &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:exists&lt;/code&gt; is essentially the pair &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;exists =&amp;gt; True&lt;/code&gt;, so to negate it we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;!:exists&lt;/code&gt;. I found this pretty interesting, because I thought it would have been &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;!%file-map{$file-name}:exists&lt;/code&gt;, but Raku complains about that.&lt;/li&gt;
-  &lt;li&gt;A &lt;a href=&quot;https://docs.raku.org/type/IO::CatHandle&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CatHandle&lt;/code&gt;&lt;/a&gt; is &lt;em&gt;normally&lt;/em&gt; used to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cat&lt;/code&gt; together several file handles and read them all at once. In this case, we are using it to take advantage of its &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;readchars&lt;/code&gt; function discussed below.&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/type/IO::CatHandle#method_readchars&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;readchars&lt;/code&gt;&lt;/a&gt; essentially just tracks our offset in the given handle and always outputs the next &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt; characters that we request, and just returns an empty string if we are at the end of the file. Super convenient for this challenge!&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;task-2-search-insert-position&quot;&gt;Task 2: Search Insert Position&lt;/h2&gt;
-
-&lt;p&gt;You are given a sorted array of distinct integers &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N&lt;/code&gt; and a target &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Write a script to return the index of the given target if found otherwise place the target in the sorted array and return the index.&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @N = (1, 2, 3, 4) and $N = 3
-Output: 2 since the target 3 is in the array at the index 2.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @N = (1, 3, 5, 7) and $N = 6
-Output: 3 since the target 6 is missing and should be placed at the index 3.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-3&quot;&gt;Example 3&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @N = (12, 14, 16, 18) and $N = 10
-Output: 0 since the target 10 is missing and should be placed at the index 0.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-4&quot;&gt;Example 4&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @N = (11, 13, 15, 17) and $N = 19
-Output: 4 since the target 19 is missing and should be placed at the index 4.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-098/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(@N is copy, Int $N) returns Int { # [1]
-    my @new = $N ∉ @N ?? (|@N, $N).sort !! @N;  # [2]
-    @new.first($N, :k);                         # [3]
-}
-
-sub MAIN(Int $N, *@N where all(@N) ~~ Int) {
-    say challenge(@N, $N)
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# $N followed by @N
-$ raku ch-2.raku 3 1 2 3 4 
-2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;This is pretty straight forward; we check if &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; is in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N&lt;/code&gt; (if not, we add it and re-sort), then return the index of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;. That’s it!&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;In Raku, the sigil (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%&lt;/code&gt;, etc.) is &lt;em&gt;part of&lt;/em&gt; the variable declaration. Because of that, for better or for worse, it is not a problem (as far as the compiler is concerned) that we have to variables named &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Rather than mark &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N&lt;/code&gt; as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is copy&lt;/code&gt; so we could use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N.push($N).sort&lt;/code&gt;, since we assign it to a new variable anyway (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@new&lt;/code&gt;), we can use a &lt;a href=&quot;https://docs.raku.org/type/Slip&quot;&gt;slip&lt;/a&gt; to append &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@N&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;first&lt;/code&gt; returns the first instance of the argument in the list (in this case &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;). We supply the &lt;a href=&quot;https://docs.raku.org/routine/first#class_List&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:k&lt;/code&gt; adverb&lt;/a&gt; to have it return the &lt;em&gt;index&lt;/em&gt; of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; rather than &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; itself.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;Raku has a lot of cool stuff built in to it. I find the hardest part of navigating this language is the documentation. Things are &lt;em&gt;mostly&lt;/em&gt; well documented, but things like Stack Overflow posts and how-tos can be few and far between. Hopefully this blog is helpful for anyone trying to learn the language!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week’s solutions explore some more obscure parts of the Raku ecosystem, namely state variables and adverbs.</summary></entry></feed>
+&lt;p&gt;Perl has always been the king of regex, which is why it got (and continues to stay) so popular. Raku continues that legacy and made these problems relatively simple.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week’s theme is regex, which is something the Perl family of languages has always been known for.</summary></entry></feed>
