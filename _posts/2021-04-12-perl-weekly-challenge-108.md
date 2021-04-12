@@ -121,7 +121,7 @@ This program runs as such:
 
 ```
 $ raku ch-2.raku
-(1 1 2 5 15 52 203 877 4140 21147 115975)
+(1 1 2 5 15 52 203 877 4140 21147)
 ```
 
 ### Explanation
