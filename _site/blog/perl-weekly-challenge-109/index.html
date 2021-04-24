@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 107 - Aaron Smith</title>
-<meta name="description" content="I wrote this week’s answers several days ago, but forgot to commit them. I ended up getting a new laptop and had to rewrite them. I think they ended up the same, but I guess no one knows for sure!">
+<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 109 - Aaron Smith</title>
+<meta name="description" content="Two fun tasks this week that were both able to be solved in a functional manner 🎉">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Perl Weekly Challenge 107">
-<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-107/">
+<meta property="og:title" content="Perl Weekly Challenge 109">
+<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-109/">
 
 
-  <meta property="og:description" content="I wrote this week’s answers several days ago, but forgot to commit them. I ended up getting a new laptop and had to rewrite them. I think they ended up the same, but I guess no one knows for sure!">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2021-04-10T00:00:00-05:00">
+  <meta property="og:description" content="Two fun tasks this week that were both able to be solved in a functional manner 🎉">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-107/">
+
+  <meta property="article:published_time" content="2021-04-24T00:00:00-05:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-109/">
 
 
 
@@ -286,15 +286,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Perl Weekly Challenge 107">
-    <meta itemprop="description" content="I wrote this week’s answers several days ago, but forgot to commit them. I ended up getting a new laptop and had to rewrite them. I think they ended up the same, but I guess no one knows for sure!">
-    <meta itemprop="datePublished" content="2021-04-10T00:00:00-05:00">
+    <meta itemprop="headline" content="Perl Weekly Challenge 109">
+    <meta itemprop="description" content="Two fun tasks this week that were both able to be solved in a functional manner 🎉">
+    <meta itemprop="datePublished" content="2021-04-24T00:00:00-05:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 107
+          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 109
 </h1>
           
 
@@ -303,7 +303,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2021-04-10T00:00:00-05:00">April 10, 2021</time>
+        <time datetime="2021-04-24T00:00:00-05:00">April 24, 2021</time>
       </span>
     
 
@@ -316,7 +316,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          3 minute read
+          5 minute read
         
       </span>
     
@@ -328,156 +328,177 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>I wrote this week’s answers several days ago, but forgot to commit them. I ended up getting a new laptop and had to rewrite them. I think they ended up the same, but I guess no one knows for sure!</p>
+        <p>Two fun tasks this week that were both able to be solved in a functional manner 🎉</p>
 
-<h2 id="task-1-self-descriptive-numbers">Task 1: Self-descriptive Numbers</h2>
+<h2 id="task-1-chowla-numbers">Task 1: Chowla Numbers</h2>
 
-<p>Write a script to display the first three self-descriptive numbers. As per <a href="https://en.wikipedia.org/wiki/Self-descriptive_number">wikipedia</a>, the definition of “self-descriptive number” is:</p>
+<p>Write a script to generate first 20 <code class="language-plaintext highlighter-rouge">Chowla Numbers</code>, named after, <strong>Sarvadaman D. S. Chowla</strong>, a London born Indian American mathematician. It is defined as:</p>
 
-<blockquote>
-  <p>In mathematics, a self-descriptive number is an integer m that in a given base b is b digits long in which each digit d at position n (the most significant digit being at position 0, and the least significant at position b−1) counts how many instances of digit n are in m.</p>
-</blockquote>
-
-<p>For example:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1210 is a four-digit self-descriptive number:
-
-    Position 0 has value 1 i.e. there is only one 0 in the number
-    Position 1 has value 2 i.e. there are two 1 in the number
-    Position 2 has value 1 i.e. there is only one 2 in the number
-    Position 3 has value 0 i.e. there is no 3 in the number
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C(n) = sum of divisors of n except 1 and n
 </code></pre></div></div>
 
-<p>Expected output:</p>
+<h3 id="output">Output</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1210, 2020, 21200
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0, 0, 0, 2, 0, 5, 0, 6, 3, 7, 0, 15, 0, 9, 8, 14, 0, 20, 0, 21
 </code></pre></div></div>
 
 <h3 id="solution">Solution</h3>
 
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-107/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-109/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(Int $n) returns Str { # [1]
-    my @output;
-    for (^∞) -&gt; $i {                # [2][3]
-        my @digits = $i.comb;
-        my $valid = True;
-        for @digits.kv -&gt; $index, $value {
-            $valid = @digits.grep($index).elems == $value;
-            last unless $valid;     # [4]
-        }
-        @output.push($i) if $valid; # [5]
-        last if @output.elems == $n;
-    }
-    @output.join(', ');
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(Int $n) returns Int {
+    (2..$n / 2).grep($n %% *).sum; # [1][2]
 }
 
-sub MAIN(Int $n = 3) {
-    say challenge($n);
+sub MAIN(Int $terms = 20) {
+    say (1..$terms).map(&amp;challenge).join(', '); # [3]
 }
 </code></pre></div></div>
 
 <p>This program runs as such:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku
-1210, 2020, 21200
+0, 0, 0, 2, 0, 5, 0, 6, 3, 7, 0, 15, 0, 9, 8, 14, 0, 20, 0, 21
 </code></pre></div></div>
 
 <h3 id="explanation">Explanation</h3>
 
-<p>We begin by defining a list to hold our output, then kick of an infinite loop starting at 0. For each number, we convert it to a list of digits (<code class="language-plaintext highlighter-rouge">.comb</code>). For each index, value pair, we check if the input number has <code class="language-plaintext highlighter-rouge">$value</code> number of <code class="language-plaintext highlighter-rouge">$index</code> digits. So for 1210 we would check if it had 1 zero, 2 ones, 1 two, and 0 threes. If it meets the conditions, we add it to <code class="language-plaintext highlighter-rouge">@output</code>. Finally, if we have found all 3 that we are looking for, we break out of the infinite loop and return.</p>
+<p>Basically we find all the factors of <code class="language-plaintext highlighter-rouge">$n</code> excluding (<code class="language-plaintext highlighter-rouge">1</code> and <code class="language-plaintext highlighter-rouge">$n</code>), then just sum them. We do this for the range <code class="language-plaintext highlighter-rouge">1..$terms</code> (in this case 20) and join them all with a comma to match the provided output.</p>
 
 <h4 id="specific-comments">Specific comments</h4>
 
 <ol>
-  <li>We make this generic by accepting the argument <code class="language-plaintext highlighter-rouge">$n</code>, but the fourth self-describing number is <code class="language-plaintext highlighter-rouge">3,211,000</code>, and the fifth is <code class="language-plaintext highlighter-rouge">42,101,000</code>, so this method would get slow very quickly.</li>
-  <li>We <em>could</em> have said <code class="language-plaintext highlighter-rouge">loop</code> to start an infinite loop, but then we wouldn’t have access to <code class="language-plaintext highlighter-rouge">$i</code>.</li>
-  <li>When using this method, we always have to use the carrot (<code class="language-plaintext highlighter-rouge">^</code>) to say we are not including infinity. This is because it is impossible to be inclusive of infinity.</li>
-  <li><code class="language-plaintext highlighter-rouge">unless</code> is just the opposite of <code class="language-plaintext highlighter-rouge">if</code>. I feel this reads better than <code class="language-plaintext highlighter-rouge">last if !$valid</code>.</li>
-  <li>I find the post-fix way of using conditionals to read better a lot of the time in Raku, as seen here.</li>
+  <li>To find the factors of a given number, we only have to look at numbers from <code class="language-plaintext highlighter-rouge">1</code> to <code class="language-plaintext highlighter-rouge">$n / 2</code> and <code class="language-plaintext highlighter-rouge">$n</code> itself. Since <code class="language-plaintext highlighter-rouge">1</code> and <code class="language-plaintext highlighter-rouge">$n</code> are excluded from Chowla numbers by definition, we just go from <code class="language-plaintext highlighter-rouge">2</code> to <code class="language-plaintext highlighter-rouge">$n / 2</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">grep</code> is Raku’s version of <code class="language-plaintext highlighter-rouge">filter</code>. Additionally, Raku has a built-in operator for “is divisible by” (<code class="language-plaintext highlighter-rouge">%%</code>). Finally, we are able to use the “whatever star” since this is such a simple anonymous function. So basically, for each potential factor, we check if <code class="language-plaintext highlighter-rouge">$n</code> is divisible by that number.</li>
+  <li>Since the challenge operates on each number individually (rather than all 20 at once), we map the function over each number and join the output with a comma.</li>
 </ol>
 
-<h2 id="task-2-list-methods">Task 2: List Methods</h2>
+<h2 id="task-2-four-squares-puzzle">Task 2: Four Squares Puzzle</h2>
 
-<p>Write a script to list methods of a package/class.</p>
+<p>You are given four squares as below with numbers named a, b, c, d, e, f, g.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>              (1)                    (3)
+        ╔══════════════╗      ╔══════════════╗
+        ║              ║      ║              ║
+        ║      a       ║      ║      e       ║
+        ║              ║ (2)  ║              ║  (4)
+        ║          ┌───╫──────╫───┐      ┌───╫─────────┐
+        ║          │   ║      ║   │      │   ║         │
+        ║          │ b ║      ║ d │      │ f ║         │
+        ║          │   ║      ║   │      │   ║         │
+        ║          │   ║      ║   │      │   ║         │
+        ╚══════════╪═══╝      ╚═══╪══════╪═══╝         │
+                   │       c      │      │      g      │
+                   │              │      │             │
+                   │              │      │             │
+                   └──────────────┘      └─────────────┘
+</code></pre></div></div>
+
+<p>Write a script to place the given unique numbers in the square box so that sum of numbers in each box is the same.</p>
 
 <h3 id="example">Example</h3>
 
-<p>Class definition:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: 1,2,3,4,5,6,7
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>package Calc;
+Output:
 
-use strict;
-use warnings;
+    a = 6
+    b = 4
+    c = 1
+    d = 5
+    e = 2
+    f = 3
+    g = 7
 
-sub new { bless {}, shift; }
-sub add { }
-sub mul { }
-sub div { }
-
-1;
-</code></pre></div></div>
-
-<p>Expected output:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>BEGIN
-mul
-div
-new
-add
+    Box 1: a + b = 6 + 4 = 10
+    Box 2: b + c + d = 4 + 1 + 5 = 10
+    Box 3: d + e + f = 5 + 2 + 3 = 10
+    Box 4: f + g = 3 + 7 = 10
 </code></pre></div></div>
 
 <h3 id="solution-1">Solution</h3>
 
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-107/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-109/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Used for testing
-class Calc {      # [1]
-    method add {}
-    method mul {}
-    method div {}
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(@nums where @nums.elems == 7) returns Str {
+  my @solution = @nums
+    .sort                                     # [1]
+    .permutations                             # [2]
+    .reverse                                  # [3]
+    .first: -&gt; ($a, $b, $c, $d, $e, $f, $g) { # [4][5]
+      $a + $b == $b + $c + $d &amp;&amp;
+      $b + $c + $d == $d + $e + $f &amp;&amp;
+      $d + $e + $f == $f + $g
+    };
+
+  if @solution.elems == 1 {                       # [6]
+    "Unable to find a solution for given input.";
+  } else {
+    (&lt;a b c d e f g&gt; Z @solution)                 # [7][8]
+      .map(-&gt; ($key, $value) { "$key = $value" }) # [9]
+      .join("\n");
+  }
 }
 
-sub challenge(Any $class) returns Str {     # [2]
-    $class.^methods.map(*.gist).join("\n"); # [3][4]
-}
-
-sub MAIN {
-    say challenge(Calc.new);
+sub MAIN(*@nums where all(@nums) ~~ Int) {
+  say challenge(@nums);
 }
 </code></pre></div></div>
 
 <p>This program runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku
-add
-mul
-div
-BUILDALL
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku 1 2 3 4 5 6 7
+a = 7
+b = 3
+c = 2
+d = 5
+e = 1
+f = 4
+g = 6
 </code></pre></div></div>
 
 <h3 id="explanation-1">Explanation</h3>
 
-<p>The example shows a class definition in Perl, but we are using Raku, so we can just define our class using the <code class="language-plaintext highlighter-rouge">class</code> keyword as shown. Additionally, we have a <code class="language-plaintext highlighter-rouge">BUILDALL</code> method instead of <code class="language-plaintext highlighter-rouge">BEGIN</code>.</p>
+<p>Raku helps us out quite a bit here with its <code class="language-plaintext highlighter-rouge">permutations</code> function. Basically, the actual squares are irrelevant and all we need to check is:</p>
 
-<p>Raku gives us the <a href="https://docs.raku.org/language/classtut#Introspection"><code class="language-plaintext highlighter-rouge">^methods</code></a> meta method to introspect an object’s methods, so we just have to utilize that on the input object!</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$a + $b == $b + $c + $d &amp;&amp;
+$b + $c + $d == $d + $e + $f &amp;&amp;
+$d + $e + $f == $f + $g
+</code></pre></div></div>
+
+<p>So we just go through each permutation of the 7 numbers we are given (5040 permutations, so should be quick) and find the first instance where the above condition is true.</p>
+
+<p>You’ll also notice our output is different from the example output. That is because the following pairs are interchangeable:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">$a</code> and <code class="language-plaintext highlighter-rouge">$g</code></li>
+  <li><code class="language-plaintext highlighter-rouge">$b</code> and <code class="language-plaintext highlighter-rouge">$f</code></li>
+  <li><code class="language-plaintext highlighter-rouge">$c</code> and <code class="language-plaintext highlighter-rouge">$e</code></li>
+</ul>
+
+<p>Since we maximize <code class="language-plaintext highlighter-rouge">$a</code>, our output is different, but still correct.</p>
 
 <h4 id="specific-comments-1">Specific Comments</h4>
 
 <ol>
-  <li>In Perl, we have to define classes in their own file, but in Raku we can just use the <code class="language-plaintext highlighter-rouge">class</code> keyword.</li>
-  <li>All objects inherit from <a href="https://docs.raku.org/type/Any"><code class="language-plaintext highlighter-rouge">Any</code></a>, so we are just saying we accept any class here.</li>
-  <li>Raku provides us a nice introspection method, <code class="language-plaintext highlighter-rouge">^methods</code>, which returns a list of defined methods and <code class="language-plaintext highlighter-rouge">BUILDALL</code>. We can also pass in the flag <code class="language-plaintext highlighter-rouge">:local</code> meaning “only show us methods defined in <code class="language-plaintext highlighter-rouge">Calc</code> and not super classes,” or we could pass in <code class="language-plaintext highlighter-rouge">:all</code> meaning “show us all methods that can act on this class.”</li>
-  <li>The returned type is <code class="language-plaintext highlighter-rouge">List[Method]</code>, so to cast everything to a string, we need to call each method’s <a href="https://docs.raku.org/routine/gist"><code class="language-plaintext highlighter-rouge">gist</code></a> method.</li>
+  <li><code class="language-plaintext highlighter-rouge">$a</code> and <code class="language-plaintext highlighter-rouge">$g</code> have to be comparatively big numbers compared to the rest, so we sort our input (and later reverse it) and start checking those permutations first.</li>
+  <li>Raku will automatically generate all permutations of a list with this function. It only works with &lt;20 terms, which is perfect for this use case.</li>
+  <li>As I said in (1), we are reversing our list of permutations to start with the ones where <code class="language-plaintext highlighter-rouge">$a</code> is greatest.</li>
+  <li>I have decided to start using the <code class="language-plaintext highlighter-rouge">first: -&gt; {}</code> syntax for multi-line anonymous functions rather than the <code class="language-plaintext highlighter-rouge">first(-&gt;  {})</code> syntax, as I feel the trailing parenthesis looks out of place.</li>
+  <li>Raku allows us to unpack our individual permutation into variables, so <code class="language-plaintext highlighter-rouge">$a</code> through <code class="language-plaintext highlighter-rouge">$g</code> are all assigned in this one line.</li>
+  <li><code class="language-plaintext highlighter-rouge">first</code> returns <code class="language-plaintext highlighter-rouge">Nil</code> if it can’t find a match. <em>However</em>, assigning <code class="language-plaintext highlighter-rouge">Nil</code> to a positional variable (denoted by the <code class="language-plaintext highlighter-rouge">@</code> sigil) will generate a list that looks like this <code class="language-plaintext highlighter-rouge">[(Any)]</code>, so we check for size equal to 1 rather than checking if it is <code class="language-plaintext highlighter-rouge">Nil</code>.</li>
+  <li>To get our numbers assigned to their letters, we need to zip them with the sequence <code class="language-plaintext highlighter-rouge">a</code> through <code class="language-plaintext highlighter-rouge">g</code>. The output of this is a list that looks like this <code class="language-plaintext highlighter-rouge">((a 7) (b 3) (c 2) (d 5) (e 1) (f 4) (g 6))</code>.</li>
+  <li>The <code class="language-plaintext highlighter-rouge">&lt;&gt;</code> syntax allows us to make a list of space-separated terms. It also makes each term a string automagically; it is basically shorthand for <code class="language-plaintext highlighter-rouge">('a', 'b', 'c', 'd', 'e', 'f', 'g')</code>.</li>
+  <li>When we map over this list of pairs, we unpack each pair into its <code class="language-plaintext highlighter-rouge">$key</code> and <code class="language-plaintext highlighter-rouge">$value</code> and turn that into a string of <code class="language-plaintext highlighter-rouge">$key = $value</code>. We then join this list of strings using newlines to match the provided output.</li>
 </ol>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>Once again, Raku makes these challenges super easy. Looking forward to something tougher in the future!</p>
+<p>I’m always happy when I can find a functional solution to these problems, so I had fun this week. 🙂 See y’all next week!</p>
 
         
       </section>
@@ -520,7 +541,7 @@ BUILDALL
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-04-10T00:00:00-05:00">April 10, 2021</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-04-24T00:00:00-05:00">April 24, 2021</time></p>
 
 
       </footer>
@@ -530,23 +551,22 @@ BUILDALL
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+107%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-107%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+109%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-109%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-107%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-109%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-107%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-109%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/perl-weekly-challenge-106/" class="pagination--pager" title="Perl Weekly Challenge 106
+      <a href="/blog/perl-weekly-challenge-108/" class="pagination--pager" title="Perl Weekly Challenge 108
 ">Previous</a>
     
     
-      <a href="/blog/perl-weekly-challenge-108/" class="pagination--pager" title="Perl Weekly Challenge 108
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -560,53 +580,6 @@ BUILDALL
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/perl-weekly-challenge-109/" rel="permalink">Perl Weekly Challenge 109
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2021-04-24T00:00:00-05:00">April 24, 2021</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          5 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">Two fun tasks this week that were both able to be solved in a functional manner 🎉
-
-</p>
-  </article>
-</div>
-
         
           
 
@@ -651,6 +624,51 @@ BUILDALL
     <p class="archive__item-excerpt" itemprop="description">Task 1 this week is kind of a joke, but task 2 was interesting!
 
 </p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-107/" rel="permalink">Perl Weekly Challenge 107
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-04-10T00:00:00-05:00">April 10, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I wrote this week’s answers several days ago, but forgot to commit them. I ended up getting a new laptop and had to rewrite them. I think they ended up the s...</p>
   </article>
 </div>
 
