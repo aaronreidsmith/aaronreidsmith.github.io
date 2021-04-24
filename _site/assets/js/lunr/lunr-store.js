@@ -274,4 +274,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-108/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 109",
+        "excerpt":"Two fun tasks this week that were both able to be solved in a functional manner 🎉 Task 1: Chowla Numbers Write a script to generate first 20 Chowla Numbers, named after, Sarvadaman D. S. Chowla, a London born Indian American mathematician. It is defined as: C(n) = sum of...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-109/",
+        "teaser": null
       }]
