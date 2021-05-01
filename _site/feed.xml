@@ -1,4 +1,166 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-04-24T10:45:30-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 109</title><link href="http://localhost:4000/blog/perl-weekly-challenge-109/" rel="alternate" type="text/html" title="Perl Weekly Challenge 109" /><published>2021-04-24T00:00:00-05:00</published><updated>2021-04-24T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-109</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-109/">&lt;p&gt;Two fun tasks this week that were both able to be solved in a functional manner 🎉&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-01T14:56:13-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 110</title><link href="http://localhost:4000/blog/perl-weekly-challenge-110/" rel="alternate" type="text/html" title="Perl Weekly Challenge 110" /><published>2021-05-01T00:00:00-05:00</published><updated>2021-05-01T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-110</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-110/">&lt;p&gt;A couple IO-related challenges this week with nice functional solutions. 🙂&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-valid-phone-numbers&quot;&gt;Task 1: Valid Phone Numbers&lt;/h2&gt;
+
+&lt;p&gt;You are given a text file.&lt;/p&gt;
+
+&lt;p&gt;Write a script to display all valid phone numbers in the given text file.&lt;/p&gt;
+
+&lt;h3 id=&quot;acceptable-phone-number-formats&quot;&gt;Acceptable Phone Number Formats&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;+nn  nnnnnnnnnn
+(nn) nnnnnnnnnn
+nnnn nnnnnnnnnn
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;input-file&quot;&gt;Input File&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;0044 1148820341
+ +44 1148820341
+  44-11-4882-0341
+(44) 1148820341
+  00 1148820341
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;output&quot;&gt;Output&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;0044 1148820341
+ +44 1148820341
+(44) 1148820341
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-110/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Str $file-path) returns Str {
+  $file-path
+    .IO
+    .lines
+    .grep(* ~~ /                                         # [1]
+      ^                                                  # [2]
+      &amp;lt;space&amp;gt;*                                           # [3]
+      [\+&amp;lt;digit&amp;gt; ** 2 | \(&amp;lt;digit&amp;gt; ** 2\) | &amp;lt;digit&amp;gt; ** 4] # [4]
+      &amp;lt;space&amp;gt;                                            # [5]
+      &amp;lt;digit&amp;gt; ** 10                                      # [6]
+      $                                                  # [7]
+    /)
+    .join(&quot;\n&quot;);
+}
+
+sub MAIN(Str $file-path) {
+  say challenge($file-path);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku test.txt
+0044 1148820341
+ +44 1148820341
+(44) 1148820341
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;The basics here are pretty simple – for each line in the file, check if it matches our regex. If so, keep it, otherwise, drop it. Finally, join all matching lines together using the newline character. See below for comments on the regex itself.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Spaces in regexes in Raku are insignificant unless we put the &lt;a href=&quot;https://docs.raku.org/language/regexes#Sigspace&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:s&lt;/code&gt; modifier&lt;/a&gt; (or “ratchet”) in front of the opening forward slash. This allows us to break the logic up over multiple lines and even add comments.&lt;/li&gt;
+  &lt;li&gt;Match the beginning of the line; this is a universal regex metacharacter.&lt;/li&gt;
+  &lt;li&gt;Match zero or more spaces. The example file had different levels of space at the beginning of each line, but all of it was insignificant.&lt;/li&gt;
+  &lt;li&gt;This line matches what I will call our “prefix.” It will match exactly one of the following:
+    &lt;ul&gt;
+      &lt;li&gt;A literal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;+&lt;/code&gt; character follow by two digits.&lt;/li&gt;
+      &lt;li&gt;A literal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(&lt;/code&gt; character followed by two digits followed by a literal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;)&lt;/code&gt; character.&lt;/li&gt;
+      &lt;li&gt;Four digits in a row.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Each valid phone number had a space between the prefix and the last 10 digits, so this matches a literal space.&lt;/li&gt;
+  &lt;li&gt;All valid phone numbers end in exactly 10 numbers&lt;/li&gt;
+  &lt;li&gt;Match the end of the line to verify there is nothing else in the matching line.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-transpose-file&quot;&gt;Task 2: Transpose File&lt;/h2&gt;
+
+&lt;p&gt;You are given a text file.&lt;/p&gt;
+
+&lt;p&gt;Write a script to transpose the contents of the given file.&lt;/p&gt;
+
+&lt;h3 id=&quot;input-file-1&quot;&gt;Input File&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;name,age,sex
+Mohammad,45,m
+Joe,20,m
+Julie,35,f
+Cristina,10,f
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;output-1&quot;&gt;Output&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;name,Mohammad,Joe,Julie,Cristina
+age,45,20,35,10
+sex,m,m,f,f
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-110/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use Text::CSV; # Imports `csv` function
+
+sub challenge(Str $file-path) returns Str {
+  my @lines = csv(in =&amp;gt; $file-path, headers =&amp;gt; &quot;auto&quot;); # [1] 
+  my $names = ('name', |@lines.map(*&amp;lt;name&amp;gt;)).join(','); # [2]
+  my $ages  = ('age', |@lines.map(*&amp;lt;age&amp;gt;)).join(',');
+  my $sexes = ('sex', |@lines.map(*&amp;lt;sex&amp;gt;)).join(',');
+  ($names, $ages, $sexes).join(&quot;\n&quot;);                   # [3]
+}
+
+sub MAIN(Str $file-path) {
+  say challenge($file-path);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku test.csv
+name,Mohammad,Joe,Julie,Cristina
+age,45,20,35,10
+sex,m,m,f,f
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;The bulk of the hard work is done for us by using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Text::CSV&lt;/code&gt; module. It allows us to pull the file into a list of hashes, and then do the logical work on that list. See below for how we apply the logic.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;csv&lt;/code&gt; with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;headers&lt;/code&gt; option allows us to pull the CSV file into a list of hashes that looks like this:&lt;/p&gt;
+
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; [
+   {age =&amp;gt; 45, name =&amp;gt; Mohammad, sex =&amp;gt; m}
+   {age =&amp;gt; 20, name =&amp;gt; Joe, sex =&amp;gt; m}
+   {age =&amp;gt; 35, name =&amp;gt; Julie, sex =&amp;gt; f}
+   {age =&amp;gt; 10, name =&amp;gt; Cristina, sex =&amp;gt; f}
+ ]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Once we have the list of hashes above, we need three individual strings (one for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;name&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;age&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sex&lt;/code&gt; respectively). To do this, we just need to extract the respective key for each item in the list; we can do this via a &lt;a href=&quot;https://docs.raku.org/routine/map&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt;&lt;/a&gt; function. Additionally, we prepend the respective key using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(&quot;key&quot;, |@list)&lt;/code&gt; syntax. For &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;name&lt;/code&gt;, this is what the output list looks like: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(name Mohammad Joe Julie Cristina)&lt;/code&gt;. Finally, we join the output list using commas.&lt;/li&gt;
+  &lt;li&gt;Once we have the 3 key lists, we simply have to join them using the newline character as shown in the example output.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I am going through an exercise at my day job where I refactor code from a more imperative approach to a more functional approach. Functional programming should not be used for everything, but when we can use it, it often allows for much more readable and predictable code.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">A couple IO-related challenges this week with nice functional solutions. 🙂</summary></entry><entry><title type="html">Perl Weekly Challenge 109</title><link href="http://localhost:4000/blog/perl-weekly-challenge-109/" rel="alternate" type="text/html" title="Perl Weekly Challenge 109" /><published>2021-04-24T00:00:00-05:00</published><updated>2021-04-24T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-109</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-109/">&lt;p&gt;Two fun tasks this week that were both able to be solved in a functional manner 🎉&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-chowla-numbers&quot;&gt;Task 1: Chowla Numbers&lt;/h2&gt;
 
@@ -1610,296 +1772,4 @@ $ raku ch-2.raku 1 1 -1 1 0 -3
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Nothing much to add this week. See y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week was pretty fun – solution one ends up re-using some code from my first post (Challenge 88), and solution two explores Barycentric coordinates! No ugly one-liners this week. 🙂</summary></entry><entry><title type="html">Perl Weekly Challenge 100</title><link href="http://localhost:4000/blog/perl-weekly-challenge-100/" rel="alternate" type="text/html" title="Perl Weekly Challenge 100" /><published>2021-02-20T00:00:00-06:00</published><updated>2021-02-20T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-100</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-100/">&lt;p&gt;This week was a lot of fun! Challenge 1 threw an additional curve ball at us – the solution should be a “one-liner.” I did my best to fit my solution on one line; the solution itself is 163 characters long.&lt;/p&gt;
-
-&lt;h2 id=&quot;task-1-fun-time&quot;&gt;Task 1: Fun Time&lt;/h2&gt;
-
-&lt;p&gt;You are given a time (12 hour / 24 hour).&lt;/p&gt;
-
-&lt;p&gt;Write a script to convert the given time from a 12-hour format to 24-hour format and vice versa.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Ideally we expect a one-liner.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 05:15 pm or 05:15pm
-Output: 17:15
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 19:15
-Output: 07:15 pm or 07:15pm
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-100/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Str \t) returns Str {
-    t~~/(\d+)\:(\d+)\s?([a|p]m)?/;my (\h,\m,\q)=$/[*];sprintf('%02d:%02d%s',q??h==12??q eq'am'??0!!h!!h+(12*(q eq'pm'))!!h==0|12??12!!h%12,m,q??''!!h&amp;gt;=12??'pm'!!'am');
-}
-
-# Implementation comments will go in this version of the above solution
-sub challenge-expanded(Str \t) returns Str {
-    t ~~ /
-      (\d+)     # One or more digits (should technically use \d ** {2}, but this is shorter
-      \:        # A literal colon character
-      (\d+)     # One or more digits (again, should use \d ** {2})
-      \s?       # An optional space (to support HH:MMam or HH:MM am)
-      ([a|p]m)? # An optional 'am' or 'pm' (to support both 12- and 24-hour time)
-    /;
-
-    my (\h, \m, \q) = $/[*]; # [1][2][3]
-
-	 # The logic in here is the same as above, with added parentheses for clarity
-    sprintf(
-      '%02d:%02d%s', # [4]
-      q ??
-        (h == 12 ??
-          (q  eq 'am' ?? 0 !! h) !!
-          h + (12 * ( q eq 'pm'))) !!
-        h == 0|12 ?? 12 !! h % 12,
-      m,
-      q ?? '' !! (h &amp;gt;= 12 ?? 'pm' !! 'am')
-    );
-}
-
-sub MAIN(Str $time) {
-    say challenge($time);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 05:15 pm
-17:15
-
-$ raku ch-1.raku 19:15
-7:15pm
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;This one is ugly, so I apologize in advance! When I hear “one-liner” I immediately think &lt;a href=&quot;https://en.wikipedia.org/wiki/Code_golf&quot;&gt;“code golf”&lt;/a&gt;. I used every trick I know to make my solution as short as possible while handling all the edge cases (it’s pretty easy to handle the given test cases, but the boundaries make things tricky. I tested every possible time in my full solution on GitHub). You’ll notice I &lt;em&gt;heavily&lt;/em&gt; lean on the ternary operator for all my branching logic.&lt;/p&gt;
-
-&lt;p&gt;For what it’s worth, this still has some flaws (for example, it will accept the time &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;99:99am&lt;/code&gt;), but it accepts &lt;strong&gt;all&lt;/strong&gt; valid input, so that is good enough for me.&lt;/p&gt;
-
-&lt;p&gt;First, we look for a string matching the regex provided (see embedded comment on what we are looking for). From this regex, we extract 3 elements: the hour, the minute, and the qualifier (am/pm) if it exists. Once we have those 3 elements, we pass them to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprintf&lt;/code&gt; function for all the logic.&lt;/p&gt;
-
-&lt;p&gt;For the hour, we follow the following logic:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Is there a qualifier?
-    &lt;ul&gt;
-      &lt;li&gt;If yes:
-        &lt;ul&gt;
-          &lt;li&gt;Is the hour equal to 12?
-            &lt;ul&gt;
-              &lt;li&gt;If yes:
-                &lt;ul&gt;
-                  &lt;li&gt;Is the qualifier equal to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;am&lt;/code&gt;?
-                    &lt;ul&gt;
-                      &lt;li&gt;If yes: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hour = 12&lt;/code&gt;&lt;/li&gt;
-                      &lt;li&gt;If no: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hour&lt;/code&gt; is left alone&lt;/li&gt;
-                    &lt;/ul&gt;
-                  &lt;/li&gt;
-                &lt;/ul&gt;
-              &lt;/li&gt;
-              &lt;li&gt;If no:
-                &lt;ul&gt;
-                  &lt;li&gt;Is the qualifier equal to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pm&lt;/code&gt;?
-                    &lt;ul&gt;
-                      &lt;li&gt;If yes: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hour = 12 + hour&lt;/code&gt;&lt;/li&gt;
-                      &lt;li&gt;If no: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hour&lt;/code&gt; is left alone&lt;/li&gt;
-                    &lt;/ul&gt;
-                  &lt;/li&gt;
-                &lt;/ul&gt;
-              &lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;If no:
-        &lt;ul&gt;
-          &lt;li&gt;Is the hour equal to 0 or 12?
-            &lt;ul&gt;
-              &lt;li&gt;If yes: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hour = 12&lt;/code&gt;&lt;/li&gt;
-              &lt;li&gt;If no: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hour = hour % 12&lt;/code&gt;&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Minute will always be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0-59&lt;/code&gt;, so we leave it alone.&lt;/p&gt;
-
-&lt;p&gt;For the qualifier, we follow the following logic:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Is there a qualifier?
-    &lt;ul&gt;
-      &lt;li&gt;If yes, we are converting to a 24-hour format, so the new qualifier is empty&lt;/li&gt;
-      &lt;li&gt;If no:
-        &lt;ul&gt;
-          &lt;li&gt;Is the hour greater than or equal to 12?
-            &lt;ul&gt;
-              &lt;li&gt;If yes: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;qualifier = 'pm'&lt;/code&gt;&lt;/li&gt;
-              &lt;li&gt;If no: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;qualifier = 'am'&lt;/code&gt;&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Finally, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprintf&lt;/code&gt; handles all the formatting (discussed below).&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Everywhere where I used a variable, you’ll notice I use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\variable-name&lt;/code&gt;. In Raku, there are several &lt;a href=&quot;https://docs.raku.org/language/variables#Sigils&quot;&gt;sigils&lt;/a&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$&lt;/code&gt; for scalars, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@&lt;/code&gt; for positionals, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%&lt;/code&gt; for associatives, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;amp;&lt;/code&gt; for functions. There is also the special &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\&lt;/code&gt; sigil for &lt;a href=&quot;https://docs.raku.org/type/Scalar#index-entry-%5c_(sigilless_scalar)&quot;&gt;sigilless scalars&lt;/a&gt;. Basically, if a variable is defined as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\variable-name&lt;/code&gt;, we are able to reference it as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;variable-name&lt;/code&gt;. This saved me 11 characters, by my count.&lt;/li&gt;
-  &lt;li&gt;A match object (returned by the smartmatch operator [&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~~&lt;/code&gt;]) creates a variable names &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$/&lt;/code&gt;, so that is where that came from. I could just have easily said &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;my $match = t ~~ &amp;lt;the rest&amp;gt;&lt;/code&gt;, but that would cost my characters.&lt;/li&gt;
-  &lt;li&gt;We used &lt;a href=&quot;https://docs.raku.org/language/regexes#Capturing&quot;&gt;regex capturing&lt;/a&gt; to pull out the hour, minute, and qualifier. Those end up in the match object (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$/&lt;/code&gt;) as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hour = $/[0]&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;minute = $/[1]&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;qualifier = $/[2]&lt;/code&gt;. We are able to extract &lt;em&gt;all 3&lt;/em&gt; elements by using the special &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; index to reference &lt;em&gt;all&lt;/em&gt; elements in the array.&lt;/li&gt;
-  &lt;li&gt;Raku’s &lt;a href=&quot;https://docs.raku.org/routine/sprintf&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprintf&lt;/code&gt; function&lt;/a&gt; is similar to Unix’s. It takes a formatting string (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;'%02d:%02d%s'&lt;/code&gt;) that describes the output. In this case, we say we want a 2-digit number, then a colon, then another 2-digit number, then a string. Those three elements are filled in with arguments 2-4 (hour, minute, qualifier).&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;task-2-triangle-sum&quot;&gt;Task 2: Triangle Sum&lt;/h2&gt;
-
-&lt;p&gt;You are given triangle array.&lt;/p&gt;
-
-&lt;p&gt;Write a script to find the minimum path sum from top to bottom.&lt;/p&gt;
-
-&lt;p&gt;When you are on index &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; on the current row then you may move to either index &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; or index &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i + 1&lt;/code&gt; on the next row.&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1-1&quot;&gt;Example 1&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: Triangle = [ [1], [2,4], [6,4,9], [5,1,7,2] ]
-Output: 8
-
-Explanation: The given triangle
-
-            1
-           2 4
-          6 4 9
-         5 1 7 2
-
-The minimum path sum from top to bottom:  1 + 2 + 4 + 1 = 8
-
-             [1]
-           [2]  4
-           6 [4] 9
-          5 [1] 7 2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2-1&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: Triangle = [ [3], [3,1], [5,2,3], [4,3,1,3] ]
-Output: 7
-
-Explanation: The given triangle
-
-            3
-           3 1
-          5 2 3
-         4 3 1 3
-
-The minimum path sum from top to bottom: 3 + 1 + 2 + 1 = 7
-
-             [3]
-            3  [1]
-           5 [2] 3
-          4 3 [1] 3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-100/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(@triangle) {
-    my @layers = (0..@triangle.end); # [1]
-    my @indices = gather {           # [2]
-        for @triangle -&amp;gt; @layer {
-            take (0..@layer.end).List;
-        }
-    }
-    my @paths = gather {
-        for ([X] @indices) -&amp;gt; @path {         # [3]
-            my @zipped = @path Z @path[1..*]; # [4]
-            my $valid = True;
-            for @zipped -&amp;gt; ($a, $b) {
-                if $b &amp;lt; $a || $b &amp;gt; $a + 1 {
-                    $valid = False;
-                    last;
-                }
-            }
-            take @path if $valid;             # [5]
-        }
-    }
-    my @sums = gather {
-        my $sum = 0;
-        for @paths -&amp;gt; @path {
-            for @layers Z @path -&amp;gt; ($layer, $index) {
-                $sum += @triangle[$layer][$index];
-            }
-            take $sum;
-            $sum = 0;
-        }
-    }
-    @sums.min;
-}
-
-sub MAIN(*@N where all(@N) ~~ Int) {
-	 # Some extra logic to turn a list into a triangle
-    my ($index, $size) = (0, 1);
-    my @triangle;
-    while $index &amp;lt;= @N.end {
-        my $end-index = $index + $size;
-
-        my @layer = @N[$index..^$end-index];
-        @triangle.push(@layer);
-
-        $index = $end-index;
-        $size++;
-    }
-    say challenge(@triangle);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 1 2 4 6 4 9 5 1 7 2
-8
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;The logic here is pretty straightforward:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Find how many layers to the triangle there are&lt;/li&gt;
-  &lt;li&gt;Find the valid indices of each layer. So, for example 1, this would be something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;((0), (0, 1), (0, 1, 2), (0, 1, 2, 3))&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Find all valid paths. “Valid” in this case means that we always move from position &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; to position &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i+1&lt;/code&gt; on the next layer.&lt;/li&gt;
-  &lt;li&gt;Find the sum of each valid path.&lt;/li&gt;
-  &lt;li&gt;Return the minimum sum out of the valid paths.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Raku has a great method for positionals called &lt;a href=&quot;https://docs.raku.org/routine/end&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;end&lt;/code&gt;&lt;/a&gt;. It returns the last index in a list and saves us from confusion (similar to something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;len(list) - 1&lt;/code&gt;).&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/syntax/gather%20take&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gather&lt;/code&gt;&lt;/a&gt; is a way to build up a list based on some logic. It can be thought of as a more powerful list comprehension (from Python).&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/X&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt;&lt;/a&gt; is the cross product operator. When used like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[X] @list&lt;/code&gt;, it works like this: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[X] ((1, 2, 3), (4, 5, 6), (7, 8, 9)) == (1, 2, 3) X (4, 5, 6) X (7, 8, 9)&lt;/code&gt;. In this case, it creates all possible paths through the triangle (which we filter down to valid paths).&lt;/li&gt;
-  &lt;li&gt;To make sure we only move from position &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; to position &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i+1&lt;/code&gt; from layer to layer, we “zip” against our path from position &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i+1&lt;/code&gt; to the end.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if&lt;/code&gt; can be used in a postfix form to save space. In this case, we only want to take a path if it is valid (as defined above).&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;I had a lot of fun with this week’s challenges, especially challenge 1! Let me know if you think of a shorter solution. Otherwise, see y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week was a lot of fun! Challenge 1 threw an additional curve ball at us – the solution should be a “one-liner.” I did my best to fit my solution on one line; the solution itself is 163 characters long.</summary></entry></feed>
+&lt;p&gt;Nothing much to add this week. See y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week was pretty fun – solution one ends up re-using some code from my first post (Challenge 88), and solution two explores Barycentric coordinates! No ugly one-liners this week. 🙂</summary></entry></feed>

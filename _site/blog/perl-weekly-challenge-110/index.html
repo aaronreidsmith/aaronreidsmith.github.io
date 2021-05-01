@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Advent of Code: Day 1 - Aaron Smith</title>
-<meta name="description" content="Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.">
+<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 110 - Aaron Smith</title>
+<meta name="description" content="A couple IO-related challenges this week with nice functional solutions. 🙂">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,28 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Advent of Code: Day 1">
-<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-day-01/">
+<meta property="og:title" content="Perl Weekly Challenge 110">
+<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-110/">
 
 
-  <meta property="og:description" content="Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.">
-
-
-
+  <meta property="og:description" content="A couple IO-related challenges this week with nice functional solutions. 🙂">
 
 
 
 
-  <meta property="article:published_time" content="2020-12-01T00:00:00-06:00">
 
 
 
-  <meta property="article:modified_time" content="2020-12-01T07:40:30-06:00">
+  <meta property="article:published_time" content="2021-05-01T00:00:00-05:00">
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-day-01/">
+
+
+<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-110/">
 
 
 
@@ -288,15 +286,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Advent of Code: Day 1">
-    <meta itemprop="description" content="Turns out I started blogging just in time for the Advent of Code, an annual series of daily challenges that run from December 1st to December 25th.">
-    <meta itemprop="datePublished" content="2020-12-01T00:00:00-06:00">
-    <meta itemprop="dateModified" content="2020-12-01T07:40:30-06:00">
+    <meta itemprop="headline" content="Perl Weekly Challenge 110">
+    <meta itemprop="description" content="A couple IO-related challenges this week with nice functional solutions. 🙂">
+    <meta itemprop="datePublished" content="2021-05-01T00:00:00-05:00">
+    
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Day 1
+          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 110
 </h1>
           
 
@@ -305,7 +303,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-01T00:00:00-06:00">December 1, 2020</time>
+        <time datetime="2021-05-01T00:00:00-05:00">May 1, 2021</time>
       </span>
     
 
@@ -318,7 +316,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          4 minute read
+          3 minute read
         
       </span>
     
@@ -330,100 +328,169 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>Turns out I started blogging just in time for the <a href="https://adventofcode.com/">Advent of Code</a>, an annual series of daily challenges that run from December 1st to December 25th.</p>
+        <p>A couple IO-related challenges this week with nice functional solutions. 🙂</p>
 
-<p>These problems remind me a lot of <a href="https://projecteuler.net/">Project Euler</a>, because they are not concerned with the readability or speed of your code, just the output. That means that any goals one wishes to accomplish should be set personally (there <em>is</em> technically a leaderboard, but I find you have to be online very late at night to catch the posts, and it is not worth the stress during the holiday season).</p>
+<h2 id="task-1-valid-phone-numbers">Task 1: Valid Phone Numbers</h2>
 
-<p>My goal, as you may have guessed from my previous posts, is to complete these challenges in <em>at least</em> Raku and to do so utilizing a functional programming paradigm. Let’s dive into day 1 and see if I can do it!</p>
+<p>You are given a text file.</p>
 
-<h2 id="the-problem">The Problem</h2>
+<p>Write a script to display all valid phone numbers in the given text file.</p>
 
-<p>I am not going to copy and paste the explanation of the problem here like I do for the Perl Weekly Challenge, because it is <em>so</em> long, and I want to encourage users to go attempt the challenge themselves! Instead, I will write a summary of what the challenge is and my solution.</p>
+<h3 id="acceptable-phone-number-formats">Acceptable Phone Number Formats</h3>
 
-<h3 id="part-1">Part 1</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+nn  nnnnnnnnnn
+(nn) nnnnnnnnnn
+nnnn nnnnnnnnnn
+</code></pre></div></div>
 
-<p>Given a file full of integers (one per line), find the single pair of integers that adds up to <code class="language-plaintext highlighter-rouge">2020</code>, then find the product of those two numbers.</p>
+<h3 id="input-file">Input File</h3>
 
-<h4 id="solution">Solution</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0044 1148820341
+ +44 1148820341
+  44-11-4882-0341
+(44) 1148820341
+  00 1148820341
+</code></pre></div></div>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku">GitHub Link</a></p>
+<h3 id="output">Output</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0044 1148820341
+ +44 1148820341
+(44) 1148820341
+</code></pre></div></div>
+
+<h3 id="solution">Solution</h3>
+
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-110/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub MAIN($file) {
-    say $file.IO.lines                           # [1]
-          .combinations(2)                       # [2]
-          .grep(-&gt; ($a, $b) { $a + $b == 2020 }) # [3]
-          .map(-&gt; ($a, $b) { $a * $b })          # [4]
-          .head;                                 # [5]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(Str $file-path) returns Str {
+  $file-path
+    .IO
+    .lines
+    .grep(* ~~ /                                         # [1]
+      ^                                                  # [2]
+      &lt;space&gt;*                                           # [3]
+      [\+&lt;digit&gt; ** 2 | \(&lt;digit&gt; ** 2\) | &lt;digit&gt; ** 4] # [4]
+      &lt;space&gt;                                            # [5]
+      &lt;digit&gt; ** 10                                      # [6]
+      $                                                  # [7]
+    /)
+    .join("\n");
+}
+
+sub MAIN(Str $file-path) {
+  say challenge($file-path);
 }
 </code></pre></div></div>
 
-<p>This runs as such:</p>
+<p>This program runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
-1020036
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku test.txt
+0044 1148820341
+ +44 1148820341
+(44) 1148820341
 </code></pre></div></div>
 
-<h4 id="explanation">Explanation</h4>
+<h3 id="explanation">Explanation</h3>
 
-<p>This is fairly straight forward, and I feel Raku reads very cleanly. Basically, we read the entire file into a list (<code class="language-plaintext highlighter-rouge">IO.lines</code>), then find all the pairs in that list, filter those pairs down to where <code class="language-plaintext highlighter-rouge">$a + $b == 2020</code>, then multiply those two numbers together!</p>
+<p>The basics here are pretty simple – for each line in the file, check if it matches our regex. If so, keep it, otherwise, drop it. Finally, join all matching lines together using the newline character. See below for comments on the regex itself.</p>
 
-<h5 id="specific-comments">Specific Comments</h5>
+<h4 id="specific-comments">Specific comments</h4>
 
 <ol>
-  <li>I’m a sucker for good IO. I feel reading/writing files in languages like Java or Scala is so cumbersome that I try to avoid it at all costs. Languages like Raku were <em>built</em> for text manipulation, so it makes sense that the IO is great, but I just wanted to call out how easy it is to get the lines of a file in a list.</li>
-  <li>As I said in my <a href="https://aaronreidsmith.github.io/blog/perl-weekly-challenge-089/#specific-comments">previous post</a>, I see the <code class="language-plaintext highlighter-rouge">combinations</code> feature coming back a lot in these puzzles. I love that it is built right in.</li>
-  <li><code class="language-plaintext highlighter-rouge">grep</code> is familiar to most <code class="language-plaintext highlighter-rouge">*nix</code> users, and it is the equivalent of a <code class="language-plaintext highlighter-rouge">filter</code> in more traditional functional languages. In this case, we are filtering down to only pairs that add up to <code class="language-plaintext highlighter-rouge">2020</code>.</li>
-  <li>At this point this list looks like this: <code class="language-plaintext highlighter-rouge">(($a, $b))</code>, so we still want to map over the outer list and multiply the pair together.</li>
-  <li>Since <code class="language-plaintext highlighter-rouge">map</code> returns a list, we need to grab the first item from that list for pretty printing.</li>
+  <li>Spaces in regexes in Raku are insignificant unless we put the <a href="https://docs.raku.org/language/regexes#Sigspace"><code class="language-plaintext highlighter-rouge">:s</code> modifier</a> (or “ratchet”) in front of the opening forward slash. This allows us to break the logic up over multiple lines and even add comments.</li>
+  <li>Match the beginning of the line; this is a universal regex metacharacter.</li>
+  <li>Match zero or more spaces. The example file had different levels of space at the beginning of each line, but all of it was insignificant.</li>
+  <li>This line matches what I will call our “prefix.” It will match exactly one of the following:
+    <ul>
+      <li>A literal <code class="language-plaintext highlighter-rouge">+</code> character follow by two digits.</li>
+      <li>A literal <code class="language-plaintext highlighter-rouge">(</code> character followed by two digits followed by a literal <code class="language-plaintext highlighter-rouge">)</code> character.</li>
+      <li>Four digits in a row.</li>
+    </ul>
+  </li>
+  <li>Each valid phone number had a space between the prefix and the last 10 digits, so this matches a literal space.</li>
+  <li>All valid phone numbers end in exactly 10 numbers</li>
+  <li>Match the end of the line to verify there is nothing else in the matching line.</li>
 </ol>
 
-<h3 id="part-2">Part 2</h3>
+<h2 id="task-2-transpose-file">Task 2: Transpose File</h2>
 
-<p>Given the same file as before, find the <em>3</em> numbers that add up to <code class="language-plaintext highlighter-rouge">2020</code> and find their product.</p>
+<p>You are given a text file.</p>
 
-<h4 id="solution-1">Solution</h4>
+<p>Write a script to transpose the contents of the given file.</p>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku">GitHub Link</a></p>
+<h3 id="input-file-1">Input File</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>name,age,sex
+Mohammad,45,m
+Joe,20,m
+Julie,35,f
+Cristina,10,f
+</code></pre></div></div>
+
+<h3 id="output-1">Output</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>name,Mohammad,Joe,Julie,Cristina
+age,45,20,35,10
+sex,m,m,f,f
+</code></pre></div></div>
+
+<h3 id="solution-1">Solution</h3>
+
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-110/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub MAIN($file, Bool :$p2 = False) {                # [1]
-    say $file.IO.lines
-          .combinations($p2 ?? 3 !! 2)              # [2]
-          .grep(-&gt; @combo { ([+] @combo) == 2020 }) # [3]
-          .map(-&gt; @combo { [*] @combo })
-          .head;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Text::CSV; # Imports `csv` function
+
+sub challenge(Str $file-path) returns Str {
+  my @lines = csv(in =&gt; $file-path, headers =&gt; "auto"); # [1] 
+  my $names = ('name', |@lines.map(*&lt;name&gt;)).join(','); # [2]
+  my $ages  = ('age', |@lines.map(*&lt;age&gt;)).join(',');
+  my $sexes = ('sex', |@lines.map(*&lt;sex&gt;)).join(',');
+  ($names, $ages, $sexes).join("\n");                   # [3]
+}
+
+sub MAIN(Str $file-path) {
+  say challenge($file-path);
 }
 </code></pre></div></div>
 
-<p>This runs as such:</p>
+<p>This program runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
-$ raku main.raku input.txt
-1020036
-
-# Part 2
-$ raku main.raku --p2 input.txt
-286977330
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku test.csv
+name,Mohammad,Joe,Julie,Cristina
+age,45,20,35,10
+sex,m,m,f,f
 </code></pre></div></div>
 
-<h4 id="explanation-1">Explanation</h4>
+<h3 id="explanation-1">Explanation</h3>
 
-<p>Since it is basically the same problem, it only makes sense to modify the script we have already written rather than starting from scratch. Basically, everywhere where we hardcoded <code class="language-plaintext highlighter-rouge">$a, $b</code> needs to be generalized to some list. In this case, we added a <code class="language-plaintext highlighter-rouge">p2</code> CLI flag that allows the users to specify if they are doing part 1 or part 2. If they are doing part 2 we find trios instead of pairs, then perform the same “business logic” on that collection.</p>
+<p>The bulk of the hard work is done for us by using the <code class="language-plaintext highlighter-rouge">Text::CSV</code> module. It allows us to pull the file into a list of hashes, and then do the logical work on that list. See below for how we apply the logic.</p>
 
-<h5 id="specific-comments-1">Specific Comments</h5>
+<h4 id="specific-comments-1">Specific Comments</h4>
 
 <ol>
-  <li>Using the <code class="language-plaintext highlighter-rouge">:$p2</code> notation says to Raku “create a command line flag called <code class="language-plaintext highlighter-rouge">--p2</code> and assign it to <code class="language-plaintext highlighter-rouge">$p2</code> with a default of <code class="language-plaintext highlighter-rouge">False</code>”. Creating command line interfaces can be kind of a pain in a lot of languages, so I am happy that is built right into the language.</li>
-  <li>This is the check to see if we are doing part 1 or part 2. Raku’s ternary operator is <code class="language-plaintext highlighter-rouge">condition ?? true !! false</code> rather than the traditional <code class="language-plaintext highlighter-rouge">condition ? true : false</code>.</li>
-  <li>Since we have to remove all the pair hard-coding, we can generalize it as a list called <code class="language-plaintext highlighter-rouge">@combo</code> and then just find the sum of the entire combo using the <code class="language-plaintext highlighter-rouge">[+]</code> meta operator. We perform a similar generalization for the <code class="language-plaintext highlighter-rouge">map</code> step.</li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">csv</code> with the <code class="language-plaintext highlighter-rouge">headers</code> option allows us to pull the CSV file into a list of hashes that looks like this:</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> [
+   {age =&gt; 45, name =&gt; Mohammad, sex =&gt; m}
+   {age =&gt; 20, name =&gt; Joe, sex =&gt; m}
+   {age =&gt; 35, name =&gt; Julie, sex =&gt; f}
+   {age =&gt; 10, name =&gt; Cristina, sex =&gt; f}
+ ]
+</code></pre></div>    </div>
+  </li>
+  <li>Once we have the list of hashes above, we need three individual strings (one for <code class="language-plaintext highlighter-rouge">name</code>, <code class="language-plaintext highlighter-rouge">age</code>, and <code class="language-plaintext highlighter-rouge">sex</code> respectively). To do this, we just need to extract the respective key for each item in the list; we can do this via a <a href="https://docs.raku.org/routine/map"><code class="language-plaintext highlighter-rouge">map</code></a> function. Additionally, we prepend the respective key using the <code class="language-plaintext highlighter-rouge">("key", |@list)</code> syntax. For <code class="language-plaintext highlighter-rouge">name</code>, this is what the output list looks like: <code class="language-plaintext highlighter-rouge">(name Mohammad Joe Julie Cristina)</code>. Finally, we join the output list using commas.</li>
+  <li>Once we have the 3 key lists, we simply have to join them using the newline character as shown in the example output.</li>
 </ol>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>So far so good with my goal to write Raku solutions functionally! Check my <a href="https://github.com/aaronreidsmith/advent-of-code">GitHub</a> to see any other solutions (and any other languages, if I get around to them). This was a fun little dip into the Advent of Code, and I am looking forward to the rest of the month!</p>
+<p>I am going through an exercise at my day job where I refactor code from a more imperative approach to a more functional approach. Functional programming should not be used for everything, but when we can use it, it often allows for much more readable and predictable code.</p>
 
         
       </section>
@@ -440,7 +507,7 @@ $ raku main.raku --p2 input.txt
     <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
     <span itemprop="keywords">
     
-      <a href="/tags/#advent-of-code" class="page__taxonomy-item" rel="tag">Advent of Code</a><span class="sep">, </span>
+      <a href="/tags/#perl-weekly-challenge" class="page__taxonomy-item" rel="tag">Perl Weekly Challenge</a><span class="sep">, </span>
     
       <a href="/tags/#raku" class="page__taxonomy-item" rel="tag">Raku</a>
     
@@ -466,7 +533,7 @@ $ raku main.raku --p2 input.txt
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-01">December 1, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-05-01T00:00:00-05:00">May 1, 2021</time></p>
 
 
       </footer>
@@ -476,23 +543,22 @@ $ raku main.raku --p2 input.txt
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Day+1%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-01%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+110%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-110%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-01%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-110%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-day-01%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-110%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/perl-weekly-challenge-089/" class="pagination--pager" title="Perl Weekly Challenge 89
+      <a href="/blog/perl-weekly-challenge-109/" class="pagination--pager" title="Perl Weekly Challenge 109
 ">Previous</a>
     
     
-      <a href="/blog/advent-of-code-day-02/" class="pagination--pager" title="Advent of Code: Day 2
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -506,53 +572,6 @@ $ raku main.raku --p2 input.txt
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/perl-weekly-challenge-110/" rel="permalink">Perl Weekly Challenge 110
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2021-05-01T00:00:00-05:00">May 1, 2021</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          3 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">A couple IO-related challenges this week with nice functional solutions. 🙂
-
-</p>
-  </article>
-</div>
-
         
           
 
@@ -681,7 +700,7 @@ $ raku main.raku --p2 input.txt
       <span class="page__meta-readtime">
         <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
-          4 minute read
+          3 minute read
         
       </span>
     
@@ -689,6 +708,53 @@ $ raku main.raku --p2 input.txt
 
 
     <p class="archive__item-excerpt" itemprop="description">I wrote this week’s answers several days ago, but forgot to commit them. I ended up getting a new laptop and had to rewrite them. I think they ended up the s...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-106/" rel="permalink">Perl Weekly Challenge 106
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-03-29T00:00:00-05:00">March 29, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Task 2 seems like it would be difficult, but once again, Raku has built-in mechanisms to help us out!
+
+</p>
   </article>
 </div>
 

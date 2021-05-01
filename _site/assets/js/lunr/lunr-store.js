@@ -280,4 +280,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-109/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 110",
+        "excerpt":"A couple IO-related challenges this week with nice functional solutions. 🙂 Task 1: Valid Phone Numbers You are given a text file. Write a script to display all valid phone numbers in the given text file. Acceptable Phone Number Formats +nn nnnnnnnnnn (nn) nnnnnnnnnn nnnn nnnnnnnnnn Input File 0044 1148820341...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-110/",
+        "teaser": null
       }]
