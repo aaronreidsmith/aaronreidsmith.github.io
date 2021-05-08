@@ -286,4 +286,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-110/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 111",
+        "excerpt":"I was apparently the champion of the Perl Weekly Challenge for last month, which is pretty cool! I encourage folks to go read my interview with Mohammad Anwar, who runs the Perl Weekly Challenge. Task 1: Search Matrix You are given 5x5 matrix filled with integers such that each row...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-111/",
+        "teaser": null
       }]
