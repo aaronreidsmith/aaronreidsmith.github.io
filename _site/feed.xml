@@ -1,4 +1,158 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-01T14:56:13-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 110</title><link href="http://localhost:4000/blog/perl-weekly-challenge-110/" rel="alternate" type="text/html" title="Perl Weekly Challenge 110" /><published>2021-05-01T00:00:00-05:00</published><updated>2021-05-01T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-110</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-110/">&lt;p&gt;A couple IO-related challenges this week with nice functional solutions. 🙂&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-08T15:04:21-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 111</title><link href="http://localhost:4000/blog/perl-weekly-challenge-111/" rel="alternate" type="text/html" title="Perl Weekly Challenge 111" /><published>2021-05-08T00:00:00-05:00</published><updated>2021-05-08T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-111</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-111/">&lt;p&gt;I was apparently &lt;a href=&quot;https://perlweeklychallenge.org/blog/meet-the-champion-2021-04/&quot;&gt;the champion&lt;/a&gt; of the &lt;em&gt;Perl Weekly Challenge&lt;/em&gt; for last month, which is pretty cool! I encourage folks to go read my interview with Mohammad Anwar, who runs the &lt;em&gt;Perl Weekly Challenge&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-search-matrix&quot;&gt;Task 1: Search Matrix&lt;/h2&gt;
+
+&lt;p&gt;You are given 5x5 matrix filled with integers such that each row is sorted from left to right, and the first integer of each row is greater than the last integer of the previous row.&lt;/p&gt;
+
+&lt;p&gt;Write a script to find a given integer in the matrix using an efficient search algorithm.&lt;/p&gt;
+
+&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Matrix: [  1,  2,  3,  5,  7 ]
+        [  9, 11, 15, 19, 20 ]
+        [ 23, 24, 25, 29, 31 ]
+        [ 32, 33, 39, 40, 42 ]
+        [ 45, 47, 48, 49, 50 ]
+
+Input: 35
+Output: 0 since it is missing in the matrix
+
+Input: 39
+Output: 1 as it exists in the matrix
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-111/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(@list-of-lists, Int $N) returns Int {
+  my $output = 0;
+  for (0..^@list-of-lists.end) Z (0^..@list-of-lists.end) -&amp;gt; ($i, $j) { # [1]
+    if @list-of-lists[$i].head == $N || @list-of-lists[$j].head == $N { # [2]
+      $output = 1;
+      last;
+    } elsif @list-of-lists[$i].head &amp;lt; $N &amp;lt; @list-of-lists[$j].head {
+      $output = (any(@list-of-lists[$i][1..*]) ~~ $N).Int;              # [3]
+      last;
+    } elsif $j == @list-of-lists.end &amp;amp;&amp;amp; $N &amp;gt; @list-of-lists[$j].head {  # [4]
+      $output = (any(@list-of-lists[$j][1..*]) ~~ $N).Int;
+      last;
+    }
+  }
+  $output;
+}
+
+sub MAIN(Int $N) {
+  my @list-of-lists = (   # [5]
+    ( 1,  2,  3,  5,  7),
+    ( 9, 11, 15, 19, 20),
+    (23, 24, 25, 29, 31),
+    (32, 33, 39, 40, 42),
+    (45, 47, 48, 49, 50)
+  );
+  say challenge(@list-of-lists, $N);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 35
+0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;I don’t know if this is the most efficient method, but it is &lt;em&gt;an&lt;/em&gt; efficient method, which is what the question calls for. The naive solution would be something like this, which has a complexity of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(n+k)&lt;/code&gt; where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt; is the number of elements total (25) and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;k&lt;/code&gt; is the cost of flattening the structure (likely just 4 appends).&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;any(@list-of-lists.flat) ~~ $N
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;My approach, instead, looks at the first element of each sublist to determine if it should even bother looking in that sublist. If so, it will drop down and check items 2 through 5 of the sublist (I assume this happens in order using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;any&lt;/code&gt;). if not, it will skip the list entirely and jump to the next sublist.&lt;/p&gt;
+
+&lt;p&gt;I &lt;em&gt;think&lt;/em&gt; my approach has a complexity of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(n+k)&lt;/code&gt; where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt; is the number of sub-lists (5) and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;k&lt;/code&gt; is the number of elements in that list (minus the first one, so 4). So we will &lt;em&gt;at most&lt;/em&gt; do 9 checks and be able to determine if the item exists in a sublist. On average, we will have fewer checks than that.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;This looks complex, but this is just making a list that looks like this &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;((0, 1), (1, 2), (2, 3), (3, 4))&lt;/code&gt; so that we can look at two sublists at a time. The second sublist is necessary so we can check the top end of the range easily.&lt;/li&gt;
+  &lt;li&gt;Check the head of the first list and head of the second sublist to see if we can skip searching a sublist.&lt;/li&gt;
+  &lt;li&gt;If it is in the range of a sublist, we can drop into it and use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;any&lt;/code&gt;, which I am pretty sure just searches from left to right. At most this will search all 4 elements (we skip the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;head&lt;/code&gt; item), and will end early if it finds the element.&lt;/li&gt;
+  &lt;li&gt;If this is the last iteration and we still haven’t found &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;, we need to drop into the last sublist, just for full coverage.&lt;/li&gt;
+  &lt;li&gt;We could set this up to be dynamic and passed in at run time, but I figured it would be okay to hardcode for our purposes.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-ordered-letters&quot;&gt;Task 2: Ordered Letters&lt;/h2&gt;
+
+&lt;p&gt;Given a word, you can sort its letters alphabetically (case-insensitive). For example, “beekeeper” becomes “beeeeekpr” and “dictionary” becomes “acdiinorty”.&lt;/p&gt;
+
+&lt;p&gt;Write a script to find the longest English words that don’t change when their letters are sorted.&lt;/p&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-111/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use LibCurl::HTTP :subs; # Imports jget
+
+sub get-english-words {
+  my %words = jget('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json'); # [1]
+  %words.keys;                                                                                           # [2]
+}
+
+sub challenge(Int $threshold) {
+  my @words = get-english-words;
+  my @matching-words = gather for @words.race -&amp;gt; $word {         # [3]
+    my @chars = $word.comb;
+    if @chars.elems &amp;gt;= $threshold &amp;amp;&amp;amp; @chars.sort.join eq $word { # [4]
+      take $word;
+    }
+  }
+  @matching-words.sort;
+}
+
+multi sub MAIN(Int $threshold = 7) { # [5]
+  for challenge($threshold) -&amp;gt; $word {
+    say $word;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku
+adelops
+aegilops
+alloquy
+beefily
+begorry
+belloot
+billowy
+deglory
+egilops
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;So this question is pretty vague. The first problem we have is, how do we get a list of all English words? Rather than ship a text file around with my code, we can pull some at run time from an API. I couldn’t find a decent free API, so I just found &lt;a href=&quot;https://github.com/dwyl/english-words&quot;&gt;this GitHub repo&lt;/a&gt; that has a JSON file full of words. Does it have all the words? I have no idea, but it will certainly work for our purposes.&lt;/p&gt;
+
+&lt;p&gt;Basically, once that is pulled down, we just split each word into characters, sort them, and compare them to the original word. However, we check against &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$threshold&lt;/code&gt; first, so we don’t do the expensive computation on every word.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Passing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:sub&lt;/code&gt; flag to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;use LibCurl:HTTP&lt;/code&gt; imports its individual subroutines, including &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jget&lt;/code&gt;. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jget&lt;/code&gt; calls the URL and unpacks the returns JSON into a hash.&lt;/li&gt;
+  &lt;li&gt;I don’t know why the author of the above GitHub repo chose this format, but instead of using a JSON array, they used a format like this: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{&quot;word&quot;: 1}&lt;/code&gt;, so we only need the keys.&lt;/li&gt;
+  &lt;li&gt;Since we need to process all of these words, and the order doesn’t matter (since we will sort later), we can cast this list to a &lt;a href=&quot;https://docs.raku.org/type/RaceSeq&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RaceSeq&lt;/code&gt;&lt;/a&gt; that will process in parallel without definite order.&lt;/li&gt;
+  &lt;li&gt;Check the threshold first, so we don’t do the expensive computation if it is short. If it passes that check, sort the characters and compare to the original word. If it also passes that check, we can take this work and add it to our output.&lt;/li&gt;
+  &lt;li&gt;The question asks us to find the longest English &lt;strong&gt;words&lt;/strong&gt; (plural). The single longest word is 8 characters (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;aegilops&lt;/code&gt;, which is a &lt;a href=&quot;https://en.wikipedia.org/wiki/Aegilops&quot;&gt;genus of plant&lt;/a&gt;), so I bumped the threshold down to 7 to give the longest English &lt;strong&gt;words&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;I have never gotten to do web requests in Raku, so it was fun learning about different packages for that. There is even the &lt;a href=&quot;https://cro.services/&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Cro&lt;/code&gt;&lt;/a&gt; project for setting up APIs; maybe I will get a chance to use that in the future. See y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I was apparently the champion of the Perl Weekly Challenge for last month, which is pretty cool! I encourage folks to go read my interview with Mohammad Anwar, who runs the Perl Weekly Challenge.</summary></entry><entry><title type="html">Perl Weekly Challenge 110</title><link href="http://localhost:4000/blog/perl-weekly-challenge-110/" rel="alternate" type="text/html" title="Perl Weekly Challenge 110" /><published>2021-05-01T00:00:00-05:00</published><updated>2021-05-01T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-110</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-110/">&lt;p&gt;A couple IO-related challenges this week with nice functional solutions. 🙂&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-valid-phone-numbers&quot;&gt;Task 1: Valid Phone Numbers&lt;/h2&gt;
 
@@ -1478,298 +1632,4 @@ sub MAIN(Int $N) {
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;It’s pretty cool that Raku has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.sqrt&lt;/code&gt; built right in, but I find it odd that it doesn’t have some sort of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.is-whole&lt;/code&gt; functionality (Python has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.is_integer()&lt;/code&gt;, Scala has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.isWhole&lt;/code&gt;). Maybe it does, and the documentation is just bad; it would not be the first time I have run into that! Honestly, if you read back through my blog, I think I have found 3 separate ways to check if a floating-point number (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Num&lt;/code&gt;) is an integer (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt;) in Raku. Oh well, I guess it is all part of the journey!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Part one was an exercise in efficiency and short-circuiting; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add!</summary></entry><entry><title type="html">Perl Weekly Challenge 101</title><link href="http://localhost:4000/blog/perl-weekly-challenge-101/" rel="alternate" type="text/html" title="Perl Weekly Challenge 101" /><published>2021-02-27T00:00:00-06:00</published><updated>2021-02-27T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-101</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-101/">&lt;p&gt;This week was pretty fun – solution one ends up re-using some code from &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-088/&quot;&gt;my first post&lt;/a&gt; (Challenge 88), and solution two explores &lt;a href=&quot;https://en.wikipedia.org/wiki/Barycentric_coordinate_system&quot;&gt;Barycentric coordinates&lt;/a&gt;! No ugly one-liners this week. 🙂&lt;/p&gt;
-
-&lt;h2 id=&quot;task-1-pack-a-spiral&quot;&gt;Task 1: Pack a Spiral&lt;/h2&gt;
-
-&lt;p&gt;You are given an array &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@A&lt;/code&gt; of items (integers say, but they can be anything).&lt;/p&gt;
-
-&lt;p&gt;Your task is to pack that array into an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MxN&lt;/code&gt; matrix spirally &lt;strong&gt;counterclockwise&lt;/strong&gt;, as tightly as possible. “Tightly” means the absolute value of the difference between &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;M&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|M-N|&lt;/code&gt;) has to be as small as possible.&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1&quot;&gt;Example 1&lt;/h3&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @A = (1,2,3,4)
-
-Output:
-
-    4 3
-    1 2
-
-Since the given array is already a 1x4 matrix on its own, but that's not as tight as possible. Instead, you'd spiral it counterclockwise into
-
-    4 3
-    1 2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @A = (1,2,3,4,5,6)
-
-Output:
-
-    6 5 4
-    1 2 3
-
-or
-
-    5 4
-    6 3
-    1 2
-
-Either will do as an answer, because they're equally tight.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-3&quot;&gt;Example 3&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @A = (1,2,3,4,5,6,7,8,9,10,11,12)
-
-Output:
-
-       9  8  7 6
-      10 11 12 5
-       1  2  3 4
-
-or
-
-       8  7 6
-       9 12 5
-      10 11 4
-       1  2 3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-101/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Finds all factor pairs of a given numbers
-sub factors(Int $n) returns Positional {
-    my $max = $n.sqrt.floor;
-    my $number = 1;
-    my @factors;
-    while $number &amp;lt;= $max {
-        my $potential-factor = $n / $number;
-        if $potential-factor == $potential-factor.Int {
-            @factors.push(($number.clone, $potential-factor)); # [1]
-        }
-        $number++;
-    }
-    @factors;
-}
-
-# Formats a 2D array into a multi-line string
-sub format(@two-d) returns Str {
-    my $width = @two-d[*;*].max(*.chars).chars;                                # [2]
-    my @formatted = gather {
-        for @two-d -&amp;gt; @row {
-            take @row.map(-&amp;gt; $num { sprintf('%*s', $width, $num) }).join(' '); # [3]
-        }
-    }
-    @formatted.join(&quot;\n&quot;);
-}
-
-sub challenge(@A) returns Str {
-    enum Direction &amp;lt;NORTH EAST SOUTH WEST&amp;gt;;
-
-    my @factors = factors(@A.elems);
-    my ($m, $n) = @factors.min(-&amp;gt; ($a, $b) { abs($a - $b) });
-    my (@matrix, @output);
-    for ^$m {
-        my (@matrix-row, @output-row);
-        for ^$n {
-            @matrix-row.push({ :!visited });
-            @output-row.push(Nil)
-        }
-        @matrix.push(@matrix-row);
-        @output.push(@output-row);
-    }
-
-    sub visit-cell($i, $j, $element) { # [4]
-        my %cell = @matrix[$i][$j];
-        if !%cell&amp;lt;visited&amp;gt; {
-            @output[$i][$j] = $element;
-        }
-        @matrix[$i][$j]&amp;lt;visited&amp;gt; = True;
-    }
-
-    my ($min-row, $min-col) = 0, 0;
-    my ($max-row, $max-col) = @matrix.elems - 1, @matrix.tail.elems - 1;
-    my ($current-row, $current-col, $current-direction) = $min-row, $min-col, EAST;
-
-    for @A -&amp;gt; $element {
-        visit-cell($current-row, $current-col, $element);
-        given $current-direction {
-            when EAST {
-                if $current-col == $max-col || @matrix[$current-row][$current-col+1]&amp;lt;visited&amp;gt; {
-                    $current-direction = SOUTH;
-                    $current-row += 1;
-                } else {
-                    $current-col += 1;
-                }
-            }
-            when SOUTH {
-                if ($current-row == $max-row &amp;amp;&amp;amp; $current-col == $max-col) || @matrix[$current-row+1][$current-col]&amp;lt;visited&amp;gt; {
-                    $current-direction = WEST;
-                    $current-col -= 1;
-                } else {
-                    $current-row += 1;
-                }
-            }
-            when WEST {
-                if $current-col == $min-col || @matrix[$current-row][$current-col-1]&amp;lt;visited&amp;gt; {
-                    $current-direction = NORTH;
-                    $current-row -= 1;
-                } else {
-                    $current-col -= 1;
-                }
-            }
-            when NORTH {
-                # No need to check for special case here, because we always start in the top left
-                if @matrix[$current-row-1][$current-col]&amp;lt;visited&amp;gt; {
-                    $current-direction = EAST;
-                    $current-col += 1;
-                } else {
-                    $current-row -= 1;
-                }
-            }
-        }
-    }
-
-    format(@output.reverse);
-}
-
-sub MAIN(*@A) {
-    say challenge(@A);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 1 2 3 4
-4 3
-2 1
-
-$ raku ch-1.raku 1 2 3 4 5 6
-6 5 4
-1 2 3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;The problem says to wrap the spiral counterclockwise (i.e., start at the bottom left, and fill-in counterclockwise), this is pretty hard to do, given a dynamic-sized array. What I did instead was start at the top left, fill in clockwise, then reverse (mirror) the outer array, so the spiral started at the bottom left.&lt;/p&gt;
-
-&lt;p&gt;Here is the basic logic:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Find all the factors of the length of the input array.&lt;/li&gt;
-  &lt;li&gt;Find the pair of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;M&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; such that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;|M-N|&lt;/code&gt; is minimized
-    &lt;ul&gt;
-      &lt;li&gt;Because of the way we find the factors, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;M&lt;/code&gt; will always be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;= N&lt;/code&gt;, so we will have horizontal output as opposed to the vertical output.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Define the 2D array with empty cells (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@output&lt;/code&gt;), as well as a separate companion array (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@matrix&lt;/code&gt;) that keeps track of visited cells.&lt;/li&gt;
-  &lt;li&gt;Traverse through the input array, keeping track of visited cells in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@matrix&lt;/code&gt;, and filling in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@output&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Once &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@output&lt;/code&gt; has been filled in, reverse it, and format it into the expected output string.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;I found it interesting that I had to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$number.clone&lt;/code&gt; here, but if I just used &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$number&lt;/code&gt;, all the pairs in the output ended up with the same &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;M&lt;/code&gt; value.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[*;*]&lt;/code&gt; is the way to flatten a 2D array. If it were a 3D array you would use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[*;*;*]&lt;/code&gt; and the pattern continues for more-nested arrays. An interesting quirk of Raku.&lt;/li&gt;
-  &lt;li&gt;Normally in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprintf&lt;/code&gt; we would do something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%2s&lt;/code&gt; to say we want to pad something to two characters. However, since the width is variable, we are able to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%*s&lt;/code&gt; and pass the width in as an argument.&lt;/li&gt;
-  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;visit-cell&lt;/code&gt; subroutine needs to be defined within &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; because it is a &lt;a href=&quot;https://stackoverflow.com/a/7464475/10696164&quot;&gt;closure&lt;/a&gt;, meaning it has access to the variables defined within &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt;, but outside &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;visit-cell&lt;/code&gt;. In this case, it is accessing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@output&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@matrix&lt;/code&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;task-2-origin-containing-triangle&quot;&gt;Task 2: Origin-containing Triangle&lt;/h2&gt;
-
-&lt;p&gt;You are given three points in the plane, as a list of six coordinates: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;A=(x1,y1)&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;B=(x2,y2)&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C=(x3,y3)&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Write a script to find out if the triangle formed by the given three coordinates contain origin &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(0,0)&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Print &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; if found otherwise &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;example-1-1&quot;&gt;Example 1&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: A=(0,1), B=(1,0) and C=(2,2)
-
-Output: 0 because that triangle does not contain (0,0).
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-2-1&quot;&gt;Example 2&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: A=(1,1), B=(-1,1) and C=(0,-3)
-
-Output: 1 because that triangle contains (0,0) in its interior.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;example-3-1&quot;&gt;Example 3&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: A=(0,1), B=(2,0) and C=(-6,0)
-
-Output: 1 because (0,0) is on the edge connecting B and C.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-101/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Point {
-    has Int $.x;
-    has Int $.y;
-
-    multi method new($x, $y) { # [1]
-        self.bless(:$x, :$y);
-    }
-}
-
-sub challenge(Point $A, Point $B, Point $C, Point $target = Point.new(0, 0)) returns Int {
-    my $area = 0.5 * (-$B.y * $C.x + $A.y * (-$B.x + $C.x) + $A.x * ($B.y - $C.y) + $B.x * $C.y);
-    my $s = 1 / (2 * $area) * ($A.y * $C.x - $A.x * $C.y + ($C.y - $A.y) * $target.x + ($A.x - $C.x) * $target.y);
-    my $t = 1 / (2 * $area) * ($A.x * $B.y - $A.y * $B.x + ($A.y - $B.y) * $target.x + ($B.x - $A.x) * $target.y);
-    (0 &amp;lt;= $s &amp;lt;= 1 &amp;amp;&amp;amp; 0 &amp;lt;= $t &amp;lt;= 1 &amp;amp;&amp;amp; $s + $t &amp;lt;= 1).Int;
-}
-
-sub MAIN(Int $x1, Int $y1, Int $x2, Int $y2, Int $x3, Int $y3) {
-    say challenge(
-        Point.new($x1, $y1),
-        Point.new($x2, $y2),
-        Point.new($x3, $y3)
-    );
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 0 1 1 0 2 2
-0
-
-$ raku ch-2.raku 1 1 -1 1 0 -3
-1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;This solution is essentially &lt;a href=&quot;https://stackoverflow.com/a/14382692/10696164&quot;&gt;this StackOverflow answer&lt;/a&gt; combined with &lt;a href=&quot;https://stackoverflow.com/a/2049712/10696164&quot;&gt;this StackOverflow answer&lt;/a&gt; with classes instead of individual points. I won’t pretend I understand &lt;a href=&quot;https://en.wikipedia.org/wiki/Barycentric_coordinate_system&quot;&gt;Barycentric coordinates&lt;/a&gt;, but it was easy enough to translate the solution into Raku. We do the following:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Turn our six integers into &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Point&lt;/code&gt; objects, so we can reference them via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$point.x&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$point.y&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Find the area of the triangle defined by the three points.&lt;/li&gt;
-  &lt;li&gt;Use the area to find the Barycentric values &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;s&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;If &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0 &amp;lt;= s &amp;lt;= 1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0 &amp;lt;= t &amp;lt;= 1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;s + t &amp;lt;= 1&lt;/code&gt;, then the target point (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(0,0)&lt;/code&gt; by default, but can be anything) is in the triangle, otherwise it is not.&lt;/li&gt;
-  &lt;li&gt;Cast the above boolean to an integer, because that is what is requested in the challenge.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;p&gt;I think the linked StackOverflow questions do a better job of describing Barycentric coordinates than I can, so I just have one implementation comment.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;It’s much easier to deal with this problem with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Point&lt;/code&gt; object. However, defining instances of classes in Raku is quite verbose; by default, it would be like this: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Point.new(x =&amp;gt; $x1, y =&amp;gt; $y1)&lt;/code&gt;. We define our own &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;new&lt;/code&gt; method that just takes positional arguments and internally calls the named arguments via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bless&lt;/code&gt;. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;self.bless(:$x, :$y)&lt;/code&gt; is shorthand for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;self.bless(x =&amp;gt; $x, y =&amp;gt; $y)&lt;/code&gt;. In fact, this &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Point&lt;/code&gt; implementation is actually &lt;a href=&quot;https://docs.raku.org/routine/bless&quot;&gt;the example&lt;/a&gt; for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bless&lt;/code&gt; method.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;Nothing much to add this week. See y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week was pretty fun – solution one ends up re-using some code from my first post (Challenge 88), and solution two explores Barycentric coordinates! No ugly one-liners this week. 🙂</summary></entry></feed>
+&lt;p&gt;It’s pretty cool that Raku has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.sqrt&lt;/code&gt; built right in, but I find it odd that it doesn’t have some sort of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.is-whole&lt;/code&gt; functionality (Python has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.is_integer()&lt;/code&gt;, Scala has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.isWhole&lt;/code&gt;). Maybe it does, and the documentation is just bad; it would not be the first time I have run into that! Honestly, if you read back through my blog, I think I have found 3 separate ways to check if a floating-point number (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Num&lt;/code&gt;) is an integer (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt;) in Raku. Oh well, I guess it is all part of the journey!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Part one was an exercise in efficiency and short-circuiting; I am sure there are more optimizations I could add, but it works as is. 🙂 Let me know if you see any obvious ones I could add!</summary></entry></feed>
