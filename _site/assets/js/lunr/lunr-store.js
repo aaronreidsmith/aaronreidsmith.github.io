@@ -292,4 +292,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-111/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 112",
+        "excerpt":"A little string manipulation and recursion today. My solution to task 2 is almost the same as my solution to Advent of Code 2020: Day 10 (part 2)! Task 1: Canonical Path You are given a string path, starting with a slash ‘/’. Write a script to convert the given...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-112/",
+        "teaser": null
       }]
