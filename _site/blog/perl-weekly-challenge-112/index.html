@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 111 - Aaron Smith</title>
-<meta name="description" content="I was apparently the champion of the Perl Weekly Challenge for last month, which is pretty cool! I encourage folks to go read my interview with Mohammad Anwar, who runs the Perl Weekly Challenge.">
+<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 112 - Aaron Smith</title>
+<meta name="description" content="A little string manipulation and recursion today. My solution to task 2 is almost the same as my solution to Advent of Code 2020: Day 10 (part 2)!">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Perl Weekly Challenge 111">
-<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-111/">
+<meta property="og:title" content="Perl Weekly Challenge 112">
+<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-112/">
 
 
-  <meta property="og:description" content="I was apparently the champion of the Perl Weekly Challenge for last month, which is pretty cool! I encourage folks to go read my interview with Mohammad Anwar, who runs the Perl Weekly Challenge.">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2021-05-08T00:00:00-05:00">
+  <meta property="og:description" content="A little string manipulation and recursion today. My solution to task 2 is almost the same as my solution to Advent of Code 2020: Day 10 (part 2)!">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-111/">
+
+  <meta property="article:published_time" content="2021-05-15T00:00:00-05:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-112/">
 
 
 
@@ -286,15 +286,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Perl Weekly Challenge 111">
-    <meta itemprop="description" content="I was apparently the champion of the Perl Weekly Challenge for last month, which is pretty cool! I encourage folks to go read my interview with Mohammad Anwar, who runs the Perl Weekly Challenge.">
-    <meta itemprop="datePublished" content="2021-05-08T00:00:00-05:00">
+    <meta itemprop="headline" content="Perl Weekly Challenge 112">
+    <meta itemprop="description" content="A little string manipulation and recursion today. My solution to task 2 is almost the same as my solution to Advent of Code 2020: Day 10 (part 2)!">
+    <meta itemprop="datePublished" content="2021-05-15T00:00:00-05:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 111
+          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 112
 </h1>
           
 
@@ -303,7 +303,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2021-05-08T00:00:00-05:00">May 8, 2021</time>
+        <time datetime="2021-05-15T00:00:00-05:00">May 15, 2021</time>
       </span>
     
 
@@ -316,7 +316,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          5 minute read
+          6 minute read
         
       </span>
     
@@ -328,161 +328,198 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>I was apparently <a href="https://perlweeklychallenge.org/blog/meet-the-champion-2021-04/">the champion</a> of the <em>Perl Weekly Challenge</em> for last month, which is pretty cool! I encourage folks to go read my interview with Mohammad Anwar, who runs the <em>Perl Weekly Challenge</em>.</p>
+        <p>A little string manipulation and recursion today. My solution to task 2 is <em>almost</em> the same as my solution to <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-10/">Advent of Code 2020: Day 10 (part 2)</a>!</p>
 
-<h2 id="task-1-search-matrix">Task 1: Search Matrix</h2>
+<h2 id="task-1-canonical-path">Task 1: Canonical Path</h2>
 
-<p>You are given 5x5 matrix filled with integers such that each row is sorted from left to right, and the first integer of each row is greater than the last integer of the previous row.</p>
+<p>You are given a string path, starting with a slash ‘/’.</p>
 
-<p>Write a script to find a given integer in the matrix using an efficient search algorithm.</p>
+<p>Write a script to convert the given absolute path to the simplified canonical path.</p>
+
+<p>In a Unix-style file system:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- A period '.' refers to the current directory
+- A double period '..' refers to the directory up a level
+- Multiple consecutive slashes ('//') are treated as a single slash '/'
+</code></pre></div></div>
+
+<p>The canonical path format:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- The path starts with a single slash '/'.
+- Any two directories are separated by a single slash '/'.
+- The path does not end with a trailing '/'.
+- The path only contains the directories on the path from the root directory to the target file or directory
+</code></pre></div></div>
 
 <h3 id="example">Example</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Matrix: [  1,  2,  3,  5,  7 ]
-        [  9, 11, 15, 19, 20 ]
-        [ 23, 24, 25, 29, 31 ]
-        [ 32, 33, 39, 40, 42 ]
-        [ 45, 47, 48, 49, 50 ]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: "/a/"
+Output: "/a"
 
-Input: 35
-Output: 0 since it is missing in the matrix
+Input: "/a/b//c/"
+Output: "/a/b/c"
 
-Input: 39
-Output: 1 as it exists in the matrix
+Input: "/a/b/c/../.."
+Output: "/a"
 </code></pre></div></div>
 
 <h3 id="solution">Solution</h3>
 
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-111/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-112/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(@list-of-lists, Int $N) returns Int {
-  my $output = 0;
-  for (0..^@list-of-lists.end) Z (0^..@list-of-lists.end) -&gt; ($i, $j) { # [1]
-    if @list-of-lists[$i].head == $N || @list-of-lists[$j].head == $N { # [2]
-      $output = 1;
-      last;
-    } elsif @list-of-lists[$i].head &lt; $N &lt; @list-of-lists[$j].head {
-      $output = (any(@list-of-lists[$i][1..*]) ~~ $N).Int;              # [3]
-      last;
-    } elsif $j == @list-of-lists.end &amp;&amp; $N &gt; @list-of-lists[$j].head {  # [4]
-      $output = (any(@list-of-lists[$j][1..*]) ~~ $N).Int;
-      last;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(Str $path is copy) returns Str {                  # [1]
+  die "Must be an absolute path" unless $path.starts-with('/'); # [2]
+  
+  $path = $path.substr(1);                              # [3]
+  $path = $path.subst(/\/ ** 2..*/, '/', :global);      # [4][5]
+  $path = $path.substr(0, *-1) if $path.ends-with('/'); # [6]
+
+  my @output;
+  for $path.split('/') -&gt; $dir {
+    given $dir {
+      when '.' { Nil }                            # [7]
+      when '..' {
+        die "Illegal path" if @output.elems == 0;
+        @output.pop;
+      }
+      default { @output.push($dir) }
     }
   }
-  $output;
+  '/' ~ @output.join('/')
 }
 
-sub MAIN(Int $N) {
-  my @list-of-lists = (   # [5]
-    ( 1,  2,  3,  5,  7),
-    ( 9, 11, 15, 19, 20),
-    (23, 24, 25, 29, 31),
-    (32, 33, 39, 40, 42),
-    (45, 47, 48, 49, 50)
-  );
-  say challenge(@list-of-lists, $N);
+sub MAIN(Str $path) {
+  say challenge($path);
 }
 </code></pre></div></div>
 
 <p>This program runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku 35
-0
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku /a/b//c
+/a/b/c
 </code></pre></div></div>
 
 <h3 id="explanation">Explanation</h3>
 
-<p>I don’t know if this is the most efficient method, but it is <em>an</em> efficient method, which is what the question calls for. The naive solution would be something like this, which has a complexity of <code class="language-plaintext highlighter-rouge">O(n+k)</code> where <code class="language-plaintext highlighter-rouge">n</code> is the number of elements total (25) and <code class="language-plaintext highlighter-rouge">k</code> is the cost of flattening the structure (likely just 4 appends).</p>
+<p>We basically just follow the following steps:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>any(@list-of-lists.flat) ~~ $N
-</code></pre></div></div>
-
-<p>My approach, instead, looks at the first element of each sublist to determine if it should even bother looking in that sublist. If so, it will drop down and check items 2 through 5 of the sublist (I assume this happens in order using <code class="language-plaintext highlighter-rouge">any</code>). if not, it will skip the list entirely and jump to the next sublist.</p>
-
-<p>I <em>think</em> my approach has a complexity of <code class="language-plaintext highlighter-rouge">O(n+k)</code> where <code class="language-plaintext highlighter-rouge">n</code> is the number of sub-lists (5) and <code class="language-plaintext highlighter-rouge">k</code> is the number of elements in that list (minus the first one, so 4). So we will <em>at most</em> do 9 checks and be able to determine if the item exists in a sublist. On average, we will have fewer checks than that.</p>
+<ol>
+  <li>Does the path start with a slash?
+    <ul>
+      <li>If yes, remove it and continue.</li>
+      <li>If not, <code class="language-plaintext highlighter-rouge">die</code>, since the problem indicates we are given a path starting with a slash.</li>
+    </ul>
+  </li>
+  <li>Replace any duplicate slashes with a single slash.</li>
+  <li>Remove the trailing slash if it exists.</li>
+  <li>We should now have something that looks like <code class="language-plaintext highlighter-rouge">a/b/c</code> and we split it into a list that looks like <code class="language-plaintext highlighter-rouge">(a, b, c)</code>.</li>
+  <li>Iterate through the above list and take one of three actions depending on what item we encounter:
+    <ul>
+      <li>If we hit <code class="language-plaintext highlighter-rouge">.</code>, it is just redundant and we can continue.</li>
+      <li>If we hit <code class="language-plaintext highlighter-rouge">..</code>, we need to remove the most recent item from <code class="language-plaintext highlighter-rouge">@output</code>. As a caveat, if <code class="language-plaintext highlighter-rouge">@output</code> is empty and we encounter <code class="language-plaintext highlighter-rouge">..</code>, it will throw an error.</li>
+      <li>If we hit anything else (i.e., a normal directory), we can just add it to the end of <code class="language-plaintext highlighter-rouge">@output</code>.</li>
+    </ul>
+  </li>
+  <li>Finally, we just join <code class="language-plaintext highlighter-rouge">@output</code> into a path using slashes, and prepend a slash onto it to make it an absolute path.</li>
+</ol>
 
 <h4 id="specific-comments">Specific comments</h4>
 
 <ol>
-  <li>This looks complex, but this is just making a list that looks like this <code class="language-plaintext highlighter-rouge">((0, 1), (1, 2), (2, 3), (3, 4))</code> so that we can look at two sublists at a time. The second sublist is necessary so we can check the top end of the range easily.</li>
-  <li>Check the head of the first list and head of the second sublist to see if we can skip searching a sublist.</li>
-  <li>If it is in the range of a sublist, we can drop into it and use <code class="language-plaintext highlighter-rouge">any</code>, which I am pretty sure just searches from left to right. At most this will search all 4 elements (we skip the <code class="language-plaintext highlighter-rouge">head</code> item), and will end early if it finds the element.</li>
-  <li>If this is the last iteration and we still haven’t found <code class="language-plaintext highlighter-rouge">$N</code>, we need to drop into the last sublist, just for full coverage.</li>
-  <li>We could set this up to be dynamic and passed in at run time, but I figured it would be okay to hardcode for our purposes.</li>
+  <li>Since we are mutating <code class="language-plaintext highlighter-rouge">$path</code> within the subroutine, we need to declare it as <code class="language-plaintext highlighter-rouge">is copy</code>.</li>
+  <li>The question says our input must start with a slash. So we die <code class="language-plaintext highlighter-rouge">unless</code> it has the correct input.</li>
+  <li>If we reach this line, that means the <code class="language-plaintext highlighter-rouge">$path</code> <em>does</em> start with a slash, and we need to remove it using <code class="language-plaintext highlighter-rouge">substr</code>.</li>
+  <li>We want to replace any instance where there are two or more slashes in a row. That is what this regex means <code class="language-plaintext highlighter-rouge">/\/ ** 2..*/</code>; <code class="language-plaintext highlighter-rouge">\/</code> means “literal slash” and <code class="language-plaintext highlighter-rouge">2..*</code> means “two or more times.” We replace all of these instances with a single slash, and we want to do it for the whole string, hence <code class="language-plaintext highlighter-rouge">:global</code>.</li>
+  <li>As an aside, I hate that <code class="language-plaintext highlighter-rouge">substr</code> (substring) and <code class="language-plaintext highlighter-rouge">subst</code> (substitute) are so close in spelling. I feel the former should be named <code class="language-plaintext highlighter-rouge">slice</code> and the latter <code class="language-plaintext highlighter-rouge">replace</code>.</li>
+  <li>If our path ends with a slash, we want to remove it so that when we <code class="language-plaintext highlighter-rouge">split</code> we don’t get an empty entry.</li>
+  <li>Don’t really know if <code class="language-plaintext highlighter-rouge">Nil</code> is the right thing to do here. In Scala, it would just be <code class="language-plaintext highlighter-rouge">case "." =&gt;</code> with nothing on the right-hand side of the arrow. I figured an empty block or <code class="language-plaintext highlighter-rouge">Nil</code> is safe since we don’t want this case to fall into <code class="language-plaintext highlighter-rouge">default</code>.</li>
 </ol>
 
-<h2 id="task-2-ordered-letters">Task 2: Ordered Letters</h2>
+<h2 id="task-2-climb-stairs">Task 2: Climb Stairs</h2>
 
-<p>Given a word, you can sort its letters alphabetically (case-insensitive). For example, “beekeeper” becomes “beeeeekpr” and “dictionary” becomes “acdiinorty”.</p>
+<p>You are given <code class="language-plaintext highlighter-rouge">$n</code> steps to climb</p>
 
-<p>Write a script to find the longest English words that don’t change when their letters are sorted.</p>
+<p>Write a script to find out the distinct ways to climb to the top. You are allowed to climb either 1 or 2 steps at a time.</p>
+
+<h3 id="example-1">Example</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: $n = 3
+Output: 3
+
+    Option 1: 1 step + 1 step + 1 step
+    Option 2: 1 step + 2 steps
+    Option 3: 2 steps + 1 step
+
+Input: $n = 4
+Output: 5
+
+    Option 1: 1 step + 1 step + 1 step + 1 step
+    Option 2: 1 step + 1 step + 2 steps
+    Option 3: 2 steps + 1 step + 1 step
+    Option 4: 1 step + 2 steps + 1 step
+    Option 5: 2 steps + 2 steps
+</code></pre></div></div>
 
 <h3 id="solution-1">Solution</h3>
 
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-111/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
+<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-112/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use LibCurl::HTTP :subs; # Imports jget
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use experimental :cached; # [1]
 
-sub get-english-words {
-  my %words = jget('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json'); # [1]
-  %words.keys;                                                                                           # [2]
-}
-
-sub challenge(Int $threshold) {
-  my @words = get-english-words;
-  my @matching-words = gather for @words.race -&gt; $word {         # [3]
-    my @chars = $word.comb;
-    if @chars.elems &gt;= $threshold &amp;&amp; @chars.sort.join eq $word { # [4]
-      take $word;
+sub challenge(
+  $max where Int,
+  @paths where Positional = (^$max), # [2][3]
+  $current-step where Int = 0
+) is cached {
+  given $current-step {
+    when * == $max { 1 }
+    when * &gt; $max  { 0 }
+    default {
+      challenge($max, @paths, $current-step + 1) +
+      challenge($max, @paths, $current-step + 2)
     }
   }
-  @matching-words.sort;
 }
 
-multi sub MAIN(Int $threshold = 7) { # [5]
-  for challenge($threshold) -&gt; $word {
-    say $word;
-  }
+sub MAIN(Int $n) {
+  say challenge($n);
 }
 </code></pre></div></div>
 
 <p>This program runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku
-adelops
-aegilops
-alloquy
-beefily
-begorry
-belloot
-billowy
-deglory
-egilops
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku 4
+5
 </code></pre></div></div>
 
 <h3 id="explanation-1">Explanation</h3>
 
-<p>So this question is pretty vague. The first problem we have is, how do we get a list of all English words? Rather than ship a text file around with my code, we can pull some at run time from an API. I couldn’t find a decent free API, so I just found <a href="https://github.com/dwyl/english-words">this GitHub repo</a> that has a JSON file full of words. Does it have all the words? I have no idea, but it will certainly work for our purposes.</p>
+<p>This one is actually pretty straight forward, even if it doesn’t seem as such. Basically, <code class="language-plaintext highlighter-rouge">challenge</code> will construct a list from <code class="language-plaintext highlighter-rouge">0..^$n</code>; so for <code class="language-plaintext highlighter-rouge">$n = 3</code> we would get <code class="language-plaintext highlighter-rouge">(0, 1, 2)</code>. Starting at step <code class="language-plaintext highlighter-rouge">0</code> we check 2 conditions:</p>
 
-<p>Basically, once that is pulled down, we just split each word into characters, sort them, and compare them to the original word. However, we check against <code class="language-plaintext highlighter-rouge">$threshold</code> first, so we don’t do the expensive computation on every word.</p>
+<ol>
+  <li>Are we at the top of the steps? If so, stop and mark this path as valid (<code class="language-plaintext highlighter-rouge">1</code>).</li>
+  <li>Are we <em>above</em> the top of the steps? If so, stop and mark this path as <em>invalid</em> (<code class="language-plaintext highlighter-rouge">0</code>).</li>
+</ol>
+
+<p>If we don’t match either of the above conditions, we try <em>both</em> a step size of <code class="language-plaintext highlighter-rouge">1</code> and <code class="language-plaintext highlighter-rouge">2</code> recursively. So essentially this is a brute force approach, but it is efficient because we have memoized our subroutine using the <code class="language-plaintext highlighter-rouge">is cached</code> trait. This means that once it has done the computation for <code class="language-plaintext highlighter-rouge">challenge(3, (0, 1, 2), 2)</code>, the next time it sees that same input, it will always return the same result. Since a step size of <code class="language-plaintext highlighter-rouge">1</code> and <code class="language-plaintext highlighter-rouge">2</code> will have some overlap in individual steps, this makes this approach incredibly efficient.</p>
+
+<p>Since the end conditions only return <code class="language-plaintext highlighter-rouge">0</code> or <code class="language-plaintext highlighter-rouge">1</code>, the <code class="language-plaintext highlighter-rouge">default</code> block actually handles summing the valid paths.</p>
 
 <h4 id="specific-comments-1">Specific Comments</h4>
 
 <ol>
-  <li>Passing the <code class="language-plaintext highlighter-rouge">:sub</code> flag to <code class="language-plaintext highlighter-rouge">use LibCurl:HTTP</code> imports its individual subroutines, including <code class="language-plaintext highlighter-rouge">jget</code>. <code class="language-plaintext highlighter-rouge">jget</code> calls the URL and unpacks the returns JSON into a hash.</li>
-  <li>I don’t know why the author of the above GitHub repo chose this format, but instead of using a JSON array, they used a format like this: <code class="language-plaintext highlighter-rouge">{"word": 1}</code>, so we only need the keys.</li>
-  <li>Since we need to process all of these words, and the order doesn’t matter (since we will sort later), we can cast this list to a <a href="https://docs.raku.org/type/RaceSeq"><code class="language-plaintext highlighter-rouge">RaceSeq</code></a> that will process in parallel without definite order.</li>
-  <li>Check the threshold first, so we don’t do the expensive computation if it is short. If it passes that check, sort the characters and compare to the original word. If it also passes that check, we can take this work and add it to our output.</li>
-  <li>The question asks us to find the longest English <strong>words</strong> (plural). The single longest word is 8 characters (<code class="language-plaintext highlighter-rouge">aegilops</code>, which is a <a href="https://en.wikipedia.org/wiki/Aegilops">genus of plant</a>), so I bumped the threshold down to 7 to give the longest English <strong>words</strong>.</li>
+  <li><code class="language-plaintext highlighter-rouge">is cached</code> is an experimental feature and needs to be explicitly imported.</li>
+  <li>Normally you see me write <code class="language-plaintext highlighter-rouge">Int $foo</code> instead of <code class="language-plaintext highlighter-rouge">$foo where Int</code>. This fails for positionals and hashes; <code class="language-plaintext highlighter-rouge">Int @foo</code> indicates a <em>positional of ints</em> (since the <code class="language-plaintext highlighter-rouge">@</code> sigil already indicates it is a positional). So why didn’t I just do that? I tried. It fails with <code class="language-plaintext highlighter-rouge">expected Positional[Int] but got Range (^10)</code>, which I think is stupid. So this is a way to <em>kind of</em> strongly-type it; better than nothing I guess.</li>
+  <li>I think it is cool that I can use <code class="language-plaintext highlighter-rouge">$max</code> in the default of <code class="language-plaintext highlighter-rouge">@paths</code> here!</li>
 </ol>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>I have never gotten to do web requests in Raku, so it was fun learning about different packages for that. There is even the <a href="https://cro.services/"><code class="language-plaintext highlighter-rouge">Cro</code></a> project for setting up APIs; maybe I will get a chance to use that in the future. See y’all next week!</p>
+<p>Pretty easy this week, but that is mostly because I was able to copy an older solution of mine for task two. Should I have done something new/different? Probably, but oh well. See y’all next week!</p>
 
         
       </section>
@@ -525,7 +562,7 @@ egilops
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-05-08T00:00:00-05:00">May 8, 2021</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-05-15T00:00:00-05:00">May 15, 2021</time></p>
 
 
       </footer>
@@ -535,23 +572,22 @@ egilops
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+111%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-111%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+112%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-112%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-111%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-112%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-111%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-112%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/perl-weekly-challenge-110/" class="pagination--pager" title="Perl Weekly Challenge 110
+      <a href="/blog/perl-weekly-challenge-111/" class="pagination--pager" title="Perl Weekly Challenge 111
 ">Previous</a>
     
     
-      <a href="/blog/perl-weekly-challenge-112/" class="pagination--pager" title="Perl Weekly Challenge 112
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -575,7 +611,7 @@ egilops
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/blog/perl-weekly-challenge-112/" rel="permalink">Perl Weekly Challenge 112
+        <a href="/blog/perl-weekly-challenge-111/" rel="permalink">Perl Weekly Challenge 111
 </a>
       
     </h2>
@@ -586,7 +622,7 @@ egilops
       
       <span class="page__meta-date">
         <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2021-05-15T00:00:00-05:00">May 15, 2021</time>
+        <time datetime="2021-05-08T00:00:00-05:00">May 8, 2021</time>
       </span>
     
 
@@ -599,16 +635,14 @@ egilops
       <span class="page__meta-readtime">
         <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
-          6 minute read
+          5 minute read
         
       </span>
     
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">A little string manipulation and recursion today. My solution to task 2 is almost the same as my solution to Advent of Code 2020: Day 10 (part 2)!
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">I was apparently the champion of the Perl Weekly Challenge for last month, which is pretty cool! I encourage folks to go read my interview with Mohammad Anwa...</p>
   </article>
 </div>
 
