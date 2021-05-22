@@ -298,4 +298,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-112/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 112",
+        "excerpt":"Task 1 allowed for some functional programming using some cool built-ins in Raku. Task 2 built on some code I wrote for Challenge 94. Task 1: Represent Integer You are given a positive integer $N and a digit $D. Write a script to check if $N can be represented as...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-113/",
+        "teaser": null
       }]

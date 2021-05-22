@@ -1,4 +1,196 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-15T19:47:56-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 112</title><link href="http://localhost:4000/blog/perl-weekly-challenge-112/" rel="alternate" type="text/html" title="Perl Weekly Challenge 112" /><published>2021-05-15T00:00:00-05:00</published><updated>2021-05-15T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-112</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-112/">&lt;p&gt;A little string manipulation and recursion today. My solution to task 2 is &lt;em&gt;almost&lt;/em&gt; the same as my solution to &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-10/&quot;&gt;Advent of Code 2020: Day 10 (part 2)&lt;/a&gt;!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-22T15:57:55-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 112</title><link href="http://localhost:4000/blog/perl-weekly-challenge-113/" rel="alternate" type="text/html" title="Perl Weekly Challenge 112" /><published>2021-05-22T00:00:00-05:00</published><updated>2021-05-22T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-113</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-113/">&lt;p&gt;Task 1 allowed for some functional programming using some cool built-ins in Raku. Task 2 built on some code I wrote for &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-094/#task-2-binary-tree-to-linked-list&quot;&gt;Challenge 94&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-represent-integer&quot;&gt;Task 1: Represent Integer&lt;/h2&gt;
+
+&lt;p&gt;You are given a positive integer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; and a digit &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$D&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to check if &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; can be represented as a sum of positive integers having &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$D&lt;/code&gt; at least once. If check passes print 1 otherwise 0.&lt;/p&gt;
+
+&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $N = 25, $D = 7
+Output: 0 as there are 2 numbers between 1 and 25 having the digit 7 i.e. 7 and 17. If we add up both we don't get 25.
+
+Input: $N = 24, $D = 7
+Output: 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-113/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset PositiveInt of Int where * &amp;gt; 0; # [1]
+
+sub challenge(PositiveInt $N, PositiveInt $D) returns Int {
+  my $output = (1..^$N)   # [2]
+    .race                 # [3]
+    .grep(*.contains($D)) # [4]
+    .combinations(2..*)   # [5]
+    .map(*.sum)           # [6]
+    .any == $N;           # [7]
+  $output.Bool.Int;       # [8]
+}
+
+sub MAIN(PositiveInt $N, PositiveInt $D) {
+  say challenge($N, $D);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 24 7
+1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;This function first generates a list of integers from 0 to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N - 1&lt;/code&gt; (no need to include 0 or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; itself, since 0 is not positive and. we want things that add up to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;). It then filters those down to only numbers that contain &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$D&lt;/code&gt;. It then finds all combinations of size 2 or larger to evaluate, and finds the sum of those combinations. Finally, it simply checks if any of the sums add up to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;. I like that we can easily just chain these methods together; makes it very easy to read.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The question says we should only allow positive integers. To do this, we can easily create a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;subset&lt;/code&gt; of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; and add a condition using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;where&lt;/code&gt; (in this case &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;where * &amp;gt; 0&lt;/code&gt;).&lt;/li&gt;
+  &lt;li&gt;As mentioned above, no need to include &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;, so we filter them using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;..^&lt;/code&gt; range creator. It includes the bottom number and excludes the top number.&lt;/li&gt;
+  &lt;li&gt;We don’t need this list in any order, since we will end up with a boolean (and eventually integer) at the end. So we want to perform all of our actions as quickly as possible, and we don’t care about order. &lt;a href=&quot;https://docs.raku.org/routine/race&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;race&lt;/code&gt;&lt;/a&gt; creates a &lt;a href=&quot;https://docs.raku.org/type/RaceSeq&quot;&gt;RaceSeq&lt;/a&gt;, which allows us to process a list in parallel without regards to order.&lt;/li&gt;
+  &lt;li&gt;We filter (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;grep&lt;/code&gt;) down to numbers that contains &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$D&lt;/code&gt;. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;contains&lt;/code&gt; coerces the left-hand argument to a String, so this is the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*.Str.contains($d)&lt;/code&gt;. This is actually a documented &lt;a href=&quot;https://docs.raku.org/language/traps#Lists_become_strings,_so_beware_.contains()&quot;&gt;trap&lt;/a&gt; that I &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-04/&quot;&gt;fell into&lt;/a&gt; during Advent of Code, but it works in my favor this time.&lt;/li&gt;
+  &lt;li&gt;We want to examine all combinations of size 2 or larger, which can easily be created using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2..*&lt;/code&gt; syntax.&lt;/li&gt;
+  &lt;li&gt;Once we have all the combinations, it is a simple matter to find their sums by mapping over each combination (and using the built-in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sum&lt;/code&gt; method).&lt;/li&gt;
+  &lt;li&gt;Once we have a list of sums, we want to see if &lt;em&gt;any&lt;/em&gt; equal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;. So we just call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.any&lt;/code&gt; on the list and get our answer!&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;any&lt;/code&gt; returns a &lt;a href=&quot;https://docs.raku.org/routine/any&quot;&gt;Junction&lt;/a&gt;, so we have to coerce it to a boolean, and then an integer to get the output that the challenge expects.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-recreate-binary-tree&quot;&gt;Task 2: Recreate Binary Tree&lt;/h2&gt;
+
+&lt;p&gt;You are given a Binary Tree.&lt;/p&gt;
+
+&lt;p&gt;Write a script to replace each node of the tree with the sum of all the remaining nodes.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1&quot;&gt;Example&lt;/h3&gt;
+
+&lt;h4 id=&quot;input-binary-tree&quot;&gt;Input Binary Tree&lt;/h4&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;        1
+       / \
+      2   3
+     /   / \
+    4   5   6
+     \
+      7
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;output-binary-tree&quot;&gt;Output Binary Tree&lt;/h4&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;        27
+       /  \
+      26  25
+     /   /  \
+    24  23  22
+     \
+     21
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-113/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subset NodeValue of Str where { $_ ~~ /^&amp;lt;digit&amp;gt;$/ || $_ eq 'Nil' }
+
+class Node {
+  has Node $.left  is rw = Nil;
+  has Node $.right is rw = Nil;
+  has Int  $.value is rw = 0;
+}
+
+# Adapted from https://rosettacode.org/wiki/Visualize_a_tree#Raku
+sub format-tree(
+  Node $root,
+  Str :$indent = '',
+  :@mid = ('├─', '│ '),
+  :@end = ('└─', '  ')
+) returns Str {
+  sub visit(Node $node, *@pre) {
+    with $node {
+      |gather {
+        take @pre[0] ~ $node.value;
+        my @children = ($node.right, $node.left).grep(*.defined);
+        my $end = @children.end;
+        for @children.kv -&amp;gt; $_, $child {
+          when $end { take visit($child, (@pre[1] X~ @end)) }
+          default   { take visit($child, (@pre[1] X~ @mid)) }
+        }
+      }
+    }
+  }
+  visit($root, $indent xx 2).join(&quot;\n&quot;);
+}
+
+sub build-tree(@array, $root is copy = Nil, Int $i = 0) returns Node {
+  if $i &amp;lt; @array.elems &amp;amp;&amp;amp; @array[$i] ne 'Nil' {
+    $root       = Node.new(value =&amp;gt; @array[$i].Int);
+    $root.left  = build-tree(@array, $root.left, 2 * $i + 1);
+    $root.right = build-tree(@array, $root.right, 2 * $i + 2);
+  }
+  $root;
+}
+
+sub challenge(Node $root is copy, @values = ()) returns Node {
+  sub extract-values(Node $root) returns Positional {                           # [1]
+    with $root {                                                                # [2]
+      ($root.value, |extract-values($root.left), |extract-values($root.right)); # [3]
+    }
+  }
+
+  with $root {
+    my @node-values = @values.elems &amp;gt; 0 ?? @values !! extract-values($root); # [4]
+    $root.value = @node-values.grep(* != $root.value).sum;                   # [5]
+    challenge($root.left, @node-values);                                     # [6]
+    challenge($root.right, @node-values);
+  }
+  $root;
+}
+
+sub MAIN(*@nodes where all(@nodes) ~~ NodeValue) {
+  my $root = build-tree(@nodes);
+  say format-tree(challenge($root));
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 1 2 3 4 Nil 5 6 Nil 7 Nil Nil
+27
+├─25
+│ ├─22
+│ └─23
+└─26
+  └─24
+    └─21
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;I will only be discussing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; subroutine, as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build-tree&lt;/code&gt; was written in my Challenge 94 blog, along with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NodeValue&lt;/code&gt; subset and the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Node&lt;/code&gt; class. Additionally, I couldn’t find a good way to actually print this tree out, so I copied &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;format-tree&lt;/code&gt; from &lt;a href=&quot;https://rosettacode.org/wiki/Visualize_a_tree#Raku&quot;&gt;Rosetta Code&lt;/a&gt;; it has some issues (the 24 is not obvious that it is the left branch), but it works overall.&lt;/p&gt;
+
+&lt;p&gt;As for the actual &lt;em&gt;new&lt;/em&gt; code that I wrote, given a tree, we simply need to traverse it once to find the values (storing it in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@node-values&lt;/code&gt;). Then, traverse it a second time and changing the values at each node to the sum of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@node-values&lt;/code&gt; excluding the current value. So for the root node, it would be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@node-values.grep(* != 1).sum&lt;/code&gt;. Once we have done that, since we changed the tree in place, we can just return the root.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;This is defined within &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; because it is not really needed outside of it. Additionally, this logic can’t be included as part of the main flow of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; since we use a copy of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$root&lt;/code&gt;. Since we traverse recursively, our list of values would be different on each recursive call.&lt;/li&gt;
+  &lt;li&gt;This &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;with&lt;/code&gt; guard prevents us from trying to run the logic/recurse even more if &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$root&lt;/code&gt; is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Nil&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;This is a simple prefix traversal (where we visit the current node, then left, then right). Since we have the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;with&lt;/code&gt; guard, this will prevent &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Nil&lt;/code&gt; values. So for the example input we would end up with this list: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(1, 2, 3, 4, 5, 6, 7)&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;We only want to call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;extract-values&lt;/code&gt; on the first call (since the tree is constantly changing), so we only run it if &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@values&lt;/code&gt; is empty (and then pass in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@node-values&lt;/code&gt; on subsequent calls).&lt;/li&gt;
+  &lt;li&gt;Like I showed above, we just need to sum all the values are not &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$root.value&lt;/code&gt;. Another way to do this would have been &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@node-values.sum - $root.value&lt;/code&gt;, which honestly might have been faster since it doesn’t require traversing twice. Oh well!&lt;/li&gt;
+  &lt;li&gt;These recursive calls will &lt;em&gt;technically&lt;/em&gt; return their &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$root&lt;/code&gt;, but since they aren’t assigned to anything, they are just ignored.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;The hardest part of this week’s challenge was honestly trying to find a way to print a binary tree! I tried translating some algorithms from other languages, and eventually settled on the one I used. Let me know if there are any good ones out there!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Task 1 allowed for some functional programming using some cool built-ins in Raku. Task 2 built on some code I wrote for Challenge 94.</summary></entry><entry><title type="html">Perl Weekly Challenge 112</title><link href="http://localhost:4000/blog/perl-weekly-challenge-112/" rel="alternate" type="text/html" title="Perl Weekly Challenge 112" /><published>2021-05-15T00:00:00-05:00</published><updated>2021-05-15T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-112</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-112/">&lt;p&gt;A little string manipulation and recursion today. My solution to task 2 is &lt;em&gt;almost&lt;/em&gt; the same as my solution to &lt;a href=&quot;https://aaronreidsmith.github.io/blog/advent-of-code-day-10/&quot;&gt;Advent of Code 2020: Day 10 (part 2)&lt;/a&gt;!&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-canonical-path&quot;&gt;Task 1: Canonical Path&lt;/h2&gt;
 
@@ -1432,205 +1624,4 @@ You win!
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Raku gives us some cool tools to make these challenges easier. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;given&lt;/code&gt; syntax was especially helpful in both of these challenges (and in others)!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week had some fun topics like recursion, memoization, and IO/data validation!</summary></entry><entry><title type="html">Perl Weekly Challenge 103</title><link href="http://localhost:4000/blog/perl-weekly-challenge-103/" rel="alternate" type="text/html" title="Perl Weekly Challenge 103" /><published>2021-03-13T00:00:00-06:00</published><updated>2021-03-13T00:00:00-06:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-103</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-103/">&lt;p&gt;Challenge two this week was… interesting, to say the least. But, we are through it, and it’s the weekend! 🍻&lt;/p&gt;
-
-&lt;h2 id=&quot;task-1-chinese-zodiac&quot;&gt;Task 1: Chinese Zodiac&lt;/h2&gt;
-
-&lt;p&gt;You are given a year &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$year&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Write a script to determine the Chinese Zodiac for the given year &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$year&lt;/code&gt;. Please check out &lt;a href=&quot;https://en.wikipedia.org/wiki/Chinese_zodiac&quot;&gt;wikipage&lt;/a&gt; for more information about it.&lt;/p&gt;
-
-&lt;p&gt;The animal cycle: Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig.&lt;br /&gt;
-The element cycle: Wood, Fire, Earth, Metal, Water.&lt;/p&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-103/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Int $year) returns Str {
-    constant $root-year = 1924; # From Wikipedia
-
-    my $difference         = $year - $root-year;
-    my $element-difference = $difference &amp;lt; 0 ?? $difference + 10 !! $difference; # [1]
-    my $animal-difference  = $difference &amp;lt; 0 ?? $difference + 12 !! $difference;
-
-    my $element = do given $element-difference % 10 { # [2][3]
-        when 0|1 { 'Wood'  }
-        when 2|3 { 'Fire'  }
-        when 4|5 { 'Earth' }
-        when 6|7 { 'Metal' }
-        when 8|9 { 'Water' }
-    }
-    my $animal = do given $animal-difference % 12 {
-        when 0  { 'Rat'     }
-        when 1  { 'Ox'      }
-        when 2  { 'Tiger'   }
-        when 3  { 'Rabbit'  }
-        when 4  { 'Dragon'  }
-        when 5  { 'Snake'   }
-        when 6  { 'Horse'   }
-        when 7  { 'Goat'    }
-        when 8  { 'Monkey'  }
-        when 9  { 'Rooster' }
-        when 10 { 'Dog'     }
-        when 11 { 'Pig'     }
-    }
-
-    &quot;$element $animal&quot;; # [4]
-}
-
-sub MAIN(Int $year) {
-    say challenge($year);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 2017
-Fire Rooster
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;I’m sure there is a better root than 1924, but that is the first year in the table on the &lt;a href=&quot;https://en.wikipedia.org/wiki/Chinese_zodiac&quot;&gt;Wikipedia page&lt;/a&gt;. Reading through the Wikipedia page, we can see two things:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;The element cycle has 5 rotations (Wood, Fire, Earth, Metal, and Water), and each one lasts for 2 years (a Yin year and a Yang year [which we don’t care about]).&lt;/li&gt;
-  &lt;li&gt;The animal cycle has 12 rotations (Rat, Ox,  Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig), and each one lasts for 1 year.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;This makes our logic pretty simple – we just need to find our distance from the known year of 1924 and find which cycle that year falls in. For element, we find the difference and then find the remainder after dividing by 10 (5 cycles x 2 years each). If it is 0 or 1, it is Wood, if it is 2 or 3 it is Fire, etc. Similarly, we find the difference and find the remainder after dividing by 12 for the animals. If it is 0 it is Rat, if it is 1 it is Ox, etc. That’s it!&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;We can’t just do &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;abs($year - $root-year)&lt;/code&gt; because for years before &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$root-year&lt;/code&gt;, it would yield the wrong cycle (for example, 1923 would have a remainder of 1 for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$element&lt;/code&gt; instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;9&lt;/code&gt;). Because of this, if the difference is negative, we need to add the size of the cycle (10 and 12, respectively) to put it in its correct place.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;given&lt;/code&gt; is a flow control keyword and doesn’t actually return anything. To make the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;given&lt;/code&gt; block return its value, we need to add the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;do&lt;/code&gt; keyword before it.&lt;/li&gt;
-  &lt;li&gt;You’ll notice there is no &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;default&lt;/code&gt; block for these &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;given&lt;/code&gt;s. That is intentional, since we know all the possible outcomes. Best practice would probably be something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;default { die &quot;Unexpected input: $_&quot; }&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Double quotes tell the Raku compiler to interpolate this string, so we get &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&quot;Fire Rooster&quot;&lt;/code&gt; instead of the literal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;'$element $animal'&lt;/code&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;task-2-whats-playing&quot;&gt;Task 2: What’s playing?&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Note: This was copied directly from &lt;a href=&quot;https://perlweeklychallenge.org/blog/perl-weekly-challenge-103/#TASK2&quot;&gt;perlweeklychallenge.org&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Working from home, you decided that on occasion you wanted some background noise while working. You threw together a network streamer to continuously loop through the files and launched it in a tmux (or screen) session, giving it a directory tree of files to play. During the day, you connected an audio player to the stream, listening through the workday, closing it when done.&lt;/p&gt;
-
-&lt;p&gt;For weeks you connect to the stream daily, slowly noticing a gradual drift of the media. After several weeks, you take vacation. When you return, you are pleasantly surprised to find the streamer still running. Before connecting, however, if you consider the puzzle of determining which track is playing.&lt;/p&gt;
-
-&lt;p&gt;After looking at a few modules to read info regarding the media, a quick bit of coding gave you a file list. The file list is in a simple CSV format, each line containing two fields: the first the number of milliseconds in length, the latter the media’s title (this example is of several episodes available from the MercuryTheatre.info):&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1709363,&quot;Les Miserables Episode 1: The Bishop (broadcast date: 1937-07-23)&quot;
-1723781,&quot;Les Miserables Episode 2: Javert (broadcast date: 1937-07-30)&quot;
-1723781,&quot;Les Miserables Episode 3: The Trial (broadcast date: 1937-08-06)&quot;
-1678356,&quot;Les Miserables Episode 4: Cosette (broadcast date: 1937-08-13)&quot;
-1646043,&quot;Les Miserables Episode 5: The Grave (broadcast date: 1937-08-20)&quot;
-1714640,&quot;Les Miserables Episode 6: The Barricade (broadcast date: 1937-08-27)&quot;
-1714640,&quot;Les Miserables Episode 7: Conclusion (broadcast date: 1937-09-03)&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;For this script, you can assume to be provided the following information:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;* the value of $^T ($BASETIME) of the streamer script,
-* the value of time(), and
-* a CSV file containing the media to play consisting of the length in milliseconds and an identifier for the media (title, filename, or other).
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Write a program to output which file is currently playing. For purposes of this script, you may assume gapless playback, and format the output as you see fit.&lt;/p&gt;
-
-&lt;p&gt;Optional: Also display the current position in the media as a time-like value.&lt;/p&gt;
-
-&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 3 command line parameters: start time, current time, file name
-
-    # starttime
-    1606134123
-
-    # currenttime
-    1614591276
-
-    # filelist.csv
-
-Output:
-
-    &quot;Les Miserables Episode 1: The Bishop (broadcast date: 1937-07-23)&quot;
-    00:10:24
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-103/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use Text::CSV; # imports `csv` function
-
-sub challenge(Int $start-time, Int $current-time, Str $file-name) returns Str {
-    my @playlist          = csv(in =&amp;gt; $file-name);
-    my $playlist-length   = @playlist[*;0].sum;                                      # [1]
-    my $playlist-position = ($current-time - $start-time) * 1000 % $playlist-length;
-
-    my ($track, $timestamp);
-    for @playlist -&amp;gt; ($track-length, $track-name) {
-        # If we are &amp;lt;= the playlist position, skip to the next track
-        if $track-length &amp;lt;= $playlist-position {
-            $playlist-position -= $track-length;
-            next;                                                                    # [2]
-        }
-
-        # We know we are in the right track now, so find how far in we are
-        $track            = $track-name;
-        my $total-seconds = ($playlist-position / 1000).Int;
-        my $hour          = ($total-seconds / 3600).Int;
-        my $minutes       = ($total-seconds % 3600 / 60).Int;
-        my $seconds       = $total-seconds % 60;
-        $timestamp        = sprintf('%02d:%02d:%02d', $hour, $minutes, $seconds);
-        last;                                                                        # [3]
-    }
-
-    &quot;$track\n$timestamp&quot;;
-}
-
-sub MAIN(Int $start-time, Int $current-time, Str $file-name) {
-    say challenge($start-time, $current-time, $file-name);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Assumes `filelist.csv` contains the above input
-$ raku ch-2.raku 1606134123 1614591276 filelist.csv
-Les Miserables Episode 1: The Bishop (broadcast date: 1937-07-23)
-00:10:24
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;I found this question to be &lt;em&gt;incredibly&lt;/em&gt; confusing. Maybe it is the wording, or the fact that it was written by a guest author, but it didn’t make sense to me at first. Additionally, we are &lt;em&gt;explicitly&lt;/em&gt; told that one set of numbers (the ones in the CSV) are in milliseconds, and the others are not specified; I started programming this assuming they are &lt;em&gt;also&lt;/em&gt; in milliseconds only to have to figure out later on they are in seconds. With that out of the way, let’s look at the actual logic:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Read the CSV into a list of lists.&lt;/li&gt;
-  &lt;li&gt;Find the total length of the playlist.&lt;/li&gt;
-  &lt;li&gt;Find the position that we are in the playlist (in milliseconds).&lt;/li&gt;
-  &lt;li&gt;Iterate through each track in the playlist:
-    &lt;ul&gt;
-      &lt;li&gt;If the length of the track is less than the position in the playlist, decrement the position in the playlist by the length of the track and continue&lt;/li&gt;
-      &lt;li&gt;Otherwise, we are &lt;em&gt;in&lt;/em&gt; the track we need to be in, and we need to find the position in the track. We do this by calculating the total seconds we are into the track, then formatting that using some simple division. It’s also important we remember to break after we have found what track we are in.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;This is an interesting way to find the sum of a particular index in the list. This says “give me position 0 for the whole list, then sum it.”&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;next&lt;/code&gt; is the equivalent of something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;continue&lt;/code&gt; in other languages.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;last&lt;/code&gt; is the equivalent of something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;break&lt;/code&gt; in other languages.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;Overall, not my favorite set of questions this week, but what can you do! Hope y’all enjoy the rest of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Metal Ox&lt;/code&gt; year!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Challenge two this week was… interesting, to say the least. But, we are through it, and it’s the weekend! 🍻</summary></entry></feed>
+&lt;p&gt;Raku gives us some cool tools to make these challenges easier. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;given&lt;/code&gt; syntax was especially helpful in both of these challenges (and in others)!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week had some fun topics like recursion, memoization, and IO/data validation!</summary></entry></feed>
