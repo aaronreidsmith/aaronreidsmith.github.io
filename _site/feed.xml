@@ -1,4 +1,114 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-22T15:57:55-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 112</title><link href="http://localhost:4000/blog/perl-weekly-challenge-113/" rel="alternate" type="text/html" title="Perl Weekly Challenge 112" /><published>2021-05-22T00:00:00-05:00</published><updated>2021-05-22T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-113</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-113/">&lt;p&gt;Task 1 allowed for some functional programming using some cool built-ins in Raku. Task 2 built on some code I wrote for &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-094/#task-2-binary-tree-to-linked-list&quot;&gt;Challenge 94&lt;/a&gt;.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-28T09:46:57-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Perl Weekly Challenge 114</title><link href="http://localhost:4000/blog/perl-weekly-challenge-114/" rel="alternate" type="text/html" title="Perl Weekly Challenge 114" /><published>2021-05-28T00:00:00-05:00</published><updated>2021-05-28T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-114</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-114/">&lt;p&gt;Both of this week’s solutions look remarkably similar, because we were able to utilize the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;first&lt;/code&gt; subroutine for each one!&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-next-palindrome-number&quot;&gt;Task 1: Next Palindrome Number&lt;/h2&gt;
+
+&lt;p&gt;You are given a positive integer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to find out the next Palindrome Number higher than the given integer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $N = 1234
+Output: 1331
+
+Input: $N = 999
+Output: 1001
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-114/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Int $N) returns Int {
+  ($N^..Inf).first(-&amp;gt; $num { $num == $num.flip }, :v); # [1][2][3]
+}
+
+sub MAIN(Int $N) {
+  say challenge($N);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku 1234
+1331
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;This is fairly straightforward; we create an infinite range from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; to infinity. This range will be lazily evaluated, so we don’t have to worry about memory. Then we find the first instance where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$num&lt;/code&gt; is equal to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$num.flip&lt;/code&gt;. That’s it!&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Ranges are lazily evaluated, so it is safe to have these seemingly infinite range constructors.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$num.flip&lt;/code&gt; &lt;em&gt;technically&lt;/em&gt; returns a string, but &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;==&lt;/code&gt; will coerce it to an integer (since &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eq&lt;/code&gt; should be used for string equality). This is convenient, but also kind of scary that conversions are happening without us knowing.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;first&lt;/code&gt; returns both the index and value of that index by default. Since we only want the value, we pass in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:v&lt;/code&gt; flag to specify that.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-higher-integer-set-bits&quot;&gt;Task 2: Higher Integer Set Bits&lt;/h2&gt;
+
+&lt;p&gt;You are given a positive integer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Write a script to find the next higher integer having the same number of 1 bits in binary representation as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-1&quot;&gt;Example&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: $N = 3
+Output: 5
+
+Binary representation of $N is 011. There are two 1 bits. So the next higher integer is 5 having the same the number of 1 bits i.e. 101.
+
+Input: $N = 12
+Output: 17
+
+Binary representation of $N is 1100. There are two 1 bits. So the next higher integer is 17 having the same number of 1 bits i.e. 10001.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-114/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub bits(Int $base-ten) returns Int {
+  $base-ten.base(2).comb.grep(* eq '1').elems; # [1][2][3][4]
+}
+
+sub challenge(Int $N where $N &amp;gt; 0) returns Int {
+  my $bits = bits($N);
+  ($N^..Inf).first(-&amp;gt; $num { bits($num) == $bits }, :v);
+}
+
+sub MAIN(Int $N) {
+  say challenge($N);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 12
+17
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;The meat of this lies in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bits&lt;/code&gt; function. It finds the number of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; bits for a given integer. Given that, we again construct a range from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt; to infinity and find the first number that has the same number of bits as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$N&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.raku.org/routine/base&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;base&lt;/code&gt;&lt;/a&gt; is a cool function to convert a number to any other base. So &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;9.base(3) eq '100'&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;255.base(16) eq 'FF'&lt;/code&gt;. We use it to convert base 10 to base 2.&lt;/li&gt;
+  &lt;li&gt;Once we have it in base 2, we need to convert it to a list of digits, so we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;comb&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Once it has been converted to a list of digits, we filter (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;grep&lt;/code&gt;) for digits that equal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt;. Since &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;base&lt;/code&gt; converted to a string, we use string equality (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eq&lt;/code&gt;).&lt;/li&gt;
+  &lt;li&gt;Finally, we just count the elements that equal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;elems&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;Lazy evaluation is one of the pillars of functional programming, so it is cool to see it exist in Raku. Always happy when I can break these down into a line or two!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Both of this week’s solutions look remarkably similar, because we were able to utilize the first subroutine for each one!</summary></entry><entry><title type="html">Perl Weekly Challenge 112</title><link href="http://localhost:4000/blog/perl-weekly-challenge-113/" rel="alternate" type="text/html" title="Perl Weekly Challenge 112" /><published>2021-05-22T00:00:00-05:00</published><updated>2021-05-22T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-113</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-113/">&lt;p&gt;Task 1 allowed for some functional programming using some cool built-ins in Raku. Task 2 built on some code I wrote for &lt;a href=&quot;https://aaronreidsmith.github.io/blog/perl-weekly-challenge-094/#task-2-binary-tree-to-linked-list&quot;&gt;Challenge 94&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-represent-integer&quot;&gt;Task 1: Represent Integer&lt;/h2&gt;
 
@@ -1447,181 +1557,4 @@ Fee fi mo-m(Y)
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Like I said, short and sweet! See y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week’s challenges are short and sweet, but still give us the opportunity to explore some interesting Raku-isms!</summary></entry><entry><title type="html">Perl Weekly Challenge 104</title><link href="http://localhost:4000/blog/perl-weekly-challenge-104/" rel="alternate" type="text/html" title="Perl Weekly Challenge 104" /><published>2021-03-21T00:00:00-05:00</published><updated>2021-03-21T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-104</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-104/">&lt;p&gt;This week had some fun topics like &lt;a href=&quot;https://en.wikipedia.org/wiki/Recursion_(computer_science)&quot;&gt;recursion&lt;/a&gt;, &lt;a href=&quot;https://en.wikipedia.org/wiki/Memoization&quot;&gt;memoization&lt;/a&gt;, and IO/data validation!&lt;/p&gt;
-
-&lt;h2 id=&quot;task-1-fusc-sequence&quot;&gt;Task 1: FUSC Sequence&lt;/h2&gt;
-
-&lt;p&gt;Write a script to generate first 50 members of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FUSC&lt;/code&gt; Sequence. Please refer to &lt;a href=&quot;http://oeis.org/A002487&quot;&gt;OEIS&lt;/a&gt; for more information.&lt;/p&gt;
-
-&lt;p&gt;The sequence defined as below:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;fusc(0) = 0
-fusc(1) = 1
-for n &amp;gt; 1:
-when n is even: fusc(n) = fusc(n / 2),
-when n is odd: fusc(n) = fusc((n-1)/2) + fusc((n+1)/2)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-104/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use experimental :cached; # [1]
-
-sub fusc(Int(Rat) $n) is cached returns Int { # [2]
-    given $n {
-        when 0      { 0 }
-        when 1      { 1 }
-        when * %% 2 { fusc($n / 2) }                            # [3]
-        default     { fusc(($n - 1) / 2) + fusc(($n + 1) / 2) } # [4]
-    }
-}
-
-sub MAIN(Int $terms = 50) {
-    say (^$terms).map(&amp;amp;fusc); # [4]
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku
-(0 1 1 2 1 3 2 3 1 4 3 5 2 5 3 4 1 5 4 7 3 8 5 7 2 7 5 8 3 7 4 5 1 6 5 9 4 11 7 10 3 11 8 13 5 12 7 9 2 9)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;I feel like this is pretty straight forward, and aligns well to the definition of the FUSC sequence. When we look at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$n&lt;/code&gt;, we run through the following logic:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Is it 0? Return 0.&lt;/li&gt;
-  &lt;li&gt;Is it 1? Return 1.&lt;/li&gt;
-  &lt;li&gt;Is it even? Return &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc($n / 2)&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Otherwise, return &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc(($n - 1) / 2) + fusc(($n + 1) / 2)&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;The function recurses until it ends up in one of the two stopping conditions (0 or 1). So obviously &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc(50)&lt;/code&gt; is going to go through &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc(49)&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc(48)&lt;/code&gt;, etc. See below for how we make this efficient.&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Caching in Raku is an experimental feature, so we have to import it (and add the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is cached&lt;/code&gt; trait to our subroutine). The basic idea is that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc($n)&lt;/code&gt; is &lt;em&gt;always&lt;/em&gt; the same value, so once we calculate it once, we can just look it up later. Adding this trait essentially adds a hash behind the scenes that checks if &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc($n)&lt;/code&gt; already exists. If it does, it just returns that value, otherwise, it will actually calculate the value and store it in the hash before returning.&lt;/li&gt;
-  &lt;li&gt;Notice the function signature takes &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int(Rat)&lt;/code&gt;. This means that this function will accept either &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; &lt;em&gt;or&lt;/em&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Rat&lt;/code&gt; (&lt;a href=&quot;https://docs.raku.org/type/Rat&quot;&gt;Rational number&lt;/a&gt;) types, but it will coerce the input to an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt;. The reason for this is that division in Raku will generate a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Rat&lt;/code&gt; type, even for something like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2 / 1&lt;/code&gt;. So we need to convert it to an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; on the recursive calls. This saves use from having to write &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fusc(($n / 2).Int)&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Raku has a special “is divisible by” operator. So instead of saying &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$n % 2 == 0&lt;/code&gt;, we can say &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$n %% 2&lt;/code&gt;. Also notice that in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;given&lt;/code&gt; block, we have to use the “whatever star” (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt;) to do this operation; this is because we can’t &lt;a href=&quot;https://docs.raku.org/language/operators#index-entry-smartmatch_operator&quot;&gt;smartmatch&lt;/a&gt; against &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%% 2&lt;/code&gt;, so we need to be more explicit.&lt;/li&gt;
-  &lt;li&gt;Remember when passing a function as an argument (in this case to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt;), it has a special &lt;a href=&quot;https://docs.raku.org/language/variables#index-entry-sigil_&amp;amp;&quot;&gt;sigil&lt;/a&gt; – &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;amp;&lt;/code&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;task-2-nim-game&quot;&gt;Task 2: NIM Game&lt;/h2&gt;
-
-&lt;p&gt;Write a script to simulate the NIM Game.&lt;/p&gt;
-
-&lt;p&gt;It is played between 2 players. For the purpose of this task, let assume you play against the machine.&lt;/p&gt;
-
-&lt;p&gt;There are 3 simple rules to follow:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;a) You have 12 tokens
-b) Each player can pick 1, 2 or 3 tokens at a time
-c) The player who picks the last token wins the game
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-104/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Formats a message defined as plural to be singular if $n == 1
-sub format(Str $message, Int $n) returns Str {
-    $n == 1 ?? $message.trans(['are', 'tokens'] =&amp;gt; ['is', 'token']) !! $message; # [1]
-}
-
-sub challenge(Int $n) {
-    my $remaining = $n;
-
-    # Defined within the challenge sub because it references $remaining
-    sub default-prompt returns Any {
-        prompt(format(&quot;There are $remaining tokens. How many would you like to pick up? (1, 2, 3) &quot;, $remaining)); # [2]
-    }
-
-    my $input = default-prompt;
-    my $most-recent-move;
-    while $remaining &amp;gt; 0 {
-        given $input {
-            when 1|2|3 {
-                if $input &amp;gt; $remaining {
-                    $input = prompt(&quot;There are only $remaining tokens left. Please enter a valid number &quot;)
-                } else {
-                    say format(&quot;You take $input tokens&quot;, $input);
-                    $remaining -= $input;
-                    $most-recent-move = 'You';
-
-                    last if $remaining == 0;
-
-                    # If there are only 3 or less tokens, take all of them. Otherwise, take a random number between 1 and 3
-                    my $bot-move = $remaining ~~ 1|2|3 ?? $remaining !! (1..3).pick;
-                    say format(&quot;The computer takes $bot-move tokens&quot;, $bot-move);
-                    $remaining -= $bot-move;
-                    $most-recent-move = 'Computer';
-
-                    last if $remaining == 0;
-
-                    $input = default-prompt;
-                }
-            }
-            default { $input = prompt('Please enter 1, 2, or 3 ') }
-        }
-    }
-    say $most-recent-move eq 'Computer' ?? 'The computer wins!' !! 'You win!'; # [3]
-}
-
-sub MAIN(Int $n where $n &amp;gt; 0 = 12) { # [4]
-    challenge($n);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku
-There are 12 tokens. How many would you like to pick up? (1, 2, 3) 3
-You take 3 tokens
-The computer takes 3 tokens
-There are 6 tokens. How many would you like to pick up? (1, 2, 3) 2
-You take 2 tokens
-The computer takes 3 tokens
-There is 1 token. How many would you like to pick up? (1, 2, 3) 1
-You take 1 token
-You win!
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;This task is basically an exercise in IO (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;prompt&lt;/code&gt;) and data validation (did I get what I expect?). We follow the following steps:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Ask the user to give us a number (1, 2, or 3).
-    &lt;ul&gt;
-      &lt;li&gt;Did they give it to us? Move on to step 2.&lt;/li&gt;
-      &lt;li&gt;Otherwise, keep asking for a valid input (doesn’t matter if they gave us an invalid number, a string, etc.).&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Do a special check to see if their number is higher than the remaining tokens (only happens when there are 3 or fewer tokens). If so, keep prompting them for a valid input.&lt;/li&gt;
-  &lt;li&gt;Now that we know we have valid input, decrement &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$remaining&lt;/code&gt; to reflect the number of token the user took.&lt;/li&gt;
-  &lt;li&gt;If there are 0 tokens left, exit the loop and print that the user won.&lt;/li&gt;
-  &lt;li&gt;Otherwise, there are tokens left, and it is the computer’s turn. Our bot is semi-smart, so if there are 3 or fewer tokens take all of them (and win). Otherwise, take a random valid number of tokens.&lt;/li&gt;
-  &lt;li&gt;If there are 0 tokens left, exit the loop and print that th computer won.&lt;/li&gt;
-  &lt;li&gt;Finally, if there are still tokens left, repeat steps 1-6 until there are 0 tokens left.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;This is simply a helper function, so we can write all of our prompts like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&quot;There are $n tokens remaining&quot;&lt;/code&gt; and they will get properly formatted if &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$n&lt;/code&gt; is 1. This is very specific to this question, obviously, but it is useful. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trans&lt;/code&gt; basically just translates all &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;are&lt;/code&gt; instances to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is&lt;/code&gt; and all &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tokens&lt;/code&gt; instances to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;token&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;You’ll notice a few things about this subroutine. First, we don’t have to define it with parentheses if it doesn’t take any arguments. Second, it returns &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Any&lt;/code&gt; because we don’t know what we are going to get from the user. Third, it is defined &lt;em&gt;inside&lt;/em&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;challenge&lt;/code&gt; because it is acting as a &lt;a href=&quot;https://simple.wikipedia.org/wiki/Closure_(computer_science)&quot;&gt;closure&lt;/a&gt;, meaning it references variables defined outside itself (in this case, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$remaining&lt;/code&gt;).&lt;/li&gt;
-  &lt;li&gt;Raku is kind of strange in that if you want to do string equality you have to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eq&lt;/code&gt; instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;==&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;This function signature specifies that it takes an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; that is greater than 0, and if it is not provided, it defaults to 12.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;Raku gives us some cool tools to make these challenges easier. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;given&lt;/code&gt; syntax was especially helpful in both of these challenges (and in others)!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week had some fun topics like recursion, memoization, and IO/data validation!</summary></entry></feed>
+&lt;p&gt;Like I said, short and sweet! See y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">This week’s challenges are short and sweet, but still give us the opportunity to explore some interesting Raku-isms!</summary></entry></feed>

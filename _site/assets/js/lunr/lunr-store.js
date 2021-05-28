@@ -304,4 +304,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-113/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 114",
+        "excerpt":"Both of this week’s solutions look remarkably similar, because we were able to utilize the first subroutine for each one! Task 1: Next Palindrome Number You are given a positive integer $N. Write a script to find out the next Palindrome Number higher than the given integer $N. Example Input:...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-114/",
+        "teaser": null
       }]
