@@ -310,4 +310,16 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-114/",
         "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 115",
+        "excerpt":"I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today! Task 1: String Chain You are given an array of strings. Write a script to find out if the given...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-115/",
+        "teaser": null
+      },{
+        "title": "Perl Weekly Challenge 116",
+        "excerpt":"Part 1 was probably the hardest this week, but I ended up being able to adapt a solution from an existing Python library. Task 1: Number Sequence You are given a number $N &gt;= 10. Write a script to split the given number such that the difference between two consecutive...","categories": ["Blog"],
+        "tags": ["Perl Weekly Challenge","Raku"],
+        "url": "/blog/perl-weekly-challenge-116/",
+        "teaser": null
       }]
