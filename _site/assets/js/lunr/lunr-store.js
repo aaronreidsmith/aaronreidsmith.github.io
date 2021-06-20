@@ -322,4 +322,10 @@ var store = [{
         "tags": ["Perl Weekly Challenge","Raku"],
         "url": "/blog/perl-weekly-challenge-116/",
         "teaser": null
+      },{
+        "title": "Sabbatical",
+        "excerpt":"Today is Father’s Day in the U.S. I have an almost-11-month-old son who I should be spending time with, but I feel the need to post a blog because I have been doing so weekly since November 2020. However, I find no joy in it today or even recently. I...","categories": ["Personal"],
+        "tags": [],
+        "url": "/personal/sabbatical/",
+        "teaser": null
       }]
