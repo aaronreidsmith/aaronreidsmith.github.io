@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Perl Weekly Challenge 115 - Aaron Smith</title>
-<meta name="description" content="I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!">
+<!-- begin _includes/seo.html --><title>Advent of Code: Year 2021, Day 1 - Aaron Smith</title>
+<meta name="description" content="I am back after not blogging for 6 months. Who knows if I will blog every day, but I am excited for Advent of Code regardless!">
 
 
   <meta name="author" content="Aaron Smith">
@@ -22,26 +22,26 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Aaron Smith">
-<meta property="og:title" content="Perl Weekly Challenge 115">
-<meta property="og:url" content="http://localhost:4000/blog/perl-weekly-challenge-115/">
+<meta property="og:title" content="Advent of Code: Year 2021, Day 1">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-year-2021-day-01/">
 
 
-  <meta property="og:description" content="I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2021-06-07T00:00:00-05:00">
+  <meta property="og:description" content="I am back after not blogging for 6 months. Who knows if I will blog every day, but I am excited for Advent of Code regardless!">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/blog/perl-weekly-challenge-115/">
+
+  <meta property="article:published_time" content="2021-12-01T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-year-2021-day-01/">
 
 
 
@@ -286,15 +286,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Perl Weekly Challenge 115">
-    <meta itemprop="description" content="I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!">
-    <meta itemprop="datePublished" content="2021-06-07T00:00:00-05:00">
+    <meta itemprop="headline" content="Advent of Code: Year 2021, Day 1">
+    <meta itemprop="description" content="I am back after not blogging for 6 months. Who knows if I will blog every day, but I am excited for Advent of Code regardless!">
+    <meta itemprop="datePublished" content="2021-12-01T00:00:00-06:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Perl Weekly Challenge 115
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Year 2021, Day 1
 </h1>
           
 
@@ -303,7 +303,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time>
+        <time datetime="2021-12-01T00:00:00-06:00">December 1, 2021</time>
       </span>
     
 
@@ -316,7 +316,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          3 minute read
+          2 minute read
         
       </span>
     
@@ -328,123 +328,124 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!</p>
+        <p>I am back after not blogging for 6 months. Who knows if I will blog every day, but I am excited for Advent of Code regardless!</p>
 
-<h2 id="task-1-string-chain">Task 1: String Chain</h2>
+<p>This year I am planning on doing everything in Scala, and I am going to focus more on the problem than the prose when/if I blog my solution.</p>
 
-<p>You are given an array of strings.</p>
+<h2 id="the-problem">The Problem</h2>
 
-<p>Write a script to find out if the given strings can be chained to form a circle. Print 1 if found otherwise 0.</p>
+<h3 id="part-1">Part 1</h3>
 
-<blockquote>
-  <p>A string $S can be put before another string $T in circle if the last character of $S is same as first character of $T.</p>
-</blockquote>
+<p>Given a list of integers that looks like the below, count the number of entries that are greater than the previous entry.</p>
 
-<h3 id="examples">Examples</h3>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: @S = ("abc", "dea", "cd")
-Output: 1 as we can form circle e.g. "abc", "cd", "dea".
-
-Input: @S = ("ade", "cbd", "fgh")
-Output: 0 as we can't form circle.
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>199
+200
+208
+210
+200
+207
+240
+269
+260
+263
 </code></pre></div></div>
 
-<h3 id="solution">Solution</h3>
+<p>So for this example, it would look like this, for an answer of <strong>7</strong>.</p>
 
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-115/aaronreidsmith/raku/ch-1.raku">GitHub Link</a></p>
-
-<p>See below for explanation and any implementation-specific comments.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(@S) returns Int {
-  my @solutions = @S.race.permutations.grep: -&gt; @permutation { # [1][2]
-    my $valid = True;
-    for @permutation Z (|@permutation[1..*], @permutation.head) -&gt; ($a, $b) { # [3]
-      if $a.comb.tail ne $b.comb.head {
-        $valid = False;
-        last;
-      }
-    }
-    $valid;
-  }
-  (@solutions.elems &gt; 0).Int;
-}
-
-sub MAIN(*@S where all(@S) ~~ Str) {
-  say challenge(@S);
-}
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>199 (N/A - no previous measurement)
+200 (increased)
+208 (increased)
+210 (increased)
+200 
+207 (increased)
+240 (increased)
+269 (increased)
+260 
+263 (increased)
 </code></pre></div></div>
 
-<p>This program runs as such:</p>
+<h4 id="solution">Solution</h4>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-1.raku abc dea cd
-1
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/scala/io/github/aaronreidsmith/year2021/Day01.scala">GitHub Link</a></p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">object</span> <span class="nc">Day01</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">input</span> <span class="k">=</span> <span class="nv">Using</span><span class="o">.</span><span class="py">resource</span><span class="o">(</span><span class="nv">Source</span><span class="o">.</span><span class="py">fromResource</span><span class="o">(</span><span class="s">"2021/day01.txt"</span><span class="o">))(</span><span class="nv">_</span><span class="o">.</span><span class="py">getLines</span><span class="o">().</span><span class="py">map</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">toInt</span><span class="o">).</span><span class="py">toSeq</span><span class="o">)</span>
+
+    <span class="k">val</span> <span class="nv">part1</span> <span class="k">=</span> <span class="nv">input</span><span class="o">.</span><span class="py">sliding</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="py">count</span> <span class="o">{</span> <span class="k">case</span> <span class="nc">Seq</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">a</span> <span class="o">}</span>
+    <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Part 1: $part1"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div></div>
 
-<h3 id="explanation">Explanation</h3>
+<h4 id="explanation">Explanation</h4>
 
-<p>For this problem, we start by finding all the permutations of our input. So for <code class="language-plaintext highlighter-rouge">("abc", "dea", "cd")</code> we would get <code class="language-plaintext highlighter-rouge">((abc dea cd) (abc cd dea) (dea abc cd) (dea cd abc) (cd abc dea) (cd dea abc))</code>. We then take each one individually and compare each element pairwise. Since the last element needs to be compared to the first element, we have the special zip discussed in #3 below. If the last element of each string matches the first element of the next string, then we have a valid chain; otherwise, we exit early. Finally, we convert the boolean <code class="language-plaintext highlighter-rouge">@solutions.elems &gt; 0</code> to an integer to match the problem.</p>
+<p>This solution uses Scala’s <code class="language-plaintext highlighter-rouge">sliding</code> function to group our input into pairs and then counts the number where the second entry is larger than the first.</p>
 
-<h4 id="specific-comments">Specific comments</h4>
+<h3 id="part-2">Part 2</h3>
 
-<ol>
-  <li>We can process each permutation separately and order does not matter, so we convert our input to a <code class="language-plaintext highlighter-rouge">RaceSeq</code> as early as possible.</li>
-  <li><code class="language-plaintext highlighter-rouge">permutations</code> only works for positionals with size &lt; 20, or else it will blow up the stack.</li>
-  <li>If we have the list <code class="language-plaintext highlighter-rouge">(a, b, c)</code> here, what we are trying to generate is <code class="language-plaintext highlighter-rouge">((a, b), (b, c), (c, a))</code>. In Scala, this could be written as <code class="language-plaintext highlighter-rouge">(list :+ list.head).sliding(2)</code>, but Raku doesn’t have that functionality, so this line does the same thing by creating a second list with the first element moved to the end, <em>and then</em> zipping.</li>
-</ol>
+<p>The problem has changed so that we need to look at sliding windows of size 3 and count the number of windows where the sum of the latter window is larger than the sum of the previous window.</p>
 
-<h2 id="task-2-largest-multiple">Task 2: Largest Multiple</h2>
+<p>To visualize this, here are the sliding windows with the data from above:</p>
 
-<p>You are given a list of positive integers (0-9), single digit.</p>
-
-<p>Write a script to find the largest multiple of 2 that can be formed from the list.</p>
-
-<h3 id="examples-1">Examples</h3>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: @N = (1, 0, 2, 6)
-Output: 6210
-
-Input: @N = (1, 4, 2, 8)
-Output: 8412
-
-Input: @N = (4, 1, 7, 6)
-Output: 7614
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>199  A      
+200  A B    
+208  A B C  
+210    B C D
+200  E   C D
+207  E F   D
+240  E F G  
+269    F G H
+260      G H
+263        H
 </code></pre></div></div>
 
-<h3 id="solution-1">Solution</h3>
+<p>The sums of those windows are:</p>
 
-<p><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-115/aaronreidsmith/raku/ch-2.raku">GitHub Link</a></p>
-
-<p>See below for explanation and any implementation-specific comments.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub challenge(@N) returns Int {
-  @N.race.permutations.map(*.join.Int).grep(* %% 2).max; # [1]
-}
-
-sub MAIN(*@N where all(@N) ~~ /^&lt;digit&gt;$/) { # [2]
-  say challenge(@N);
-}
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A: 607 (N/A - no previous sum)
+B: 618 (increased)
+C: 618 
+D: 617 
+E: 647 (increased)
+F: 716 (increased)
+G: 769 (increased)
+H: 792 (increased)
 </code></pre></div></div>
 
-<p>This program runs as such:</p>
+<p>So the answer to part 2 with the example data is <strong>5</strong></p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku ch-2.raku 1 0 2 6
-6210
+<h4 id="solution-1">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/scala/io/github/aaronreidsmith/year2021/Day01.scala">GitHub Link</a></p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">object</span> <span class="nc">Day01</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">input</span> <span class="k">=</span> <span class="nv">Using</span><span class="o">.</span><span class="py">resource</span><span class="o">(</span><span class="nv">Source</span><span class="o">.</span><span class="py">fromResource</span><span class="o">(</span><span class="s">"2021/day01.txt"</span><span class="o">))(</span><span class="nv">_</span><span class="o">.</span><span class="py">getLines</span><span class="o">().</span><span class="py">map</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">toInt</span><span class="o">).</span><span class="py">toSeq</span><span class="o">)</span>
+
+    <span class="k">val</span> <span class="nv">part1</span> <span class="k">=</span> <span class="nv">input</span><span class="o">.</span><span class="py">sliding</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="py">count</span> <span class="o">{</span> <span class="k">case</span> <span class="nc">Seq</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">a</span> <span class="o">}</span>
+    <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Part 1: $part1"</span><span class="o">)</span>
+
+    <span class="k">val</span> <span class="nv">part2</span> <span class="k">=</span> <span class="nv">input</span><span class="o">.</span><span class="py">sliding</span><span class="o">(</span><span class="mi">4</span><span class="o">).</span><span class="py">count</span> <span class="o">{</span> <span class="k">case</span> <span class="nc">Seq</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="k">_</span><span class="o">,</span> <span class="k">_</span><span class="o">,</span> <span class="n">d</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="n">a</span> <span class="o">}</span>
+    <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Part 2: $part2"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div></div>
 
-<h3 id="explanation-1">Explanation</h3>
+<h4 id="explanation-1">Explanation</h4>
 
-<p>Once again, we find all the permutations and then map all of them to integers. We then filter them to only numbers divisible by 2, and then find the max. Easy peasy!</p>
+<p>The naive answer would be something like this:</p>
 
-<h4 id="specific-comments-1">Specific Comments</h4>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">input</span><span class="o">.</span><span class="py">sliding</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="py">sliding</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="py">count</span> <span class="o">{</span> <span class="k">case</span> <span class="nc">Seq</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">b</span><span class="o">.</span><span class="py">sum</span> <span class="o">&gt;</span> <span class="nv">a</span><span class="o">.</span><span class="py">sum</span> <span class="o">}</span>
+</code></pre></div></div>
 
-<ol>
-  <li>Raku has a cool built-in operator for “divisible by” which comes in handy in these situations.</li>
-  <li>The question says to only accept positive integers between 0 and 9, in other words, a digit, so we enforce that at runtime using this regex.</li>
-</ol>
+<p>However, the overlapping members don’t matter, so we can save some cycles by only comparing every 4th item. Here is how it looks using windows <code class="language-plaintext highlighter-rouge">A</code> and <code class="language-plaintext highlighter-rouge">B</code> from above:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>B - A = (210 + 208 + 200) - (208 + 200 + 199) = 210 + 208 + 200 - 208 - 200 - 199 = 210 - 199 = 11
+</code></pre></div></div>
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>Permutations and <code class="language-plaintext highlighter-rouge">RaceSeq</code> make for fairly efficient and readable solutions this week! See y’all in Challenge 116.</p>
+<p>A good little puzzle to dip our toes in the water this year. Looking forward to the rest of the year! Happy Advent of Code!</p>
 
         
       </section>
@@ -461,9 +462,9 @@ sub MAIN(*@N where all(@N) ~~ /^&lt;digit&gt;$/) { # [2]
     <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
     <span itemprop="keywords">
     
-      <a href="/tags/#perl-weekly-challenge" class="page__taxonomy-item" rel="tag">Perl Weekly Challenge</a><span class="sep">, </span>
+      <a href="/tags/#advent-of-code" class="page__taxonomy-item" rel="tag">Advent of Code</a><span class="sep">, </span>
     
-      <a href="/tags/#raku" class="page__taxonomy-item" rel="tag">Raku</a>
+      <a href="/tags/#scala" class="page__taxonomy-item" rel="tag">Scala</a>
     
     </span>
   </p>
@@ -487,7 +488,7 @@ sub MAIN(*@N where all(@N) ~~ /^&lt;digit&gt;$/) { # [2]
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-12-01T00:00:00-06:00">December 1, 2021</time></p>
 
 
       </footer>
@@ -497,23 +498,22 @@ sub MAIN(*@N where all(@N) ~~ /^&lt;digit&gt;$/) { # [2]
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=Perl+Weekly+Challenge+115%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-115%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Year+2021%2C+Day+1%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2021-day-01%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-115%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2021-day-01%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fperl-weekly-challenge-115%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2021-day-01%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/blog/perl-weekly-challenge-114/" class="pagination--pager" title="Perl Weekly Challenge 114
+      <a href="/personal/sabbatical/" class="pagination--pager" title="Sabbatical
 ">Previous</a>
     
     
-      <a href="/blog/perl-weekly-challenge-116/" class="pagination--pager" title="Perl Weekly Challenge 116
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -527,53 +527,6 @@ sub MAIN(*@N where all(@N) ~~ /^&lt;digit&gt;$/) { # [2]
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/advent-of-code-year-2021-day-01/" rel="permalink">Advent of Code: Year 2021, Day 1
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2021-12-01T00:00:00-06:00">December 1, 2021</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          2 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">I am back after not blogging for 6 months. Who knows if I will blog every day, but I am excited for Advent of Code regardless!
-
-</p>
-  </article>
-</div>
-
         
           
 
@@ -661,6 +614,53 @@ sub MAIN(*@N where all(@N) ~~ /^&lt;digit&gt;$/) { # [2]
 
 
     <p class="archive__item-excerpt" itemprop="description">Part 1 was probably the hardest this week, but I ended up being able to adapt a solution from an existing Python library.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-115/" rel="permalink">Perl Weekly Challenge 115
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!
 
 </p>
   </article>

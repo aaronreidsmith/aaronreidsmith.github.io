@@ -1,123 +1,124 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-12-01T08:43:17-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Sabbatical</title><link href="http://localhost:4000/personal/sabbatical/" rel="alternate" type="text/html" title="Sabbatical" /><published>2021-06-20T00:00:00-05:00</published><updated>2021-06-20T00:00:00-05:00</updated><id>http://localhost:4000/personal/sabbatical</id><content type="html" xml:base="http://localhost:4000/personal/sabbatical/">&lt;p&gt;Today is Father’s Day in the U.S. I have an almost-11-month-old son who I should be spending time with, but I feel the need to post a blog because I have been doing so weekly since November 2020. However, I find no joy in it today or even recently. I still enjoy doing the occasional Perl Weekly Challenge (I was only able to get &lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-117/aaronreidsmith/raku/ch-1.raku&quot;&gt;Part 1&lt;/a&gt; done before the deadline this week), but writing about it has become a source of burnout. I don’t even think I have readers out there, but I figured it would be worth sharing my thoughts on the matter rather than just disappearing. I will still blog from time to time, but I will no longer put the pressure on myself to do it weekly. With that, I am going to go spend time with my family.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-12-01T09:01:51-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aaron Smith</title><subtitle>Personal website and blog of Aaron Smith</subtitle><author><name>Aaron Smith</name></author><entry><title type="html">Advent of Code: Year 2021, Day 1</title><link href="http://localhost:4000/blog/advent-of-code-year-2021-day-01/" rel="alternate" type="text/html" title="Advent of Code: Year 2021, Day 1" /><published>2021-12-01T00:00:00-06:00</published><updated>2021-12-01T00:00:00-06:00</updated><id>http://localhost:4000/blog/advent-of-code-year-2021-day-01</id><content type="html" xml:base="http://localhost:4000/blog/advent-of-code-year-2021-day-01/">&lt;p&gt;I am back after not blogging for 6 months. Who knows if I will blog every day, but I am excited for Advent of Code regardless!&lt;/p&gt;
 
-&lt;p&gt;Cheers,&lt;br /&gt;
-Aaron&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Personal" /><summary type="html">Today is Father’s Day in the U.S. I have an almost-11-month-old son who I should be spending time with, but I feel the need to post a blog because I have been doing so weekly since November 2020. However, I find no joy in it today or even recently. I still enjoy doing the occasional Perl Weekly Challenge (I was only able to get Part 1 done before the deadline this week), but writing about it has become a source of burnout. I don’t even think I have readers out there, but I figured it would be worth sharing my thoughts on the matter rather than just disappearing. I will still blog from time to time, but I will no longer put the pressure on myself to do it weekly. With that, I am going to go spend time with my family.</summary></entry><entry><title type="html">Perl Weekly Challenge 115</title><link href="http://localhost:4000/blog/perl-weekly-challenge-115/" rel="alternate" type="text/html" title="Perl Weekly Challenge 115" /><published>2021-06-07T00:00:00-05:00</published><updated>2021-06-07T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-115</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-115/">&lt;p&gt;I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!&lt;/p&gt;
+&lt;p&gt;This year I am planning on doing everything in Scala, and I am going to focus more on the problem than the prose when/if I blog my solution.&lt;/p&gt;
 
-&lt;h2 id=&quot;task-1-string-chain&quot;&gt;Task 1: String Chain&lt;/h2&gt;
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
 
-&lt;p&gt;You are given an array of strings.&lt;/p&gt;
+&lt;h3 id=&quot;part-1&quot;&gt;Part 1&lt;/h3&gt;
 
-&lt;p&gt;Write a script to find out if the given strings can be chained to form a circle. Print 1 if found otherwise 0.&lt;/p&gt;
+&lt;p&gt;Given a list of integers that looks like the below, count the number of entries that are greater than the previous entry.&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;A string $S can be put before another string $T in circle if the last character of $S is same as first character of $T.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;examples&quot;&gt;Examples&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @S = (&quot;abc&quot;, &quot;dea&quot;, &quot;cd&quot;)
-Output: 1 as we can form circle e.g. &quot;abc&quot;, &quot;cd&quot;, &quot;dea&quot;.
-
-Input: @S = (&quot;ade&quot;, &quot;cbd&quot;, &quot;fgh&quot;)
-Output: 0 as we can't form circle.
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;199
+200
+208
+210
+200
+207
+240
+269
+260
+263
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+&lt;p&gt;So for this example, it would look like this, for an answer of &lt;strong&gt;7&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-115/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(@S) returns Int {
-  my @solutions = @S.race.permutations.grep: -&amp;gt; @permutation { # [1][2]
-    my $valid = True;
-    for @permutation Z (|@permutation[1..*], @permutation.head) -&amp;gt; ($a, $b) { # [3]
-      if $a.comb.tail ne $b.comb.head {
-        $valid = False;
-        last;
-      }
-    }
-    $valid;
-  }
-  (@solutions.elems &amp;gt; 0).Int;
-}
-
-sub MAIN(*@S where all(@S) ~~ Str) {
-  say challenge(@S);
-}
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;199 (N/A - no previous measurement)
+200 (increased)
+208 (increased)
+210 (increased)
+200 
+207 (increased)
+240 (increased)
+269 (increased)
+260 
+263 (increased)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;This program runs as such:&lt;/p&gt;
+&lt;h4 id=&quot;solution&quot;&gt;Solution&lt;/h4&gt;
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku abc dea cd
-1
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/scala/io/github/aaronreidsmith/year2021/Day01.scala&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Day01&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Unit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Using&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;resource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;Source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;fromResource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2021/day01.txt&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;getLines&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;toInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;toSeq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;part1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;sliding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nf&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Part 1: $part1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
 
-&lt;p&gt;For this problem, we start by finding all the permutations of our input. So for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(&quot;abc&quot;, &quot;dea&quot;, &quot;cd&quot;)&lt;/code&gt; we would get &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;((abc dea cd) (abc cd dea) (dea abc cd) (dea cd abc) (cd abc dea) (cd dea abc))&lt;/code&gt;. We then take each one individually and compare each element pairwise. Since the last element needs to be compared to the first element, we have the special zip discussed in #3 below. If the last element of each string matches the first element of the next string, then we have a valid chain; otherwise, we exit early. Finally, we convert the boolean &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@solutions.elems &amp;gt; 0&lt;/code&gt; to an integer to match the problem.&lt;/p&gt;
+&lt;p&gt;This solution uses Scala’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sliding&lt;/code&gt; function to group our input into pairs and then counts the number where the second entry is larger than the first.&lt;/p&gt;
 
-&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+&lt;h3 id=&quot;part-2&quot;&gt;Part 2&lt;/h3&gt;
 
-&lt;ol&gt;
-  &lt;li&gt;We can process each permutation separately and order does not matter, so we convert our input to a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RaceSeq&lt;/code&gt; as early as possible.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;permutations&lt;/code&gt; only works for positionals with size &amp;lt; 20, or else it will blow up the stack.&lt;/li&gt;
-  &lt;li&gt;If we have the list &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(a, b, c)&lt;/code&gt; here, what we are trying to generate is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;((a, b), (b, c), (c, a))&lt;/code&gt;. In Scala, this could be written as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(list :+ list.head).sliding(2)&lt;/code&gt;, but Raku doesn’t have that functionality, so this line does the same thing by creating a second list with the first element moved to the end, &lt;em&gt;and then&lt;/em&gt; zipping.&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;The problem has changed so that we need to look at sliding windows of size 3 and count the number of windows where the sum of the latter window is larger than the sum of the previous window.&lt;/p&gt;
 
-&lt;h2 id=&quot;task-2-largest-multiple&quot;&gt;Task 2: Largest Multiple&lt;/h2&gt;
+&lt;p&gt;To visualize this, here are the sliding windows with the data from above:&lt;/p&gt;
 
-&lt;p&gt;You are given a list of positive integers (0-9), single digit.&lt;/p&gt;
-
-&lt;p&gt;Write a script to find the largest multiple of 2 that can be formed from the list.&lt;/p&gt;
-
-&lt;h3 id=&quot;examples-1&quot;&gt;Examples&lt;/h3&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @N = (1, 0, 2, 6)
-Output: 6210
-
-Input: @N = (1, 4, 2, 8)
-Output: 8412
-
-Input: @N = (4, 1, 7, 6)
-Output: 7614
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;199  A      
+200  A B    
+208  A B C  
+210    B C D
+200  E   C D
+207  E F   D
+240  E F G  
+269    F G H
+260      G H
+263        H
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+&lt;p&gt;The sums of those windows are:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-115/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(@N) returns Int {
-  @N.race.permutations.map(*.join.Int).grep(* %% 2).max; # [1]
-}
-
-sub MAIN(*@N where all(@N) ~~ /^&amp;lt;digit&amp;gt;$/) { # [2]
-  say challenge(@N);
-}
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;A: 607 (N/A - no previous sum)
+B: 618 (increased)
+C: 618 
+D: 617 
+E: 647 (increased)
+F: 716 (increased)
+G: 769 (increased)
+H: 792 (increased)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;This program runs as such:&lt;/p&gt;
+&lt;p&gt;So the answer to part 2 with the example data is &lt;strong&gt;5&lt;/strong&gt;&lt;/p&gt;
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 1 0 2 6
-6210
+&lt;h4 id=&quot;solution-1&quot;&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/scala/io/github/aaronreidsmith/year2021/Day01.scala&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Day01&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Unit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Using&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;resource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;Source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;fromResource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2021/day01.txt&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;getLines&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;toInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;toSeq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;part1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;sliding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nf&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Part 1: $part1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;part2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;sliding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nf&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Part 2: $part2&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+&lt;h4 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h4&gt;
 
-&lt;p&gt;Once again, we find all the permutations and then map all of them to integers. We then filter them to only numbers divisible by 2, and then find the max. Easy peasy!&lt;/p&gt;
+&lt;p&gt;The naive answer would be something like this:&lt;/p&gt;
 
-&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;sliding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;sliding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;ol&gt;
-  &lt;li&gt;Raku has a cool built-in operator for “divisible by” which comes in handy in these situations.&lt;/li&gt;
-  &lt;li&gt;The question says to only accept positive integers between 0 and 9, in other words, a digit, so we enforce that at runtime using this regex.&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;However, the overlapping members don’t matter, so we can save some cycles by only comparing every 4th item. Here is how it looks using windows &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;A&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;B&lt;/code&gt; from above:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;B - A = (210 + 208 + 200) - (208 + 200 + 199) = 210 + 208 + 200 - 208 - 200 - 199 = 210 - 199 = 11
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Permutations and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RaceSeq&lt;/code&gt; make for fairly efficient and readable solutions this week! See y’all in Challenge 116.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!</summary></entry><entry><title type="html">Perl Weekly Challenge 116</title><link href="http://localhost:4000/blog/perl-weekly-challenge-116/" rel="alternate" type="text/html" title="Perl Weekly Challenge 116" /><published>2021-06-07T00:00:00-05:00</published><updated>2021-06-07T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-116</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-116/">&lt;p&gt;Part 1 was probably the hardest this week, but I ended up being able to adapt a solution from an existing Python library.&lt;/p&gt;
+&lt;p&gt;A good little puzzle to dip our toes in the water this year. Looking forward to the rest of the year! Happy Advent of Code!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Advent of Code" /><category term="Scala" /><summary type="html">I am back after not blogging for 6 months. Who knows if I will blog every day, but I am excited for Advent of Code regardless!</summary></entry><entry><title type="html">Sabbatical</title><link href="http://localhost:4000/personal/sabbatical/" rel="alternate" type="text/html" title="Sabbatical" /><published>2021-06-20T00:00:00-05:00</published><updated>2021-06-20T00:00:00-05:00</updated><id>http://localhost:4000/personal/sabbatical</id><content type="html" xml:base="http://localhost:4000/personal/sabbatical/">&lt;p&gt;Today is Father’s Day in the U.S. I have an almost-11-month-old son who I should be spending time with, but I feel the need to post a blog because I have been doing so weekly since November 2020. However, I find no joy in it today or even recently. I still enjoy doing the occasional Perl Weekly Challenge (I was only able to get &lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-117/aaronreidsmith/raku/ch-1.raku&quot;&gt;Part 1&lt;/a&gt; done before the deadline this week), but writing about it has become a source of burnout. I don’t even think I have readers out there, but I figured it would be worth sharing my thoughts on the matter rather than just disappearing. I will still blog from time to time, but I will no longer put the pressure on myself to do it weekly. With that, I am going to go spend time with my family.&lt;/p&gt;
+
+&lt;p&gt;Cheers,&lt;br /&gt;
+Aaron&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Personal" /><summary type="html">Today is Father’s Day in the U.S. I have an almost-11-month-old son who I should be spending time with, but I feel the need to post a blog because I have been doing so weekly since November 2020. However, I find no joy in it today or even recently. I still enjoy doing the occasional Perl Weekly Challenge (I was only able to get Part 1 done before the deadline this week), but writing about it has become a source of burnout. I don’t even think I have readers out there, but I figured it would be worth sharing my thoughts on the matter rather than just disappearing. I will still blog from time to time, but I will no longer put the pressure on myself to do it weekly. With that, I am going to go spend time with my family.</summary></entry><entry><title type="html">Perl Weekly Challenge 116</title><link href="http://localhost:4000/blog/perl-weekly-challenge-116/" rel="alternate" type="text/html" title="Perl Weekly Challenge 116" /><published>2021-06-07T00:00:00-05:00</published><updated>2021-06-07T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-116</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-116/">&lt;p&gt;Part 1 was probably the hardest this week, but I ended up being able to adapt a solution from an existing Python library.&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-number-sequence&quot;&gt;Task 1: Number Sequence&lt;/h2&gt;
 
@@ -258,7 +259,123 @@ sub MAIN(Int $N) {
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;Two fun challenges this week! Glad I am ahead of the curve and won’t be behind due to a busy weekend this week.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Part 1 was probably the hardest this week, but I ended up being able to adapt a solution from an existing Python library.</summary></entry><entry><title type="html">Perl Weekly Challenge 114</title><link href="http://localhost:4000/blog/perl-weekly-challenge-114/" rel="alternate" type="text/html" title="Perl Weekly Challenge 114" /><published>2021-05-28T00:00:00-05:00</published><updated>2021-05-28T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-114</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-114/">&lt;p&gt;Both of this week’s solutions look remarkably similar, because we were able to utilize the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;first&lt;/code&gt; subroutine for each one!&lt;/p&gt;
+&lt;p&gt;Two fun challenges this week! Glad I am ahead of the curve and won’t be behind due to a busy weekend this week.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Part 1 was probably the hardest this week, but I ended up being able to adapt a solution from an existing Python library.</summary></entry><entry><title type="html">Perl Weekly Challenge 115</title><link href="http://localhost:4000/blog/perl-weekly-challenge-115/" rel="alternate" type="text/html" title="Perl Weekly Challenge 115" /><published>2021-06-07T00:00:00-05:00</published><updated>2021-06-07T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-115</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-115/">&lt;p&gt;I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!&lt;/p&gt;
+
+&lt;h2 id=&quot;task-1-string-chain&quot;&gt;Task 1: String Chain&lt;/h2&gt;
+
+&lt;p&gt;You are given an array of strings.&lt;/p&gt;
+
+&lt;p&gt;Write a script to find out if the given strings can be chained to form a circle. Print 1 if found otherwise 0.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;A string $S can be put before another string $T in circle if the last character of $S is same as first character of $T.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;examples&quot;&gt;Examples&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @S = (&quot;abc&quot;, &quot;dea&quot;, &quot;cd&quot;)
+Output: 1 as we can form circle e.g. &quot;abc&quot;, &quot;cd&quot;, &quot;dea&quot;.
+
+Input: @S = (&quot;ade&quot;, &quot;cbd&quot;, &quot;fgh&quot;)
+Output: 0 as we can't form circle.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-115/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(@S) returns Int {
+  my @solutions = @S.race.permutations.grep: -&amp;gt; @permutation { # [1][2]
+    my $valid = True;
+    for @permutation Z (|@permutation[1..*], @permutation.head) -&amp;gt; ($a, $b) { # [3]
+      if $a.comb.tail ne $b.comb.head {
+        $valid = False;
+        last;
+      }
+    }
+    $valid;
+  }
+  (@solutions.elems &amp;gt; 0).Int;
+}
+
+sub MAIN(*@S where all(@S) ~~ Str) {
+  say challenge(@S);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku abc dea cd
+1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;For this problem, we start by finding all the permutations of our input. So for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(&quot;abc&quot;, &quot;dea&quot;, &quot;cd&quot;)&lt;/code&gt; we would get &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;((abc dea cd) (abc cd dea) (dea abc cd) (dea cd abc) (cd abc dea) (cd dea abc))&lt;/code&gt;. We then take each one individually and compare each element pairwise. Since the last element needs to be compared to the first element, we have the special zip discussed in #3 below. If the last element of each string matches the first element of the next string, then we have a valid chain; otherwise, we exit early. Finally, we convert the boolean &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@solutions.elems &amp;gt; 0&lt;/code&gt; to an integer to match the problem.&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;We can process each permutation separately and order does not matter, so we convert our input to a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RaceSeq&lt;/code&gt; as early as possible.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;permutations&lt;/code&gt; only works for positionals with size &amp;lt; 20, or else it will blow up the stack.&lt;/li&gt;
+  &lt;li&gt;If we have the list &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(a, b, c)&lt;/code&gt; here, what we are trying to generate is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;((a, b), (b, c), (c, a))&lt;/code&gt;. In Scala, this could be written as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(list :+ list.head).sliding(2)&lt;/code&gt;, but Raku doesn’t have that functionality, so this line does the same thing by creating a second list with the first element moved to the end, &lt;em&gt;and then&lt;/em&gt; zipping.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-2-largest-multiple&quot;&gt;Task 2: Largest Multiple&lt;/h2&gt;
+
+&lt;p&gt;You are given a list of positive integers (0-9), single digit.&lt;/p&gt;
+
+&lt;p&gt;Write a script to find the largest multiple of 2 that can be formed from the list.&lt;/p&gt;
+
+&lt;h3 id=&quot;examples-1&quot;&gt;Examples&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: @N = (1, 0, 2, 6)
+Output: 6210
+
+Input: @N = (1, 4, 2, 8)
+Output: 8412
+
+Input: @N = (4, 1, 7, 6)
+Output: 7614
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-115/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(@N) returns Int {
+  @N.race.permutations.map(*.join.Int).grep(* %% 2).max; # [1]
+}
+
+sub MAIN(*@N where all(@N) ~~ /^&amp;lt;digit&amp;gt;$/) { # [2]
+  say challenge(@N);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This program runs as such:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku 1 0 2 6
+6210
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
+
+&lt;p&gt;Once again, we find all the permutations and then map all of them to integers. We then filter them to only numbers divisible by 2, and then find the max. Easy peasy!&lt;/p&gt;
+
+&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Raku has a cool built-in operator for “divisible by” which comes in handy in these situations.&lt;/li&gt;
+  &lt;li&gt;The question says to only accept positive integers between 0 and 9, in other words, a digit, so we enforce that at runtime using this regex.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
+
+&lt;p&gt;Permutations and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RaceSeq&lt;/code&gt; make for fairly efficient and readable solutions this week! See y’all in Challenge 116.&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!</summary></entry><entry><title type="html">Perl Weekly Challenge 114</title><link href="http://localhost:4000/blog/perl-weekly-challenge-114/" rel="alternate" type="text/html" title="Perl Weekly Challenge 114" /><published>2021-05-28T00:00:00-05:00</published><updated>2021-05-28T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-114</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-114/">&lt;p&gt;Both of this week’s solutions look remarkably similar, because we were able to utilize the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;first&lt;/code&gt; subroutine for each one!&lt;/p&gt;
 
 &lt;h2 id=&quot;task-1-next-palindrome-number&quot;&gt;Task 1: Next Palindrome Number&lt;/h2&gt;
 
@@ -1237,171 +1354,4 @@ $d + $e + $f == $f + $g
 
 &lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
 
-&lt;p&gt;I’m always happy when I can find a functional solution to these problems, so I had fun this week. 🙂 See y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Two fun tasks this week that were both able to be solved in a functional manner 🎉</summary></entry><entry><title type="html">Perl Weekly Challenge 108</title><link href="http://localhost:4000/blog/perl-weekly-challenge-108/" rel="alternate" type="text/html" title="Perl Weekly Challenge 108" /><published>2021-04-12T00:00:00-05:00</published><updated>2021-04-12T00:00:00-05:00</updated><id>http://localhost:4000/blog/perl-weekly-challenge-108</id><content type="html" xml:base="http://localhost:4000/blog/perl-weekly-challenge-108/">&lt;p&gt;Task 1 this week is kind of a joke, but task 2 was interesting!&lt;/p&gt;
-
-&lt;h2 id=&quot;task-1-locate-memory&quot;&gt;Task 1: Locate Memory&lt;/h2&gt;
-
-&lt;p&gt;Write a script to declare a variable or constant and print its location in the memory.&lt;/p&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-108/aaronreidsmith/raku/ch-1.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub challenge(Any $variable) returns Int {
-    $variable.WHERE;
-}
-
-sub MAIN {
-    my $variable = rand;      # [1][2]
-    say challenge($variable);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-1.raku
-140444494947864
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;p&gt;Raku has the &lt;a href=&quot;https://docs.raku.org/routine/WHERE&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WHERE&lt;/code&gt;&lt;/a&gt; method built into it that “Returns an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; representing the memory address of the object,” we simply need to utilize that.&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments&quot;&gt;Specific comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rand&lt;/code&gt; is a built-in subroutine that returns a random integer.&lt;/li&gt;
-  &lt;li&gt;Following the Scala style, I would normally use parentheses for subroutines that are not “pure” and write this as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rand()&lt;/code&gt;, but Raku complains with the following error: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Unsupported use of rand().  In Raku please use: rand.&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;task-2-bell-numbers&quot;&gt;Task 2: Bell Numbers&lt;/h2&gt;
-
-&lt;p&gt;Write a script to display top 10 Bell Numbers. Please refer to the &lt;a href=&quot;https://en.wikipedia.org/wiki/Bell_number&quot;&gt;Wikipedia page&lt;/a&gt; for more information.&lt;/p&gt;
-
-&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;B&lt;sub&gt;0&lt;/sub&gt;: 1, as you can only have one partition of zero element set.&lt;/li&gt;
-  &lt;li&gt;B&lt;sub&gt;1&lt;/sub&gt;: 1, as you can only have one partition of one element set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{a}&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;B&lt;sub&gt;2&lt;/sub&gt;: 2&lt;/p&gt;
-
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{a}{b}
-{a,b}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;B&lt;sub&gt;3&lt;/sub&gt;: 5&lt;/p&gt;
-
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{a}{b}{c}
-{a,b}{c}
-{a}{b,c}
-{a,c}{b}
-{a,b,c}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;B&lt;sub&gt;4&lt;/sub&gt;: 15&lt;/p&gt;
-
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{a}{b}{c}{d}
-{a,b,c,d}
-{a,b}{c,d}
-{a,c}{b,d}
-{a,d}{b,c}
-{a,b}{c}{d}
-{a,c}{b}{d}
-{a,d}{b}{c}
-{b,c}{a}{d}
-{b,d}{a}{c}
-{c,d}{a}{b}
-{a}{b,c,d}
-{b}{a,c,d}
-{c}{a,b,d}
-{d}{a,b,c}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;solution-1&quot;&gt;Solution&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-108/aaronreidsmith/raku/ch-2.raku&quot;&gt;GitHub Link&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;See below for explanation and any implementation-specific comments.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use experimental :cached;
-
-sub challenge(Int $n where $n &amp;gt;= 0) is cached returns Int {            # [1]
-    given $n {
-        when 0|1 { 1 }
-        default {
-            my $n-minus-one = $n - 1;
-            gather for (0..$n-minus-one) -&amp;gt; $k {                       # [2]
-                take (^$n-minus-one).combinations($k) * challenge($k); # [2]
-            }.sum
-        }
-    }
-}
-
-sub MAIN(Int $n = 10) {
-    say (^$n).map(&amp;amp;challenge);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This program runs as such:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ raku ch-2.raku
-(1 1 2 5 15 52 203 877 4140 21147)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;explanation-1&quot;&gt;Explanation&lt;/h3&gt;
-
-&lt;!-- Allow inlining of math functionality --&gt;
-&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], [&quot;\\(&quot;,&quot;\\)&quot;] ],
-      processEscapes: true
-    }
-  });
-&lt;/script&gt;
-
-&lt;!-- Import math functionality --&gt;
-&lt;script type=&quot;text/javascript&quot; async=&quot;&quot; src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML&quot;&gt;
-&lt;/script&gt;
-
-&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; The question asks for the “top 10 Bell Numbers.” Since this is an ever-increasing sequence, there is no “top,” so I interpreted that to mean &lt;em&gt;first&lt;/em&gt; 10 Bell numbers.&lt;/p&gt;
-
-&lt;p&gt;At first glance, this code has nothing to do with the input sequences, but digging into the above-linked Wikipedia entry, we find this equation:&lt;/p&gt;
-
-&lt;p&gt;$ B_{n+1} = \sum_{k=0}^{n}{n \choose k}B_{k} $&lt;/p&gt;
-
-&lt;p&gt;This tells us that each Bell number is built upon by the previous Bell numbers. And we know the first two Bell numbers, so we can follow this.&lt;/p&gt;
-
-&lt;p&gt;Let’s re-write this to calculate $ B_{2} $ and see how it works; remember, since we are calculating for $ B_{n+1} $, we use $ n = 1 $.&lt;/p&gt;
-
-&lt;p&gt;$ B_{2} = \sum_{k=0}^{1}{1 \choose k}B_{k} $&lt;/p&gt;
-
-&lt;p&gt;Which can be expanded as:&lt;/p&gt;
-
-&lt;p&gt;$ B_{2} = {1 \choose 0}B_{0} + {1 \choose 1}B_{1} $&lt;/p&gt;
-
-&lt;p&gt;Which can be reduced to:&lt;/p&gt;
-
-&lt;p&gt;$ B_{2} = (1)(1) + (1)(1) = 2 $&lt;/p&gt;
-
-&lt;p&gt;So $ B_{2} = 2 $ and we can use that to calculate $ B_{3} $ and so on.&lt;/p&gt;
-
-&lt;p&gt;Now that we have the algorithm figured out, and decided we are going to apply it to the &lt;em&gt;first&lt;/em&gt; 10 terms, it’s a simple matter to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;map&lt;/code&gt; the function over the sequence from 0 (inclusive) to 10 (exclusive).&lt;/p&gt;
-
-&lt;h4 id=&quot;specific-comments-1&quot;&gt;Specific Comments&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Since this is a recursive function, once we calculate $ B_{2} $ we will use it in $ B_{3} $, $ B_{4} $ and so on. No use re-calculating it every time, so we memoize this function using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;is cached&lt;/code&gt; trait.&lt;/li&gt;
-  &lt;li&gt;gather/take is a construct to build up a sequence using a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Supply&lt;/code&gt; (in this case, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;for&lt;/code&gt; loop).&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h2&gt;
-
-&lt;p&gt;I love me some pattern matching and recursion, coming from a Scala day job, so it is fun to use those constructs in other languages, especially Raku. 🙂&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Task 1 this week is kind of a joke, but task 2 was interesting!</summary></entry></feed>
+&lt;p&gt;I’m always happy when I can find a functional solution to these problems, so I had fun this week. 🙂 See y’all next week!&lt;/p&gt;</content><author><name>Aaron Smith</name></author><category term="Blog" /><category term="Perl Weekly Challenge" /><category term="Raku" /><summary type="html">Two fun tasks this week that were both able to be solved in a functional manner 🎉</summary></entry></feed>

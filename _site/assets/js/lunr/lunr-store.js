@@ -328,4 +328,10 @@ var store = [{
         "tags": [],
         "url": "/personal/sabbatical/",
         "teaser": null
+      },{
+        "title": "Advent of Code: Year 2021, Day 1",
+        "excerpt":"I am back after not blogging for 6 months. Who knows if I will blog every day, but I am excited for Advent of Code regardless! This year I am planning on doing everything in Scala, and I am going to focus more on the problem than the prose when/if...","categories": ["Blog"],
+        "tags": ["Advent of Code","Scala"],
+        "url": "/blog/advent-of-code-year-2021-day-01/",
+        "teaser": null
       }]
