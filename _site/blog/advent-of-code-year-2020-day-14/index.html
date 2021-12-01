@@ -1,0 +1,903 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.22.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Advent of Code: Year 2020, Day 14 - Aaron Smith</title>
+<meta name="description" content="Today was much less math-heavy than yesterday, although we will dive into an algorithm that would make it faster. However, I did do this problem more imperatively than functionally; read on to see why!">
+
+
+  <meta name="author" content="Aaron Smith">
+  
+  <meta property="article:author" content="Aaron Smith">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Aaron Smith">
+<meta property="og:title" content="Advent of Code: Year 2020, Day 14">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-year-2020-day-14/">
+
+
+  <meta property="og:description" content="Today was much less math-heavy than yesterday, although we will dive into an algorithm that would make it faster. However, I did do this problem more imperatively than functionally; read on to see why!">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-14T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-year-2020-day-14/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Aaron Smith Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Aaron Smith Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/tags/">Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/assets/files/aaron_smith_resume.pdf">Resume</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/headshot-square.jpg" alt="Aaron Smith" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Aaron Smith</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Data Engineer specializing in streaming data at scale, especially on AWS</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Connect</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Austin, TX</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Advent of Code: Year 2020, Day 14">
+    <meta itemprop="description" content="Today was much less math-heavy than yesterday, although we will dive into an algorithm that would make it faster. However, I did do this problem more imperatively than functionally; read on to see why!">
+    <meta itemprop="datePublished" content="2020-12-14T00:00:00-06:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Year 2020, Day 14
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-14T00:00:00-06:00">December 14, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Today was much less math-heavy than yesterday, although we will dive into an algorithm that would make it faster. However, I did do this problem more imperatively than functionally; read on to see why!</p>
+
+<h2 id="the-problem">The Problem</h2>
+
+<h3 id="part-1">Part 1</h3>
+
+<p>As we approach the mainland, the captain once again asks for our help; our computer system is not compatible with the port’s docking software. We quickly see that the docking parameters are not being properly initialized. The docking program is using a strange bitmask software, and we don’t have the proper chip to decode it. Luckily, we can emulate it.</p>
+
+<p>Our input looks like the following:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
+mem[8] = 11
+mem[7] = 101
+mem[8] = 0
+</code></pre></div></div>
+
+<p>This defines a 36-bit bitmask and multiple memory addresses to update with bitmasked values. Here is how the bitmask is applied:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>value:  000000000000000000000000000000001011  (decimal 11)
+mask:   XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
+result: 000000000000000000000000000001001001  (decimal 73)
+</code></pre></div></div>
+
+<p>First, a value (in this case 11) is converted to binary and then the mask is applied by using the mask character if it’s a <code class="language-plaintext highlighter-rouge">1</code> or <code class="language-plaintext highlighter-rouge">0</code> and the original character if it is an <code class="language-plaintext highlighter-rouge">X</code>. As you can see, this gives us the number 73 represented as binary. We then store <code class="language-plaintext highlighter-rouge">73</code> at memory address 8 and move on to the next instruction.</p>
+
+<p>Once all instructions have been applied, what is the sum of values in memory?</p>
+
+<h4 id="solution">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/14/raku/main.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub apply-mask($mask, $num) {
+    my @mask-list = $mask.comb;
+    my @num-list  = $num.base(2).comb;
+
+    while @num-list.elems &lt; @mask-list.elems {
+        @num-list.unshift(0);                                 # [1]
+    }
+
+    my @masked = gather {
+        for @mask-list Z @num-list -&gt; ($mask-digit, $digit) { # [2]
+            take $mask-digit eq 'X' ?? $digit !! $mask-digit;
+        }
+    }
+
+    @masked.join.parse-base(2);
+}
+
+sub extract-values($line) {
+    my $address = $line.match(/\[(&lt;digit&gt;+)\]/)[0].Int;
+    my $value = $line.split(' = ')[1].Int;
+    ($address, $value)
+}
+
+sub MAIN($file) {
+    my $mask;
+    my @mem;
+    for $file.IO.lines -&gt; $line {
+        if $line.starts-with('mask') {
+            $mask = $line.split(' = ')[1];
+        } else {
+            my ($address, $value) = extract-values($line);
+            @mem[$address] = apply-mask($mask, $value);
+        }
+    }
+    say @mem.sum; # [3]
+}
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+17934269678453
+</code></pre></div></div>
+
+<h4 id="explanation">Explanation</h4>
+
+<p>So, first we define 2 helper functions:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">apply-mask</code> takes a <code class="language-plaintext highlighter-rouge">mask</code> string and an integer, then converts it to binary and iteratively works through the strings to apply the mask to the integer, then it casts the string back to a base-10 integer.</li>
+  <li><code class="language-plaintext highlighter-rouge">extract-values</code> simply parse the memory address and value to be masked from the input line.</li>
+</ul>
+
+<p>in <code class="language-plaintext highlighter-rouge">MAIN</code> you can see how imperatively we did this. First, we define a mutable mask<sup>*</sup> and memory register, then start iterating through the lines. If we hit a mask, overwrite our current one, otherwise extract the values, apply the mask, and add it to our memory register. Finally, just sum all the masked values up!</p>
+
+<p><sup>*</sup>One thing about our input that was not super clear to me in the instructions is that we are given <em>multiple</em> masks that we have to apply to the next N values (until we hit the next mask).</p>
+
+<h5 id="specific-comments">Specific Comments</h5>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">unshift</code> adds values to the beginning of an array. Raku has no equivalent of Python’s <a href="https://docs.python.org/3/library/itertools.html#itertools.zip_longest"><code class="language-plaintext highlighter-rouge">zip_longest</code></a> function, so we have to make sure the input lists are exactly the same length.</li>
+  <li><code class="language-plaintext highlighter-rouge">Z</code> is Raku’s zip operator. So <code class="language-plaintext highlighter-rouge">(1, 2, 3) Z (4, 5, 6)</code> yields <code class="language-plaintext highlighter-rouge">((1, 4), (2, 5), (3, 6))</code>.</li>
+  <li>Notice we never initialized a size of this array. Raku doesn’t require us to! It will implicitly fill in any unused slots with <code class="language-plaintext highlighter-rouge">Any</code>, which is one of its undefined types. <code class="language-plaintext highlighter-rouge">Any</code> is skipped during the sum, so it really is just as simple as saying <code class="language-plaintext highlighter-rouge">@mem.sum</code>.</li>
+</ol>
+
+<h3 id="part-2">Part 2</h3>
+
+<p>After all that business, we realize the docking computer must be running version 2 of the software while we are still on version 1. 🤦🏻</p>
+
+<p>V2 of the software applies the bitmask to memory <em>addresses</em>, not the <em>values</em>. Additionally, <code class="language-plaintext highlighter-rouge">X</code> now means “floating” (<code class="language-plaintext highlighter-rouge">0 or 1</code>), so we have to update both possible addresses. Here is an example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>address: 000000000000000000000000000000101010  (decimal 42)
+mask:    000000000000000000000000000000X1001X
+result:  000000000000000000000000000000X1101X
+</code></pre></div></div>
+
+<p>After the mask, we are left with <em>four</em> addresses to update:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>000000000000000000000000000000011010  (decimal 26)
+000000000000000000000000000000011011  (decimal 27)
+000000000000000000000000000000111010  (decimal 58)
+000000000000000000000000000000111011  (decimal 59)
+</code></pre></div></div>
+
+<p>Using V2, what is the sum of the memory addresses after initialization?</p>
+
+<h4 id="solution-1">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/14/raku/main.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub find-all-masks(@zipped, $pointer = 0, @prefix = ()) {                          # [1]
+    if $pointer == @zipped.elems {
+        @prefix.join.parse-base(2);
+    } else {
+        my ($mask-digit, $digit) = @zipped[$pointer];
+        given $mask-digit {
+            when '0' { find-all-masks(@zipped, $pointer + 1, (|@prefix, $digit)) } # [2]
+            when '1' { find-all-masks(@zipped, $pointer + 1, (|@prefix, $mask-digit)) }
+            when 'X' {
+                |(
+                    find-all-masks(@zipped, $pointer + 1, (|@prefix, '0')),
+                    find-all-masks(@zipped, $pointer + 1, (|@prefix, '1'))
+                )
+            }
+        }
+    }
+}
+
+sub apply-mask($mask, $num, Bool $part-two = False) {
+    my @mask-list = $mask.comb;
+    my @num-list  = $num.base(2).comb;
+
+    while @num-list.elems &lt; @mask-list.elems {
+        @num-list.unshift(0);
+    }
+
+    if $part-two {
+        find-all-masks(@mask-list Z @num-list);
+    } else {
+        my @masked = gather {
+            for @mask-list Z @num-list -&gt; ($mask-digit, $digit) {
+                take $mask-digit eq 'X' ?? $digit !! $mask-digit;
+            }
+        }
+        @masked.join.parse-base(2);
+    }
+}
+
+sub extract-values($line) {
+    my $address = $line.match(/\[(&lt;digit&gt;+)\]/)[0].Int;
+    my $value = $line.split(' = ')[1].Int;
+    ($address, $value)
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my $mask;
+    my @mem;
+    for $file.IO.lines -&gt; $line {
+        if $line.starts-with('mask') {
+            $mask = $line.split(' = ')[1];
+        } else {
+            my ($address, $value) = extract-values($line);
+            if $p2 {
+                for apply-mask($mask, $address, $p2) -&gt; $index {
+                    @mem[$index] = $value;
+                }
+            } else {
+                @mem[$address] = apply-mask($mask, $value);
+            }
+        }
+    }
+    say @mem.sum;
+}
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
+$ raku main.raku input.txt
+17934269678453
+
+# Part 2
+$ raku main.raku --p2 input.txt
+3440662844064
+</code></pre></div></div>
+
+<h4 id="explanation-1">Explanation</h4>
+
+<p>We made a few tweaks to the original program:</p>
+
+<ol>
+  <li>If it is <code class="language-plaintext highlighter-rouge">$part-two</code>, <code class="language-plaintext highlighter-rouge">apply-mask</code> now returns a list of integers instead of just a single integer.</li>
+  <li>Given the above, if it is <code class="language-plaintext highlighter-rouge">$p2</code> in <code class="language-plaintext highlighter-rouge">MAIN</code>, we iterate through the returned list.</li>
+  <li>We added a function <code class="language-plaintext highlighter-rouge">find-all-masks</code> that will find all binary combinations for the “floating” bits.</li>
+</ol>
+
+<p>The logic is pretty much the same, except using addresses instead of values!</p>
+
+<h5 id="specific-comments-1">Specific Comments</h5>
+
+<ol>
+  <li>This solution works, but it is <em>slow</em> and memory intensive. The correct way to find all of these bit flips is by using something called a <a href="https://en.wikipedia.org/wiki/Gray_code">Gray code</a>.</li>
+  <li>We use these slips all over this to make sure we end up with just a 1D list (per call) when all is said and done.</li>
+</ol>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>I am enjoying learning about all the shortcuts that are necessary to make these things run in an acceptable amount of time. Maybe next year I will be able to think of them without writing the brute force solution first!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#advent-of-code" class="page__taxonomy-item" rel="tag">Advent of Code</a><span class="sep">, </span>
+    
+      <a href="/tags/#raku" class="page__taxonomy-item" rel="tag">Raku</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-14T00:00:00-06:00">December 14, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Year+2020%2C+Day+14%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-14%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-14%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-14%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/advent-of-code-year-2020-day-13/" class="pagination--pager" title="Advent of Code: Year 2020, Day 13
+">Previous</a>
+    
+    
+      <a href="/blog/advent-of-code-year-2020-day-15/" class="pagination--pager" title="Advent of Code: Year 2020, Day 15
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/personal/sabbatical/" rel="permalink">Sabbatical
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-20T00:00:00-05:00">June 20, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today is Father’s Day in the U.S. I have an almost-11-month-old son who I should be spending time with, but I feel the need to post a blog because I have bee...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-116/" rel="permalink">Perl Weekly Challenge 116
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Part 1 was probably the hardest this week, but I ended up being able to adapt a solution from an existing Python library.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-115/" rel="permalink">Perl Weekly Challenge 115
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-114/" rel="permalink">Perl Weekly Challenge 114
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-28T00:00:00-05:00">May 28, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Both of this week’s solutions look remarkably similar, because we were able to utilize the first subroutine for each one!
+
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Connect:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+        
+      
+        
+          <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i> Stack Overflow</a></li>
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Aaron Smith. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

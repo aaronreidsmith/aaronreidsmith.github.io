@@ -1,0 +1,826 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.22.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Advent of Code: Year 2020, Day 3 - Aaron Smith</title>
+<meta name="description" content="Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion.">
+
+
+  <meta name="author" content="Aaron Smith">
+  
+  <meta property="article:author" content="Aaron Smith">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Aaron Smith">
+<meta property="og:title" content="Advent of Code: Year 2020, Day 3">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-year-2020-day-03/">
+
+
+  <meta property="og:description" content="Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-03T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-year-2020-day-03/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Aaron Smith Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Aaron Smith Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/tags/">Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/assets/files/aaron_smith_resume.pdf">Resume</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/headshot-square.jpg" alt="Aaron Smith" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Aaron Smith</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Data Engineer specializing in streaming data at scale, especially on AWS</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Connect</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Austin, TX</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Advent of Code: Year 2020, Day 3">
+    <meta itemprop="description" content="Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a for-loop in functional programming programming, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion.">
+    <meta itemprop="datePublished" content="2020-12-03T00:00:00-06:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Year 2020, Day 3
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-03T00:00:00-06:00">December 3, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Today was the first problem that I felt lent itself naturally to a for-loop. While there is nothing wrong with a <a href="https://two-wrongs.com/myth-of-the-day-functional-programmers-dont-use-loops">for-loop in functional programming programming</a>, I wanted to used one of the common substitutes in the functional programmer’s tool belt: recursion.</p>
+
+<h2 id="the-problem">The Problem</h2>
+
+<h3 id="part-1">Part 1</h3>
+
+<p>We are going sledding this week! Our job is to get to the bottom of the mountain following a specific path, and to count how many trees we would run into along the way.</p>
+
+<p>Given a file that looks like the diagram below, we are to start in the top left of this file and traverse right three spaces and down one space until we hit the bottom, counting the number of hash signs (trees) we encounter.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...#..............#.#....#..#..
+...#..#..#..............#..#...
+</code></pre></div></div>
+
+<p>Additionally, this is a magic mountain, so the pattern on each row repeats out to the right infinitely, and we have to account for that.</p>
+
+<h4 id="solution">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub traverse(@mountain, $trees-encountered = 0, $i = 0, $j = 0) {
+    if $i &gt; @mountain.elems - 1 {
+        $trees-encountered;
+    } else {
+        my $tree-hit = @mountain[$i][$j] cmp '#' == Same ?? 1 !! 0;
+        if $i == @mountain.elems - 1 {
+            $trees-encountered + $tree-hit;
+        } else {
+            traverse(@mountain, $trees-encountered + $tree-hit, $i + 1, $j + 3);
+        }
+    }
+}
+
+sub MAIN($file) {
+    say traverse($file.IO.lines.map(-&gt; $line { |$line.comb xx * })); # [1][2][3][4]
+}
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+191
+</code></pre></div></div>
+
+<h4 id="explanation">Explanation</h4>
+
+<p>Other than the below comments, I feel like this reads fairly easily. Basically, we turn our file into a list of infinite lists (described below) and then call <code class="language-plaintext highlighter-rouge">traverse</code> on that outer list. <code class="language-plaintext highlighter-rouge">traverse</code> is a <a href="https://www.geeksforgeeks.org/tail-recursion/">tail-recursive</a> function with fairly simple logic:</p>
+
+<ul>
+  <li>If we have already passed the bottom, return the number of trees we hit</li>
+  <li>If we are at the bottom of the mountain, see if we are currently hitting a tree and then return <code class="language-plaintext highlighter-rouge">$trees-encountered</code> with the last tree included</li>
+  <li>Otherwise, add the current tree hit to <code class="language-plaintext highlighter-rouge">$trees-encountered</code> and go down one row and to the right three columns</li>
+</ul>
+
+<h5 id="specific-comments">Specific Comments</h5>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">|</code> has a special meaning when used in front of a list. It flattens any inner lists to the top level. So, for example, if we had <code class="language-plaintext highlighter-rouge">|((1, 2), (3, 4))</code>, that would equal <code class="language-plaintext highlighter-rouge">(1, 2, 3, 4)</code>.</li>
+  <li>Reminder that <code class="language-plaintext highlighter-rouge">.comb</code> splits the input into a list of characters.</li>
+  <li><code class="language-plaintext highlighter-rouge">xx</code> is a special operator that takes the input list and concatenates it to itself <code class="language-plaintext highlighter-rouge">N</code> times (<code class="language-plaintext highlighter-rouge">N = *</code> here; see below). So, for example, if we had <code class="language-plaintext highlighter-rouge">(1, 2) xx 2</code>, that would yield <code class="language-plaintext highlighter-rouge">((1, 2), (1, 2))</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">xx</code> allows the <a href="https://docs.raku.org/type/Whatever"><code class="language-plaintext highlighter-rouge">Whatever</code></a> character (<code class="language-plaintext highlighter-rouge">*</code>) on the right-hand side, and in that case it returns a lazy, infinite concatenation of the left-hand side.</li>
+</ol>
+
+<p>So, to summarize the above comments, we take the line and <code class="language-plaintext highlighter-rouge">comb</code> it to a list. Then, we concatenate that list infinitely to have a list of lists, which we flatten using the <code class="language-plaintext highlighter-rouge">|</code> operator. Since this happens in a <code class="language-plaintext highlighter-rouge">map</code>, it applies to each line, so we have one finite outer list containing multiple infinite lists. We then traverse the outer list.</p>
+
+<h3 id="part-2">Part 2</h3>
+
+<p>Given the same file as before, we want to tackle it with five different traversals:</p>
+
+<ul>
+  <li>Right 1, down 1</li>
+  <li>Right 3, down 1 (This is the slope we already checked)</li>
+  <li>Right 5, down 1</li>
+  <li>Right 7, down 1</li>
+  <li>Right 1, down 2</li>
+</ul>
+
+<p>Then, we must find the product of all the trees we hit with each traversal</p>
+
+<h4 id="solution-1">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub traverse(@mountain, $i-increment, $j-increment, $trees-encountered = 0, $i = 0, $j = 0) {
+    if $i &gt; @mountain.elems - 1 {
+        $trees-encountered;
+    } else {
+        my $tree-hit = @mountain[$i][$j] cmp '#' == Same ?? 1 !! 0;
+        if $i == @mountain.elems - 1 {
+            $trees-encountered + $tree-hit;
+        } else {
+            traverse(
+                @mountain,
+                $i-increment,
+                $j-increment,
+                $trees-encountered + $tree-hit,
+                $i + $i-increment,
+                $j + $j-increment
+            );
+        }
+    }
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my @traversals = $p2 ?? (
+        (1, 1),
+        (1, 3),
+        (1, 5),
+        (1, 7),
+        (2, 1)      # [1]
+    ) !! ((1, 3),); # [2]
+    say [*] @traversals.map(-&gt; ($i-increment, $j-increment) {
+        traverse($file.IO.lines.map(-&gt; $line { |$line.comb xx * }), $i-increment, $j-increment)
+    });
+}
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
+$ raku main.raku input.txt
+191
+
+# Part 2
+$ raku main.raku --p2 input.txt
+1478615040
+</code></pre></div></div>
+
+<h4 id="explanation-1">Explanation</h4>
+
+<p>Again, we are able to tweak our code slightly and handle both parts one and two in one block. In this case, we added two arguments to <code class="language-plaintext highlighter-rouge">traverse</code> to tell it the row step-size and column step-size. We then just add the list of lists corresponding to the five traversals noted above, <code class="language-plaintext highlighter-rouge">map</code> over them and calculate the product using the <code class="language-plaintext highlighter-rouge">[*]</code> operator! In the case of part one, it is a list of size one, so <code class="language-plaintext highlighter-rouge">[*]</code> will just return the single element.</p>
+
+<h5 id="specific-comments-1">Specific Comments</h5>
+
+<ol>
+  <li>The input file has 323 lines, so we will hit the <code class="language-plaintext highlighter-rouge">$i &gt; @mountain.elems - 1</code> case with this traversal, so it is a good thing we generalized it in the previous step!</li>
+  <li>Need this to be a list of lists to map over it, so we need the comma to denote the outer list is of size one.</li>
+</ol>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>I felt this problem came very serendipitously; I was <em>just</em> reading about the <code class="language-plaintext highlighter-rouge">|</code> and <code class="language-plaintext highlighter-rouge">xx</code> operators last night, so I am glad I got to put them to use. Recursion (and more specifically tail recursion) is always a fun approach, and it let us tackle this problem functionally. 3 for 3! Let’s see what tomorrow brings.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#advent-of-code" class="page__taxonomy-item" rel="tag">Advent of Code</a><span class="sep">, </span>
+    
+      <a href="/tags/#raku" class="page__taxonomy-item" rel="tag">Raku</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-03T00:00:00-06:00">December 3, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Year+2020%2C+Day+3%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-03%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-03%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-03%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/advent-of-code-year-2020-day-02/" class="pagination--pager" title="Advent of Code: Year 2020, Day 2
+">Previous</a>
+    
+    
+      <a href="/blog/advent-of-code-year-2020-day-04/" class="pagination--pager" title="Advent of Code: Year 2020, Day 4
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/personal/sabbatical/" rel="permalink">Sabbatical
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-20T00:00:00-05:00">June 20, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today is Father’s Day in the U.S. I have an almost-11-month-old son who I should be spending time with, but I feel the need to post a blog because I have bee...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-116/" rel="permalink">Perl Weekly Challenge 116
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Part 1 was probably the hardest this week, but I ended up being able to adapt a solution from an existing Python library.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-115/" rel="permalink">Perl Weekly Challenge 115
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-114/" rel="permalink">Perl Weekly Challenge 114
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-28T00:00:00-05:00">May 28, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Both of this week’s solutions look remarkably similar, because we were able to utilize the first subroutine for each one!
+
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Connect:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+        
+      
+        
+          <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i> Stack Overflow</a></li>
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Aaron Smith. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

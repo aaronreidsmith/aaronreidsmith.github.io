@@ -1,0 +1,843 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.22.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Advent of Code: Year 2020, Day 15 - Aaron Smith</title>
+<meta name="description" content="Even with how short and sweet today’s solution is, I had to rewrite it between parts one and two after hitting the maximum recursion depth. So we’ve got one functional, recursive solution and one imperative, iterative solution!">
+
+
+  <meta name="author" content="Aaron Smith">
+  
+  <meta property="article:author" content="Aaron Smith">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Aaron Smith">
+<meta property="og:title" content="Advent of Code: Year 2020, Day 15">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-year-2020-day-15/">
+
+
+  <meta property="og:description" content="Even with how short and sweet today’s solution is, I had to rewrite it between parts one and two after hitting the maximum recursion depth. So we’ve got one functional, recursive solution and one imperative, iterative solution!">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-15T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-year-2020-day-15/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Aaron Smith Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Aaron Smith Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/tags/">Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/assets/files/aaron_smith_resume.pdf">Resume</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/headshot-square.jpg" alt="Aaron Smith" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Aaron Smith</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Data Engineer specializing in streaming data at scale, especially on AWS</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Connect</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Austin, TX</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Advent of Code: Year 2020, Day 15">
+    <meta itemprop="description" content="Even with how short and sweet today’s solution is, I had to rewrite it between parts one and two after hitting the maximum recursion depth. So we’ve got one functional, recursive solution and one imperative, iterative solution!">
+    <meta itemprop="datePublished" content="2020-12-15T00:00:00-06:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Year 2020, Day 15
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-15T00:00:00-06:00">December 15, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          6 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Even with how short and sweet today’s solution is, I had to rewrite it between parts one and two after hitting the maximum recursion depth. So we’ve got one functional, recursive solution and one imperative, iterative solution!</p>
+
+<h2 id="the-problem">The Problem</h2>
+
+<h3 id="part-1">Part 1</h3>
+
+<p>While we wait for our next flight, we decide to call the elves back at the North Pole. They’re playing a memory game that they want us to join.</p>
+
+<p>In this game, the players take turns saying numbers. They begin by taking turns reading from a list of starting numbers (your puzzle input). Then, each turn consists of considering the most recently spoken number:</p>
+
+<ul>
+  <li>If that was the first time the number has been spoken, the current player says <code class="language-plaintext highlighter-rouge">0</code>.</li>
+  <li>Otherwise, the number had been spoken before; the current player announces how many turns apart the number is from when it was previously spoken.</li>
+</ul>
+
+<p>Here is an example with input <code class="language-plaintext highlighter-rouge">0,3,6</code>:</p>
+
+<ul>
+  <li>Turn 1: The 1st number spoken is a starting number, <code class="language-plaintext highlighter-rouge">0</code>.</li>
+  <li>Turn 2: The 2nd number spoken is a starting number, <code class="language-plaintext highlighter-rouge">3</code>.</li>
+  <li>Turn 3: The 3rd number spoken is a starting number, <code class="language-plaintext highlighter-rouge">6</code>.</li>
+  <li>Turn 4: Now, consider the last number spoken, <code class="language-plaintext highlighter-rouge">6</code>. Since that was the first time the number had been spoken, the 4th number spoken is <code class="language-plaintext highlighter-rouge">0</code>.</li>
+  <li>Turn 5: Next, again consider the last number spoken, <code class="language-plaintext highlighter-rouge">0</code>. Since it had been spoken before, the next number to speak is the difference between the turn number when it was last spoken (the previous turn, 4) and the turn number of the time it was most recently spoken before then (turn 1). Thus, the 5th number spoken is 4 - 1, <code class="language-plaintext highlighter-rouge">3</code>.</li>
+  <li>Turn 6: The last number spoken, <code class="language-plaintext highlighter-rouge">3</code> had also been spoken before, most recently on turns <code class="language-plaintext highlighter-rouge">5</code> and <code class="language-plaintext highlighter-rouge">2</code>. So, the 6th number spoken is 5 - 2, <code class="language-plaintext highlighter-rouge">3</code>.</li>
+  <li>Turn 7: Since 3 was just spoken twice in a row, and the last two turns are 1 turn apart, the 7th number spoken is <code class="language-plaintext highlighter-rouge">1</code>.</li>
+  <li>Turn 8: Since 1 is new, the 8th number spoken is <code class="language-plaintext highlighter-rouge">0</code>.</li>
+  <li>Turn 9: <code class="language-plaintext highlighter-rouge">0</code> was last spoken on turns 8 and 4, so the 9th number spoken is the difference between them, <code class="language-plaintext highlighter-rouge">4</code>.</li>
+  <li>Turn 10: <code class="language-plaintext highlighter-rouge">4</code> is new, so the 10th number spoken is <code class="language-plaintext highlighter-rouge">0</code>.</li>
+</ul>
+
+<p>Given an input of <code class="language-plaintext highlighter-rouge">11,18,0,20,1,7,16</code>, what will be the 2020<sup>th</sup> number?</p>
+
+<h4 id="solution">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/15/raku/main.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub play-game(%numbers, $turn, $number, $target-turn) {
+    if $turn == $target-turn {
+        $number;
+    } else {
+        my $next-number = %numbers{$number}:exists ?? $turn - %numbers{$number} !! 0;        # [1]
+        play-game(%(|%numbers, |($number =&gt; $turn)), $turn + 1, $next-number, $target-turn); # [2]
+    }
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my %initial = $file.IO.slurp.split(',').kv.map(-&gt; $key, $value { $value =&gt; $key + 1 } ).Hash;
+    say play-game(%initial, %initial.elems + 1, 0, 2020);
+}
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+639
+</code></pre></div></div>
+
+<h4 id="explanation">Explanation</h4>
+
+<p>So, in <code class="language-plaintext highlighter-rouge">MAIN</code> we first pull everything from our input into a <code class="language-plaintext highlighter-rouge">Hash</code> with the keys being the number that was said by the elves, and the value being the turn it was said on. Then we pass that to <code class="language-plaintext highlighter-rouge">play-game</code> with four parameters:</p>
+
+<ul>
+  <li>The <code class="language-plaintext highlighter-rouge">Hash</code> itself</li>
+  <li>The turn we are starting on (in the case of our input, 8)</li>
+  <li>The next number in the sequence (since our input is so small, we can hard-code this to 0)</li>
+  <li>The number in the sequence we are hoping to find (2020)</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">play-game</code> will recursively do the following (until it hits turn 2020):</p>
+
+<ul>
+  <li>If we have seen this number find the difference between this turn, and the turn it was last said on, otherwise <code class="language-plaintext highlighter-rouge">0</code></li>
+  <li>Update the <code class="language-plaintext highlighter-rouge">%numbers</code> variable with the new number/turn pair</li>
+</ul>
+
+<p>That’s it!</p>
+
+<h5 id="specific-comments">Specific Comments</h5>
+
+<ol>
+  <li>The <code class="language-plaintext highlighter-rouge">:exists</code> tag here is something called an <a href="https://docs.raku.org/language/subscripts#index-entry-:exists_(subscript_adverb)">adverb</a> in Raku. It is the equivalent of <code class="language-plaintext highlighter-rouge">key in dictionary</code> in Python.</li>
+  <li>There is some special syntax on this line for merging hashes without mutating the original hashes. The slip character (<code class="language-plaintext highlighter-rouge">|</code>) unpacks the two hashes into an outer <code class="language-plaintext highlighter-rouge">Hash</code> (denoted by the preceding <code class="language-plaintext highlighter-rouge">%</code> sigil) and gives precedence to the second <code class="language-plaintext highlighter-rouge">Hash</code>. Here is what that means in simple terms:</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>my %a = (a =&gt; 1, b =&gt; 2);  # {a =&gt; 1, b =&gt; 2} 
+my %b = (b =&gt; 3, c =&gt; 4);  # {b =&gt; 3, c =&gt; 4}
+my %c = %(|%a, |%b);       # {a =&gt; 1, b =&gt; 3, c =&gt; 4}
+</code></pre></div></div>
+
+<h3 id="part-2">Part 2</h3>
+
+<p>The elves are impressed with our memory skills, so they up the ante! What is the <em>30 millionth</em> term in the sequence?</p>
+
+<h4 id="solution-1">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/15/raku/main.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub play-game-recursive(%numbers, $turn, $number, $target-turn) {
+    if $turn == $target-turn {
+        $number;
+    } else {
+        my $next-turn = %numbers{$number}:exists ?? $turn - %numbers{$number} !! 0;
+        play-game-recursive(
+            %(|%numbers, |($number =&gt; $turn)),
+            $turn + 1,
+            $next-turn,
+            $target-turn
+        );
+    }
+}
+
+sub play-game-iterative(%numbers is copy, $target-turn) {                                      # [1]
+    my $last-item = %numbers.pairs.sort({ $^a.value cmp $^b.value })[*-1];                     # [2]
+    for (%numbers.elems^..$target-turn) -&gt; $turn {                                             # [3]
+        my $new-item = %numbers{$last-item}:exists ?? ($turn - 1) - %numbers{$last-item} !! 0;
+        %numbers{$last-item} = $turn - 1;
+        $last-item = $new-item;
+    }
+    $last-item;
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my %initial = $file.IO.slurp.split(',').kv.map(-&gt; $key, $value { $value =&gt; $key + 1 } ).Hash;
+    my $last-turn = $p2 ?? 30_000_000 !! 2020;                                                    # [4]
+    say play-game-iterative(%initial, $last-turn);
+}
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
+$ raku main.raku input.txt
+639
+
+# Part 2
+$ raku main.raku --p2 input.txt
+266
+</code></pre></div></div>
+
+<h4 id="explanation-1">Explanation</h4>
+
+<p>So the first thing you’ll notice is I refactored <code class="language-plaintext highlighter-rouge">play-game</code> to be called <code class="language-plaintext highlighter-rouge">play-game-recursive</code>; this is not used anywhere, it was simply left in to show the progression of the code.</p>
+
+<p><code class="language-plaintext highlighter-rouge">MAIN</code> does the same thing, but changes the <code class="language-plaintext highlighter-rouge">$last-turn</code> value based on if it is <code class="language-plaintext highlighter-rouge">$p2</code> or not, but then passes the input to an <em>iterative</em> solution. The iterative solution basically just keeps the last-said number in memory and checks if it exists in our <code class="language-plaintext highlighter-rouge">%number</code> <code class="language-plaintext highlighter-rouge">Hash</code>. If so, it finds the difference between the last turn, and the last time it was said and that is our next number, otherwise it is <code class="language-plaintext highlighter-rouge">0</code>. We then add that new number to <code class="language-plaintext highlighter-rouge">%numbers</code> and keep going.</p>
+
+<p>For 30 million iterations this solution is still pretty slow, but it works where the recursive solution just dies.</p>
+
+<h5 id="specific-comments-1">Specific Comments</h5>
+
+<ol>
+  <li>The <code class="language-plaintext highlighter-rouge">is copy</code> parameter tells the subroutine that it is receiving a <code class="language-plaintext highlighter-rouge">copy</code> of <code class="language-plaintext highlighter-rouge">%numbers</code> and it is safe to mutate it.</li>
+  <li>Since a <code class="language-plaintext highlighter-rouge">Hash</code> does not guarantee order, we need to implement a custom sort algorithm. In this case, we are sorting by the <code class="language-plaintext highlighter-rouge">value</code> of the <code class="language-plaintext highlighter-rouge">Pair</code> objects, which is the <code class="language-plaintext highlighter-rouge">turn</code> in our scenario. The <code class="language-plaintext highlighter-rouge">$^a</code> syntax is special here in that it assigns and uses a variable all at once. This is the equivalent of <code class="language-plaintext highlighter-rouge">.sort(-&gt; $a, $b { $a.value cmp $b.value })</code>.</li>
+  <li>The <code class="language-plaintext highlighter-rouge">^..</code> syntax means it is a range <em>exclusive</em> of the bottom end but <em>inclusive</em> of the top; the corresponding math notation is <code class="language-plaintext highlighter-rouge">(a, b]</code>.</li>
+  <li>Raku (like many languages) allows us to put underscores in numeric literals to make them easier to read.</li>
+</ol>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>This is obviously a time when recursion is not the best idea. It’s important to be able to distinguish what can be done recursively and what must be done iteratively, even if the recursive solution seems more “natural.”</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#advent-of-code" class="page__taxonomy-item" rel="tag">Advent of Code</a><span class="sep">, </span>
+    
+      <a href="/tags/#raku" class="page__taxonomy-item" rel="tag">Raku</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-15T00:00:00-06:00">December 15, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Year+2020%2C+Day+15%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-15%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-15%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-15%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/advent-of-code-year-2020-day-14/" class="pagination--pager" title="Advent of Code: Year 2020, Day 14
+">Previous</a>
+    
+    
+      <a href="/blog/advent-of-code-year-2020-day-16/" class="pagination--pager" title="Advent of Code: Year 2020, Day 16
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/personal/sabbatical/" rel="permalink">Sabbatical
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-20T00:00:00-05:00">June 20, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today is Father’s Day in the U.S. I have an almost-11-month-old son who I should be spending time with, but I feel the need to post a blog because I have bee...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-116/" rel="permalink">Perl Weekly Challenge 116
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Part 1 was probably the hardest this week, but I ended up being able to adapt a solution from an existing Python library.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-115/" rel="permalink">Perl Weekly Challenge 115
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-114/" rel="permalink">Perl Weekly Challenge 114
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-28T00:00:00-05:00">May 28, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Both of this week’s solutions look remarkably similar, because we were able to utilize the first subroutine for each one!
+
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Connect:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+        
+      
+        
+          <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i> Stack Overflow</a></li>
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Aaron Smith. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

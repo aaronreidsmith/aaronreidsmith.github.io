@@ -1,0 +1,911 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.22.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Advent of Code: Year 2020, Day 24 - Aaron Smith</title>
+<meta name="description" content="Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days 11 and 17, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.">
+
+
+  <meta name="author" content="Aaron Smith">
+  
+  <meta property="article:author" content="Aaron Smith">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Aaron Smith">
+<meta property="og:title" content="Advent of Code: Year 2020, Day 24">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-year-2020-day-24/">
+
+
+  <meta property="og:description" content="Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days 11 and 17, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-24T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-year-2020-day-24/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Aaron Smith Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Aaron Smith Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/tags/">Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/assets/files/aaron_smith_resume.pdf">Resume</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/headshot-square.jpg" alt="Aaron Smith" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Aaron Smith</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Data Engineer specializing in streaming data at scale, especially on AWS</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Connect</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Austin, TX</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Advent of Code: Year 2020, Day 24">
+    <meta itemprop="description" content="Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days 11 and 17, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.">
+    <meta itemprop="datePublished" content="2020-12-24T00:00:00-06:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Year 2020, Day 24
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-24T00:00:00-06:00">December 24, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Merry Christmas Eve! I had a lot more fun with today’s challenge than the past few days. It is reminiscent of days <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-11/">11</a> and <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-17/">17</a>, but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.</p>
+
+<h2 id="the-problem">The Problem</h2>
+
+<h3 id="part-1">Part 1</h3>
+
+<p>We <em>finally</em> made it to the resort, but there is a problem – they are renovating the lobby floor, and we can’t make it to the check-in desk until they are done. Since we are in a rush, we offer to help.</p>
+
+<p>The workers are trying to lay a pattern using hexagonal tiles. All the tiles are white on one side and black on the other; to start, the workers laid them all out in the “white” orientation. The foreman gives us a list that looks like the following:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sesenwnenenewseeswwswswwnenewsewsw
+neeenesenwnwwswnenewnwwsewnenwseswesw
+seswneswswsenwwnwse
+nwnwneseeswswnenewneswwnewseswneseene
+swweswneswnenwsewnwneneseenw
+eesenwseswswnenwswnwnwsewwnwsene
+sewnenenenesenwsewnenwwwse
+wenwwweseeeweswwwnwwe
+wsweesenenewnwwnwsenewsenwwsesesenwne
+neeswseenwwswnwswswnw
+nenwswwsewswnenenewsenwsenwnesesenew
+enewnwewneswsewnwswenweswnenwsenwsw
+sweneswneswneneenwnewenewwneswswnese
+swwesenesewenwneswnwwneseswwne
+enesenwswwswneneswsenwnewswseenwsese
+wnwnesenesenenwwnenwsewesewsesesew
+nenewswnwewswnenesenwnesewesw
+eneswnwswnwsenenwnwnwwseeswneewsenese
+neswnwewnwnwseenwseesewsenwsweewe
+wseweeenwnesenwwwswnew
+</code></pre></div></div>
+
+<p>From an arbitrary starting tile, this defines directions to the tiles that need to be flipped; one set of directions per line. From each tile, there are six directions we can move in: <code class="language-plaintext highlighter-rouge">e</code>, <code class="language-plaintext highlighter-rouge">se</code>, <code class="language-plaintext highlighter-rouge">sw</code>, <code class="language-plaintext highlighter-rouge">w</code>, <code class="language-plaintext highlighter-rouge">nw</code>, and <code class="language-plaintext highlighter-rouge">ne</code>. So the first line above would split into these directions:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>se se nw ne ne ne w se e sw w sw sw w ne ne w se w sw
+</code></pre></div></div>
+
+<p>Once we follow the directions to the appropriate tile, we flip it. One note, some of these tiles may flip and then <em>flip back</em>. After all the instructions have been processed, how many tiles are flipped with their black side up?</p>
+
+<h4 id="solution">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/24/raku/main.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub MAIN($file) {
+    my $regex = /^(e|se|sw|w|nw|ne)+$/;
+    my @instructions =
+        $file.IO
+        .lines
+        .map(-&gt; $line {
+            $line.match($regex).map(*.Str).split(' ')
+        });
+    my $flipped = Set.new;
+    for @instructions -&gt; @instruction-set {
+        my ($q, $r) = (0, 0);
+        for @instruction-set -&gt; $direction {
+            given $direction {
+                when 'e'  { $q += 1          }
+                when 'se' { $r += 1          }
+                when 'sw' { $q -= 1; $r += 1 }
+                when 'w'  { $q -= 1          }
+                when 'nw' { $r -= 1          }
+                when 'ne' { $q += 1; $r -= 1 }
+            }
+        }
+        my $tile-key = "$q:$r";    # [1]
+        if $tile-key ∈ $flipped {
+            $flipped ⊖= $tile-key; # [2]
+        } else {
+            $flipped ∪= $tile-key; # [3]
+        }
+    }
+    say $flipped.elems;
+}
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+459
+</code></pre></div></div>
+
+<h4 id="explanation">Explanation</h4>
+
+<p>First things first, we need to split the input into a list of lists, where the inner list contains the individual directions we need to move. We do so by matching each line against a regex and converting that into a list. Next, since a hexagonal grid is kind of an unconventional data structure, I decided to go with a <code class="language-plaintext highlighter-rouge">Set</code> to store the flipped tiles rather than a <code class="language-plaintext highlighter-rouge">List</code> or some other traversable.</p>
+
+<p>Now that we have the building blocks, how do we follow these directions? I found this great resource dedicated to <a href="https://www.redblobgames.com/grids/hexagons">hexagonal grids</a> and how to traverse them. We use something called <a href="https://www.redblobgames.com/grids/hexagons/#coordinates-axial">axial coordinates</a>. Here is a good representation of what is happening:</p>
+
+<p><img src="https://raw.githubusercontent.com/aaronreidsmith/aaronreidsmith.github.io/master/assets/images/axial-coordinates.png" alt="Axial Coordinates (credit: Red Blob Games)" />
+<sub>Image credit: <a href="https://www.redblobgames.com/grids/hexagons/#coordinates-axial">Red Blob Games</a><sub></sub></sub></p>
+
+<p>Basically, we move east or west, we increment or decrement our <code class="language-plaintext highlighter-rouge">q</code> value. Similarly, if we move northwest or southeast, we increment or decrement our <code class="language-plaintext highlighter-rouge">r</code> value. If we move northeast or southwest, we increment one while decrementing the other. Now that we understand that, it is fairly easy to see what is happening in the <code class="language-plaintext highlighter-rouge">given</code> block.</p>
+
+<p>Once we reach our desired tile, we check if it is in our <code class="language-plaintext highlighter-rouge">$flipped</code> set. If so, we need to remove it (or “un-flip” it); otherwise, it goes <em>in</em> to the <code class="language-plaintext highlighter-rouge">$flipped</code> set. Finally, we just count the flipped tiles (via <code class="language-plaintext highlighter-rouge">$flipped.elems</code>).</p>
+
+<h5 id="specific-comments">Specific Comments</h5>
+
+<ol>
+  <li>Sets can only contain scalars in Raku (i.e., <code class="language-plaintext highlighter-rouge">Set.new((1, 2, 3))</code> yields <code class="language-plaintext highlighter-rouge">Set(1, 2, 3)</code>), so we can’t just add the <code class="language-plaintext highlighter-rouge">q</code> and <code class="language-plaintext highlighter-rouge">r</code> values to the set as-is. My workaround is to convert them to a string with the format <code class="language-plaintext highlighter-rouge">q:r</code> so we are able to store them in a set, but still retrieve them easily later.</li>
+  <li><code class="language-plaintext highlighter-rouge">⊖</code> is the <a href="https://en.wikipedia.org/wiki/Symmetric_difference">symmetric difference</a> operator, which removes elements that are present in both sets. In conjunction with the <code class="language-plaintext highlighter-rouge">=</code> operator, it reassigns to <code class="language-plaintext highlighter-rouge">$flipped</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">∪</code> is the <a href="https://en.wikipedia.org/wiki/Union_(set_theory)">set union</a>, which returns all the items in both sets cast to a new set. In conjunction with the <code class="language-plaintext highlighter-rouge">=</code> operator, it reassigns to <code class="language-plaintext highlighter-rouge">$flipped</code>.</li>
+</ol>
+
+<h3 id="part-2">Part 2</h3>
+
+<p>Now we find out that the tiles in the lobby are meant to be a sort-of “living art exhibit.” Every day the tiles are flipped according to the following rules:</p>
+
+<ul>
+  <li>Any <strong>black</strong> tile with <strong>zero</strong> or <strong>more than 2</strong> black tiles immediately adjacent to it is flipped to <strong>white</strong>.</li>
+  <li>Any <strong>white</strong> tile with <strong>exactly 2</strong> black tiles immediately adjacent to it is flipped to <strong>black</strong>.</li>
+</ul>
+
+<p>The rules are applied simultaneously to every tile; put another way, it is first determined which tiles need to be flipped, then they are all flipped at the same time.</p>
+
+<p>Starting with the layout <em>after</em> part one, what how many tiles will be black after 100 days?</p>
+
+<h4 id="solution-1">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/24/raku/main.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub adjacent($q, $r) {
+    "{$q + 1}:$r",       # [1]
+    "$q:{$r + 1}",
+    "{$q - 1}:{$r + 1}",
+    "{$q - 1}:$r",
+    "$q:{$r - 1}",
+    "{$q + 1}:{$r - 1}"  # [2]
+}
+
+sub MAIN($file, Bool :$p2 = False) {
+    my $regex = /^(e|se|sw|w|nw|ne)+$/;
+    my @instructions =
+        $file.IO
+        .lines
+        .map(-&gt; $line {
+            $line.match($regex).map(*.Str).split(' ')
+        });
+
+    my $flipped = Set.new;
+    for @instructions -&gt; @instruction-set {
+        my ($q, $r) = (0, 0);
+        for @instruction-set -&gt; $direction {
+            given $direction {
+                when 'e'  { $q += 1          }
+                when 'se' { $r += 1          }
+                when 'sw' { $q -= 1; $r += 1 }
+                when 'w'  { $q -= 1          }
+                when 'nw' { $r -= 1          }
+                when 'ne' { $q += 1; $r -= 1 }
+            }
+        }
+        my $tile = "$q:$r";
+        if $tile ∈ $flipped {
+            $flipped ⊖= $tile;
+        } else {
+            $flipped ∪= $tile;
+        }
+    }
+
+    if $p2 {
+        for (^100) {
+            my $flipped-this-round = Set.new;
+            my $unflipped-this-round = Set.new;
+            my @q-range = $flipped.keys.map(*.split(':')[0].Int).minmax;
+            my @r-range = $flipped.keys.map(*.split(':')[1].Int).minmax;
+            for (@q-range.min - 1 .. @q-range.max + 1) -&gt; $q {
+                for (@r-range.min - 1 .. @r-range.max + 1) -&gt; $r {
+                    my $tile = "$q:$r";
+                    my $adjacent-flipped = adjacent($q, $r).grep(* ∈ $flipped).elems;
+                    if $tile ∈ $flipped {
+                        if $adjacent-flipped == 0 || $adjacent-flipped &gt; 2 {
+                            $unflipped-this-round ∪= $tile;
+                        }
+                    } else {
+                        if $adjacent-flipped == 2 {
+                            $flipped-this-round ∪= $tile;
+                        }
+                    }
+                }
+            }
+            $flipped ∪= $flipped-this-round;
+            $flipped ⊖= $unflipped-this-round;
+        }
+    }
+    say $flipped.elems;
+}
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+459
+
+$ raku main.raku --p2 input.txt
+4150
+</code></pre></div></div>
+
+<h4 id="explanation-1">Explanation</h4>
+
+<p>I had some initial difficulty here because I didn’t have a good data structure to traverse, so how would this work? Turns out we don’t need it, we just need the min and max black tile coordinates (from our arbitrary starting tile), and we can traverse that way!</p>
+
+<p>All that was added was the <code class="language-plaintext highlighter-rouge">if $p2 {...}</code> block, as well as a helper function (<code class="language-plaintext highlighter-rouge">adjacent</code>) to help find adjacent tiles. The logic here is fairly straightforward:</p>
+
+<ol>
+  <li>Once we have our layout for part 1, we kick off 100 iterations.</li>
+  <li>Within each iteration, to not affect <code class="language-plaintext highlighter-rouge">$flipped</code> state until the end, we create 2 new sets: <code class="language-plaintext highlighter-rouge">$flipped-this-round</code> and <code class="language-plaintext highlighter-rouge">$unflipped-this-round</code>.</li>
+  <li>We find the minimum and maximum <code class="language-plaintext highlighter-rouge">q</code> and <code class="language-plaintext highlighter-rouge">r</code> values and go one tile further (we need to account for the neighbors of those outer black tiles).</li>
+  <li>For each tile in our area we check if it is black (<code class="language-plaintext highlighter-rouge">$tile ∈ $flipped</code>).
+    <ul>
+      <li>If so, we check if it has either <code class="language-plaintext highlighter-rouge">0</code> or <code class="language-plaintext highlighter-rouge">&gt;2</code> black neighbors. If so, it goes in the <code class="language-plaintext highlighter-rouge">$unflipped-this-round</code> set.</li>
+      <li>If it is a white tile, we check if it has exactly <code class="language-plaintext highlighter-rouge">2</code> black neighbors. If so, it goes in the <code class="language-plaintext highlighter-rouge">$flipped-this-round</code> set.</li>
+    </ul>
+  </li>
+  <li>We update <code class="language-plaintext highlighter-rouge">$flipped</code> by unioning it with <code class="language-plaintext highlighter-rouge">$flipped-this-round</code> and removing the <code class="language-plaintext highlighter-rouge">$unflipped-this-round</code> elements via symmetric set difference.</li>
+</ol>
+
+<p>After 100 round, just like part one, we count our black tiles via <code class="language-plaintext highlighter-rouge">$flipped.elems</code>!</p>
+
+<h5 id="specific-comments-1">Specific comments</h5>
+
+<ol>
+  <li>Parentheses are optional when constructing a list in Raku. In this case, I felt it read better to not use them.</li>
+  <li>Additionally, semicolons are optional <em>for the last expression in a block</em>. You have seen this before (look at those <code class="language-plaintext highlighter-rouge">given/when</code> blocks, for example), but I have never called it out. Similarly, I felt it read better without it here.</li>
+</ol>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>I had fun with this one! Maybe it helps that I am actually off for the holidays and don’t have to rush through it before or after work. Looking forward to crossing the finish line tomorrow!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#advent-of-code" class="page__taxonomy-item" rel="tag">Advent of Code</a><span class="sep">, </span>
+    
+      <a href="/tags/#raku" class="page__taxonomy-item" rel="tag">Raku</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-24T00:00:00-06:00">December 24, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Year+2020%2C+Day+24%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-24%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-24%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-24%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/advent-of-code-year-2020-day-23/" class="pagination--pager" title="Advent of Code: Year 2020, Day 23
+">Previous</a>
+    
+    
+      <a href="/blog/advent-of-code-year-2020-day-25/" class="pagination--pager" title="Advent of Code: Year 2020, Day 25
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/personal/sabbatical/" rel="permalink">Sabbatical
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-20T00:00:00-05:00">June 20, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today is Father’s Day in the U.S. I have an almost-11-month-old son who I should be spending time with, but I feel the need to post a blog because I have bee...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-116/" rel="permalink">Perl Weekly Challenge 116
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Part 1 was probably the hardest this week, but I ended up being able to adapt a solution from an existing Python library.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-115/" rel="permalink">Perl Weekly Challenge 115
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-114/" rel="permalink">Perl Weekly Challenge 114
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-28T00:00:00-05:00">May 28, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Both of this week’s solutions look remarkably similar, because we were able to utilize the first subroutine for each one!
+
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Connect:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+        
+      
+        
+          <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i> Stack Overflow</a></li>
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Aaron Smith. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,883 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.22.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Advent of Code: Year 2020, Day 8 - Aaron Smith</title>
+<meta name="description" content="Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end!">
+
+
+  <meta name="author" content="Aaron Smith">
+  
+  <meta property="article:author" content="Aaron Smith">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Aaron Smith">
+<meta property="og:title" content="Advent of Code: Year 2020, Day 8">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-year-2020-day-08/">
+
+
+  <meta property="og:description" content="Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end!">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-08T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-year-2020-day-08/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Aaron Smith Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Aaron Smith Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/tags/">Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/assets/files/aaron_smith_resume.pdf">Resume</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/headshot-square.jpg" alt="Aaron Smith" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Aaron Smith</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Data Engineer specializing in streaming data at scale, especially on AWS</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Connect</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Austin, TX</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Advent of Code: Year 2020, Day 8">
+    <meta itemprop="description" content="Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end!">
+    <meta itemprop="datePublished" content="2020-12-08T00:00:00-06:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Year 2020, Day 8
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-08T00:00:00-06:00">December 8, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Today tripped me up a bit in part 2 due to my lack of understanding around copying objects in Raku. Regardless, we made it through and are now over 30% of the way to the end!</p>
+
+<h2 id="the-problem">The Problem</h2>
+
+<h3 id="part-1">Part 1</h3>
+
+<p>We’re still traveling to our destination (see the past few blogs of the <a href="https://www.adventofcode.com">Advent of Code</a> itself for more backstory).</p>
+
+<p>We are on another flight, and the kid in the seat next to us is having an issue with his Game Boy. We are able to isolate the boot code, and it looks like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nop +0
+acc +1
+jmp +4
+acc +3
+jmp -3
+acc -99
+acc +1
+jmp -4
+acc +6
+</code></pre></div></div>
+
+<p>Where each instruction means the following:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">nop</code>: No operation, move to the next entry</li>
+  <li><code class="language-plaintext highlighter-rouge">jmp</code>: Jump to the entry specified by the number (+1 means next entry, -1 means previous entry, etc.)</li>
+  <li><code class="language-plaintext highlighter-rouge">acc</code>: Increment an accumulator the specified amount of times, then go to the next entry</li>
+</ul>
+
+<p>The example instructions, as well as our input, create an infinite loop. Our task is to find the value of the accumulator immediately before any instruction is executed a second time.</p>
+
+<h4 id="solution">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/08/raku/main.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub accumulate(@instructions is copy, $pointer = 0, $accumulator = 0) { # [1]
+    if @instructions[$pointer]&lt;visited&gt; {
+        $accumulator;
+    } else {
+        @instructions[$pointer]&lt;visited&gt; = True;
+        given @instructions[$pointer]&lt;operation&gt; {
+            when 'acc' {
+                accumulate(
+                    @instructions,
+                    $pointer + 1,
+                    $accumulator + @instructions[$pointer]&lt;value&gt;
+                );
+            }
+            when 'jmp' {
+                accumulate(
+                    @instructions,
+                    $pointer + @instructions[$pointer]&lt;value&gt;,
+                    $accumulator
+                );
+            }
+            when 'nop' {
+                accumulate(@instructions, $pointer + 1, $accumulator);
+            }
+        }
+    }
+}
+
+
+sub MAIN($file) {
+    my @cells = $file.IO.lines.map(-&gt; $line {
+        my ($operation, $value) = $line.split(' ');
+        { :$operation, value =&gt; $value.Int, :!visited } # [2]
+    });
+    say accumulate(@cells);
+}
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+1600
+</code></pre></div></div>
+
+<h4 id="explanation">Explanation</h4>
+
+<p>The logic here is fairly simple. First, we split our input into a list of <code class="language-plaintext highlighter-rouge">Hash</code> objects that look like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{ operation =&gt; 'jmp|acc|nop', value =&gt; &lt;value&gt;, visited =&gt; False }
+</code></pre></div></div>
+
+<p>We then recursively traverse this list of cells until we hit one that is <code class="language-plaintext highlighter-rouge">visited =&gt; True</code>, and we return the accumulator at that point.</p>
+
+<h5 id="specific-comments">Specific Comments</h5>
+
+<ol>
+  <li>We mark the <code class="language-plaintext highlighter-rouge">@instructions</code> variable as a copy so that we can manipulate it in the <code class="language-plaintext highlighter-rouge">accumulate</code> subroutine without affecting the outer scope.</li>
+  <li>We use two shorthands on this line. The first being <code class="language-plaintext highlighter-rouge">:$operation</code>, which is shorthand for <code class="language-plaintext highlighter-rouge">operation =&gt; $operation</code>, and the second being <code class="language-plaintext highlighter-rouge">:!visited</code>, which is shorthand for <code class="language-plaintext highlighter-rouge">visited =&gt; False</code>. I don’t really like mixing the paradigms, but IntelliJ was complaining about it, so what are you gonna do? 🤷🏻‍♂️</li>
+</ol>
+
+<h3 id="part-2">Part 2</h3>
+
+<p>Now that we have a program to interpret the boot code, we find that there is a bug in the boot code itself. Either a <code class="language-plaintext highlighter-rouge">nop</code> was switched for a <code class="language-plaintext highlighter-rouge">jmp</code> or vice versa, in exactly one place in the code. Swapping the right code back to its original form will allow the boot code to terminate rather than running forever.</p>
+
+<p>We need to find the value of the accumulator in the terminal solution.</p>
+
+<h4 id="solution-1">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/08/raku/main.raku">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub accumulate(@instructions is copy, $pointer = 0, $accumulator = 0, $part-two = False) {
+    if $part-two &amp;&amp; $pointer == @instructions.elems {
+        ($accumulator, 'Terminal');
+    } elsif @instructions[$pointer]&lt;visited&gt; {
+        ($accumulator, 'Infinite');
+    } else {
+        @instructions[$pointer]&lt;visited&gt; = True;
+        given @instructions[$pointer]&lt;operation&gt; {
+            when 'acc' {
+                accumulate(
+                    @instructions,
+                    $pointer + 1,
+                    $accumulator + @instructions[$pointer]&lt;value&gt;,
+                    $part-two
+                );
+            }
+            when 'jmp' {
+                accumulate(
+                    @instructions,
+                    $pointer + @instructions[$pointer]&lt;value&gt;,
+                    $accumulator,
+                    $part-two
+                );
+            }
+            when 'nop' {
+                accumulate(@instructions, $pointer + 1, $accumulator, $part-two);
+            }
+        }
+    }
+}
+
+
+sub MAIN($file, Bool :$p2 = False) {
+    my @cells = $file.IO.lines.map(-&gt; $line {
+        my ($operation, $value) = $line.split(' ');
+        { :$operation, value =&gt; $value.Int, :!visited }
+    });
+    if $p2 {
+        my @fixed-instructions = gather {
+            for @cells.kv -&gt; $index, %cell {
+                given %cell&lt;operation&gt;.Str {
+                    when /^[nop|jmp]$/ {                                               # [1]
+                        my @cells-copy = @cells.deepmap(-&gt; $entry is copy { $entry }); # [2]
+                        my %cell-copy = %cell.deepmap(-&gt; $entry is copy { $entry });
+                        when 'nop' {
+                            %cell-copy&lt;operation&gt; = 'jmp';
+                            @cells-copy[$index] = %cell-copy;
+                            take @cells-copy;
+                        }
+                        when 'jmp' {
+                            %cell-copy&lt;operation&gt; = 'nop';
+                            @cells-copy[$index] = %cell-copy;
+                            take @cells-copy;
+                        }
+                    }
+                }
+            }
+        };
+        say @fixed-instructions
+            .map(&amp;accumulate.assuming(*, 0, 0, $p2))
+            .grep(-&gt; @pair { @pair[1] eq 'Terminal' })
+            .head  # Gives us the first item in the above list
+            .head; # Gives us the number in the pair returned from `accumulate`
+    } else {
+        say accumulate(@cells).head;
+    }
+}
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
+$ raku main.raku input.txt
+1600
+
+# Part 2
+$ raku main.raku --p2 input.txt
+1543
+</code></pre></div></div>
+
+<h4 id="explanation-1">Explanation</h4>
+
+<p>The logic here is fairly straightforward (albeit brute force) as well. Basically, we find all combinations of our input with a single code point change (<code class="language-plaintext highlighter-rouge">@fixed-instructions</code>), find <em>all</em> solutions to those codes (infinite and terminal), filter down to the terminal solution and print the output.</p>
+
+<p>The hard part here was copying <code class="language-plaintext highlighter-rouge">@cells</code> multiple times into <code class="language-plaintext highlighter-rouge">@fixed-instructions</code>. I ran into an issue where all of <code class="language-plaintext highlighter-rouge">@fixed-instructions</code> was pointing to the same memory address, so after traversing <code class="language-plaintext highlighter-rouge">@fixed-instructions[0]</code>, the rest of the inputs were tainted. This issue was fixed by the (awkward) <code class="language-plaintext highlighter-rouge">.deepmaps</code>. See #2 below for additional details.</p>
+
+<h5 id="specific-comments-1">Specific Comments</h5>
+<ol>
+  <li>Interestingly <code class="language-plaintext highlighter-rouge">when 'nop' || 'jmp'</code> does not work here. I suspect it has to do with the fact that <code class="language-plaintext highlighter-rouge">when</code> operates <a href="https://docs.raku.org/language/control#index-entry-control_flow__given-given">very eagerly</a> and as soon as it finds a match, it skips the rest of the lines of input. Generally that happens in a code block, but I guess it can happen in the <code class="language-plaintext highlighter-rouge">when</code> statement itself.</li>
+  <li>I knew I needed a mutable copy of the original input here. Originally I tried <code class="language-plaintext highlighter-rouge">@cells-copy = @cells</code>, but that didn’t work. Eventually I stumbled upon <code class="language-plaintext highlighter-rouge">.clone</code>, which it seems <a href="https://docs.raku.org/routine/clone"><em>intentionally</em> doesn’t work</a> on <code class="language-plaintext highlighter-rouge">@</code>- or <code class="language-plaintext highlighter-rouge">%</code>-sigiled variables. Finally, I <a href="https://stackoverflow.com/a/38585401/10696164">stumbled upon</a> this awkward <code class="language-plaintext highlighter-rouge">.deepcopy</code> syntax which is not only incredibly ugly, but also incredibly slow. For reference, part one runs in 0.48 seconds on my machine and part two runs in 28.7 seconds.</li>
+</ol>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>Today’s problem helped me get back on the functional Raku track after a <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-07/">frustrating day 7</a>. However, I am going to have to do more digging on copies of iterables in Raku, because a 60x performance decrease is not really acceptable for this kind of thing, especially when the input is relatively small (&lt;1000 lines).</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#advent-of-code" class="page__taxonomy-item" rel="tag">Advent of Code</a><span class="sep">, </span>
+    
+      <a href="/tags/#raku" class="page__taxonomy-item" rel="tag">Raku</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-08T00:00:00-06:00">December 8, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Year+2020%2C+Day+8%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-08%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-08%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-08%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/perl-weekly-challenge-090/" class="pagination--pager" title="Perl Weekly Challenge 90
+">Previous</a>
+    
+    
+      <a href="/blog/advent-of-code-year-2020-day-09/" class="pagination--pager" title="Advent of Code: Year 2020, Day 9
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/personal/sabbatical/" rel="permalink">Sabbatical
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-20T00:00:00-05:00">June 20, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today is Father’s Day in the U.S. I have an almost-11-month-old son who I should be spending time with, but I feel the need to post a blog because I have bee...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-116/" rel="permalink">Perl Weekly Challenge 116
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Part 1 was probably the hardest this week, but I ended up being able to adapt a solution from an existing Python library.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-115/" rel="permalink">Perl Weekly Challenge 115
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-114/" rel="permalink">Perl Weekly Challenge 114
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-28T00:00:00-05:00">May 28, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Both of this week’s solutions look remarkably similar, because we were able to utilize the first subroutine for each one!
+
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Connect:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+        
+      
+        
+          <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i> Stack Overflow</a></li>
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Aaron Smith. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

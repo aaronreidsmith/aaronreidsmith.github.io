@@ -1,0 +1,855 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.22.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Advent of Code: Year 2020, Day 17 - Aaron Smith</title>
+<meta name="description" content="Today was almost exactly like day 11 except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python solution (with the same logic) to get it to finish in a reasonable amount of time. Because of the similarities between today’s problem and that one, I only wrote a Python solution today.">
+
+
+  <meta name="author" content="Aaron Smith">
+  
+  <meta property="article:author" content="Aaron Smith">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Aaron Smith">
+<meta property="og:title" content="Advent of Code: Year 2020, Day 17">
+<meta property="og:url" content="http://localhost:4000/blog/advent-of-code-year-2020-day-17/">
+
+
+  <meta property="og:description" content="Today was almost exactly like day 11 except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python solution (with the same logic) to get it to finish in a reasonable amount of time. Because of the similarities between today’s problem and that one, I only wrote a Python solution today.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-17T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blog/advent-of-code-year-2020-day-17/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Aaron Smith Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Aaron Smith Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/tags/">Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/assets/files/aaron_smith_resume.pdf">Resume</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/headshot-square.jpg" alt="Aaron Smith" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Aaron Smith</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Data Engineer specializing in streaming data at scale, especially on AWS</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Connect</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Austin, TX</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Advent of Code: Year 2020, Day 17">
+    <meta itemprop="description" content="Today was almost exactly like day 11 except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python solution (with the same logic) to get it to finish in a reasonable amount of time. Because of the similarities between today’s problem and that one, I only wrote a Python solution today.">
+    <meta itemprop="datePublished" content="2020-12-17T00:00:00-06:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Advent of Code: Year 2020, Day 17
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-17T00:00:00-06:00">December 17, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Today was <em>almost exactly</em> like <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-11/">day 11</a> except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python solution (with the same logic) to get it to finish in a reasonable amount of time. Because of the similarities between today’s problem and that one, I only wrote a Python solution today.</p>
+
+<h2 id="the-problem">The Problem</h2>
+
+<h3 id="part-1">Part 1</h3>
+
+<p>The elves back at the North Pole call us about a mysterious phenomenon they are witnessing called Conway Cubes occurring in a pocket dimension.</p>
+
+<p>The pocket dimension consists of an infinite 3D grid. At each <code class="language-plaintext highlighter-rouge">(x, y, z)</code> coordinate there exists a cube in an active (<code class="language-plaintext highlighter-rouge">#</code>) or inactive (<code class="language-plaintext highlighter-rouge">.</code>) state. Every cycle in the phenomenon all the cubes <em>simultaneously</em> look at their 26 neighbors (9 above, 9 below, 8 in-plane) and they change based on the following rules:</p>
+
+<ul>
+  <li>If a cube is <strong>active</strong> and <strong>exactly 2 or 3</strong> of its neighbors are also <strong>active</strong>, the cube remains active. Otherwise, the cube becomes <strong>inactive</strong>.</li>
+  <li>If a cube is <strong>inactive</strong> but <strong>exactly 3</strong> of its neighbors are active, the cube becomes <strong>active</strong>. Otherwise, the cube remains <strong>inactive</strong>.</li>
+</ul>
+
+<p>Our input is a 2D grid where the top-left position corresponding to coordinate <code class="language-plaintext highlighter-rouge">(0,0,0)</code> with some active and some inactive cubes. After 6 cycles of the pattern listed above, how many cubes in the space are <strong>active</strong>?</p>
+
+<h4 id="solution">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/17/python/main.py">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+
+<span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span class="n">coordinates</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">diff</span> <span class="ow">in</span> <span class="n">product</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">repeat</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)):</span> <span class="c1"># [1]
+</span>        <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">coordinate</span> <span class="o">+</span> <span class="n">diff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">coordinate</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">coordinates</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">conway_cubes</span><span class="p">(</span><span class="n">initial</span><span class="p">):</span>
+    <span class="n">space</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="s">'.'</span><span class="p">)</span> <span class="c1"># [2]
+</span>    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">initial</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">y</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+            <span class="n">cube</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">space</span><span class="p">[</span><span class="n">cube</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+        <span class="n">active</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="c1"># [3]
+</span>
+        <span class="k">for</span> <span class="n">cube</span> <span class="ow">in</span> <span class="n">space</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">space</span><span class="p">[</span><span class="n">cube</span><span class="p">]</span> <span class="o">==</span> <span class="s">"."</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">(</span><span class="n">cube</span><span class="p">):</span>
+                <span class="c1"># We count active cubes with active neighbors so we can
+</span>                <span class="c1"># activate/deactivate following as necessary in the next loop
+</span>                <span class="n">active</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">neighbor</span> <span class="o">!=</span> <span class="n">cube</span> <span class="k">else</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">cube</span><span class="p">,</span> <span class="n">active_neighbors</span> <span class="ow">in</span> <span class="n">active</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">space</span><span class="p">[</span><span class="n">cube</span><span class="p">]</span> <span class="o">==</span> <span class="s">"#"</span> <span class="ow">and</span> <span class="n">active_neighbors</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+                <span class="n">space</span><span class="p">[</span><span class="n">cube</span><span class="p">]</span> <span class="o">=</span> <span class="s">"."</span>
+            <span class="k">elif</span> <span class="n">space</span><span class="p">[</span><span class="n">cube</span><span class="p">]</span> <span class="o">==</span> <span class="s">"."</span> <span class="ow">and</span> <span class="n">active_neighbors</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">space</span><span class="p">[</span><span class="n">cube</span><span class="p">]</span> <span class="o">=</span> <span class="s">"#"</span>
+
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">state</span> <span class="o">==</span> <span class="s">"#"</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">space</span><span class="p">.</span><span class="n">values</span><span class="p">())</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">initial</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="p">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]).</span><span class="n">readlines</span><span class="p">()]</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">conway_cubes</span><span class="p">(</span><span class="n">initial</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python main.py input.txt
+137
+</code></pre></div></div>
+
+<h4 id="explanation">Explanation</h4>
+
+<p>The logic here is pretty simple:</p>
+
+<ol>
+  <li>We have an infinite grid called <code class="language-plaintext highlighter-rouge">space</code> and we set our initial values in the <code class="language-plaintext highlighter-rouge">(x, y, 0)</code> plane.</li>
+  <li>For 6 cycles we iterate through the cubes focusing first on <em>active</em> cubes (since the rules apply to active neighbors).</li>
+  <li>Within each cycle we do a second loop to look at our neighbors
+    <ul>
+      <li>If a cube is active and fewer than 2 or greater than 3 neighbors are inactive, it becomes inactive.</li>
+      <li>If a cube is inactive and exactly 3 neighbors are active, it becomes active.</li>
+    </ul>
+  </li>
+  <li>After 6 cycles of this, we simply sum up the active cubes.</li>
+</ol>
+
+<h5 id="specific-comments">Specific Comments</h5>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">product</code> is a Python 3.8+ function that is basically the equivalent of Raku’s <code class="language-plaintext highlighter-rouge">X</code> operator. In this case, the <code class="language-plaintext highlighter-rouge">repeat</code> param means to use the same input <code class="language-plaintext highlighter-rouge">repeat</code> times. So if <code class="language-plaintext highlighter-rouge">repeat=3</code>, in this case, it would be the same as <code class="language-plaintext highlighter-rouge">[-1, 0, 1] X [-1, 0, 1] X [-1, 0, 1]</code>.</li>
+  <li>A <code class="language-plaintext highlighter-rouge">defaultdict</code> is a great data structure for an infinite grid. Basically, the key to <code class="language-plaintext highlighter-rouge">space</code> will be a tuple of coordinates, and the value will either be a period or a hash. Since it is a <code class="language-plaintext highlighter-rouge">defaultdict</code>, if we reference a key that does not exist, it creates it and fills it in with the default value (<code class="language-plaintext highlighter-rouge">'.'</code>).</li>
+  <li>We also use a <code class="language-plaintext highlighter-rouge">defaultdict</code> to track our active cubes, with the default being an <code class="language-plaintext highlighter-rouge">int</code>. This will create new items with the default being <code class="language-plaintext highlighter-rouge">0</code> (<code class="language-plaintext highlighter-rouge">defaultdict</code> accepts a <em>function</em>, not a <em>value</em>, which is why we can’t just specify <code class="language-plaintext highlighter-rouge">0</code>).</li>
+</ol>
+
+<h3 id="part-2">Part 2</h3>
+
+<p>Turns out the pocket dimension is actually <em>four dimensional</em>. Our input now represents the plane <code class="language-plaintext highlighter-rouge">(x, y, 0, 0)</code>. How many cubes are active after 6 cycles in 4D?</p>
+
+<h4 id="solution-1">Solution</h4>
+
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/17/python/main.py">GitHub Link</a></p>
+
+<p>See below for explanation and any implementation-specific comments.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+
+<span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span class="n">coordinates</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">diff</span> <span class="ow">in</span> <span class="n">product</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">repeat</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)):</span>
+        <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">coordinate</span> <span class="o">+</span> <span class="n">diff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">coordinate</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">coordinates</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">conway_cubes</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">):</span>
+    <span class="n">space</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="s">'.'</span><span class="p">)</span>
+    <span class="n">padding</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,)</span> <span class="o">*</span> <span class="p">(</span><span class="n">dimensions</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">initial</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">y</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+            <span class="n">cube</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="n">padding</span>
+            <span class="n">space</span><span class="p">[</span><span class="n">cube</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+        <span class="n">active</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">cube</span> <span class="ow">in</span> <span class="n">space</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">space</span><span class="p">[</span><span class="n">cube</span><span class="p">]</span> <span class="o">==</span> <span class="s">"."</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">(</span><span class="n">cube</span><span class="p">):</span>
+                <span class="c1"># We count active cubes with active neighbors so we can
+</span>                <span class="c1"># activate/deactivate following as necessary in the next loop
+</span>                <span class="n">active</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">neighbor</span> <span class="o">!=</span> <span class="n">cube</span> <span class="k">else</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">cube</span><span class="p">,</span> <span class="n">active_neighbors</span> <span class="ow">in</span> <span class="n">active</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">space</span><span class="p">[</span><span class="n">cube</span><span class="p">]</span> <span class="o">==</span> <span class="s">"#"</span> <span class="ow">and</span> <span class="n">active_neighbors</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+                <span class="n">space</span><span class="p">[</span><span class="n">cube</span><span class="p">]</span> <span class="o">=</span> <span class="s">"."</span>
+            <span class="k">elif</span> <span class="n">space</span><span class="p">[</span><span class="n">cube</span><span class="p">]</span> <span class="o">==</span> <span class="s">"."</span> <span class="ow">and</span> <span class="n">active_neighbors</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">space</span><span class="p">[</span><span class="n">cube</span><span class="p">]</span> <span class="o">=</span> <span class="s">"#"</span>
+
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">state</span> <span class="o">==</span> <span class="s">"#"</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">space</span><span class="p">.</span><span class="n">values</span><span class="p">())</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">initial</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="p">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]).</span><span class="n">readlines</span><span class="p">()]</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">f'Part 1: </span><span class="si">{</span><span class="n">conway_cubes</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">dimensions</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">f'Part 2: </span><span class="si">{</span><span class="n">conway_cubes</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">dimensions</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This runs as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python main.py input.txt
+Part 1: 237
+Part 2: 2448
+</code></pre></div></div>
+
+<h4 id="explanation-1">Explanation</h4>
+
+<p>The changes here are so small, you may not even notice them:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">conway_cubes</code> now accepts a dimension argument</li>
+  <li>We have a dynamic <code class="language-plaintext highlighter-rouge">padding</code> variable that adds either 1 or 2 zeros to the supplied <code class="language-plaintext highlighter-rouge">(x, y)</code> coordinates (rather than hard-coding as we did in part one).</li>
+  <li>We run both parts (CLIs are much easier in Raku, so I don’t bother in Python)</li>
+</ol>
+
+<p>That’s it!</p>
+
+<h5 id="specific-comments-1">Specific Comments</h5>
+
+<p>No specific comments to add because the code barely changed. Luckily the code was generalized enough to handle the new dimension.</p>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>I didn’t write a Raku solution, but I wonder how fast (or slow) if I wrote one with the same logic. Maybe I will go back and compare one of these days!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#advent-of-code" class="page__taxonomy-item" rel="tag">Advent of Code</a><span class="sep">, </span>
+    
+      <a href="/tags/#python" class="page__taxonomy-item" rel="tag">Python</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-17T00:00:00-06:00">December 17, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Advent+of+Code%3A+Year+2020%2C+Day+17%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-17%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-17%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fadvent-of-code-year-2020-day-17%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/advent-of-code-year-2020-day-16/" class="pagination--pager" title="Advent of Code: Year 2020, Day 16
+">Previous</a>
+    
+    
+      <a href="/blog/advent-of-code-year-2020-day-18/" class="pagination--pager" title="Advent of Code: Year 2020, Day 18
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/personal/sabbatical/" rel="permalink">Sabbatical
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-20T00:00:00-05:00">June 20, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Today is Father’s Day in the U.S. I have an almost-11-month-old son who I should be spending time with, but I feel the need to post a blog because I have bee...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-116/" rel="permalink">Perl Weekly Challenge 116
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Part 1 was probably the hardest this week, but I ended up being able to adapt a solution from an existing Python library.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-115/" rel="permalink">Perl Weekly Challenge 115
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-07T00:00:00-05:00">June 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">I had a very busy weekend and didn’t get the opportunity to post this during the actual week of the challenge, but I will post both 115 and 116 today!
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/perl-weekly-challenge-114/" rel="permalink">Perl Weekly Challenge 114
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-28T00:00:00-05:00">May 28, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Both of this week’s solutions look remarkably similar, because we were able to utilize the first subroutine for each one!
+
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Connect:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="mailto:aaronreidsmith@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+        
+      
+        
+          <li><a href="https://linkedin.com/in/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/aaronreidsmith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://stackoverflow.com/users/10696164/aaron-smith" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i> Stack Overflow</a></li>
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Aaron Smith. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>
