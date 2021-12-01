@@ -13,7 +13,7 @@ This is just trashy, slow code that gets the job done. Not functional, not fast,
 
 ### Part 1
 
-After [yesterday's game of War](https://aaronreidsmith.github.io/blog/advent-of-code-day-22/), the crab challenges _us_ to a game! In this game there are 10 labeled cups placed clockwise in a circle (our input). The first cup in our list is our "current cup," and the crab is going to make **100 moves**. Here is how each move works:
+After [yesterday's game of War](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-22/), the crab challenges _us_ to a game! In this game there are 10 labeled cups placed clockwise in a circle (our input). The first cup in our list is our "current cup," and the crab is going to make **100 moves**. Here is how each move works:
 
 - The crab picks up the three cups that are immediately clockwise of the current cup. They are removed from the circle; cup spacing is adjusted as necessary to maintain the circle.
 - The crab selects a destination cup: the cup with a label equal to the current cup's label minus one. If this would select one of the cups that was just picked up, the crab will keep subtracting one until it finds a cup that wasn't just picked up. If at any point in this process the value goes below the lowest value on any cup's label, it wraps around to the highest value on any cup's label instead.
@@ -83,7 +83,7 @@ What is the answer after 100 moves with an input of `712643589`?
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/23/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-23.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -132,7 +132,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-23.raku input.txt
 29385746
 ```
 
@@ -155,7 +155,7 @@ The crab adds almost _a million_ more cups to the game. After the 9 initial ones
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/23/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-23.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -251,10 +251,10 @@ sub MAIN($file, Bool :$p2 = False) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-23.raku input.txt
 29385746
 
-$ raku main.raku --p2 input.txt
+$ raku day-23.raku --p2 input.txt
 712643589
 ```
 

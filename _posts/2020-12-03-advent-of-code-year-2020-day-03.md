@@ -28,7 +28,7 @@ Additionally, this is a magic mountain, so the pattern on each row repeats out t
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-03.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -54,7 +54,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-03.raku input.txt
 191
 ```
 
@@ -89,7 +89,7 @@ Then, we must find the product of all the trees we hit with each traversal
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/03/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-03.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -132,11 +132,11 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-03.raku input.txt
 191
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-03.raku --p2 input.txt
 1478615040
 ```
 

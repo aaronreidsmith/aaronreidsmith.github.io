@@ -200,4 +200,4 @@ We set the `$pointer` to start at index 0 and enter an infinite loop. If we are 
 
 ## Final Thoughts
 
-Nothing ground breaking this week. However, we did get to explore one of the cooler features of Raku for Advent of Code day 18. [Give it a read](https://aaronreidsmith.github.io/blog/advent-of-code-day-18/)!
+Nothing ground breaking this week. However, we did get to explore one of the cooler features of Raku for Advent of Code day 18. [Give it a read](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-18/)!

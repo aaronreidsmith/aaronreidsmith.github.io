@@ -28,7 +28,7 @@ Luckily it seems like all of his math problems are only addition and multiplicat
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/18/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-18.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -46,7 +46,7 @@ sub MAIN($file, Bool :$p2 = False) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-18.raku input.txt
 45840336521334
 ```
 
@@ -70,7 +70,7 @@ After finishing up part one, we reach the _advanced math_ section. In this secti
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/18/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-18.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -89,10 +89,10 @@ sub MAIN($file, Bool :$p2 = False) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-18.raku input.txt
 45840336521334
 
-$ raku main.raku --p2 input.txt
+$ raku day-18.raku --p2 input.txt
 328920644404583
 ```
 

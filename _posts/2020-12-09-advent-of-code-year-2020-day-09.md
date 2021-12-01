@@ -13,7 +13,7 @@ Today we have a classic [sliding window](https://www.geeksforgeeks.org/window-sl
 
 ### Part 1
 
-After helping our seatmate fix his Game Boy [yesterday](https://aaronreidsmith.github.io/blog/advent-of-code-day-08/), we find ourselves bored on the plane. Why not pass the time with a little mid-air hacking?
+After helping our seatmate fix his Game Boy [yesterday](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-08/), we find ourselves bored on the plane. Why not pass the time with a little mid-air hacking?
 
 We hook our computer up to the seat-back entertainment center, but it is protected by the e**X**change-**M**asking **A**ddition **S**ystem (XMAS), which is a cipher with a documented weakness.
 
@@ -54,7 +54,7 @@ The first step in attacking the weakness of the cipher is that exactly one numbe
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/09/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-09.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -78,7 +78,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-09.raku input.txt
 31161678
 ```
 
@@ -100,7 +100,7 @@ We need to find a contiguous set of numbers (size two or greater) in the input t
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/09/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-09.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -141,11 +141,11 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-09.raku input.txt
 31161678
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-09.raku --p2 input.txt
 5453868
 ```
 

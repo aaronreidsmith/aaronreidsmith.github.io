@@ -16,7 +16,7 @@ That was our task with today's problem. Yet again, we get to bust out our old fr
 
 ### Part 1
 
-After [yesterday's fiasco](https://aaronreidsmith.github.io/blog/advent-of-code-day-04/) of just getting through the airport, we find ourselves on the plane. Lo and behold, we dropped our boarding pass, but they still let us on the plane with the holiday rush.
+After [yesterday's fiasco](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-04/) of just getting through the airport, we find ourselves on the plane. Lo and behold, we dropped our boarding pass, but they still let us on the plane with the holiday rush.
 
 Luckily, we use our phone to scan _all_ the boarding passes nearby into a file full of lines that look like this:
 
@@ -59,7 +59,7 @@ Our task is to find the maximum seat number in the list of scanned boarding pass
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/05/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-05.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -93,7 +93,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-05.raku input.txt
 828
 ```
 
@@ -122,7 +122,7 @@ As a caveat, the seat numbers do _not_ start at 1, so we have to take that into 
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/05/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-05.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -166,11 +166,11 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-05.raku input.txt
 828
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-05.raku --p2 input.txt
 565
 ```
 

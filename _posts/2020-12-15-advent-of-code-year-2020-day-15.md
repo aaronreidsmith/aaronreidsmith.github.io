@@ -37,7 +37,7 @@ Given an input of `11,18,0,20,1,7,16`, what will be the 2020<sup>th</sup> number
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/15/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-15.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -60,7 +60,7 @@ sub MAIN($file, Bool :$p2 = False) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-15.raku input.txt
 639
 ```
 
@@ -97,7 +97,7 @@ The elves are impressed with our memory skills, so they up the ante! What is the
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/15/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-15.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -137,11 +137,11 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-15.raku input.txt
 639
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-15.raku --p2 input.txt
 266
 ```
 

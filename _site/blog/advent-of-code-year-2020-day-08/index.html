@@ -361,7 +361,7 @@ acc +6
 
 <h4 id="solution">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/08/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-08.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
@@ -404,7 +404,7 @@ sub MAIN($file) {
 
 <p>This runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku day-08.raku input.txt
 1600
 </code></pre></div></div>
 
@@ -432,7 +432,7 @@ sub MAIN($file) {
 
 <h4 id="solution-1">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/08/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/08/raku/day-08.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
@@ -508,11 +508,11 @@ sub MAIN($file, Bool :$p2 = False) {
 <p>This runs as such:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
-$ raku main.raku input.txt
+$ raku day-08.raku input.txt
 1600
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-08.raku --p2 input.txt
 1543
 </code></pre></div></div>
 
@@ -530,7 +530,7 @@ $ raku main.raku --p2 input.txt
 
 <h2 id="final-thoughts">Final Thoughts</h2>
 
-<p>Today’s problem helped me get back on the functional Raku track after a <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-07/">frustrating day 7</a>. However, I am going to have to do more digging on copies of iterables in Raku, because a 60x performance decrease is not really acceptable for this kind of thing, especially when the input is relatively small (&lt;1000 lines).</p>
+<p>Today’s problem helped me get back on the functional Raku track after a <a href="https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-07/">frustrating day 7</a>. However, I am going to have to do more digging on copies of iterables in Raku, because a 60x performance decrease is not really acceptable for this kind of thing, especially when the input is relatively small (&lt;1000 lines).</p>
 
         
       </section>

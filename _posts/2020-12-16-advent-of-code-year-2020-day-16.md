@@ -34,7 +34,7 @@ Where each ticket column corresponds to _a_ field in the first section, but we d
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/16/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-16.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -82,7 +82,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-16.raku input.txt
 20091
 ```
 
@@ -105,7 +105,7 @@ Now that we have found our invalid tickets, we need to disregard them entirely. 
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/16/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-16.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -214,11 +214,11 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-16.raku input.txt
 20091
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-16.raku --p2 input.txt
 2325343130651
 ```
 

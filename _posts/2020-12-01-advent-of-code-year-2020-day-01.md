@@ -24,7 +24,7 @@ Given a file full of integers (one per line), find the single pair of integers t
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-01.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -41,7 +41,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-01.raku input.txt
 1020036
 ```
 
@@ -63,7 +63,7 @@ Given the same file as before, find the _3_ numbers that add up to `2020` and fi
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/01/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-01.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -81,11 +81,11 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-01.raku input.txt
 1020036
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-01.raku --p2 input.txt
 286977330
 ```
 

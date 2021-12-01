@@ -15,7 +15,7 @@ Today involved a lot of matrix operations. I attempted to use Raku's [Math::Matr
 
 ### Part 1
 
-The messages from [yesterday](https://aaronreidsmith.github.io/blog/advent-of-code-day-19/) decode into a series of images that we need to reassemble back into a single image.
+The messages from [yesterday](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-19/) decode into a series of images that we need to reassemble back into a single image.
 
 Each of our inputs comes with an ID and the image itself. Here is an example of nine tiles of input:
 
@@ -184,7 +184,7 @@ What is the product of the four corners in our real input?
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/20/python/main.py)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/python/2020/day20.py)
 
 See below for explanation and any implementation-specific comments.
 
@@ -256,7 +256,7 @@ if __name__ == '__main__':
 This runs as such:
 
 ```
-$ python main.py input.txt
+$ python day20.py input.txt
 23497974998093
 ```
 
@@ -396,7 +396,7 @@ After identifying the sea monsters, we can calculate how rough the water is by c
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/20/python/main.py)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/python/2020/day20.py)
 
 See below for explanation and any implementation-specific comments.
 
@@ -500,7 +500,7 @@ if __name__ == '__main__':
 This runs as such:
 
 ```
-$ python main.py input.txt
+$ python day20.py input.txt
 Part 1: 20899048083289
 Part 2: 2256
 ```

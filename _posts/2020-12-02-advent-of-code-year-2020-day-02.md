@@ -31,7 +31,7 @@ Our job is to find how many passwords are **valid**.
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-02.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -63,7 +63,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-02.raku input.txt
 393
 ```
 
@@ -112,7 +112,7 @@ The password "qqqqqqqqqq" must contain a "q" character in position 10 or 14 (but
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/02/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-02.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -159,17 +159,17 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-02.raku input.txt
 393
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-02.raku --p2 input.txt
 690
 ```
 
 #### Explanation
 
-Similarly to [day 1](https://aaronreidsmith.github.io/blog/advent-of-code-day-01/), we can utilize the code already written and tweak it a little bit. In this case, the grammar stays the same, but the actions taken on each line need to change.
+Similarly to [day 1](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-01/), we can utilize the code already written and tweak it a little bit. In this case, the grammar stays the same, but the actions taken on each line need to change.
 
 Again, we provide the `--p2` flag, and then add the `PartTwoActions` class to handle the business logic for the new interpretation of the password policy.
 

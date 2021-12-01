@@ -13,7 +13,7 @@ Today was the first day where I didn't use the same code for parts one and two -
 
 ### Part 1
 
-We finally got on the ferry to our vacation destination after the [day 11](https://aaronreidsmith.github.io/blog/advent-of-code-day-11/) nonsense. However, we hit a patch of bad weather that knocked the navigation computer out. Luckily, as it was dying, it printed out its final instructions, and the captain needs help interpreting what it produced.
+We finally got on the ferry to our vacation destination after the [day 11](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-11/) nonsense. However, we hit a patch of bad weather that knocked the navigation computer out. Luckily, as it was dying, it printed out its final instructions, and the captain needs help interpreting what it produced.
 
 The instructions (our input) consist of single-character actions followed by values. Here is an example followed by our interpretation for the captain:
 
@@ -37,7 +37,7 @@ Our ship is fairly sophisticated, so it does not need to face the direction it i
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/12/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-12.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -108,7 +108,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-12.raku input.txt
 1186
 ```
 
@@ -165,7 +165,7 @@ If we start with a waypoint 1 unit north and 10 units east, what is our final Ma
 
 For brevity on this one, since the two solutions do not overlap, I did not copy the part one code from above. If you would like to see it, see the link below.
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/12/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-12.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -249,11 +249,11 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-12.raku input.txt
 1186
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-12.raku --p2 input.txt
 47806
 ```
 

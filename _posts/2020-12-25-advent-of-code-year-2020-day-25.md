@@ -104,7 +104,7 @@ With our _real_ card and door public keys, what is the cryptographic handshake b
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/25/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-25.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -124,7 +124,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-25.raku input.txt
 18293391
 ```
 

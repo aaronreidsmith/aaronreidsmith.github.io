@@ -40,7 +40,7 @@ The example instructions, as well as our input, create an infinite loop. Our tas
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/08/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-08.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -85,7 +85,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-08.raku input.txt
 1600
 ```
 
@@ -113,7 +113,7 @@ We need to find the value of the accumulator in the terminal solution.
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/08/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/08/raku/day-08.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -191,11 +191,11 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-08.raku input.txt
 1600
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-08.raku --p2 input.txt
 1543
 ```
 
@@ -213,4 +213,4 @@ The hard part here was copying `@cells` multiple times into `@fixed-instructions
 
 ## Final Thoughts
 
-Today's problem helped me get back on the functional Raku track after a [frustrating day 7](https://aaronreidsmith.github.io/blog/advent-of-code-day-07/). However, I am going to have to do more digging on copies of iterables in Raku, because a 60x performance decrease is not really acceptable for this kind of thing, especially when the input is relatively small (<1000 lines).
+Today's problem helped me get back on the functional Raku track after a [frustrating day 7](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-07/). However, I am going to have to do more digging on copies of iterables in Raku, because a 60x performance decrease is not really acceptable for this kind of thing, especially when the input is relatively small (<1000 lines).

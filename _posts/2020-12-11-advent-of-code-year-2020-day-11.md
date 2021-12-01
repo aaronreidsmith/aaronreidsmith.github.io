@@ -8,7 +8,7 @@ tags:
   - Python
 ---
 
-I am giving myself half credit for today; the solution I came up with _is_ in Raku, but it is an iterative solution. Additionally, this solution is _slow_. In fact, it was so slow that in between runs I was able to write a [Python solution](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/11/python/main.py) (with the same logic) that ran much faster.
+I am giving myself half credit for today; the solution I came up with _is_ in Raku, but it is an iterative solution. Additionally, this solution is _slow_. In fact, it was so slow that in between runs I was able to write a [Python solution](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/python/2020/day11.py) (with the same logic) that ran much faster.
 
 ## The Problem
 
@@ -41,7 +41,7 @@ The interesting thing about the layout is that (following the above rules) it wi
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/11/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-11.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -118,7 +118,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-11.raku input.txt
 2152
 ```
 
@@ -163,7 +163,7 @@ Additionally, people seem to be more tolerant than expected and will only vacate
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/11/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-11.rakuu)
 
 See below for explanation and any implementation-specific comments.
 
@@ -247,11 +247,11 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-11.raku input.txt
 2152
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-11.raku --p2 input.txt
 1937
 ```
 

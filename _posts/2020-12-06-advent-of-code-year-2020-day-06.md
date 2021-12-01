@@ -13,7 +13,7 @@ Well, our old pal [set theory](https://en.wikipedia.org/wiki/Set_theory) reared 
 
 ### Part 1
 
-On [day four](https://aaronreidsmith.github.io/blog/advent-of-code-day-04/) we helped out airport security with their passport scanner, and [yesterday](https://aaronreidsmith.github.io/blog/advent-of-code-day-05/) we wrote a program to find our seat on the airplane after losing our boarding pass. Today we are about to land, and it's time to fill out customs declaration form.
+On [day four](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-04/) we helped out airport security with their passport scanner, and [yesterday](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-05/) we wrote a program to find our seat on the airplane after losing our boarding pass. Today we are about to land, and it's time to fill out customs declaration form.
 
 This form has 26 yes or no questions marked "A" through "Z." We fill ours out quickly and notice the family next to us having some issues with theirs; they ask us for help. Pretty soon we have offered to help everyone on the plane, and we end up with a file that looks like this:
 
@@ -49,7 +49,7 @@ Our job is to find the sum of distinct "yes" answers (one per question per famil
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/06/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-06.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -66,7 +66,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-06.raku input.txt
 6809
 ```
 
@@ -85,7 +85,7 @@ As soon as we finished processing everyone's customs forms, we realize we misrea
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/06/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-06.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -107,11 +107,11 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-06.raku input.txt
 6809
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-06.raku --p2 input.txt
 3394
 ```
 

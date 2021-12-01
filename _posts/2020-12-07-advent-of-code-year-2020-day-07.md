@@ -13,7 +13,7 @@ Well, today was our streak breaker. For the life of me, I could not get Raku to 
 
 ### Part 1
 
-For the past few days, we have been traveling. First we had troubles at [the airport](https://aaronreidsmith.github.io/blog/advent-of-code-day-04/), then we had trouble [finding our seat](https://aaronreidsmith.github.io/blog/advent-of-code-day-05/), and then we had issues filling out the [customs form](https://aaronreidsmith.github.io/blog/advent-of-code-day-06/). But, we have landed safely and are ready to enjoy our vacation!
+For the past few days, we have been traveling. First we had troubles at [the airport](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-04/), then we had trouble [finding our seat](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-05/), and then we had issues filling out the [customs form](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-06/). But, we have landed safely and are ready to enjoy our vacation!
 
 However, our luggage is taking a long time getting to the carousel due to recent luggage rules that have been put into effect. We are given a list of the rules that looks like the following:
 
@@ -40,7 +40,7 @@ So the question is, given a much larger input file, how many outermost bags can 
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/07/python/main.py)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/python/2020/day07.py)
 
 See below for explanation and any implementation-specific comments.
 
@@ -112,7 +112,7 @@ if __name__ == '__main__':
 This runs as such:
 
 ```
-$ python main.py input.txt
+$ python day07.py input.txt
 151
 ```
 
@@ -158,7 +158,7 @@ Now the question flips: if our _outermost_ bag is our shiny gold bag, how many b
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/07/python/main.py)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/python/2020/day07.py)
 
 See below for explanation and any implementation-specific comments.
 
@@ -243,7 +243,7 @@ if __name__ == '__main__':
 This runs as such:
 
 ```
-$ python main.py input.txt
+$ python day07.py input.txt
 Part 1: 151
 Part 2: 41559
 ```

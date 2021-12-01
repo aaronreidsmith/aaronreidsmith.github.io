@@ -111,7 +111,7 @@ What is the winning player's score with the actual input?
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/22/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-22.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -153,7 +153,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-22.raku input.txt
 33400
 ```
 
@@ -481,7 +481,7 @@ _Now_, what is the score of the winner?
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/22/python/main.py)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/python/2020/day22.py)
 
 See below for explanation and any implementation-specific comments.
 
@@ -534,7 +534,7 @@ if __name__ == '__main__':
 This runs as such:
 
 ```
-$ python main.py input.txt
+$ python day22.py input.txt
 33745
 ```
 

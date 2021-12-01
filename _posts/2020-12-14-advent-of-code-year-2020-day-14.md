@@ -38,7 +38,7 @@ Once all instructions have been applied, what is the sum of values in memory?
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/14/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-14.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -84,7 +84,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-14.raku input.txt
 17934269678453
 ```
 
@@ -130,7 +130,7 @@ Using V2, what is the sum of the memory addresses after initialization?
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/14/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-14.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -204,11 +204,11 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-14.raku input.txt
 17934269678453
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-14.raku --p2 input.txt
 3440662844064
 ```
 

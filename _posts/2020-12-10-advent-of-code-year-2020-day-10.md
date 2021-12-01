@@ -19,7 +19,7 @@ We are bored on this flight, so, treating the seat-back outlet as zero jolts, we
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/10/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-10.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -46,7 +46,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-10.raku input.txt
 2176
 ```
 
@@ -70,7 +70,7 @@ Now that we have found the one solution that uses all adaptors, we want to find 
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/10/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-10.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -116,11 +116,11 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-10.raku input.txt
 2176
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-10.raku --p2 input.txt
 18512297918464
 ```
 

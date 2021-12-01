@@ -7,7 +7,7 @@ tags:
   - Python
 ---
 
-Today was _almost exactly_ like [day 11](https://aaronreidsmith.github.io/blog/advent-of-code-day-11/) except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python solution (with the same logic) to get it to finish in a reasonable amount of time. Because of the similarities between today's problem and that one, I only wrote a Python solution today.
+Today was _almost exactly_ like [day 11](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-11/) except with more dimensions. If you remember from day 11, the Raku solution was so slow that I had to write a Python solution (with the same logic) to get it to finish in a reasonable amount of time. Because of the similarities between today's problem and that one, I only wrote a Python solution today.
 
 ## The Problem
 
@@ -24,7 +24,7 @@ Our input is a 2D grid where the top-left position corresponding to coordinate `
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/17/python/main.py)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/python/2020/day17.py)
 
 See below for explanation and any implementation-specific comments.
 
@@ -74,7 +74,7 @@ if __name__ == '__main__':
 This runs as such:
 
 ```
-$ python main.py input.txt
+$ python day17.py input.txt
 137
 ```
 
@@ -101,7 +101,7 @@ Turns out the pocket dimension is actually _four dimensional_. Our input now rep
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/17/python/main.py)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/python/2020/day17.py)
 
 See below for explanation and any implementation-specific comments.
 
@@ -153,7 +153,7 @@ if __name__ == '__main__':
 This runs as such:
 
 ```
-$ python main.py input.txt
+$ python day17.py input.txt
 Part 1: 237
 Part 2: 2448
 ```

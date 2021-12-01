@@ -6,7 +6,7 @@ tags:
   - Advent of Code
   - Raku
 ---
-Merry Christmas Eve! I had a lot more fun with today's challenge than the past few days. It is reminiscent of days [11](https://aaronreidsmith.github.io/blog/advent-of-code-day-11/) and [17](https://aaronreidsmith.github.io/blog/advent-of-code-day-17/), but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.
+Merry Christmas Eve! I had a lot more fun with today's challenge than the past few days. It is reminiscent of days [11](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-11/) and [17](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-17/), but with a fun twist. I also solved it using a different data structure due to that twist, so it felt fresh.
 
 ## The Problem
 
@@ -49,7 +49,7 @@ Once we follow the directions to the appropriate tile, we flip it. One note, som
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/24/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-24.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -89,7 +89,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-24.raku input.txt
 459
 ```
 
@@ -109,7 +109,7 @@ Once we reach our desired tile, we check if it is in our `$flipped` set. If so, 
 ##### Specific Comments
 
 1. Sets can only contain scalars in Raku (i.e., `Set.new((1, 2, 3))` yields `Set(1, 2, 3)`), so we can't just add the `q` and `r` values to the set as-is. My workaround is to convert them to a string with the format `q:r` so we are able to store them in a set, but still retrieve them easily later.
-2.  `⊖` is the [symmetric difference](https://en.wikipedia.org/wiki/Symmetric_difference) operator, which removes elements that are present in both sets. In conjunction with the `=` operator, it reassigns to `$flipped`.
+2. `⊖` is the [symmetric difference](https://en.wikipedia.org/wiki/Symmetric_difference) operator, which removes elements that are present in both sets. In conjunction with the `=` operator, it reassigns to `$flipped`.
 3. `∪` is the [set union](https://en.wikipedia.org/wiki/Union_(set_theory)), which returns all the items in both sets cast to a new set. In conjunction with the `=` operator, it reassigns to `$flipped`.
 
 ### Part 2
@@ -125,7 +125,7 @@ Starting with the layout _after_ part one, what how many tiles will be black aft
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/24/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-24.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -201,10 +201,10 @@ sub MAIN($file, Bool :$p2 = False) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-24.raku input.txt
 459
 
-$ raku main.raku --p2 input.txt
+$ raku day-24.raku --p2 input.txt
 4150
 ```
 

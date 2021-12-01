@@ -7,7 +7,7 @@ tags:
   - Python
 ---
 
-After  I was singing Raku's praises yesterday, it had to come back to bite me.
+After I was singing Raku's praises yesterday, it had to come back to bite me.
 
 Today's solution is written in Python because I just couldn't get it to work in Raku. It's iterable handling is, in my opinion, a joke. Between `List`s, `Array`s, and `Seq`s (among others) and no discernible way to differentiate between them at object creation time, and the fact that everything _in_ a list gets cast to a `Scalar` (thus adding an extra container around it), it made it too hard, and I wasn't going to waste my Saturday fighting it.
 
@@ -40,7 +40,7 @@ Comparing this to the list of messages, we can see that only `ababbb` and `abbba
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/19/python/main.py)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/python/2020/day19.py)
 
 See below for explanation and any implementation-specific comments.
 
@@ -93,7 +93,7 @@ if __name__ == '__main__':
 This runs as such:
 
 ```
-$ python main.py input.txt
+$ python day19.py input.txt
 120
 ```
 
@@ -139,7 +139,7 @@ So now the rules _can_ contain loops. How will this affect us? Our job is still 
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/19/python/main.py)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/python/2020/day19.py)
 
 See below for explanation and any implementation-specific comments.
 
@@ -201,7 +201,7 @@ if __name__ == '__main__':
 This runs as such:
 
 ```
-$ python main.py input.txt
+$ python day19.py input.txt
 Part 1: 120
 Part 2: 350
 ```

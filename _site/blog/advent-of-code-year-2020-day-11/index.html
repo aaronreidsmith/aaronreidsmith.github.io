@@ -328,7 +328,7 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>I am giving myself half credit for today; the solution I came up with <em>is</em> in Raku, but it is an iterative solution. Additionally, this solution is <em>slow</em>. In fact, it was so slow that in between runs I was able to write a <a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/11/python/main.py">Python solution</a> (with the same logic) that ran much faster.</p>
+        <p>I am giving myself half credit for today; the solution I came up with <em>is</em> in Raku, but it is an iterative solution. Additionally, this solution is <em>slow</em>. In fact, it was so slow that in between runs I was able to write a <a href="https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/python/2020/day11.py">Python solution</a> (with the same logic) that ran much faster.</p>
 
 <h2 id="the-problem">The Problem</h2>
 
@@ -362,7 +362,7 @@ L.LLLLL.LL
 
 <h4 id="solution">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/11/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-11.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
@@ -437,7 +437,7 @@ sub MAIN($file) {
 
 <p>This runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku day-11.raku input.txt
 2152
 </code></pre></div></div>
 
@@ -488,7 +488,7 @@ sub MAIN($file) {
 
 <h4 id="solution-1">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/11/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-11.rakuu">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
@@ -570,11 +570,11 @@ sub MAIN($file, Bool :$p2 = False) {
 <p>This runs as such:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Part 1
-$ raku main.raku input.txt
+$ raku day-11.raku input.txt
 2152
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-11.raku --p2 input.txt
 1937
 </code></pre></div></div>
 

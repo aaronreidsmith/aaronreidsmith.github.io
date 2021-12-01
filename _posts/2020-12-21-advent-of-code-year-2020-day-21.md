@@ -26,7 +26,7 @@ This list has a caveat to it -- allergens are not always listed for each food. S
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/21/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-21.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -63,7 +63,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-21.raku input.txt
 2061
 ```
 
@@ -131,7 +131,7 @@ What is the allergen list for our real input?
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/21/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-21.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -172,10 +172,10 @@ sub MAIN($file, Bool :$p2 = False) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-21.raku input.txt
 2061
 
-$ raku main.raku --p2 input.txt
+$ raku day-21.raku --p2 input.txt
 cdqvp,dglm,zhqjs,rbpg,xvtrfz,tgmzqjz,mfqgx,rffqhl
 ```
 

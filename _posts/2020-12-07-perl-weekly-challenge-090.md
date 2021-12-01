@@ -7,7 +7,7 @@ tags:
   - Raku
 ---
 
-Today was a busy day with both [Advent of Code](https://aaronreidsmith.github.io/blog/advent-of-code-day-07/) and the Perl Weekly Challenge. Luckily, the PWC was short and sweet this week, and a nice breather after the Advent of Code.
+Today was a busy day with both [Advent of Code](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-07/) and the Perl Weekly Challenge. Luckily, the PWC was short and sweet this week, and a nice breather after the Advent of Code.
 
 ## Task 1: DNA Sequence
 
@@ -128,4 +128,4 @@ This is a very straightforward solution; most of the mess in the code is from th
 
 ## Final Thoughts
 
-This week was super easy, so not much to add! Jump over to my blog on [day 7 of the Advent of Code](https://aaronreidsmith.github.io/blog/advent-of-code-day-07/) for something more challenging.
+This week was super easy, so not much to add! Jump over to my blog on [day 7 of the Advent of Code](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-07/) for something more challenging.

@@ -7,7 +7,7 @@ tags:
   - Raku
 ---
 
-It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as [finishing up AoC](https://aaronreidsmith.github.io/blog/advent-of-code-day-25/)!
+It was a slow Christmas day for me, for the most part, so I decided to knock this challenge out as well as [finishing up AoC](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-25/)!
 
 ## Task 1: Isomorphic Strings
 

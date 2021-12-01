@@ -334,7 +334,7 @@
 
 <h3 id="part-1">Part 1</h3>
 
-<p>After <a href="https://aaronreidsmith.github.io/blog/advent-of-code-day-22/">yesterday’s game of War</a>, the crab challenges <em>us</em> to a game! In this game there are 10 labeled cups placed clockwise in a circle (our input). The first cup in our list is our “current cup,” and the crab is going to make <strong>100 moves</strong>. Here is how each move works:</p>
+<p>After <a href="https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-22/">yesterday’s game of War</a>, the crab challenges <em>us</em> to a game! In this game there are 10 labeled cups placed clockwise in a circle (our input). The first cup in our list is our “current cup,” and the crab is going to make <strong>100 moves</strong>. Here is how each move works:</p>
 
 <ul>
   <li>The crab picks up the three cups that are immediately clockwise of the current cup. They are removed from the circle; cup spacing is adjusted as necessary to maintain the circle.</li>
@@ -405,7 +405,7 @@ cups:  5 (8) 3  7  4  1  9  2  6
 
 <h4 id="solution">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/23/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-23.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
@@ -452,7 +452,7 @@ cups:  5 (8) 3  7  4  1  9  2  6
 
 <p>This runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku day-23.raku input.txt
 29385746
 </code></pre></div></div>
 
@@ -477,7 +477,7 @@ cups:  5 (8) 3  7  4  1  9  2  6
 
 <h4 id="solution-1">Solution</h4>
 
-<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/23/raku/main.raku">GitHub Link</a></p>
+<p><a href="https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-23.raku">GitHub Link</a></p>
 
 <p>See below for explanation and any implementation-specific comments.</p>
 
@@ -571,10 +571,10 @@ sub MAIN($file, Bool :$p2 = False) {
 
 <p>This runs as such:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku main.raku input.txt
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ raku day-23.raku input.txt
 29385746
 
-$ raku main.raku --p2 input.txt
+$ raku day-23.raku --p2 input.txt
 712643589
 </code></pre></div></div>
 

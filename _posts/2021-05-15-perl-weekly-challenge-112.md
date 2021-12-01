@@ -7,7 +7,7 @@ tags:
   - Raku
 ---
 
-A little string manipulation and recursion today. My solution to task 2 is _almost_ the same as my solution to [Advent of Code 2020: Day 10 (part 2)](https://aaronreidsmith.github.io/blog/advent-of-code-day-10/)!
+A little string manipulation and recursion today. My solution to task 2 is _almost_ the same as my solution to [Advent of Code 2020: Day 10 (part 2)](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-10/)!
 
 ## Task 1: Canonical Path
 

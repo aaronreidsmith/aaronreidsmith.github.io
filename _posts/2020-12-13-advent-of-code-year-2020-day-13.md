@@ -14,7 +14,7 @@ Today's challenge was... interesting, to say the least. It may look short and sw
 
 ### Part 1
 
-After [yesterday's fiasco](https://aaronreidsmith.github.io/blog/advent-of-code-day-12/), our ferry is being forced to make an emergency stop on a different island. Unfortunately, there are no ferries from this island to our destination island; once again, we will have to take a plane. To get to the airport, our only option is a bus. Bus IDs also correspond to how often they come. I.e., a bus with ID 7 will come at timestamps 0, 7, 14, etc.
+After [yesterday's fiasco](https://aaronreidsmith.github.io/blog/advent-of-code-year-2020-day-12/), our ferry is being forced to make an emergency stop on a different island. Unfortunately, there are no ferries from this island to our destination island; once again, we will have to take a plane. To get to the airport, our only option is a bus. Bus IDs also correspond to how often they come. I.e., a bus with ID 7 will come at timestamps 0, 7, 14, etc.
 
 We took a few notes (our input) on the bus schedule. Example:
 
@@ -54,7 +54,7 @@ Once we have found the bus that can take us to the airport, we need to calculate
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/13/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-13.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -73,7 +73,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-13.raku input.txt
 261
 ```
 
@@ -162,7 +162,7 @@ Looking at our notes (our input), we realize that timestamp `t` will _surely_ be
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/13/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-13.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -197,11 +197,11 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-13.raku input.txt
 261
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-13.raku --p2 input.txt
 807435693182510
 ```
 

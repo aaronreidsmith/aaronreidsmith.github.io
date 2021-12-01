@@ -59,7 +59,7 @@ Our job is to find how many passports are either valid or "valid"
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-04.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -93,7 +93,7 @@ sub MAIN($file) {
 This runs as such:
 
 ```
-$ raku main.raku input.txt
+$ raku day-04.raku input.txt
 237
 ```
 
@@ -145,7 +145,7 @@ Now it needs to check both keys and values with the following stipulations:
 
 #### Solution
 
-[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/main/2020/04/raku/main.raku)
+[GitHub Link](https://github.com/aaronreidsmith/advent-of-code/blob/103fedb13cd88b0e852caed8a1ff951d84bffdac/src/main/raku/2020/day-04.raku)
 
 See below for explanation and any implementation-specific comments.
 
@@ -200,11 +200,11 @@ This runs as such:
 
 ```
 # Part 1
-$ raku main.raku input.txt
+$ raku day-04.raku input.txt
 237
 
 # Part 2
-$ raku main.raku --p2 input.txt
+$ raku day-04.raku --p2 input.txt
 172
 ```
 
